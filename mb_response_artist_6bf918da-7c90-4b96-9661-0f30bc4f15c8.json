@@ -1,0 +1,187 @@
+{
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "type": null,
+    "name": "France",
+    "iso-3166-1-codes": [
+      "FR"
+    ],
+    "disambiguation": "",
+    "id": "08310658-51eb-3801-80de-5a0739207115",
+    "type-id": null,
+    "sort-name": "France"
+  },
+  "country": "FR",
+  "begin-area": {
+    "disambiguation": "",
+    "name": "Paris",
+    "type": null,
+    "id": "dc10c22b-e510-4006-8b7f-fecb4f36436e",
+    "iso-3166-2-codes": [
+      "FR-75"
+    ],
+    "type-id": null,
+    "sort-name": "Paris"
+  },
+  "type": "Group",
+  "name": "Voyage",
+  "gender": null,
+  "gender-id": null,
+  "life-span": {
+    "ended": true,
+    "end": "1983",
+    "begin": "1978"
+  },
+  "sort-name": "Voyage",
+  "disambiguation": "French disco group",
+  "ipis": [],
+  "isnis": [],
+  "relations": [
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000221547",
+        "id": "ca6f30d2-f5d1-4a56-a8c3-ce80b6a7c99b"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/33203",
+        "id": "8c7c17e6-bebd-49e8-9952-ad33c9ae5c54"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "28491b5b-6d91-433e-86f4-355b3bd1b145",
+        "resource": "https://open.spotify.com/artist/062P9drV4QbnEkTd81Wkrw"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://genius.com/artists/Voyage-band",
+        "id": "62594591-aa0a-45cd-9e1c-3744fb73bc5f"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "2e67bc5e-b163-4928-befe-7a26a1458981",
+        "resource": "https://rateyourmusic.com/artist/voyage"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "49ef5e1f-026f-49b1-b990-ed8d85137006",
+        "resource": "https://www.songkick.com/artists/241784"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/138512120",
+        "id": "61d5a431-57ab-45d7-8d39-bfb976765c0a"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "b759edcc-26d4-4437-93c0-e2f07b5c016d",
+        "resource": "https://www.wikidata.org/wiki/Q7942402"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    }
+  ],
+  "id": "6bf918da-7c90-4b96-9661-0f30bc4f15c8"
+}

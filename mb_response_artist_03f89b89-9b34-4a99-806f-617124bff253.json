@@ -1,0 +1,105 @@
+{
+  "id": "03f89b89-9b34-4a99-806f-617124bff253",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type": null,
+    "sort-name": "Spain",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "ES"
+    ],
+    "id": "471c46a7-afc5-31c4-923c-d0444f5053a4",
+    "name": "Spain",
+    "type-id": null
+  },
+  "isnis": [],
+  "begin-area": null,
+  "name": "Erik Urano",
+  "end-area": null,
+  "ipis": [],
+  "type": "Person",
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "disambiguation": "",
+  "sort-name": "Erik Urano",
+  "relations": [
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "id": "199e1186-5eb9-4df4-8875-e3469c49d9be",
+        "resource": "https://www.discogs.com/artist/6074270"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "f3176b01-1976-4fa9-94fc-84ccb1c8b978",
+        "resource": "https://open.spotify.com/artist/4UGlbaxTr9BPv4YLD6iWRN"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://twitter.com/Erik_Urano",
+        "id": "d0776b50-8ac5-423d-968c-ffab5cbc24f1"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "49d62293-e970-45a6-8b7e-a30647306d31",
+        "resource": "https://tidal.com/artist/7233476"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    }
+  ],
+  "gender": "Male",
+  "country": "ES"
+}

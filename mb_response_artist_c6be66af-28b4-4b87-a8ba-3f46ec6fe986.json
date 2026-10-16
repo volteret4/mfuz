@@ -1,0 +1,294 @@
+{
+  "type": "Person",
+  "gender": "Male",
+  "isnis": [
+    "0000000361214152"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0001905415",
+        "id": "beff3c49-4006-4ed9-be18-b1af333886f3"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/540828",
+        "id": "64de1cf6-a02a-4a2a-9f07-72fe543d2090"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "852694ed-5cd8-45f3-9024-7ccafbf2c5f1",
+        "resource": "https://open.spotify.com/artist/4R073T3AVJKqAsbzLmLW9u"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "4506ef4d-0eda-49bb-8060-d49c34a6fbee",
+        "resource": "https://www.deezer.com/artist/524797"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a525eed3-9959-4feb-84f9-548b8f57dad9",
+        "resource": "https://www.last.fm/music/John+Maus"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://myspace.com/johnmaus",
+        "id": "a3428464-b3c1-49fb-8137-09a4c611ecb8"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "myspace",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://johnma.us/",
+        "id": "9658276b-6f28-4057-9b3e-9223cc0676d6"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.mausspace.com/",
+        "id": "16e56ad5-4ba7-449d-9284-637d98d43bcc"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "86528b33-8eac-4e1c-872b-3ddcb6996f2e",
+        "resource": "https://rateyourmusic.com/artist/john_maus"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4a9fbb24-81dc-4748-bfd3-ccb50162a438",
+        "resource": "https://itunes.apple.com/mx/artist/id423445122"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "d3f6a6d6-b09d-4fc8-a4b0-df142c73011b",
+        "resource": "https://twitter.com/JOHNMAUS"
+      }
+    },
+    {
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "id": "36fb9e18-2398-43e6-8690-c0e0b634ca5d",
+        "resource": "https://www.facebook.com/pages/John-Maus/141499528174"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://viaf.org/viaf/223471750",
+        "id": "e3c84480-1e31-4ef6-b511-1810741b8837"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "5ebfa166-764d-40d4-8ec9-6f13b8e05797",
+        "resource": "https://www.wikidata.org/wiki/Q5980315"
+      },
+      "attributes": []
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [],
+  "begin-area": {
+    "name": "Austin",
+    "type-id": null,
+    "sort-name": "Austin",
+    "id": "f0f65d2c-f29e-4bc1-9672-690340e69ce8",
+    "disambiguation": "",
+    "type": null
+  },
+  "disambiguation": "US composer/musician/philosopher",
+  "id": "c6be66af-28b4-4b87-a8ba-3f46ec6fe986",
+  "sort-name": "Maus, John",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "name": "John Maus",
+  "end-area": null,
+  "life-span": {
+    "begin": "1980-02-23",
+    "end": null,
+    "ended": false
+  }
+}

@@ -49,7 +49,7 @@ class TicketmasterService:
                 # Parámetros para esta página
                 params = {
                     "keyword": artist_name,
-                    "countrycode": country_code.lower(),
+                    "countryCode": country_code.upper(),
                     "size": str(page_size),
                     "page": str(page),
                     "apikey": self.api_key
@@ -243,7 +243,7 @@ class TicketmasterService:
         """
         params = {
             "keyword": artist_name,
-            "countrycode": country_code.lower(),
+            "countryCode": country_code.upper(),
             "size": "1",  # Solo necesitamos info de paginación
             "page": "0",
             "apikey": self.api_key

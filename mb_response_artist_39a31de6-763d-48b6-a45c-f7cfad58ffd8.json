@@ -1,0 +1,814 @@
+{
+  "gender": null,
+  "type": "Group",
+  "ipis": [],
+  "begin-area": {
+    "name": "Falun",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "79c088ee-da48-4427-a611-e1293ace15e7",
+    "sort-name": "Falun",
+    "type": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "3d7f67ac-1ced-40d5-8394-92cd14595603",
+        "resource": "https://www.allmusic.com/artist/mn0000631335"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "45188180-ade8-4fd8-9500-965305941186",
+        "resource": "https://sabaton.bandcamp.com/"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "8ce33fe2-2c59-4110-908e-b9e769a8f4a2",
+        "resource": "https://www.bandsintown.com/a/20303"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/580793",
+        "id": "d610ce1c-7bdc-48b2-8b03-0d2095b6dbeb"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "89d3cd7a-4f72-4106-8f9f-c26b95ab6df4",
+        "resource": "https://open.spotify.com/artist/3o2dn2O0FCVsWDFSh8qxgG"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/12022",
+        "id": "815b8b85-36f7-46ab-92bd-c4b0d86f4f02"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "87692e71-8ed8-46aa-bbfd-b8d513b9c478",
+        "resource": "http://www.pandora.com/sabaton"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm6721357/",
+        "id": "72174434-cd8a-4218-8b49-d66fc9c7cab3"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "8a33284f-e8dc-4d77-8791-8b9511702070",
+        "resource": "https://www.last.fm/music/Sabaton"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://muzikum.eu/en/122-5789/sabaton/lyrics.html",
+        "id": "a1767ee9-fad7-4e30-9283-6c8456e0b74f"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "c03d3a78-10db-43a9-8c28-4003d4489e08",
+        "resource": "https://genius.com/artists/Sabaton"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://myspace.com/sabaton",
+        "id": "9590210b-fc6e-4abb-af3b-3ff1a4034634"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace"
+    },
+    {
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "http://www.sabaton.net/",
+        "id": "12e60025-7408-4f79-9afa-b086dd36e9cf"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "32618ec0-320a-422e-88f1-89e5983f0ff2",
+        "resource": "https://d-nb.info/gnd/16026521-6"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "9c4443e2-1d3b-46e5-8b95-4f520b30cf72",
+        "resource": "https://imvdb.com/n/sabaton"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/sabaton",
+        "id": "9ad98110-921b-4c08-ba22-3cf70b77f7a9"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "82234ddb-4879-471e-94f1-83eabae50b2d",
+        "resource": "https://www.metal-archives.com/bands/Sabaton/484"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "8393f0e4-534e-40dc-a075-b39561864d2d",
+        "resource": "https://www.musik-sammler.de/artist/sabaton/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a526ba0b-e760-4235-bca7-d75ea1ae245a",
+        "resource": "https://www.spirit-of-metal.com/en/band/Sabaton"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "4f3c46fe-f23b-4674-b9f9-195848906fe8",
+        "resource": "https://www.whosampled.com/Sabaton/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/viaf-127733860",
+        "id": "f1cae9f9-2d46-4f32-94c1-f8494cc854ac"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=A4p4x2fy6ohx7nxvj7tllmdrm6u",
+        "id": "634d60e5-c6af-434f-a3b3-dd1fe0deab69"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": "2020-10-12",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://itunes.apple.com/se/artist/id184065032",
+        "id": "f83e1384-e587-4374-8be9-1026e0dbc15f"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "13bf86d1-7559-463d-ab2f-0c6e75e88bd8",
+        "resource": "https://uk.7digital.com/artist/sabaton"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/sabaton/551516",
+        "id": "fc854663-0056-4468-b266-ac8c2dd868e4"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B001LHPTMU",
+        "id": "3e90ac92-bcc3-4984-950e-4710730f52e2"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/43656",
+        "id": "848c75ba-ebd6-4e16-adb0-b98f565bf8ad"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/sabaton-13d6d1c5.html",
+        "id": "5c8d2404-fb39-4116-8696-a65a016d428e"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "6408b06e-ba29-4e77-b414-466ca2ec4ac0",
+        "resource": "https://giphy.com/sabaton"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "3326c5d7-b930-438d-a5fb-d8d7f10e4f1f",
+        "resource": "https://twitter.com/sabaton"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "055be4c1-3a8a-4ad6-b176-0e65c4fe7e22",
+        "resource": "https://www.facebook.com/sabaton"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/sabatonofficial/",
+        "id": "49b14b76-ef5d-4ea9-a8b6-643062f0b327"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "9de7bee4-7ee5-40e5-985e-9a35f94bfd77",
+        "resource": "https://www.threads.com/@sabatonofficial"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.tiktok.com/@sabatonofficial",
+        "id": "2aeadc6f-42e6-4687-b08f-34c3079e2fbb"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/233066",
+        "id": "ed302222-dfb2-4a66-b0bf-dbbf82fb81d3"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://soundcloud.com/sabatonofficial",
+        "id": "94fc0a87-80a4-4421-a7c4-37cacf894383"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/se/artist/184065032",
+        "id": "52c51f34-2d40-4703-825c-760b8b176871"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1ff15809-2e66-450f-8f6b-ac5dbd64a69e",
+        "resource": "https://tidal.com/artist/3616281"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/sabaton/551516",
+        "id": "fc854663-0056-4468-b266-ac8c2dd868e4"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "c7e3ebad-5af4-495b-98c7-ca6fc0323775",
+        "resource": "http://viaf.org/viaf/127733860"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q740159",
+        "id": "3ae08ef4-22b2-430c-ae4f-dc60961a0dee"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCjQhd1APsd5NQhiVZV7GYzg",
+        "id": "f2ab24c2-105e-4016-a9e5-162e3b859a3e"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "99bc7a2b-5563-47b5-9b76-dbc176e9557b",
+        "resource": "https://music.youtube.com/channel/UCxJrBLPnyUIt6K33m9ZcsqA"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "youtube music",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "end": null,
+      "begin": null
+    }
+  ],
+  "country": "SE",
+  "isnis": [],
+  "area": {
+    "name": "Sweden",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "SE"
+    ],
+    "sort-name": "Sweden",
+    "id": "23d10872-f5ae-3f0c-bf55-332788a16ecb",
+    "disambiguation": "",
+    "type": null
+  },
+  "name": "Sabaton",
+  "end-area": null,
+  "disambiguation": "",
+  "id": "39a31de6-763d-48b6-a45c-f7cfad58ffd8",
+  "sort-name": "Sabaton",
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1999"
+  }
+}

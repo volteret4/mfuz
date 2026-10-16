@@ -1,0 +1,871 @@
+{
+  "life-span": {
+    "begin": "1982",
+    "ended": false,
+    "end": null
+  },
+  "type": "Group",
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type-id": null,
+    "disambiguation": "",
+    "name": "United Kingdom",
+    "type": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [],
+  "gender-id": null,
+  "sort-name": "James",
+  "name": "James",
+  "ipis": [],
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "iso-3166-2-codes": [
+      "GB-MAN"
+    ],
+    "disambiguation": "",
+    "name": "Manchester",
+    "sort-name": "Manchester",
+    "id": "852531bf-3410-401f-b432-9c3157a386b9"
+  },
+  "end-area": null,
+  "id": "a2accb58-6099-4cb5-a3c8-f6332f364db5",
+  "country": "GB",
+  "relations": [
+    {
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000112185",
+        "id": "4d4204e2-e0a8-4e18-b912-3020fc69babf"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/a2accb58-6099-4cb5-a3c8-f6332f364db5",
+        "id": "42967316-e7fa-45e2-b6a7-be1381427179"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": "2020-11-19",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": true,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/12094",
+        "id": "9e7ab11c-9e19-4e7a-b0ac-394215382391"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "https://web.archive.org/web/19980123055504/http://www.james.wattyco.com/",
+        "id": "a7eae618-f58d-45c9-a5d1-55a8d8bccf95"
+      },
+      "target-type": "url",
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "type": "fanpage",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "56aa80f0-f695-497e-acdf-a186705e6269",
+        "resource": "https://web.archive.org/web/19990218185124/http://www.eclipse.net/~stutter/"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "b5ac8ef1-9488-4aa8-b801-8c52812ae3da",
+        "resource": "https://web.archive.org/web/19990221012934/http://www.geocities.com/SunsetStrip/Studio/4996/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "fanpage",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "48cbc70b-abc9-4495-951e-f68570be9918",
+        "resource": "https://web.archive.org/web/19991001094254/http://webhome.idirect.com/~windzor/james/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24"
+    },
+    {
+      "direction": "forward",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "53d15224-14b5-472e-882a-3fc0e95036fc",
+        "resource": "https://web.archive.org/web/19991128082453/http://www.sitdown.co.uk/"
+      },
+      "target-type": "url",
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "fanpage",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "https://web.archive.org/web/20000510235420/http://www.stateofbliss.co.uk/",
+        "id": "b8230d51-4bd0-44f4-87f9-02db015ca0ae"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "https://web.archive.org/web/20001019010615/http://www.thisisnotasong.co.uk/",
+        "id": "04e3c79a-d4cd-415d-a4ce-1eb666f9d348"
+      },
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "628f6e6f-cd2d-4646-8bd5-c8d529343aec",
+        "resource": "https://web.archive.org/web/20001109102700/http://homepage.ntlworld.com/micheal.okane/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-type": "url",
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "fanpage",
+      "attribute-values": {},
+      "url": {
+        "id": "6d5c3776-e3d6-41bb-8186-305514eaa29e",
+        "resource": "https://web.archive.org/web/20010124161900/http://www.changeofscenery.co.uk/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "https://web.archive.org/web/20010413225604/http://www.geocities.com/blackhole_zine/",
+        "id": "1ae6d556-b2ba-4cd6-95a2-f99f9c013b4a"
+      },
+      "target-type": "url",
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "2a108f17-f2cd-42f1-b0c0-9d86a76ff9e2",
+        "resource": "https://web.archive.org/web/20010619055303/http://www.geocities.com/tfmuh/"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "fanpage",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "8f446425-87c1-4520-b74c-0a5398e9a6d2",
+        "resource": "https://web.archive.org/web/20010803085122/http://www.geocities.com/wearesound/"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "b89e28c8-3f34-4716-8013-0d83576260ee",
+        "resource": "https://web.archive.org/web/20070507203942/http://dreamthrum.moonfruit.com/?noflash=1"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "fanpage",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "d1d3bb35-5e1e-421f-bd27-70675b81e8bb",
+        "resource": "https://web.archive.org/web/20220128191244/http://jamesfansite.co.uk/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "begin": null,
+      "attribute-values": {},
+      "type": "fanpage",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "9d5aea0d-bb04-40fb-8f5c-8eb49eed3040",
+        "resource": "https://www.oneofthethree.com/"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0qLNsNKm8bQcMoRFkR8Hmh",
+        "id": "8bd8796a-0d9b-462b-af33-5b0db0e680b7"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/3345",
+        "id": "97c93120-dd39-47c0-883c-6e45e8ab96cd"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "8e93c2c3-f8c6-40d4-bc63-6e91b2de9c48",
+        "resource": "https://www.last.fm/music/James"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "last.fm",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "6dc8bf02-6f14-424e-9c33-c7a1d49696bc",
+        "resource": "https://myspace.com/jamesisnotaperson"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "begin": null,
+      "type": "myspace",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "05b876eb-b8d3-4529-9929-81f4e459824b",
+        "resource": "http://www.wearejames.com/"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "e6c7c0cf-29c0-4f70-a4f1-86efe138df8f",
+        "resource": "http://id.loc.gov/authorities/names/n92076240"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "175b03a1-c1c5-48b2-a2af-651c075e6a86",
+        "resource": "http://musicmoz.org/Bands_and_Artists/J/James/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13943121x",
+        "id": "dd5c8d81-261e-422c-9361-9b8a792b7538"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/4685733-3",
+        "id": "789ef94e-160f-4357-878e-71dc6fdcd8fa"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://imvdb.com/n/james",
+        "id": "04448efe-0238-4aa8-b093-b7f1e7b94752"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/james",
+        "id": "01c6b80a-290a-4925-b1b2-8c39e6226076"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "0316d57f-f486-4b2c-a8f3-0af26d7e8a56",
+        "resource": "https://www.whosampled.com/James/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n92-076240",
+        "id": "16b93752-4fa2-49ae-a890-b4eef8bcf95e"
+      },
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id130451",
+        "id": "e41fcd83-f2fa-4f62-8b48-8a73c95cb82a"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.amazon.co.uk/-/e/B000AQ0MQG",
+        "id": "951c1d50-83c3-4f5a-bd30-55b81d12ed3c"
+      },
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "id": "951c1d50-83c3-4f5a-bd30-55b81d12ed3c",
+        "resource": "https://www.amazon.co.uk/-/e/B000AQ0MQG"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/1044",
+        "id": "7008bfef-5d7d-48f7-b257-4bd381eb9c36"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3"
+    },
+    {
+      "attribute-values": {},
+      "type": "setlistfm",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/james-43d6ab6f.html",
+        "id": "1e6b22cc-cd32-4ec5-9e1d-62214f3dd707"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/wearejames",
+        "id": "73317c5a-9653-4537-9e93-ae1baa6e1622"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "7aa199d2-0910-4722-8223-6c171a127192",
+        "resource": "https://www.facebook.com/jamesisnotaperson"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "url": {
+        "id": "4da0c878-df78-4186-a89d-e093ca9cfc96",
+        "resource": "https://www.songkick.com/artists/272323"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "resource": "https://soundcloud.com/james-the-band",
+        "id": "2095a2d2-e729-47e8-b361-317a899b8023"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/fr/artist/130451",
+        "id": "3099df2c-8a30-473b-8a73-518a85d8f46b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/130451",
+        "id": "98c8706a-9ff0-4430-8d5b-3d38a8f042ca"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/29939",
+        "id": "3e3b7760-0a75-44bf-aca3-531cf5c1472e"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "293516fc-f156-4961-b5a0-40a538503142",
+        "resource": "http://viaf.org/viaf/102840429"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1277864",
+        "id": "0b4d9d32-fc17-430b-897f-e8171c1b0a90"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "bb22ba1a-6c51-4ed4-b765-e4662eaa83e3",
+        "resource": "https://www.youtube.com/user/WeAreJamesTV"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {},
+      "attribute-ids": {}
+    }
+  ],
+  "disambiguation": "Manchester indie rock band",
+  "gender": null
+}

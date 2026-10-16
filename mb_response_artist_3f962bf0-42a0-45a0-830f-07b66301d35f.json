@@ -1,0 +1,485 @@
+{
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "begin": "1947-12-31",
+    "end": "2023-05-08",
+    "ended": true
+  },
+  "sort-name": "Lee, Rita",
+  "ipis": [
+    "00060250127",
+    "00210826404",
+    "00452421582"
+  ],
+  "disambiguation": "",
+  "isnis": [
+    "0000000114728500"
+  ],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000807068",
+        "id": "978cb81b-7651-42d4-a4c2-7c1e261bf202"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "293cabc3-2b0a-45c7-8ce2-d1f648bfe533",
+        "resource": "https://www.discogs.com/artist/274890"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/7dnT2FUXhjirperXaH22IJ",
+        "id": "6dd2305b-de7a-4128-831b-7ffee131167b"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "79629616-ab84-4f72-9aae-7903e8425890",
+        "resource": "https://www.deezer.com/artist/1893"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm",
+      "url": {
+        "resource": "https://www.last.fm/music/Rita+Lee",
+        "id": "1593ff57-aa0a-4d53-a01d-61a2d0b4ef81"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://genius.com/artists/Rita-lee",
+        "id": "7f58f897-485b-452e-b482-a35079b624a4"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "e90855ff-1795-4d2d-a908-7d7d23e35771",
+        "resource": "https://myspace.com/ritaleeoficial"
+      }
+    },
+    {
+      "url": {
+        "id": "f4704119-9ac1-408d-acfa-e7ce20afa3d4",
+        "resource": "http://www.ritalee.com.br/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "04599463-3190-49be-a9ff-776870aabff2",
+        "resource": "http://id.loc.gov/authorities/names/n95920455"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "96e86556-ac05-4184-8113-63440415760e",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14043561v"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f0c395a9-c8ff-4d10-8467-06efb2b639b2",
+        "resource": "https://d-nb.info/gnd/132444399"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n95920455",
+        "id": "8779d348-6d62-41cc-8d20-a1aa6a01bb2b"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": "2019-05-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://itunes.apple.com/br/artist/id6710846",
+        "id": "900dacdb-ee4d-49ec-bf38-308fd5dfba7a"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "f9677ac4-f71d-4189-a374-530c018134dd",
+        "resource": "https://music.apple.com/us/artist/6710846"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "2d093c9a-74eb-493e-b7b7-9b6519620a70",
+        "resource": "https://www.beatport.com/artist/rita-lee/96721"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "975bfcc0-e6f3-439a-9e73-f7bc8fd52982",
+        "resource": "https://secondhandsongs.com/artist/960"
+      }
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/rita_lee",
+        "id": "2a262d20-3f93-4ab8-9c4b-e2dde36570ba"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "id": "52e6a446-005a-41e7-81be-763d26fbe4bd",
+        "resource": "https://www.facebook.com/ritalee.oficial"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "7e971a95-1d21-46c9-9fdf-ca786cdaa39c",
+        "resource": "https://www.songkick.com/artists/9030"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "f9677ac4-f71d-4189-a374-530c018134dd",
+        "resource": "https://music.apple.com/us/artist/6710846"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/3510582",
+        "id": "bfda9fe5-cc29-4fd5-9fc6-361acc0c5a19"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "fa3e767f-e8e2-48e3-82e1-837d04f27312",
+        "resource": "http://viaf.org/viaf/54348256"
+      },
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "b86ce579-3d18-4a78-9ccf-1cf3f1df60aa",
+        "resource": "https://www.wikidata.org/wiki/Q265179"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {},
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/user/ritaleetv",
+        "id": "c4497378-2d63-4098-b7f0-8ef76299e1e1"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    }
+  ],
+  "id": "3f962bf0-42a0-45a0-830f-07b66301d35f",
+  "end-area": {
+    "type": null,
+    "name": "S\u00e3o Paulo",
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "S\u00e3o Paulo",
+    "id": "33e0f86c-d709-448d-a484-d55778913af1"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "sort-name": "Brazil",
+    "type-id": null,
+    "id": "f45b47f8-5796-386e-b172-6c31b009a5d8",
+    "name": "Brazil",
+    "type": null,
+    "iso-3166-1-codes": [
+      "BR"
+    ],
+    "disambiguation": ""
+  },
+  "type": "Person",
+  "name": "Rita Lee",
+  "begin-area": {
+    "type": null,
+    "name": "S\u00e3o Paulo",
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "S\u00e3o Paulo",
+    "id": "33e0f86c-d709-448d-a484-d55778913af1"
+  },
+  "country": "BR",
+  "gender": "Female"
+}

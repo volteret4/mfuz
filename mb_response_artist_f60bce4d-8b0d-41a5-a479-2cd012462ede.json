@@ -1,0 +1,159 @@
+{
+  "gender": "Male",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [],
+  "begin-area": null,
+  "country": "ES",
+  "isnis": [],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/4193104",
+        "id": "7fca8e12-7451-4dc7-a72e-f16fe6c36cf3"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "57410736-236f-4cd1-8778-8c362502baa8",
+        "resource": "https://open.spotify.com/artist/1F2erLLqRHbaFvEYHeVIHJ"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "5114f1a8-2d33-493c-83e7-6dd4ae75752c",
+        "resource": "http://foyone.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "aebbd8a6-62b8-4686-92dd-7e1c35ff5017",
+        "resource": "https://twitter.com/foyones"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://soundcloud.com/zombierock",
+        "id": "c92ae700-cb0e-424c-8b8f-cce6efcc7aca"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "454d62a2-f487-4c21-bd91-6624b064dd50",
+        "resource": "https://tidal.com/artist/6494128"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/user/putowifi",
+        "id": "a06fdc71-251a-4d9f-a196-a1ff0620b45c"
+      },
+      "attributes": []
+    }
+  ],
+  "area": {
+    "iso-3166-1-codes": [
+      "ES"
+    ],
+    "sort-name": "Spain",
+    "disambiguation": "",
+    "id": "471c46a7-afc5-31c4-923c-d0444f5053a4",
+    "type": null,
+    "name": "Spain",
+    "type-id": null
+  },
+  "name": "Foyone",
+  "end-area": null,
+  "id": "f60bce4d-8b0d-41a5-a479-2cd012462ede",
+  "disambiguation": "",
+  "sort-name": "Foyone",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  }
+}

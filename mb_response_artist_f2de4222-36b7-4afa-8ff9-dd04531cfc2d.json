@@ -1,0 +1,310 @@
+{
+  "name": "Mamas Gun",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "type": null,
+    "sort-name": "United Kingdom",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "name": "United Kingdom",
+    "type-id": null
+  },
+  "isnis": [],
+  "begin-area": {
+    "disambiguation": "Greater London",
+    "type": null,
+    "sort-name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type-id": null,
+    "name": "London"
+  },
+  "gender-id": null,
+  "id": "f2de4222-36b7-4afa-8ff9-dd04531cfc2d",
+  "ipis": [],
+  "end-area": null,
+  "type": "Group",
+  "disambiguation": "London based soul/ funk band",
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "gender": null,
+  "relations": [
+    {
+      "target-credit": "",
+      "url": {
+        "id": "405f9835-139c-4ee3-b354-36b87793876e",
+        "resource": "https://mamasgun.bandcamp.com/"
+      },
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "end": null,
+      "type": "bandcamp",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "52169398-1d67-4308-b327-b2a4ff256664",
+        "resource": "https://www.discogs.com/artist/1962642"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "50482942-008c-4103-8baf-5ef771738cc7",
+        "resource": "https://open.spotify.com/artist/09bP40OuEV5tOM1rQnZNxI"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "449c8a28-181b-4611-9ea0-b1650e28584d",
+        "resource": "https://www.deezer.com/artist/288255"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/mamasgun",
+        "id": "845ad12b-2c3f-4113-8758-f9eb6c470f33"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "myspace",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "b1e3e6b8-59ab-45ef-a37f-fa51511c9074",
+        "resource": "http://mamasgun.co.uk/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "id": "fee57097-751b-44e2-8bac-aa2ed209e9c5",
+        "resource": "https://music.apple.com/us/artist/215662409"
+      },
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "end": null,
+      "type": "purchase for download",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "e0f97b14-669d-46f9-bae9-2efadd2d9b94",
+        "resource": "https://twitter.com/mamasgun_uk"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "52c4566f-9732-427d-9846-0fcce62eb660",
+        "resource": "https://www.facebook.com/MamasGun"
+      },
+      "source-credit": "",
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/mamasgun_uk/",
+        "id": "8f98e6d2-9d82-4c4a-827c-817ec6659260"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/609559",
+        "id": "12d58f9c-9fb7-4061-88fc-c394cad22481"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "songkick",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "resource": "https://soundcloud.com/mamas-gun",
+        "id": "39ad3d91-53f2-4f9e-b752-e874bd76117a"
+      },
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "soundcloud",
+      "source-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/215662409",
+        "id": "fee57097-751b-44e2-8bac-aa2ed209e9c5"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/3624951",
+        "id": "29d39e2b-e396-4682-a210-0e3854d6a522"
+      },
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "f68b98b2-df01-4c59-9e71-470572fa8d05",
+        "resource": "https://www.wikidata.org/wiki/Q6745449"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    }
+  ],
+  "sort-name": "Mamas Gun",
+  "country": "GB"
+}

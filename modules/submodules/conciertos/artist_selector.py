@@ -314,10 +314,12 @@ class ArtistSelectorDialog(QDialog):
             if self.has_favorito_column:
                 query += ", a.favorito"
             
-            query += " FROM artists a ORDER BY a.name"
-            
+            query += """,
+                (SELECT genre FROM albums WHERE artist_id = a.id AND genre IS NOT NULL LIMIT 1) AS genre
+            FROM artists a ORDER BY a.name"""
+
             print(f"Query: {query}")  # Debug
-            
+
             cursor.execute(query)
             artists = cursor.fetchall()
             
@@ -331,11 +333,12 @@ class ArtistSelectorDialog(QDialog):
                 'similar_artists': 3,
                 'member_of': 4,
                 'aliases': 5,
-                'origen': 6
+                'origen': 6,
+                'genre': 7,
             }
-            
+
             if self.has_favorito_column:
-                col_indices['favorito'] = 7
+                col_indices['favorito'] = 8
             
             # Configurar filas de la tabla
             self.artists_table.setRowCount(len(artists))
@@ -353,22 +356,8 @@ class ArtistSelectorDialog(QDialog):
                 
                 # Añadir los datos a las columnas
                 self.artists_table.setItem(row, 0, QTableWidgetItem(artist[col_indices['artist_name']]))
-                
-                # Para la columna de género, buscaremos en otro lugar ya que no existe en la tabla artists
-                genre = ""
-                try:
-                    # Intentar obtener género del álbum más popular del artista
-                    cursor.execute("""
-                        SELECT genre FROM albums 
-                        WHERE artist_id = ? AND genre IS NOT NULL
-                        LIMIT 1
-                    """, (artist_id,))
-                    genre_result = cursor.fetchone()
-                    if genre_result:
-                        genre = genre_result[0]
-                except Exception as e:
-                    print(f"Error obteniendo género para artista {artist_id}: {e}")
-                
+
+                genre = artist[col_indices['genre']] or ""
                 self.artists_table.setItem(row, 1, QTableWidgetItem(genre))
                 
                 # Tags (puede ser None)

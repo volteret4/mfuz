@@ -1,0 +1,141 @@
+{
+  "area": {
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "type": null,
+    "name": "Germany",
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "sort-name": "Germany",
+    "type-id": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "end-area": null,
+  "gender": null,
+  "type": "Group",
+  "name": "Kettenkarussell",
+  "begin-area": null,
+  "country": "DE",
+  "sort-name": "Kettenkarussell",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": null
+  },
+  "gender-id": null,
+  "id": "126ed5d6-a0f4-4a37-87d5-8dce0febd18c",
+  "isnis": [],
+  "relations": [
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "1973818a-781c-49ae-b91c-9567824c4589",
+        "resource": "https://www.allmusic.com/artist/mn0003482813"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "url": {
+        "id": "78b9c494-3557-45f3-ae5b-530c322e00b8",
+        "resource": "https://www.discogs.com/artist/1398569"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "myspace",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://myspace.com/kttnkrssll",
+        "id": "4a8f33ed-a3db-4fd6-a9c4-cdc37cca5128"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156"
+    },
+    {
+      "url": {
+        "id": "eee90653-8cba-44ef-81c4-d636ce4cf001",
+        "resource": "https://ra.co/dj/kettenkarussell"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/kettenkarussell",
+        "id": "ba1f335b-7ccf-4efa-8100-e028a7e62b10"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "94c0a0a7-858b-489b-8216-5d8317fe2757",
+        "resource": "https://www.wikidata.org/wiki/Q61037231"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "ipis": [],
+  "disambiguation": ""
+}

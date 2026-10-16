@@ -1,0 +1,438 @@
+{
+  "gender-id": null,
+  "id": "0daeccf9-9a55-4726-a845-80b439d8e4c9",
+  "name": "Matia Bazar",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000115085391"
+  ],
+  "begin-area": {
+    "sort-name": "Genova",
+    "id": "5e27763f-9567-4b8d-ac62-d8e5f18b32d1",
+    "type-id": null,
+    "name": "Genova",
+    "disambiguation": "",
+    "type": null
+  },
+  "area": {
+    "iso-3166-1-codes": [
+      "IT"
+    ],
+    "disambiguation": "",
+    "name": "Italy",
+    "type-id": null,
+    "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+    "type": null,
+    "sort-name": "Italy"
+  },
+  "type": "Group",
+  "ipis": [],
+  "end-area": null,
+  "life-span": {
+    "ended": true,
+    "begin": "1975",
+    "end": "1989"
+  },
+  "disambiguation": "",
+  "country": "IT",
+  "sort-name": "Matia Bazar",
+  "relations": [
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000863433",
+        "id": "278eb360-fbed-4174-9e96-341ed08b160a"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "allmusic",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/136886",
+        "id": "5c0a8475-70aa-495a-88b6-3f8d90b99a5f"
+      },
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "e20a64fa-0706-4d03-aa1d-13f54c65d71b",
+        "resource": "http://www.scalise.it/matiabazar/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "end": null,
+      "begin": null,
+      "type": "fanpage",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/449mAbddAC2PAgNM3TLyc5",
+        "id": "670c37ef-6600-46a3-8207-77e78eb98cd4"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "afefae7c-2337-4591-a694-ff68efed752f",
+        "resource": "https://www.deezer.com/artist/10261"
+      },
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Matia%20Bazar%20Stigliano%2020070613.jpg",
+        "id": "6010782c-da17-43c9-addc-f5e1f8a2541c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "image",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "4583c735-e02f-48f7-a619-948b8f6e35e8",
+        "resource": "https://www.imdb.com/name/nm0063288/"
+      }
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "resource": "https://myspace.com/matiabazarofficialmyspace",
+        "id": "8e529b75-7a78-458c-9c36-aaff6534c85c"
+      },
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "end": null,
+      "begin": null,
+      "type": "myspace",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "url": {
+        "resource": "http://www.matiabazar.com/",
+        "id": "2f4ed2b3-7088-4239-95d4-352cb0a01088"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "url": {
+        "id": "2e17d49b-893c-4a13-85b4-5ee41d06c5c7",
+        "resource": "http://discografia.dds.it/scheda_artista.php?ida=4720"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no98005296",
+        "id": "055fe4d9-b909-4375-9e2a-ef976200da38"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "1c03e580-25da-4157-b577-782c6aecdbee",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13904894g"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://d-nb.info/gnd/16040661-4",
+        "id": "72b637b7-4736-4985-ac27-84b73117f2b1"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "3d74dbf9-7db2-4f95-a072-7d570672aa8e",
+        "resource": "https://rateyourmusic.com/artist/matia_bazar"
+      },
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "5d9cbf0f-f5f5-48fe-84fc-7ee558421a75",
+        "resource": "https://www.worldcat.org/identities/lccn-no98005296"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://www.beatport.com/artist/matia-bazar/468608",
+        "id": "50897218-847f-495d-b8c6-96d80c6d497d"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/matia-bazar-23d6c013.html",
+        "id": "ff2b98cf-a3c5-46ea-afe9-6f22759a8af6"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null,
+      "end": null,
+      "type": "setlistfm",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "songkick",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "url": {
+        "id": "c4f10247-0ec8-47ef-8df2-ded9a5a0b836",
+        "resource": "https://www.songkick.com/artists/478240"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/17498398",
+        "id": "3a5cb5ae-3b00-428b-a1b8-5093aa85d218"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/3506170",
+        "id": "7b90ea94-0f6f-416b-85ca-7e526833874e"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "url": {
+        "id": "b3780ce4-0dd3-4a83-a76b-3a09143e1fb9",
+        "resource": "http://viaf.org/viaf/306417845"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "type": "VIAF",
+      "begin": null,
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "wikidata",
+      "end": null,
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "url": {
+        "id": "48246340-58b3-498c-9b5d-1e6f073ed12d",
+        "resource": "https://www.wikidata.org/wiki/Q1231930"
+      },
+      "target-type": "url"
+    }
+  ],
+  "gender": null
+}

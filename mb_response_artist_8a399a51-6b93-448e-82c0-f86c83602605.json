@@ -1,0 +1,621 @@
+{
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "8a399a51-6b93-448e-82c0-f86c83602605",
+  "name": "Hildur Gu\u00f0nad\u00f3ttir",
+  "isnis": [
+    "0000000372568140"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "iso-3166-2-codes": [
+      "IS-0"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "id": "e498a3ef-704c-462e-b144-6e6fc108a6f2",
+    "sort-name": "Reykjav\u00edk",
+    "type-id": null,
+    "name": "Reykjav\u00edk"
+  },
+  "area": {
+    "sort-name": "Iceland",
+    "type": null,
+    "name": "Iceland",
+    "type-id": null,
+    "id": "48802a32-075a-3805-a183-277c66047693",
+    "iso-3166-1-codes": [
+      "IS"
+    ],
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "end-area": null,
+  "type": "Person",
+  "life-span": {
+    "end": null,
+    "begin": "1982-09-04",
+    "ended": false
+  },
+  "disambiguation": "Icelandic musician and score composer",
+  "sort-name": "Hildur Gu\u00f0nad\u00f3ttir",
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "url": {
+        "id": "db3403cc-9a86-4fd7-bb25-9cf369405f3a",
+        "resource": "https://www.allmusic.com/artist/mn0000554234"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "allmusic",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://hildurgudnadottir.bandcamp.com/",
+        "id": "16e02de2-a7b2-4978-833b-1fdad775c067"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "bandcamp",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "id": "d12ff87b-4805-4a37-a48b-4678f9ec5ea2",
+        "resource": "https://www.discogs.com/artist/403026"
+      },
+      "target-type": "url",
+      "source-credit": "Hildur Gu\u00f0nad\u00f3ttir",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "Lost in Hildurness",
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "id": "d30a8c8b-74c7-4b5a-b51e-a95534bab746",
+        "resource": "https://www.discogs.com/artist/791682"
+      },
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "fanpage",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "439bd4dc-93fa-4a9f-abc3-74fe69e046b9",
+        "resource": "https://fanart.tv/artist/8a399a51-6b93-448e-82c0-f86c83602605/"
+      },
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "resource": "https://open.spotify.com/artist/2lD1D6eEh7xQdBtnl2Ik7Y",
+        "id": "80ef5d64-cfad-4984-95a7-bf06da6a564a"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "aca98215-eaf1-4bd6-9208-092334810afc",
+        "resource": "https://open.spotify.com/artist/5EM7Diw0HuzYcqletAOpEa"
+      },
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "free streaming",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "bbb521de-aab0-4e3b-ae57-4c159593f68d",
+        "resource": "https://www.deezer.com/artist/5962324"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "url": {
+        "id": "c8ad2fea-ecef-4fc6-989e-23060df17875",
+        "resource": "https://www.imdb.com/name/nm3723390/"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/Hildur%20Gu%C3%B0nad%C3%B3ttir",
+        "id": "69d2b9f2-8751-4002-8f15-c8ca5545cf24"
+      },
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "end": null,
+      "type": "last.fm",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "lyrics",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "url": {
+        "id": "4cf646c5-b0e5-4871-a14f-dacaebdd4e71",
+        "resource": "https://genius.com/artists/Hildur-gunadottir"
+      },
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "df3924ed-a028-483e-8a9e-06a8a32ecb00",
+        "resource": "https://myspace.com/hildurness"
+      },
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false,
+      "type": "myspace",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "url": {
+        "id": "82530c59-56e5-4066-91fb-d673904c98de",
+        "resource": "https://www.hildurness.com/"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "2ee01fb2-c062-431d-a029-4814ebda294a",
+        "resource": "http://id.loc.gov/authorities/names/no2015083489"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "08a7fa35-22ca-452d-a0c9-b2b57e9fa21c",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb169523764"
+      },
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "1d14b45a-de8a-4466-8209-43ec00e9aaca",
+        "resource": "https://d-nb.info/gnd/1059084643"
+      }
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "source-credit": "",
+      "url": {
+        "resource": "https://imvdb.com/n/hildur-gu%C3%B0nad%C3%B3ttir",
+        "id": "63ad240c-17fa-4e05-95e8-d6100f7239fe"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "4a30606b-4195-480d-9e2a-d4693b3a5d31",
+        "resource": "https://rateyourmusic.com/artist/hildur-gudnadottir"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2015083489/",
+        "id": "c7c95559-476f-4395-bdf6-c74aeb23aab3"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id306767183",
+        "id": "5183066d-f393-4e7b-9872-c3643aa09c0c"
+      },
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "url": {
+        "id": "62eba056-f847-48b4-8f18-7dd2944a1b5e",
+        "resource": "https://music.apple.com/us/artist/306767183"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "source-credit": "",
+      "url": {
+        "resource": "https://twitter.com/hildurness",
+        "id": "3ab0ff1c-a26d-4cf5-8af3-8d8ca7a22fc8"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.facebook.com/Hildur-Gudnad%C3%B3ttir-72600460848",
+        "id": "33ed54de-c8a8-402f-8e19-3c73fbb4d349"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "0f029ad1-94ae-4ccc-94df-ff0d711e3a17",
+        "resource": "https://www.instagram.com/hildur_gudnadottir/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/2083527",
+        "id": "825786e9-0e19-43ff-9b18-e4d66cb62e4f"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "songkick",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "f531a15f-817f-4f4b-a6e3-e60b66e283ed",
+        "resource": "https://music.apple.com/fr/artist/306767183"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "4ea4f932-ba91-42eb-921e-446c42ed0be4",
+        "resource": "https://music.apple.com/gb/artist/306767183"
+      },
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/7409911",
+        "id": "27b1e158-6cb5-484a-9909-5ffba657c270"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "50632583-9110-40d2-b8f2-8dac5044bd34",
+        "resource": "https://vgmdb.net/artist/53703"
+      },
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "end": null,
+      "begin": null,
+      "type": "vgmdb",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "VIAF",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "f221b5ad-dfb1-449c-a01d-2020d628d6b1",
+        "resource": "http://viaf.org/viaf/313410974"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q433734",
+        "id": "8d6f5328-f905-458c-b4b2-8ad011df1a7b"
+      },
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "end": null,
+      "type": "wikidata",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCzSebZaqfKU_p3QA0K4kjTQ",
+        "id": "a771a445-2062-4a8c-a4e0-85fbe4a0aeef"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "type": "youtube",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    }
+  ],
+  "gender": "Female",
+  "country": "IS"
+}

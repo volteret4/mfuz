@@ -1,0 +1,762 @@
+{
+  "sort-name": "Austra",
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Toronto",
+    "id": "74b24e62-d2fe-42d2-9d96-31f2da756c77",
+    "name": "Toronto",
+    "type": null
+  },
+  "disambiguation": "",
+  "end-area": null,
+  "life-span": {
+    "ended": false,
+    "begin": "2009",
+    "end": null
+  },
+  "gender-id": null,
+  "id": "af9e8d94-d471-4f91-82c7-250c22545162",
+  "name": "Austra",
+  "isnis": [
+    "0000000470123583"
+  ],
+  "gender": null,
+  "relations": [
+    {
+      "url": {
+        "id": "6c3f0494-3b70-4381-b2f0-5e7132c69687",
+        "resource": "https://www.allmusic.com/artist/mn0002576168"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "allmusic",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "type": "bandcamp",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://austra.bandcamp.com/",
+        "id": "6e03dfb5-2b31-47bb-b6b8-96847e2cb73f"
+      }
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "bandcamp",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "fe3b5cec-9004-44bf-aa86-e348e57b3ae6",
+        "resource": "https://austramusic.bandcamp.com/"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "bandsintown",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "ca01a9d9-2521-46da-bed7-50084407138c",
+        "resource": "https://www.bandsintown.com/a/1087018"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://austramusic.tumblr.com/",
+        "id": "b64388bf-b42c-4ce2-b8e4-e703128267b1"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "blog",
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f"
+    },
+    {
+      "url": {
+        "id": "0e77217b-a0aa-4bda-ae48-8422f0c5d38d",
+        "resource": "https://www.discogs.com/artist/2101535"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "b7d63d03-7351-4b34-aec4-d46c8faa5484",
+        "resource": "https://open.spotify.com/artist/1o43SzzuLoyOxqThmp7s0g"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/984734",
+        "id": "9bff50cf-b42e-44a6-9442-cc3d9fb494a4"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm10773277/",
+        "id": "890ff7d7-5b02-4df7-9b6e-8fe690ae940d"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "type": "IMDb",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "67a0ba84-91ff-4ce2-b232-07c8a9e8ef01",
+        "resource": "https://www.last.fm/music/Austra"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "last.fm"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-13435/austra/lyrics.html",
+        "id": "fda7442b-cc74-4bfa-9143-5148c9e05bc8"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://genius.com/artists/Austra",
+        "id": "c2325c39-6127-47a9-b4ef-c1b245013cfe"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "lyrics"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "myspace",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "e41b05a3-8be0-457a-84cc-6faa7eae7069",
+        "resource": "https://myspace.com/austra"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://austra.fyi/",
+        "id": "67b46938-af9d-4dea-9b02-4ff78750f781"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "official homepage",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "6eaa1602-0aff-46cb-8576-364b59009af2",
+        "resource": "http://www.austramusic.com/"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "41afbc71-81cd-4861-bdfa-2ccda16d3f13",
+        "resource": "http://id.loc.gov/authorities/names/no2013061833"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "4caef1b7-0270-4138-8362-0c26f93641c1",
+        "resource": "https://imvdb.com/n/austra"
+      }
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/austra",
+        "id": "99d2d1bb-2304-452d-bf5f-d8bb4c6c3f3b"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.whosampled.com/Austra/",
+        "id": "31afc74f-4134-45ea-be19-cf1818b9ee85"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2013061833/",
+        "id": "72512f3b-d376-47e4-98a8-bb703f880193"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://bleep.com/artist/20481",
+        "id": "8380a032-3d30-47dd-9a4c-977b169514b5"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "purchase for download",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "d15cacea-c711-47ed-9174-1644534f4e61",
+        "resource": "https://boomkat.com/artists/austra"
+      }
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "d70cf92d-1d13-4fb6-b2e7-90fa232f3c8d",
+        "resource": "https://itunes.apple.com/artist/id409876334"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "9527806c-9fda-4374-b7db-069b0546b5b5",
+        "resource": "https://music.apple.com/us/artist/409876334"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "4e9975a6-4e8a-4a04-b4c4-05ec8dbcda19",
+        "resource": "https://www.beatport.com/artist/-/170705"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "secondhandsongs",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/52593",
+        "id": "0d323502-d207-45d5-838b-4dc883356802"
+      }
+    },
+    {
+      "type": "setlistfm",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "83dcb176-1553-475f-ae32-7e884fe29b6b",
+        "resource": "https://www.setlist.fm/setlists/austra-3bd2cca0.html"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://twitter.com/austratalks",
+        "id": "7c2f346e-6ee5-4041-9741-eefbf3359991"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "ed971e3f-9a3a-4d01-b88d-1a26871bb78a",
+        "resource": "https://www.facebook.com/austraofficial"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "cd916594-1565-496b-8181-f9fc230ea013",
+        "resource": "https://www.instagram.com/austra/"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/3678466",
+        "id": "67d5e8a5-6f7d-44d5-b928-88d6ad06f93d"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "14eccadf-9fd3-4318-9dd0-8d72819915b2",
+        "resource": "https://soundcloud.com/austra_midi"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "soundcloud",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/409876334",
+        "id": "c8838043-91ff-4f57-a0c8-1af4ca119a57"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/409876334",
+        "id": "9527806c-9fda-4374-b7db-069b0546b5b5"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://play.qobuz.com/artist/552322",
+        "id": "e8c1ae87-53e2-4ab7-b723-3072afe52615"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://tidal.com/artist/3843287",
+        "id": "57b214cd-c145-4c07-81ff-fa56328f0423"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "type": "VIAF",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "4e32346e-24f7-4b27-adf8-b53f1b762785",
+        "resource": "http://viaf.org/viaf/305424993"
+      }
+    },
+    {
+      "type": "wikidata",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "30c5dc66-15af-47bf-93c1-c4eef71ae620",
+        "resource": "https://www.wikidata.org/wiki/Q781201"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "fdea3a40-efdc-4431-b04a-a36162fa7889",
+        "resource": "https://www.youtube.com/channel/UCv4RjtQbOmNrOHzPEm4bbxA"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "youtube"
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/user/AustraVEVO",
+        "id": "f9596f8b-8f88-4565-bf82-5db32e26b6dc"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    }
+  ],
+  "area": {
+    "type-id": null,
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "name": "Canada",
+    "type": null,
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "disambiguation": "",
+    "sort-name": "Canada"
+  },
+  "ipis": [],
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": "CA"
+}

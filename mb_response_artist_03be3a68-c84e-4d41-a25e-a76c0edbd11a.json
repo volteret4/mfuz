@@ -1,0 +1,112 @@
+{
+  "country": "ES",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "ipis": [],
+  "area": {
+    "iso-3166-1-codes": [
+      "ES"
+    ],
+    "disambiguation": "",
+    "sort-name": "Spain",
+    "type-id": null,
+    "id": "471c46a7-afc5-31c4-923c-d0444f5053a4",
+    "name": "Spain",
+    "type": null
+  },
+  "relations": [
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "45ae16f4-c5c2-4e70-a36f-5b762d3dead0",
+        "resource": "https://www.discogs.com/artist/7015392"
+      }
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "ce4ecef9-0d12-4bf8-b039-2be7078fc810",
+        "resource": "https://open.spotify.com/artist/70GBRlKEGjfueop2lfdQ4Q"
+      }
+    },
+    {
+      "url": {
+        "id": "c36d2ada-8127-4f38-a8af-6b372a111b35",
+        "resource": "https://tidal.com/artist/10975224"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "type": "wikidata",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "e287a1f8-e089-4f3a-b6ac-bbe9582d9130",
+        "resource": "https://www.wikidata.org/wiki/Q66317462"
+      },
+      "direction": "forward",
+      "begin": null
+    }
+  ],
+  "gender": "Female",
+  "isnis": [],
+  "name": "Mar\u00eda Jos\u00e9 Llergo",
+  "id": "03be3a68-c84e-4d41-a25e-a76c0edbd11a",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "end": null,
+    "begin": "1994",
+    "ended": false
+  },
+  "sort-name": "Llergo, Mar\u00eda Jos\u00e9",
+  "disambiguation": "",
+  "end-area": null,
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Pozoblanco",
+    "sort-name": "Pozoblanco",
+    "id": "82aedda4-ff1a-4d09-8279-99d60ba94f51",
+    "type-id": null
+  }
+}

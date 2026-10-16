@@ -1,0 +1,159 @@
+{
+  "type": "Group",
+  "life-span": {
+    "end": "1979",
+    "begin": "1977",
+    "ended": true
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [],
+  "area": {
+    "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+    "sort-name": "Europe",
+    "iso-3166-1-codes": [
+      "XE"
+    ],
+    "type-id": null,
+    "disambiguation": "",
+    "name": "Europe",
+    "type": null
+  },
+  "name": "Love & Kisses",
+  "sort-name": "Love & Kisses",
+  "gender-id": null,
+  "disambiguation": "",
+  "relations": [
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "url": {
+        "resource": "https://web.archive.org/web/20080517165519/http://www.discomuseum.com/LoveKisses.html",
+        "id": "eb2e73e7-cd86-4ca4-ae7c-cd143939d42d"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "biography",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "1c46b131-0d45-46d0-93c2-a423acdf6220",
+        "resource": "https://www.discogs.com/artist/33199"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "49314cd9-872e-47fd-b053-a84f89d658ad",
+        "resource": "https://www.last.fm/music/Love+&+Kisses"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "last.fm",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/love_and_kisses",
+        "id": "60e86ded-cd7b-4de1-842b-67c33ff196c5"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "setlistfm",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "ae8c1b5b-ab47-4e2b-b0d5-1cdf7da0b82b",
+        "resource": "https://www.setlist.fm/setlists/love-and-kisses-4bd7db2a.html"
+      }
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "wikidata",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q16240315",
+        "id": "511dec91-9e04-4d34-9c45-8985ae89f0f7"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "e8c01bfd-ffd0-4244-b209-fde8695a6714",
+        "resource": "https://www.youtube.com/channel/UCK_NUNXU9Q7BS2QpSvowhpQ"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "youtube",
+      "attribute-values": {},
+      "begin": null
+    }
+  ],
+  "country": "XE",
+  "gender": null,
+  "end-area": null,
+  "id": "e8aaa68e-bc8a-41d8-8815-2bde83490c4b",
+  "ipis": [],
+  "begin-area": null
+}

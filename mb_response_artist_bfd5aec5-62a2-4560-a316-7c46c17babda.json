@@ -1,0 +1,1015 @@
+{
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "San Francisco",
+    "id": "83f22bb6-4631-443c-bace-9fae8540362a",
+    "sort-name": "San Francisco",
+    "type-id": null
+  },
+  "country": "US",
+  "name": "Train",
+  "type": "Group",
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "disambiguation": "US pop rock band",
+  "ipis": [],
+  "id": "bfd5aec5-62a2-4560-a316-7c46c17babda",
+  "isnis": [
+    "0000000107680668",
+    "0000000114568105"
+  ],
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000746302",
+        "id": "d003165e-a630-4e7f-9d47-423e7e2fea4d"
+      },
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "b50d3e6c-6fce-422b-9feb-452fe3b8ce73",
+        "resource": "https://www.bandsintown.com/a/654"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown"
+    },
+    {
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/bfd5aec5-62a2-4560-a316-7c46c17babda",
+        "id": "e7633154-5308-44ec-9580-7bb20891d930"
+      },
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": true,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": "2020-11-19",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/295763",
+        "id": "57113b2b-e38e-437d-afa5-413c0de3f6f6"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "f684c44b-2581-45d9-9eaf-12a428d34fa9",
+        "resource": "https://open.spotify.com/artist/3FUY2gzHeIiaesXtOAdB7A"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/285618621",
+        "id": "6f89e9a2-21d9-4eda-a689-e8c1fd1d3784"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "473d5a28-76a6-493c-a2ae-1ebd48de6d9c",
+        "resource": "https://www.deezer.com/artist/685"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1613356/",
+        "id": "718a6d73-2d47-46db-82a5-a9f53b13c792"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "IMDb"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "1d8aff2c-4032-48da-b246-0234cfee972c",
+        "resource": "https://www.last.fm/music/Train"
+      },
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "8fe52870-520e-458a-b271-8121e0fa80dd",
+        "resource": "http://muzikum.eu/en/122-4019/train/lyrics.html"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "type": "lyrics",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Train",
+        "id": "6b09126c-4ace-424a-b9a9-685d95b21cf4"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Train",
+        "id": "c90afb2e-13c1-490c-b751-acb8772dacd1"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://myspace.com/train",
+        "id": "7b35c7a5-412f-439b-a95f-678c4a76885a"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attribute-values": {},
+      "type": "myspace",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "ee8830f7-d66d-4f12-918e-73e62bcdcfb1",
+        "resource": "https://savemesanfrancisco.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "2990e3b9-1f79-496e-bd4c-46a603c3b300",
+        "resource": "http://trainline.com/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no00009940",
+        "id": "8b6c8667-c9f8-41de-8cac-737bf565f2fe"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/T/Train/",
+        "id": "d67c72c5-be94-42dc-b3cd-061ef033c676"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb140423403",
+        "id": "8f357ebe-dc93-4872-aab3-1a9c067e9029"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9d45350b-21f7-4946-a3c5-55106f2bb64a",
+        "resource": "https://d-nb.info/gnd/5534840-3"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://imvdb.com/n/train",
+        "id": "e9760888-d393-4597-a03b-fa2bb1082599"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "684193a4-0cee-4b6a-b754-a3dcd09d677c",
+        "resource": "https://rateyourmusic.com/artist/train"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "f789a6ab-a4ac-4e34-bae7-06532fcf84ca",
+        "resource": "https://www.45cat.com/artist/train"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "301fe7c8-ee29-45ed-89b0-b1ce199d6a77",
+        "resource": "https://www.musik-sammler.de/artist/train/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "eb06d422-c139-4b13-84bb-88fc618703d5",
+        "resource": "https://www.muziekweb.nl/Link/M00000130329/POPULAR/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "a00a622b-3ffd-48bc-99a1-176d8c32ff62",
+        "resource": "https://www.spirit-of-rock.com/en/band/Train"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "1b2274af-0518-48e9-ba98-52fb49964ba4",
+        "resource": "https://www.whosampled.com/Train/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "8fd979f3-ea12-4ed0-bcb8-61afb06e91ba",
+        "resource": "https://www.worldcat.org/identities/viaf-160435253/"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": "2020-10-12",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "id": "1d470966-f6c6-4826-bd1f-704288d15370",
+        "resource": "https://play.google.com/store/music/artist?id=A4quissxu3g2u2c2tjgcldkamoy"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/artist/id469476",
+        "id": "32d7bc1f-fa35-41ac-9c3f-13f07853a9e7"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "f4b40419-2bb5-4aed-967f-5667794408e8",
+        "resource": "https://music.apple.com/us/artist/469476"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.7digital.com/artist/train",
+        "id": "42a15db4-ee77-411e-a757-944556a3a47a"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "5d0f3eaa-9915-4c86-a753-b10b6b8f01bd",
+        "resource": "https://www.junodownload.com/artists/Train/releases/"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "fe0fb6f5-4822-4b45-820e-7cf8e251464e",
+        "resource": "https://www.onkyomusic.com/GB/artist/train"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "id": "8453c7de-d099-420c-ba2c-50c7257ca522",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/train/download-streaming-albums"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700210794",
+        "id": "b85c52a5-dc41-4bd4-a1fb-d46f8a280884"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "7b2c45cc-584c-4e68-92fe-f57203ddecdb",
+        "resource": "https://secondhandsongs.com/artist/1382"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/train-7bd6b650.html",
+        "id": "0cbc7faa-fc5c-42e9-ad41-e9d601aaf753"
+      },
+      "attribute-values": {},
+      "type": "setlistfm",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "ca72b8fe-d766-458e-8b50-4670e2ceaf21",
+        "resource": "https://twitter.com/train"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "7acb6b21-5c5f-465c-a44d-d11d8cdaf673",
+        "resource": "https://www.facebook.com/Train"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "c4b05528-d229-4a7d-a66e-31414eae779d",
+        "resource": "https://www.instagram.com/train/"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "ead84beb-d058-46f4-8bd0-8c1524320e66",
+        "resource": "https://www.songkick.com/artists/186049"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "soundcloud",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "resource": "https://soundcloud.com/trainofficial",
+        "id": "d259b21b-5e46-46af-9a8d-a170b9cd8460"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "c66a07ea-19ae-43da-a198-d4a71cda0c92",
+        "resource": "https://music.amazon.com/artists/B001EEHFV8"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/469476",
+        "id": "b2890c80-20b0-443f-b04b-ce92d8d89a6b"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "f4b40419-2bb5-4aed-967f-5667794408e8",
+        "resource": "https://music.apple.com/us/artist/469476"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCWzv46iaY7wRp0sQMes95kw",
+        "id": "9e6360e8-afad-45b4-8a09-4d6022086821"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/1186",
+        "id": "31d443a6-6756-424a-95b5-e137a614bd2a"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/30691784",
+        "id": "35612a24-dec0-480a-a58f-11f359e4335d"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "ee0b46df-85d4-4e7e-822f-e5f384c23b46",
+        "resource": "https://us.napster.com/artist/train"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "8453c7de-d099-420c-ba2c-50c7257ca522",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/train/download-streaming-albums"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "2ba5c26d-919b-4d49-af1c-42c6309198fe",
+        "resource": "http://viaf.org/viaf/139174118"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "511932c6-fede-4f8f-8512-ca1ea0abb6ed",
+        "resource": "https://www.wikidata.org/wiki/Q282531"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "27f95136-7703-4928-a768-c1eccb70a0fe",
+        "resource": "https://www.youtube.com/user/TrainMusic"
+      },
+      "attribute-values": {},
+      "type": "youtube",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/user/trainvevo",
+        "id": "4773569f-64cb-41fd-903f-02a78a3e416d"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "gender-id": null,
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1994"
+  },
+  "sort-name": "Train"
+}

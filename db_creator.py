@@ -3,6 +3,7 @@ import sys
 import argparse
 import json
 import importlib.util
+import time
 from project_utils import PROJECT_ROOT
 from pathlib import Path
 
@@ -88,6 +89,7 @@ def main():
             continue
 
         print(f"\n=== Ejecutando {script_name} ===")
+        script_start = time.monotonic()
 
         # Extraer configuración específica para este script
         script_config = {}
@@ -135,6 +137,9 @@ def main():
                 print(f"Advertencia: El script {script_name} no tiene función main")
         except Exception as e:
             print(f"Error al ejecutar {script_name}: {e}")
+        finally:
+            elapsed = time.monotonic() - script_start
+            print(f"=== {script_name} tardó {elapsed:.1f}s ===")
 
 if __name__ == "__main__":
     sys.exit(main())

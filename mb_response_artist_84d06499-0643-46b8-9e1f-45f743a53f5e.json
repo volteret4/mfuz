@@ -1,0 +1,744 @@
+{
+  "type": "Group",
+  "gender": null,
+  "country": "GB",
+  "isnis": [
+    "0000000115128734"
+  ],
+  "relations": [
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "08c52b20-8761-4e4f-9d41-cd033084503b",
+        "resource": "https://www.allmusic.com/artist/mn0000785101"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.bandsintown.com/a/3108",
+        "id": "b93356ce-a79d-420e-91fb-4828cb96ab21"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "e8394efd-0a75-4926-b905-d972e60aea71",
+        "resource": "https://www.bbc.co.uk/music/artists/84d06499-0643-46b8-9e1f-45f743a53f5e"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "biography",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "e1015055-48d2-4bb0-ac78-b1f5329f648f",
+        "resource": "https://www.theaudiodb.com/artist/112536-Bananarama"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/10389",
+        "id": "fcb9d7f6-ec64-4a4f-bf05-68fbf5621e0a"
+      },
+      "attributes": [],
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "62a1503e-96d1-4448-8545-978f0f89181a",
+        "resource": "https://music.yandex.com/artist/51962"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "c0aece81-993a-4ee6-818d-17a8a1151bd9",
+        "resource": "https://open.spotify.com/artist/3sc7iUG1Wwpwx7bHeZolgx"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attributes": [],
+      "url": {
+        "id": "a57a4c60-aba4-4091-b14c-fbb7b19cea55",
+        "resource": "https://play.anghami.com/artist/4704"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.boomplay.com/artists/2222565",
+        "id": "d6df6df8-76e5-4fc3-9629-4b850a8ac924"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/13658",
+        "id": "c0c4602e-ea78-4e8e-b10d-429a0beca030"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm2078179/",
+        "id": "86713fda-a469-4c5a-a5e7-e9e89ba1069a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.last.fm/music/Bananarama",
+        "id": "451c4024-ca5c-4c21-aa02-6f98079e56e5"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "d0a54c33-b160-41f8-b9f8-a5ac85eb099f",
+        "resource": "http://muzikum.eu/en/122-3767/bananarama/lyrics.html"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://genius.com/artists/Bananarama",
+        "id": "8327fbf3-1cdd-4f20-9540-040d9df78a9b"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/bananarama",
+        "id": "b94648e9-e602-4823-85e8-92ca8cb64a82"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "myspace",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "http://www.bananarama.co.uk/",
+        "id": "0aa8403b-9e42-4059-919b-c12bdcc5f5bd"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": "2025-12-17",
+      "begin": null,
+      "ended": true,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "0953344e-458b-491b-9cf7-d11baeca60cb",
+        "resource": "https://jaxsta.com/profile/1ba95272-3f76-4a43-b0c4-c2bbc211de87"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n92008601",
+        "id": "d17c1c8f-c138-4f54-a82c-1d04e9811fe2"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "ee1ba4f9-c16b-44a1-bc56-c811ac5a8c0c",
+        "resource": "http://musicmoz.org/Bands_and_Artists/B/Bananarama/"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139017965",
+        "id": "0209191f-592a-4795-b79f-94f765747a03"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://d-nb.info/gnd/5154582-2",
+        "id": "f671792c-1e09-47af-b367-b71654c1dac5"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://imvdb.com/n/bananarama",
+        "id": "f7fbaf7d-9595-45b7-aafb-3342cfdd5adb"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1167848",
+        "id": "7069930d-ea84-4a4a-b4b3-2c2706296172"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "fbf8a1cf-644c-4562-a4d6-09fab51f71fe",
+        "resource": "https://rateyourmusic.com/artist/bananarama"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.idref.fr/157339122",
+        "id": "d9e46969-b992-4bf1-91d8-29660fd8324c"
+      }
+    },
+    {
+      "ended": true,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "d3dda289-ab2b-456f-a27d-8db36bbdad72",
+        "resource": "https://www.worldcat.org/identities/lccn-n92008601/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "11552de1-eac1-406b-9d24-fc7adfb6c266",
+        "resource": "https://www.beatport.com/artist/bananarama/45791"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/6070",
+        "id": "15856d38-5593-458d-93e5-e74d11457a85"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://twitter.com/vivabananarama",
+        "id": "e3851c78-f1f0-47a6-9886-5ece12e0aeb5"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "58a44183-9b71-4366-80b3-48754ebd15cd",
+        "resource": "https://www.facebook.com/Bananarama"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "e42d492e-9f38-4212-bbe7-09ea3d54a475",
+        "resource": "https://www.instagram.com/bananarama_official/"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/344559",
+        "id": "29f06231-8200-413a-8ae0-0d514851b557"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://music.amazon.com/artists/B000RW2R0W",
+        "id": "193447a4-6582-4aea-af3d-e2a6f8cb4444"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "69ebcb2f-d286-49b5-8301-1c77ddd819cc",
+        "resource": "https://music.apple.com/gb/artist/720991"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "45d57481-9f70-496b-8f01-a7dd938e2588",
+        "resource": "https://tidal.com/artist/17810"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "9160d91d-64bd-4c7d-b533-7ec4c2bc7b2e",
+        "resource": "https://us.napster.com/artist/bananarama"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/144388361",
+        "id": "3145bfd1-71d1-4e33-a0b6-5ba4ea282969"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q725926",
+        "id": "69f3cf1d-142b-4124-b97f-201460ba1b2f"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCEvj-7nTkDpZeDQBm8i2Bdg",
+        "id": "8e5a7163-fac1-47c6-9101-172aa151e405"
+      }
+    }
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "ipis": [],
+  "begin-area": {
+    "type-id": null,
+    "name": "London",
+    "type": null,
+    "sort-name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "disambiguation": "Greater London"
+  },
+  "disambiguation": "",
+  "id": "84d06499-0643-46b8-9e1f-45f743a53f5e",
+  "gender-id": null,
+  "sort-name": "Bananarama",
+  "name": "Bananarama",
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "type": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "end-area": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1979"
+  }
+}

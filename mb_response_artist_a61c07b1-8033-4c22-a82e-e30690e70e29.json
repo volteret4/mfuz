@@ -1,0 +1,107 @@
+{
+  "disambiguation": "",
+  "ipis": [
+    "00139918144"
+  ],
+  "isnis": [],
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/31012",
+        "id": "41acf17e-0cb9-41c4-bce1-3ce9de57d2d6"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "2ff0baaa-94ac-4015-83eb-99a96fef84d8",
+        "resource": "https://open.spotify.com/artist/3O7IxMv6D9iFICSUa5w9X4"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "IMDb",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "32957473-c411-47dc-8359-960c6f3a6281",
+        "resource": "https://www.imdb.com/name/nm0095377/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q5115875",
+        "id": "48ce218f-0a82-4155-b8cc-cfecf771a231"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {}
+    }
+  ],
+  "id": "a61c07b1-8033-4c22-a82e-e30690e70e29",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1962-12-19"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Booker, Chuckii",
+  "begin-area": null,
+  "country": "US",
+  "name": "Chuckii Booker",
+  "type": "Person",
+  "gender": "Male",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "sort-name": "United States",
+    "type-id": null
+  }
+}

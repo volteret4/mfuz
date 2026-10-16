@@ -4,6 +4,10 @@ Script para buscar y almacenar URLs de artistas en equipboard.com
 """
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import time
 import re
@@ -503,6 +507,7 @@ def process_artists_urls(database_path, force_update=False, limit=None):
     """Procesa las URLs de los artistas"""
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         # Crear tabla
@@ -583,6 +588,7 @@ def get_artist_url_stats(database_path):
     """Muestra estadísticas de URLs de artistas"""
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         cursor.execute("SELECT status, COUNT(*) FROM equipboard_artists GROUP BY status")
@@ -971,6 +977,7 @@ def process_artists_urls_selenium(database_path, force_update=False, limit=None,
     driver = None
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         # Crear tabla

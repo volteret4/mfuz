@@ -1,0 +1,603 @@
+{
+  "isnis": [
+    "0000000106535338"
+  ],
+  "begin-area": {
+    "name": "Walsall",
+    "iso-3166-2-codes": [
+      "GB-WLL"
+    ],
+    "id": "ad78cb67-115f-455a-be9c-15801055c628",
+    "sort-name": "Walsall",
+    "disambiguation": "",
+    "type-id": null,
+    "type": null
+  },
+  "ipis": [],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "type": "Person",
+  "name": "Goldie",
+  "life-span": {
+    "ended": false,
+    "begin": "1965-09-19",
+    "end": null
+  },
+  "country": "GB",
+  "end-area": null,
+  "relations": [
+    {
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "9f2b3de8-be54-4e59-b74c-ac50b16784a1",
+        "resource": "https://www.allmusic.com/artist/mn0000672498"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "allmusic",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "attributes": [],
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "id": "6a7bbb19-7b02-41e1-b840-624dfc69d3f0",
+        "resource": "https://www.bbc.co.uk/music/artists/c5393047-0c44-48eb-b5a8-070759f04371"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2020-11-19",
+      "type": "BBC Music page"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/2825",
+        "id": "d6b252cf-e098-4ac7-aa0a-420d237ecdc0"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "3a4ebba3-7fc3-4ffe-aa7b-fe5d4ffeff13",
+        "resource": "https://open.spotify.com/artist/2SYqJ3uDLLXZNyZdLKBy4M"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "7e8b4bff-0159-41df-a556-0041e033357a",
+        "resource": "https://www.deezer.com/artist/5523"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0325635/",
+        "id": "f2d1ac30-8758-44c6-8ac2-936d615e9a86"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "IMDb",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.last.fm/music/Goldie",
+        "id": "f68f142d-ba44-45f8-9015-23df17fe5b30"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "030b78e7-214c-415d-9826-db69862b2d27",
+        "resource": "http://www.goldie.co.uk/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "official homepage",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no98011003",
+        "id": "96c1e1bf-e9d7-438c-99d4-e5a682ba966e"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13983281w",
+        "id": "e0e5b53a-133f-4a09-b108-1497ce050dbe"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/128839716",
+        "id": "2d71255e-715b-47bf-b6e0-c7d7a3d7b5d2"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "5b86e8ca-1726-4f00-b4cc-f0da191acc89",
+        "resource": "https://imvdb.com/n/goldie"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "6d729d7c-55df-4568-b9d6-7af7feb4a519",
+        "resource": "https://rateyourmusic.com/artist/goldie"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no98011003/",
+        "id": "25107e4d-fe64-4cef-abb7-6404fcc0b663"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "59df16fe-09f8-49b6-9d68-027e0c1e748a",
+        "resource": "http://www.rolldabeats.com/artist/goldie"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "e39a9865-32ec-4a4f-a57e-025eebc1dac6",
+        "resource": "https://itunes.apple.com/us/artist/id615459457"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "a0e1ec5d-e7bb-43f6-a1bf-a82992f20495",
+        "resource": "https://www.beatport.com/artist/goldie/45780"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.junodownload.com/artists/Goldie/releases/",
+        "id": "f6c3c004-9f75-411c-b6ca-88d2d2eddc8e"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/goldie/427257",
+        "id": "ee20268c-f3de-431c-8bda-8358c7e5d62f"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://twitter.com/mrgoldie",
+        "id": "05468b2c-c36e-4262-83c5-dc7720f039b1"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "social network",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://twitter.com/MRGOLDIE",
+        "id": "1649c2d7-bce8-4fca-87ae-ddb306012417"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "social network",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/Goldie",
+        "id": "73828624-9b63-4501-839a-f595c8197c46"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.instagram.com/mrgoldie/",
+        "id": "9a2b7db9-4a74-46d8-8f67-4ea0fda0b74e"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "3dd0cfbc-bb6c-42d6-bc0a-2c62412c68e2",
+        "resource": "https://www.songkick.com/artists/387557"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "ac7bf7b3-de18-41e1-adb8-7de149ccaa33",
+        "resource": "https://music.apple.com/gb/artist/615459457"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "4e01a59d-7645-4fe9-b808-9809305cd51a",
+        "resource": "https://tidal.com/artist/13505"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "6c9f1013-4a5d-4fc0-b00b-63660627ae18",
+        "resource": "https://tidal.com/artist/8536040"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "ee20268c-f3de-431c-8bda-8358c7e5d62f",
+        "resource": "https://www.qobuz.com/us-en/interpreter/goldie/427257"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming"
+    },
+    {
+      "type": "VIAF",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "http://viaf.org/viaf/28290023",
+        "id": "a0628bf3-ab06-4402-832c-56d5feeb22df"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q507845",
+        "id": "e966de6c-cec8-40bd-b863-cfa6bff45773"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "wikidata",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "youtube",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "77a281fd-bcf7-4c06-a790-6a0527976c56",
+        "resource": "https://www.youtube.com/channel/UC3jTmoAqoxGn_oIISd3f_eg"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    }
+  ],
+  "sort-name": "Goldie",
+  "disambiguation": "UK jungle, drum & bass artist Clifford Joseph Price",
+  "id": "c5393047-0c44-48eb-b5a8-070759f04371",
+  "area": {
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "name": "United Kingdom",
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male"
+}

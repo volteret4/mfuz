@@ -1,0 +1,147 @@
+{
+  "gender": "Male",
+  "type": "Person",
+  "ipis": [
+    "00147371666",
+    "00147384359",
+    "00153578260"
+  ],
+  "begin-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000563742",
+        "id": "a46dffc1-09c4-47e8-8cf9-541d85b5580c"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "bde0fc30-5185-4c3f-8ea9-56032f5e0bc0",
+        "resource": "https://juantrip.bandcamp.com/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "discography page",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://juantrip.com/discography/discography.html",
+        "id": "54626f7a-e4c6-49c6-8944-7d3c20f50f96"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "58cdd079-8996-47ca-96a3-7d3b93368993",
+        "resource": "https://www.discogs.com/artist/66975"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.juantrip.com/",
+        "id": "0f050657-939e-4e39-8af9-3870f37aa334"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "cd3f0604-d7d2-429b-83d0-7a411e78f25f",
+        "resource": "http://viaf.org/viaf/29743040"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {}
+    }
+  ],
+  "isnis": [
+    "000000000317615X"
+  ],
+  "country": "FR",
+  "area": {
+    "id": "08310658-51eb-3801-80de-5a0739207115",
+    "disambiguation": "",
+    "sort-name": "France",
+    "iso-3166-1-codes": [
+      "FR"
+    ],
+    "type": null,
+    "name": "France",
+    "type-id": null
+  },
+  "name": "Juantrip\u2019",
+  "end-area": null,
+  "id": "02bc78ff-8131-4c7d-a994-eb2c8a38c86a",
+  "disambiguation": "",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Juantrip\u2019",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1969-07"
+  }
+}

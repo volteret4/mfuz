@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import argparse
 import json
 
@@ -10,6 +14,7 @@ class MusicDatabaseQuery:
         :param db_path: Ruta al archivo de base de datos SQLite
         """
         self.conn = sqlite3.connect(db_path)
+        apply_pragmas(self.conn)
         self.cursor = self.conn.cursor()
 
     def get_mbid_by_album_artist(self, artist, album):

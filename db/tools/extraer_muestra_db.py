@@ -5,6 +5,10 @@ Uso: python script.py [json|csv] [ruta_base_datos.db]
 """
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import json
 import csv
 import sys
@@ -24,6 +28,7 @@ def get_sample_data(db_path: str, limit: int = 3) -> Dict[str, List[Dict[str, An
     ]
     
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     conn.row_factory = sqlite3.Row  # Para obtener diccionarios en lugar de tuplas
     
     sample_data = {}

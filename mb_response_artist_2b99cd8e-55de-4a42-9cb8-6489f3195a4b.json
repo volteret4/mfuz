@@ -1,0 +1,240 @@
+{
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/46713",
+        "id": "1f83c421-74c9-417a-bcea-687f52e0ded5"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "target-type": "url",
+      "source-credit": "",
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "12a2fd01-7e60-401d-87cd-87e12ebf0b7d",
+        "resource": "https://open.spotify.com/artist/47UDFBXxSM6d5zbKvflXhv"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "473a2090-585e-4b91-849a-bbbc9e538d4b",
+        "resource": "https://www.deezer.com/artist/195223"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2012121969",
+        "id": "8799c871-0b56-49b8-ad2c-063a85a0acae"
+      }
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "350c24b2-9d3a-43ad-8677-d6fb7d83f470",
+        "resource": "https://www.worldcat.org/identities/lccn-no2012121969"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/BandBlackRio",
+        "id": "99291bdc-5c5b-4778-ae60-d0ab7496d39a"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "526ed665-75ae-4ff5-ace4-1fc7358cd7f9",
+        "resource": "https://www.songkick.com/artists/266751"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/18233851",
+        "id": "993bdeea-c34d-445c-ad4d-0a2b866739ca"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "5455fb4c-9ee6-4c80-aaaa-edc934ddf2c4",
+        "resource": "https://tidal.com/artist/7391"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "56c450f1-680c-4ec9-bee0-33854587f2ac",
+        "resource": "http://viaf.org/viaf/139454807"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "type": "VIAF",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q2334564",
+        "id": "4485b849-4d09-40c0-b6be-d752ee9d1b8b"
+      }
+    }
+  ],
+  "gender": null,
+  "area": {
+    "name": "Brazil",
+    "type": null,
+    "id": "f45b47f8-5796-386e-b172-6c31b009a5d8",
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Brazil",
+    "iso-3166-1-codes": [
+      "BR"
+    ]
+  },
+  "ipis": [],
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": "BR",
+  "sort-name": "Banda Black Rio",
+  "disambiguation": "",
+  "begin-area": {
+    "id": "9443d4f5-668c-4f30-96bd-6caf831de30f",
+    "sort-name": "Rio de Janeiro",
+    "type": null,
+    "name": "Rio de Janeiro",
+    "disambiguation": "",
+    "type-id": null
+  },
+  "end-area": null,
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1976"
+  },
+  "name": "Banda Black Rio",
+  "isnis": [
+    "0000000107245762"
+  ],
+  "id": "2b99cd8e-55de-4a42-9cb8-6489f3195a4b"
+}

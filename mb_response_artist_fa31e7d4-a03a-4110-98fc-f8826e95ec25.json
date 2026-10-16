@@ -1,0 +1,798 @@
+{
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Salem",
+    "id": "21abf854-fba3-4b34-a944-c4ce09331cc7",
+    "type": null,
+    "name": "Salem",
+    "disambiguation": ""
+  },
+  "country": "US",
+  "name": "Converge",
+  "type": "Group",
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "name": "United States",
+    "type": null,
+    "type-id": null,
+    "sort-name": "United States"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "disambiguation": "US metalcore band",
+  "ipis": [],
+  "id": "fa31e7d4-a03a-4110-98fc-f8826e95ec25",
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000123363",
+        "id": "9345cf41-14c3-4d49-ae2f-11ffe641ee48"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://convergecult.bandcamp.com/",
+        "id": "a9b95184-c23b-4745-9d04-065232a0d6d1"
+      },
+      "type": "bandcamp",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "bandsintown",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/3016",
+        "id": "3a42c22b-9082-4c92-80a6-f7ed4b4daa7b"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/292633",
+        "id": "7667f38f-0976-417c-a9ca-7e0bb84e6c1b"
+      }
+    },
+    {
+      "url": {
+        "id": "ce54114b-bfe1-4545-ba76-1303cce48ade",
+        "resource": "https://web.archive.org/web/19970615123002/http://www.wpi.edu/~hallee/converge.html"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/7kHzfxMLtVHHb523s43rY1",
+        "id": "c6895a8c-2398-4bce-ae76-f0dc87ad801a"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/2986",
+        "id": "8da38ac6-4785-4c70-adb4-0ec20fa8f0bb"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "image",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Converge_f4304335.jpg",
+        "id": "7ca1bd03-19eb-4f9a-81b5-18734c95e425"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Converge",
+        "id": "17d15c89-321b-475e-a81e-c5beca7f4694"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "65917b72-8925-429d-94ff-0ea73cf98115",
+        "resource": "https://genius.com/artists/Converge"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "e5a3aa86-2eb8-4d59-b930-0a7a704f986b",
+        "resource": "https://myspace.com/converge"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "official homepage",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "66fad7c0-e28d-4604-95f3-5894363beaec",
+        "resource": "https://www.convergecult.com/"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "140a4869-4b7b-4f71-b8a8-ec146be398d5",
+        "resource": "http://id.loc.gov/authorities/names/no2004118203"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://imvdb.com/n/converge",
+        "id": "cfe8e2dc-d86c-4909-ac3b-309d3d497aed"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "47526d83-a487-4ce4-9394-333ebdaa3d4e",
+        "resource": "https://rateyourmusic.com/artist/converge"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "66c22674-7929-48fc-b844-95de8b9a4894",
+        "resource": "https://www.metalmusicarchives.com/artist/converge"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/converge/",
+        "id": "7a571a86-a9db-46d1-9304-3df9e05dfcf9"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9fb9c21f-081d-4f87-91a8-e8c39d0c0a76",
+        "resource": "https://www.spirit-of-metal.com/en/band/Converge"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/Converge",
+        "id": "fc93fc16-fd46-406e-84d4-015e0e23af6e"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "06f5a20d-87b9-495f-a7f3-280c4a9641fa",
+        "resource": "https://www.worldcat.org/identities/lccn-no2004118203"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id15405383",
+        "id": "cb408d78-3e78-48fc-91d3-229ef132711c"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/15405383",
+        "id": "6ba7788c-65cc-4a24-9643-e55feed24775"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/converge/462192",
+        "id": "56a1d711-2d99-4d46-a696-3a39a2a3abe4"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/11626",
+        "id": "d9e747ac-2c72-4e96-bdb7-fb46f567b113"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "9b16e7a4-ebb7-42f6-9039-ad5ff5a7fc05",
+        "resource": "https://www.setlist.fm/setlists/converge-bd6ed5e.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "setlistfm",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "13138b89-bd3f-4588-83c2-36ccc450a743",
+        "resource": "https://twitter.com/Convergecult"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "d08cfaba-babd-4a88-89ca-f190684f4a05",
+        "resource": "https://www.facebook.com/converge"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "8062d575-68e0-43d2-a12b-5ccebf12a7d2",
+        "resource": "https://www.instagram.com/converge/"
+      },
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/174118",
+        "id": "15cd321c-4048-4eef-a5c5-8575d9a15df5"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "url": {
+        "id": "09812f4e-3df7-41bb-ba1c-1364b3265cb8",
+        "resource": "https://soundcloud.com/converge-official"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "51029df2-a44f-4aeb-ba7c-de267c048d8e",
+        "resource": "https://music.amazon.com/artists/B001QQSR0M"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/15405383",
+        "id": "a8c859cc-e199-4bf0-bbd5-ac05e4651deb"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "5e2bf048-3ca1-4364-b84a-73155b5e072c",
+        "resource": "https://music.apple.com/nz/artist/15405383"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "6ba7788c-65cc-4a24-9643-e55feed24775",
+        "resource": "https://music.apple.com/us/artist/15405383"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/3517838",
+        "id": "a0ffee14-34ea-4715-bad0-63df24f30335"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "f66c9208-28f3-40b5-9fcb-c7a93820f124",
+        "resource": "https://us.napster.com/artist/converge"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/converge/462192",
+        "id": "56a1d711-2d99-4d46-a696-3a39a2a3abe4"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "c629ae9b-615a-4efe-a92f-61fecc588751",
+        "resource": "http://viaf.org/viaf/137561702"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q281894",
+        "id": "a6f12d0b-086e-4b49-b0ab-04e4d83a7c07"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "668db90e-43a2-4b0b-abff-fdb332f5ad59",
+        "resource": "https://www.youtube.com/channel/UCztS97HJxfVWncp-QCsTmPA"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {}
+    },
+    {
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/ConvergeOfficial",
+        "id": "f676ca37-b964-464a-ac38-c23a9b11e066"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube music",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "id": "d0a0ab96-9523-4b8b-bd3f-c5120f0cfea7",
+        "resource": "https://music.youtube.com/channel/UCsz432GHFrq89-lUx9V8Xpg"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    }
+  ],
+  "isnis": [
+    "000000009362201X"
+  ],
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1990"
+  },
+  "sort-name": "Converge"
+}

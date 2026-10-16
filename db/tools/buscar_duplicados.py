@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import os
 import argparse
 from collections import defaultdict
@@ -28,6 +32,7 @@ class DuplicateManager:
         if not os.path.exists(self.db_path):
             raise FileNotFoundError(f"La base de datos no existe en: {self.db_path}")
         self.conn = sqlite3.connect(self.db_path)
+        apply_pragmas(self.conn)
         self.cursor = self.conn.cursor()
     
     def backup_database(self):

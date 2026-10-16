@@ -1,0 +1,438 @@
+{
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1988-07-18"
+  },
+  "sort-name": "En Vogue",
+  "disambiguation": "",
+  "end-area": null,
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "type": null,
+    "name": "Oakland",
+    "sort-name": "Oakland",
+    "id": "6195f381-5711-4655-bf7c-75918c04b201"
+  },
+  "id": "9a883a69-436b-4d17-9ffd-122a9bf4419a",
+  "name": "En Vogue",
+  "isnis": [
+    "0000000123750451"
+  ],
+  "ipis": [],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000160690",
+        "id": "cbb4d755-7a08-49f1-af97-9ce11a6c28c1"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/9a883a69-436b-4d17-9ffd-122a9bf4419a",
+        "id": "09666885-6a26-4f93-a41a-abed655dd63a"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "BBC Music page",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": true,
+      "attribute-values": {},
+      "end": "2020-11-19"
+    },
+    {
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/21295",
+        "id": "1d732786-3924-4c45-984f-73b160e4fad0"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "4ff61d65-4fd0-45cd-8d58-fe153fec2578",
+        "resource": "https://open.spotify.com/artist/5fikk4h5qbEebqK2Fc6e48"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "2427e702-4573-4a57-b3a3-abad4cd93b44",
+        "resource": "https://www.deezer.com/artist/4516"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "e27f7774-7c64-472e-88e1-9452773b279b",
+        "resource": "https://www.imdb.com/name/nm1622923/"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "IMDb"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/En+Vogue",
+        "id": "ef5bc4b5-1249-4ea8-88e7-57b53fefef33"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/envogue",
+        "id": "8e383c28-2dc0-498b-a27f-e293e3669840"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "3b6f3494-e658-4c23-84bd-5fbd7a85fdc1",
+        "resource": "http://musicmoz.org/Bands_and_Artists/E/En_Vogue/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13957642f",
+        "id": "185b1313-722c-4c77-9c5f-d645744c19c9"
+      }
+    },
+    {
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "resource": "https://imvdb.com/n/en-vogue",
+        "id": "0a45a712-5ff7-42ce-b962-95004b6a1c2a"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "54b1e8f8-77dd-45e1-8ccd-2737e764c9d0",
+        "resource": "https://rateyourmusic.com/artist/en_vogue"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/en-vogue/",
+        "id": "efea4352-ddb6-4170-aaae-7b2cd117806c"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/9339",
+        "id": "2e16decd-737b-43bd-8f07-e8259e1a6430"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "b8350df7-c873-44b5-9419-621e43783b22",
+        "resource": "https://twitter.com/EnVogue"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/envogue",
+        "id": "c3d2d6f7-8326-4678-8d16-1c6f74b661b5"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.songkick.com/artists/471868",
+        "id": "26292ff7-af71-40c8-930e-28587da617e1"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "c213e174-9804-44b0-832b-06ff821359bd",
+        "resource": "https://music.apple.com/gb/artist/335508"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "resource": "https://tidal.com/artist/14684",
+        "id": "6899edcc-3a9c-4073-bd99-8ae6490bf462"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/123103389",
+        "id": "010920fc-b8ff-45ca-bc14-d90442ed5dd8"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "VIAF",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "wikidata",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "3dcafc0b-2f91-4644-9778-cf5589423d10",
+        "resource": "https://www.wikidata.org/wiki/Q1137304"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/user/envogue",
+        "id": "e1890394-5dca-4bc7-baf8-b9aa44ae70e9"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "youtube",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    }
+  ],
+  "gender": null,
+  "area": {
+    "type": null,
+    "name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": "US",
+  "type": "Group"
+}

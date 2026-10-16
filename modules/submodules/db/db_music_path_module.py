@@ -13,7 +13,13 @@ from PyQt6.QtCore import Qt
 
 class DBMusicPathModule:
     """Submódulo para gestionar la creación de base de datos con db_musica_path.py"""
-    
+
+    DESCRIPTION = (
+        "Escanea tu colección de música local y crea o actualiza la base de datos "
+        "con los metadatos de los archivos de audio (MP3, FLAC, M4A): artistas, álbumes, "
+        "pistas, rutas, bitrates y ReplayGain."
+    )
+
     def __init__(self, parent=None, config=None):
         self.parent = parent
         self.config = config or {}

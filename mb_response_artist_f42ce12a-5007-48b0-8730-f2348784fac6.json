@@ -1,0 +1,204 @@
+{
+  "type": "Person",
+  "isnis": [
+    "0000000003502963"
+  ],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [],
+  "begin-area": {
+    "name": "London",
+    "sort-name": "London",
+    "disambiguation": "Greater London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type": null,
+    "type-id": null
+  },
+  "id": "f42ce12a-5007-48b0-8730-f2348784fac6",
+  "area": {
+    "name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "type-id": null,
+    "type": null
+  },
+  "disambiguation": "",
+  "sort-name": "Faultline",
+  "gender": "Male",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "country": "GB",
+  "name": "Faultline",
+  "life-span": {
+    "begin": "1968",
+    "ended": false,
+    "end": null
+  },
+  "relations": [
+    {
+      "ended": false,
+      "url": {
+        "id": "91e79862-9818-434c-bba3-5ff75387362b",
+        "resource": "https://www.allmusic.com/artist/mn0000163688"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "allmusic",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "28dad583-20e8-4846-b8dc-949baa15c364",
+        "resource": "https://www.discogs.com/artist/598"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/2MDj3VdPVUo2w1A6bRwvAh",
+        "id": "a3382041-cc85-4d10-b38a-d31714605a5c"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "76dcdfb9-b0ff-42dd-a33a-094152e1dc3a",
+        "resource": "https://www.deezer.com/artist/6882"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "d5ad105e-2d40-44fd-9501-0f6bfac1f31d",
+        "resource": "http://faultline.co.uk/"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/faultline",
+        "id": "e94bef0c-0ac0-4b64-a955-9dd0971166e1"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "6e77702b-fd42-420f-be05-490db2209844",
+        "resource": "https://music.apple.com/gb/artist/1286689609"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://tidal.com/artist/27442",
+        "id": "577ae69a-76dd-4484-8e93-49843f94dabd"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1398450",
+        "id": "e759603f-94f8-419f-871c-791bc310cc67"
+      },
+      "direction": "forward",
+      "attributes": []
+    }
+  ],
+  "end-area": null
+}

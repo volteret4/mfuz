@@ -1,0 +1,423 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type-id": null,
+    "name": "Doncaster",
+    "type": null,
+    "disambiguation": "",
+    "id": "edf8fd76-564a-4745-9805-7a92dd887cea",
+    "sort-name": "Doncaster",
+    "iso-3166-2-codes": [
+      "GB-DNC"
+    ]
+  },
+  "ipis": [],
+  "isnis": [
+    "0000000372740879"
+  ],
+  "country": "GB",
+  "relations": [
+    {
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "82596295-d21c-4462-80b7-4484fd2e12b3",
+        "resource": "https://www.allmusic.com/artist/mn0002357101"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://blawan.bandcamp.com/",
+        "id": "4162f0b1-5fd4-4242-bb15-cb9be9ca67b8"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c2ff9245-0944-4d92-9cc8-55065ab18aa7",
+        "resource": "https://blawanuk.bandcamp.com/"
+      },
+      "attributes": [],
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/1622339",
+        "id": "16b81230-c7c4-4dfe-b45b-e0e740130b86"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/64kN9EkSTHYhda2FupL0KI",
+        "id": "387d45e3-150b-414b-b983-f4c806a6399c"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "8c3b43b0-4678-46ef-a51c-6f695d4821bf",
+        "resource": "https://www.deezer.com/artist/1064916"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "fd999670-a80b-4891-9c69-1b3dd2fd47ef",
+        "resource": "https://www.last.fm/music/Blawan"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://myspace.com/blawan",
+        "id": "7c45403b-0231-439b-8746-f523fc0630cb"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "type": "myspace",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "fb6ae288-0ade-4cba-99bd-0b4849a5a97e",
+        "resource": "https://blawan.com/"
+      }
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "d5ebd8f8-a4e8-4305-8190-47f8f6c16407",
+        "resource": "https://ra.co/dj/blawan"
+      },
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "b8de60f6-3861-45fc-bad3-e43968f19041",
+        "resource": "https://rateyourmusic.com/artist/blawan"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.beatport.com/artist/-/136162",
+        "id": "012de29e-3f9a-4aa5-90eb-3a636819dce4"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "6decd509-e313-4ea4-84e6-cec0e126c155",
+        "resource": "https://twitter.com/Blawan"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/BlawanUK",
+        "id": "ff13af99-bc76-4e86-80a5-c7d135704bdc"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "8eaead11-9054-49f5-b7c2-f675f453cf4f",
+        "resource": "https://www.instagram.com/blawan/"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.tiktok.com/@blawan",
+        "id": "fe013bb0-71fd-4d9f-ad04-c222f1a990cf"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/3370006",
+        "id": "1df03ceb-cf0d-474f-b081-241fef7698f4"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "8ddbe380-ea66-4803-a111-5270e719fe76",
+        "resource": "https://soundcloud.com/blawan"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "11d7608a-e4a5-4ca6-89dd-1fa9f765e6a2",
+        "resource": "https://tidal.com/artist/3945082"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q28803195",
+        "id": "4aca1625-f232-41ad-9519-584421d0b10b"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "ca220407-e145-410e-9199-5a93ae026f29",
+        "resource": "https://www.youtube.com/channel/UCeXdWe6GYghPvn-DW5XTW2A"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "begin": null,
+      "end": null
+    }
+  ],
+  "gender": "Male",
+  "type": "Person",
+  "life-span": {
+    "ended": false,
+    "begin": "1987",
+    "end": null
+  },
+  "end-area": null,
+  "name": "Blawan",
+  "area": {
+    "type": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type-id": null,
+    "name": "United Kingdom"
+  },
+  "sort-name": "Blawan",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "c27d4389-390e-497c-9a41-dd446ace742c",
+  "disambiguation": "British techno producer & DJ"
+}

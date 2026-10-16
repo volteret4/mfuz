@@ -1,0 +1,2 @@
+tools/mostrar_tabla_con_ejemplos.py
+sqlite/musica_local.sqlite

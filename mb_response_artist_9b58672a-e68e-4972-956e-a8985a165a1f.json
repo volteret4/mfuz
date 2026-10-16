@@ -1,0 +1,1089 @@
+{
+  "type": "Person",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [
+    "00043047410",
+    "00061632792"
+  ],
+  "begin-area": {
+    "type": null,
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Toronto",
+    "id": "74b24e62-d2fe-42d2-9d96-31f2da756c77",
+    "name": "Toronto"
+  },
+  "isnis": [
+    "0000000121232327"
+  ],
+  "gender": "Male",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "sort-name": "Canada",
+    "disambiguation": "",
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "type": null,
+    "type-id": null,
+    "name": "Canada",
+    "iso-3166-1-codes": [
+      "CA"
+    ]
+  },
+  "id": "9b58672a-e68e-4972-956e-a8985a165a1f",
+  "disambiguation": "Canadian score composer",
+  "sort-name": "Shore, Howard",
+  "relations": [
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000278644",
+        "id": "70c9256a-002b-40bf-970e-d2bd5d723f52"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "allmusic"
+    },
+    {
+      "type": "bandsintown",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "af3e25bd-e206-4b08-936e-214bfb87ff44",
+        "resource": "https://www.bandsintown.com/a/12143"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "attributes": [],
+      "ended": true,
+      "url": {
+        "id": "900803be-435b-4284-93b3-f9ea578cf652",
+        "resource": "https://www.bbc.co.uk/music/artists/9b58672a-e68e-4972-956e-a8985a165a1f"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": "2020-11-19",
+      "source-credit": "",
+      "type": "BBC Music page"
+    },
+    {
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.discogs.com/artist/102211",
+        "id": "318fd8df-266a-452b-b58d-2914f3d27b27"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "ac84761d-c9af-4b66-a9ff-0728eda94fe3",
+        "resource": "https://fanart.tv/artist/9b58672a-e68e-4972-956e-a8985a165a1f/"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "fanpage"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "edfcba67-3418-4aca-9412-debc2a839295",
+        "resource": "https://open.spotify.com/artist/0OcclcP5o8VKH2TRqSY2A7"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "03f3729e-ec13-469e-b727-e0c45627fc46",
+        "resource": "https://www.deezer.com/artist/556"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "bc7b8076-083d-4a32-910f-01c1572c3197",
+        "resource": "https://commons.wikimedia.org/wiki/File:Howard_Shore_in_2010.jpg"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "image",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "8c792218-99bf-4f1b-89f0-d35a074d2e56",
+        "resource": "https://commons.wikimedia.org/wiki/File:Howard_Shore.jpg"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "image"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0006290/",
+        "id": "a433e2bc-b4fc-4ad2-a4e6-2002bd6ae912"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "256340f9-a66f-4560-a126-123623196bf8",
+        "resource": "https://www.last.fm/music/Howard+Shore"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Howard-shore",
+        "id": "e71da79b-1148-4c74-858b-19f1f437d0f3"
+      },
+      "attributes": [],
+      "type": "lyrics",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "official homepage",
+      "attributes": [],
+      "url": {
+        "resource": "https://howardshore.com/",
+        "id": "e7c0ff14-7b2c-4960-b985-ba0e7a013fa4"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "http://www.howardshore.com/",
+        "id": "b0d883d7-79f3-4e21-b613-e78a5bdfaa37"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": ""
+    },
+    {
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "id": "4f5017b1-e726-48c8-b74e-a1c434f6125c",
+        "resource": "https://jaxsta.com/profile/1608ae7b-6ad6-43eb-9459-8a401ca0d5e4"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": "2025-12-17",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "b7008729-596d-4318-a483-b41d225eb536",
+        "resource": "http://id.loc.gov/authorities/names/n91126627"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "4f11ff09-d704-485c-ab38-0aa98a8fc58e",
+        "resource": "http://musicmoz.org/Composition/Composers/S/Shore,_Howard/"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "bfc78fe8-9a2e-429b-bbad-320ecd23aa46",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139313673"
+      }
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://d-nb.info/gnd/131800299",
+        "id": "5b4771fd-9fe2-4926-8641-782eb4282117"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "49a0f856-39f2-4756-b81a-59cb64cb5da7",
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJhxrfK9J9fydTTwrQpwYP"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://imvdb.com/n/howard-shore",
+        "id": "8a562274-f4d9-43f8-89a0-74196cd6311e"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "ab354a73-dc67-4550-aba0-fe16f2837cb0",
+        "resource": "http://snaccooperative.org/ark:/99166/w6gh9qqv"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "af94b77a-ba04-467b-83d8-44dd88fbb69b",
+        "resource": "https://openlibrary.org/authors/OL2834626A"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://operabase.com/a2153426",
+        "id": "a3edf461-4de4-4973-acfe-7390367b6411"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "92fc25fe-a7da-4651-8c5c-1abb6e7497fe",
+        "resource": "http://soundtrackcollector.com/composer/256/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/howard-shore",
+        "id": "1aa6f4ae-1d5f-4924-bd04-6ce52a47a0a7"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "a416f6d1-3912-47e9-888d-99df604ebaec",
+        "resource": "https://www.dramonline.org/composers/shore-howard"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "28def364-b73f-4143-baf1-b980ad581f08",
+        "resource": "https://www.goodreads.com/author/show/9500"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.ibdb.com/person.php?id=92824",
+        "id": "4b197623-33c4-4239-afe7-69befc41c742"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.librarything.com/author/howardshore",
+        "id": "e54964c2-c232-41d4-979d-6e32d1dd0c56"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.librarything.com/author/shorehoward",
+        "id": "6b7a62a2-4260-4cf3-b1c2-d6883f330768"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "707d139a-320f-422c-85a3-427f64fbc95e",
+        "resource": "https://www.musik-sammler.de/artist/2938/"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000280712/POPULAR/",
+        "id": "abaa8efc-6182-434c-acc5-388467c52194"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.themoviedb.org/person/117",
+        "id": "d4db9450-9eae-4924-b270-92a7ff525407"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.whosampled.com/Howard-Shore/",
+        "id": "553825c3-e514-4ded-bdaa-4d66391f0e7d"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n91126627",
+        "id": "8987d4df-1be5-439c-8e94-b85eb35f28f8"
+      }
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "http://www.maniadb.com/artist/122773",
+        "id": "a7162ae8-0f61-4f60-8c28-e79f169367e7"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "9a7b51de-d504-499c-97b5-7bb6ccd35322",
+        "resource": "https://itunes.apple.com/ca/artist/id2898817"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://music.apple.com/ca/artist/2898817",
+        "id": "b97b629c-a830-48cd-ac18-1f0ee8e92f87"
+      },
+      "direction": "forward"
+    },
+    {
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "3dbdf086-5214-4a7b-a912-27a72d3fc99c",
+        "resource": "https://www.melon.com/artist/detail.htm?artistId=1998"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "82c73ea5-5748-4acb-9c48-8b3f3ef458b8",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/-/19298"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "secondhandsongs",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "91ac32eb-7436-4e2c-9b31-3a86762d0c88",
+        "resource": "https://secondhandsongs.com/artist/60055"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "setlistfm",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "f7bdefa3-fa75-4ee7-8caf-5bb160add5e2",
+        "resource": "https://www.setlist.fm/setlists/howard-shore-6bd6b672.html"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "511cf3c8-2ed0-4a0c-b5dc-00fee77899be",
+        "resource": "https://twitter.com/Hshoremusic"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/howardshoreofficial",
+        "id": "562703ad-6edc-4d41-b937-994a2fab947a"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/howard_shore_official/",
+        "id": "9b644d1f-a31c-47d3-9076-c3191e70b1e1"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "social network",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "0b1e7070-37b1-4789-88e7-c5e7529072c1",
+        "resource": "https://www.songkick.com/artists/76160"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "067985e3-12e3-4886-8bc5-14eac6be6ac1",
+        "resource": "https://soundcloud.com/howard-shore-official"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "soundcloud",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "2ee8fa84-eef4-426b-a2b0-4eb930a2cdfc",
+        "resource": "https://open.qobuz.com/artist/19298"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/17839",
+        "id": "e60deeb9-b5c4-4e3b-9ce8-be5b1697ffcb"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000APL7MA",
+        "id": "0014a599-27d2-4555-bfcc-4d6d60237887"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "3dbdf086-5214-4a7b-a912-27a72d3fc99c",
+        "resource": "https://www.melon.com/artist/detail.htm?artistId=1998"
+      },
+      "direction": "forward"
+    },
+    {
+      "type": "vgmdb",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "1b95691d-cdf1-4173-b1de-045f93f622c4",
+        "resource": "https://vgmdb.net/artist/17443"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "7b465f19-c5f1-4a0b-976b-e504e871813a",
+        "resource": "http://viaf.org/viaf/19869016"
+      },
+      "attributes": [],
+      "type": "VIAF",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "bbe1f391-ee8a-45de-ae99-eaacb2dd44c4",
+        "resource": "https://www.wikidata.org/wiki/Q207773"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "youtube",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "3d7cf886-9a24-41cb-bd95-bbe1d66877f6",
+        "resource": "https://www.youtube.com/@Howard_Shore"
+      },
+      "direction": "forward"
+    },
+    {
+      "type": "youtube",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCSf1PSlc7litOYTTDpErI1Q",
+        "id": "63bff150-b4d9-4c51-82d7-bd2e471ddee4"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "youtube music",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://music.youtube.com/channel/UC_S6DQOsVY3JX_dXvdo-WRQ",
+        "id": "a81d58e6-3053-4e8c-999b-d0da5d11e47a"
+      },
+      "direction": "forward"
+    }
+  ],
+  "end-area": null,
+  "country": "CA",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1946-10-18"
+  },
+  "name": "Howard Shore"
+}

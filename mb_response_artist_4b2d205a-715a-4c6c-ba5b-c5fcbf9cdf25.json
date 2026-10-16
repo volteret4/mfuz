@@ -1,0 +1,41 @@
+{
+  "gender": null,
+  "type": "Group",
+  "name": "Thee Oh No's",
+  "begin-area": null,
+  "country": null,
+  "area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "end-area": null,
+  "id": "4b2d205a-715a-4c6c-ba5b-c5fcbf9cdf25",
+  "isnis": [],
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "19fb6b08-4163-4653-a3b4-a3a986174627",
+        "resource": "https://www.discogs.com/artist/2112732"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    }
+  ],
+  "ipis": [],
+  "disambiguation": "",
+  "sort-name": "Thee Oh No's",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  },
+  "gender-id": null
+}

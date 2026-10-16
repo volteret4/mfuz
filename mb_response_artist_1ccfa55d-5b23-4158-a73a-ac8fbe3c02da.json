@@ -1,0 +1,378 @@
+{
+  "country": "HR",
+  "relations": [
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0004114090",
+        "id": "a18889a5-1d61-4ec0-a8fe-62a127066d62"
+      },
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "type": "allmusic",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "source-credit": "",
+      "url": {
+        "id": "5c101e2a-5053-47ee-bc94-f59204fef1e0",
+        "resource": "https://www.discogs.com/artist/37251"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "4c20aa29-7720-47e9-a506-58d570574131",
+        "resource": "https://open.spotify.com/artist/7Avu1adHBD8P4dBP9yJIkZ"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1549697",
+        "id": "edf85092-78cc-4125-95b3-ec5ca47795b2"
+      },
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0245346/",
+        "id": "37bbef2b-a189-45f4-8337-2a2292fb2ad4"
+      },
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/Dino%20Dvornik",
+        "id": "f86590f2-37cd-48aa-bb65-568ebf6703af"
+      },
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "url": {
+        "resource": "https://genius.com/artists/Dino-dvornik",
+        "id": "8e7cdc0e-562a-4c53-b0fb-614421a07257"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "lyrics",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "lyrics",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Dino-Dvornik",
+        "id": "3cf48f55-b818-4fc1-a1b1-b3bb8b09fad8"
+      },
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2014122788",
+        "id": "92806002-4eb3-436e-bcdb-aac8e94ee6c1"
+      },
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/dino_dvornik",
+        "id": "624ba0b5-f5e7-49c1-a855-0cea0c1bd14b"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.whosampled.com/Dino-Dvornik/",
+        "id": "ef727c77-79ff-4554-a99c-aeec21064442"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "202b6fa8-2968-433a-b85e-5649c275f685",
+        "resource": "https://www.worldcat.org/identities/lccn-no2014122788"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "url": {
+        "id": "787c33ce-a342-4f47-aa61-ad38cffae17a",
+        "resource": "https://itunes.apple.com/gb/artist/id218562251"
+      },
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "soundcloud",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "74d913b8-9116-474c-8c4b-ce739c0ab90c",
+        "resource": "https://soundcloud.com/dinodvornik"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "054ffc7b-1eff-4fc2-a0e4-16ee1c455fa1",
+        "resource": "https://music.apple.com/gb/artist/218562251"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "488ff452-04cc-4c8c-a745-cc47b424a143",
+        "resource": "https://tidal.com/artist/4794791"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "VIAF",
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "d2b0d9df-5fbf-4391-9490-48cf408e4b96",
+        "resource": "http://viaf.org/viaf/310722250"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1226635",
+        "id": "909d88e8-a9e8-4951-b4e0-c1ac194cfc0c"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "wikidata",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    }
+  ],
+  "gender": "Male",
+  "sort-name": "Dvornik, Dino",
+  "life-span": {
+    "ended": true,
+    "begin": "1964-08-20",
+    "end": "2008-09-07"
+  },
+  "disambiguation": "",
+  "type": "Person",
+  "end-area": {
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "HR-21"
+    ],
+    "type": null,
+    "sort-name": "Zagreb",
+    "id": "55f3682e-ff80-4f11-9ec9-8923608a6ee1",
+    "name": "Zagreb",
+    "type-id": null
+  },
+  "ipis": [
+    "00137197853"
+  ],
+  "isnis": [
+    "0000000129415320"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "sort-name": "Croatia",
+    "type": null,
+    "name": "Croatia",
+    "type-id": null,
+    "id": "7d30afff-e425-356a-873e-17ae9745b31d",
+    "iso-3166-1-codes": [
+      "HR"
+    ],
+    "disambiguation": ""
+  },
+  "begin-area": {
+    "id": "d51ec240-be10-47aa-930a-7429b0834e01",
+    "sort-name": "Split",
+    "type-id": null,
+    "name": "Split",
+    "disambiguation": "",
+    "type": null
+  },
+  "name": "Dino Dvornik",
+  "id": "1ccfa55d-5b23-4158-a73a-ac8fbe3c02da",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9"
+}

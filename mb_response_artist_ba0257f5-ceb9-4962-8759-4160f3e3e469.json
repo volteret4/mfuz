@@ -1,0 +1,132 @@
+{
+  "disambiguation": "",
+  "ipis": [],
+  "id": "ba0257f5-ceb9-4962-8759-4160f3e3e469",
+  "isnis": [
+    "0000000121699365"
+  ],
+  "relations": [
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "url": {
+        "id": "10ac57b0-8ec8-47e2-bc78-812a01626ec7",
+        "resource": "https://www.allmusic.com/artist/mn0000790670"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "ba20fb93-8d87-4dae-ae36-9dc30384d3d2",
+        "resource": "https://www.discogs.com/artist/5032"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "18333ad6-ea50-433d-96e0-0637bec0cac1",
+        "resource": "https://rateyourmusic.com/artist/spring_heel_jack"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.45cat.com/cdsingle/artist/spring-heel-jack",
+        "id": "345714eb-a4e0-43f5-99f3-eb98e1e4ff73"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q3494227",
+        "id": "94526117-e0f4-42ca-8295-a98cddc61d6d"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attribute-values": {},
+      "type": "wikidata",
+      "target-credit": "",
+      "begin": null
+    }
+  ],
+  "gender-id": null,
+  "life-span": {
+    "begin": "1994",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Spring Heel Jack",
+  "begin-area": {
+    "sort-name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type-id": null,
+    "name": "London",
+    "type": null,
+    "disambiguation": "Greater London"
+  },
+  "country": "GB",
+  "name": "Spring Heel Jack",
+  "type": "Group",
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "United Kingdom",
+    "type": null,
+    "name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b"
+}

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import json
 import argparse
@@ -2161,6 +2165,7 @@ def main():
     # Conectar a la base de datos
     try:
         conn = sqlite3.connect(db_path)
+        apply_pragmas(conn)
         print(f"Conectado a la base de datos: {db_path}")
     except Exception as e:
         print(f"Error al conectar a la base de datos: {e}")

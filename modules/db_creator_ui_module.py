@@ -18,6 +18,8 @@ import resources_rc
 # Import submodules
 from modules.submodules.db.db_music_path_module import DBMusicPathModule
 from modules.submodules.db.lastfm_module import LastFMModule
+from modules.submodules.db.generic_script_module import GenericScriptModule
+from modules.submodules.db.script_descriptions import SCRIPT_DESCRIPTIONS
 
 
 class OutputCaptureThread(QThread):
@@ -86,7 +88,7 @@ class DBCreatorModule(BaseModule):
     def __init__(self, parent=None, **kwargs):
         # Initialize attributes before calling super().__init__
         self.current_index = 0
-        self.total_steps = 6  # Total number of steps in the wizard
+        self.total_steps = 2  # Will be updated dynamically in init_ui after submodules are built
         self.submodules = []
         
         # Check if config file exists and is valid
@@ -200,14 +202,23 @@ class DBCreatorModule(BaseModule):
             self.setup_connections()
         else:
             self._create_ui_manually()
-        
+
+        # Add blank pages for generic submodules (beyond the 2 fixed UI pages)
+        for i in range(2, len(self.submodules)):
+            page = QWidget()
+            page.setObjectName(f"page_script_{i}")
+            self.stackedWidget.addWidget(page)
+
+        # Set total steps from actual submodule count
+        self.total_steps = max(len(self.submodules), 1)
+
         # IMPORTANTE: Asegurarse de que siempre empiece en la primera página (índice 0)
         self.current_index = 0
         self.stackedWidget.setCurrentIndex(0)
-        
+
         # Debug del StackedWidget
         self.debug_stacked_widget()
-        
+
         # Setup the progress bar
         self.progressBar.setRange(0, self.total_steps)
         self.progressBar.setValue(self.current_index + 1)
@@ -215,10 +226,16 @@ class DBCreatorModule(BaseModule):
         # Show/hide navigation buttons based on current page
         self.update_navigation_buttons()
         
+        # Find the step description label
+        self.step_description_label = self.findChild(QLabel, "step_description_label")
+
         # Initialize the first submodule (sin crear widgets duplicados)
         if self.submodules and self.stackedWidget.count() > 0:
             current_widget = self.stackedWidget.widget(0)
             self.submodules[0].setup_ui(current_widget)
+
+        # Show description for the first step
+        self._update_step_description()
                 
     def load_config_to_submodules(self):
         """Carga la configuración a todos los submódulos."""
@@ -338,28 +355,47 @@ class DBCreatorModule(BaseModule):
                 break
                 
     def init_submodules(self):
-        """Initialize submodules for each step of the database creation process."""
-        # Asegurarse de que config_data está inicializado
+        """Initialize submodules dynamically from config file."""
         if not hasattr(self, 'config_data') or not self.config_data:
             self.config_data = {}
-            
-        # First module: DB Music Path
-        music_path_module = DBMusicPathModule(self, config=self.config_data)
-        self.submodules.append(music_path_module)
-        
-        # Second module: LastFM
-        lastfm_module = LastFMModule(self, config=self.config_data)
-        self.submodules.append(lastfm_module)
-        
-        # Cargar archivo de configuración si existe
+
+        # Load config first so we know which scripts are defined
         if hasattr(self, 'config_file') and self.config_file:
             success = self.load_config(self.config_file)
             if success:
                 print(f"Configuración cargada correctamente desde {self.config_file}")
-                # Actualizar configuración en submódulos
-                self.load_config_to_submodules()
             else:
                 print(f"Error al cargar configuración inicial desde {self.config_file}")
+
+        # Keys that are not script configs
+        META_KEYS = {'scripts_order', 'common'}
+        # Scripts that have a dedicated wizard page in the UI file (must be positions 0 and 1)
+        DEDICATED = {
+            'path/db_musica_path': lambda: DBMusicPathModule(self, config=self.config_data),
+            'lastfm_escuchas':     lambda: LastFMModule(self, config=self.config_data),
+        }
+
+        # Always add the two dedicated modules first (they use hardcoded UI pages)
+        self.submodules.append(DBMusicPathModule(self, config=self.config_data))
+        self.submodules.append(LastFMModule(self, config=self.config_data))
+
+        # Build ordered list of remaining scripts from config
+        scripts_order = self.config_data.get('scripts_order', [])
+        all_script_keys = [k for k in self.config_data if k not in META_KEYS and k not in DEDICATED]
+
+        ordered = [k for k in scripts_order if k not in DEDICATED and k in self.config_data]
+        for k in all_script_keys:
+            if k not in ordered:
+                ordered.append(k)
+
+        for script_key in ordered:
+            title = script_key.split('/')[-1].replace('_', ' ').title()
+            description = SCRIPT_DESCRIPTIONS.get(script_key, '')
+            self.submodules.append(
+                GenericScriptModule(self, script_key, title, description, self.config_data)
+            )
+
+        print(f"Submodules initialized: {len(self.submodules)} steps")
         
     def browse_for_folder(self):
         """Open a file dialog to select music folder."""
@@ -418,6 +454,7 @@ class DBCreatorModule(BaseModule):
                     
             self.progressBar.setValue(self.current_index + 1)
             self.update_navigation_buttons()
+            self._update_step_description()
         else:
             print(f"No se puede avanzar más: current_index={self.current_index}, stackedWidget.count()={self.stackedWidget.count()}")
 
@@ -436,12 +473,23 @@ class DBCreatorModule(BaseModule):
             self.stackedWidget.setCurrentIndex(self.current_index)
             self.progressBar.setValue(self.current_index + 1)
             self.update_navigation_buttons()
+            self._update_step_description()
             
     def update_navigation_buttons(self):
         """Update the state of navigation buttons based on current page."""
         self.anterior_button.setEnabled(self.current_index > 0)
         self.siguiente_button.setEnabled(self.current_index < self.total_steps - 1)
-        
+
+    def _update_step_description(self):
+        """Update the step description label with the current submodule's description."""
+        if not hasattr(self, 'step_description_label') or not self.step_description_label:
+            return
+        if self.current_index < len(self.submodules):
+            desc = getattr(self.submodules[self.current_index], 'DESCRIPTION', '')
+            self.step_description_label.setText(desc)
+        else:
+            self.step_description_label.setText('')
+
     def load_config(self, config_file):
         """Load configuration from a file."""
         try:

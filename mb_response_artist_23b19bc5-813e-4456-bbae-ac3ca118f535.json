@@ -1,0 +1,338 @@
+{
+  "gender": null,
+  "type": "Group",
+  "begin-area": null,
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003875986",
+        "id": "b9aeae8f-7f7d-4039-86ad-fe7840d29aa0"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attributes": [],
+      "url": {
+        "id": "b5ee82e8-a484-42bb-8c19-38d0b0cc64a5",
+        "resource": "https://saultglobal.bandcamp.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/7328232",
+        "id": "cd339201-f1de-4e3b-9b32-95f3c75acb8d"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "98c5d37b-1f9a-4d62-aded-9f4241cdf58f",
+        "resource": "https://open.spotify.com/artist/1uRxRKC7d9zwYGSRflTKDR"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/5438687",
+        "id": "1a6c156b-6965-4b35-8416-07b65ed1617d"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "cf11a1dc-26e8-46ed-9b36-631c2fcaa48e",
+        "resource": "https://www.last.fm/music/Sault"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.sault.global/",
+        "id": "a6ff7d98-e4aa-47af-9372-821aa4c5eb4e"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/sault",
+        "id": "c2752bbb-f971-459b-bbf2-c2ceff87910a"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/571746/",
+        "id": "c306b416-6b63-43d9-b6a7-ea2c48916dec"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://twitter.com/SAULTGLOBAL",
+        "id": "b46dc34b-37a8-4c82-8679-57a035111a10"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/SAULTGLOBAL",
+        "id": "bc223b9b-0a0c-4dfd-87f7-77add7f8b576"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.instagram.com/SAULTGLOBAL/",
+        "id": "43d8f1a3-e42d-4b79-a54e-33f742f4ea16"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "4b014764-9e72-45eb-b9a8-d21705631a82",
+        "resource": "https://soundcloud.com/saultglobal"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "35fe59fa-917d-461b-93a9-3c6a2868bcf7",
+        "resource": "https://music.apple.com/fr/artist/771396456"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "0efa16e0-f7d9-4016-abda-03e2321ac81b",
+        "resource": "https://music.apple.com/us/artist/771396456"
+      }
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://tidal.com/artist/8101462",
+        "id": "78a98cac-bcc5-4f99-87de-966b0d3296c0"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q104771175",
+        "id": "61d6f82a-aad3-4181-b4ec-bb0ba9a5a183"
+      }
+    }
+  ],
+  "isnis": [
+    "0000000502554645"
+  ],
+  "country": "GB",
+  "end-area": null,
+  "area": {
+    "sort-name": "London",
+    "disambiguation": "Greater London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type": null,
+    "name": "London",
+    "type-id": null
+  },
+  "name": "SAULT",
+  "gender-id": null,
+  "sort-name": "SAULT",
+  "disambiguation": "",
+  "id": "23b19bc5-813e-4456-bbae-ac3ca118f535",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "2019"
+  }
+}

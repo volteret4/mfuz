@@ -1,0 +1,285 @@
+{
+  "gender": null,
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "ipis": [],
+  "begin-area": null,
+  "isnis": [],
+  "country": "GB",
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "5aada642-e6c2-4fc8-8bce-71fc0b99921f",
+        "resource": "https://www.allmusic.com/artist/mn0000062378"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/5081",
+        "id": "3d190278-4402-451e-a10b-3445938022d4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1fN3lF5RILxJeG9H8EhEDo",
+        "id": "ba43c6c7-2919-4ee5-bd7e-62cd42af1bcc"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "da8a1639-cfa4-4064-85ec-8f807e5152e2",
+        "resource": "https://www.deezer.com/artist/15587"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://myspace.com/gridmusic",
+        "id": "7df76e71-643d-4fd1-9442-1fabf4afe0b1"
+      },
+      "attributes": [],
+      "type": "myspace",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_grid",
+        "id": "e0a08261-6c71-4bc9-952d-edb4d3d9082a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.beatport.com/artist/the-grid/59676",
+        "id": "3bc0d014-f4f6-4c24-b655-4d0f44266d20"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.traxsource.com/artist/65489",
+        "id": "954077e7-82bc-48c7-8122-0a61028f674d"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.facebook.com/thegriduk",
+        "id": "05f4e601-ab9c-45c9-803c-2a68c410efc3"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "b1d62755-d01a-4ee2-b6da-0c7e017202fb",
+        "resource": "https://www.instagram.com/thegrid789/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "2a8bfd40-4ecc-4b34-bf30-a943a0801bbc",
+        "resource": "https://www.songkick.com/artists/255419"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/240064",
+        "id": "c884a8e0-6250-4b3f-946f-441fd7f161e1"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "c936b370-d954-4b91-9e09-c7f25931c144",
+        "resource": "https://tidal.com/artist/26722"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "5743f646-21e1-4e23-96f7-b2f48bd34c66",
+        "resource": "https://www.wikidata.org/wiki/Q163913"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata"
+    }
+  ],
+  "name": "The Grid",
+  "area": {
+    "name": "United Kingdom",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom",
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type": null
+  },
+  "end-area": null,
+  "disambiguation": "",
+  "id": "7aacce38-8ab5-4a4a-a206-0fb4b1c505c4",
+  "sort-name": "Grid, The",
+  "gender-id": null,
+  "life-span": {
+    "begin": "1988",
+    "end": null,
+    "ended": false
+  }
+}

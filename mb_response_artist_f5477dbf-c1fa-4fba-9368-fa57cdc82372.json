@@ -1,0 +1,123 @@
+{
+  "sort-name": "ICHIKO",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "begin": "1970-02-16",
+    "ended": false,
+    "end": null
+  },
+  "id": "f5477dbf-c1fa-4fba-9368-fa57cdc82372",
+  "isnis": [],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/1215701",
+        "id": "67a63a52-0e3c-4e58-b07d-fbbf095f1bad"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.srice.com/ichiko/",
+        "id": "b2869a11-b3d6-49bf-9c33-e03ae07179a8"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/jp/artist/111124804",
+        "id": "10d6c9fd-3780-4169-a134-04f4d1f1020d"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://vgmdb.net/artist/13893",
+        "id": "5f0369a3-5e6a-44ea-960e-fc169d94d58e"
+      },
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "type": "vgmdb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q3544333",
+        "id": "3a73746d-6af5-4910-879d-edcb1a067376"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "disambiguation": "",
+  "ipis": [],
+  "area": {
+    "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+    "iso-3166-1-codes": [
+      "JP"
+    ],
+    "disambiguation": "",
+    "name": "Japan",
+    "type": null,
+    "type-id": null,
+    "sort-name": "Japan"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null,
+  "gender": "Female",
+  "begin-area": null,
+  "country": "JP",
+  "name": "ICHIKO",
+  "type": "Person"
+}

@@ -1,0 +1,816 @@
+{
+  "relations": [
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "d8968111-32c3-44be-911e-561d49bb7d08",
+        "resource": "https://www.allmusic.com/artist/mn0000757085"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.bandsintown.com/a/3175",
+        "id": "09fede4c-f6f5-4d15-a032-bbf9a6b9872c"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/f31ec2ac-9071-4306-acd1-d2c8321033b5",
+        "id": "357d9fcd-bf05-4363-bba6-348f5ce5c475"
+      },
+      "begin": null,
+      "end": "2020-11-19",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "ended": true,
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4bc4e710-3e80-444a-99db-582f11f48c18",
+        "resource": "http://punkmodpop.free.fr/bangs_pic.htm"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": null,
+      "source-credit": "The Bangs",
+      "attribute-values": {},
+      "type": "biography"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://web.archive.org/web/19990220022414/http://members.tripod.com/~colli/bangles/bangles.html",
+        "id": "249c72d4-8388-4598-9203-180f45277797"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "discography page",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/124489",
+        "id": "10056308-8e3d-44e8-b437-bec1a5e89781"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "385a13f7-a20e-4415-915b-c6fcfcb516dd",
+        "resource": "https://open.spotify.com/artist/51l0uqRxGaczYr4271pVIC"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/994",
+        "id": "94d3d7de-36a3-4249-b3a6-929ebd1de775"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": ""
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1692733/",
+        "id": "c8d5aead-e465-4f20-92d7-3c3109fb53ec"
+      },
+      "attributes": []
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "c5d3bedd-b8bc-4435-a4bd-e7ea39f92604",
+        "resource": "https://www.last.fm/music/The+Bangles"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "ee7aca18-c003-4250-90ec-3e714fbea640",
+        "resource": "http://muzikum.eu/en/122-3385/the-bangles/lyrics.html"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "url": {
+        "resource": "https://genius.com/artists/The-bangles",
+        "id": "857b1176-79a8-4224-ba10-c52760fcb0ed"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/The-Bangles",
+        "id": "09e79866-e195-48e3-bd38-6d2abe93bab2"
+      },
+      "attributes": [],
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "b2abebf5-9f82-4767-9124-e15969fb7edf",
+        "resource": "https://myspace.com/thebangles"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://www.thebangles.com/",
+        "id": "30e52254-9eb9-43fb-950b-8e629091b75c"
+      },
+      "attributes": [],
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n91108282",
+        "id": "309c11aa-d7c7-43c4-ae19-d44c47d43e50"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13901806n",
+        "id": "bb59544e-fd6e-4e66-a04d-5021957e1754"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/1217810-X",
+        "id": "fa8fa72a-4b84-4a92-a6d2-4120453406ff"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://imvdb.com/n/the-bangles",
+        "id": "3cb3b21e-6e33-4b2a-964a-e945b35dc06d"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "1938c912-bd94-4d31-b5c5-82d4ee758d30",
+        "resource": "https://nla.gov.au/nla.party-1187673"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "97205a2b-1621-4b85-9bb9-fe8446eb2c7a",
+        "resource": "https://rateyourmusic.com/artist/the_bangles"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "f1110a3f-1966-4e2c-9bb0-831311fe71b1",
+        "resource": "https://www.45cat.com/artist/bangles"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "81006f30-2036-4f73-a2ac-a77a72587227",
+        "resource": "https://www.musik-sammler.de/artist/the-bangles/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "d3297c08-4b4d-4a03-ae9b-fd0f5fa55475",
+        "resource": "https://www.spirit-of-rock.com/en/band/Bangles"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "a0ca06a8-51ca-418d-84c9-4f98f27917e4",
+        "resource": "https://www.whosampled.com/The-Bangles/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "18e56b69-a2f3-4784-8045-f81d810dcd26",
+        "resource": "https://www.worldcat.org/identities/lccn-n91108282"
+      },
+      "attributes": []
+    },
+    {
+      "end": "2020-10-12",
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9ba3c6d0-d816-47bd-8958-ac5b1f27e297",
+        "resource": "https://play.google.com/store/music/artist?id=Aady7x3yd4wxvva2h5gdohkndfe"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "4689d7da-c4c5-4361-8bd8-d8c550684dbe",
+        "resource": "https://music.apple.com/us/artist/3932789"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "ca802be6-dcc2-4f48-984d-26d247a0e818",
+        "resource": "https://www.7digital.com/artist/the-bangles"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/362",
+        "id": "1a8b3f3e-3e4c-42d8-91c0-ef2b7124a29a"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/the-bangles-bd6b522.html",
+        "id": "813ea1c7-4ba3-473e-b179-7472adf1f878"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://twitter.com/OfficialBangles",
+        "id": "d74459ae-3c64-4946-9ab5-889ccf301c93"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/thebangles",
+        "id": "8f44f950-dccf-48d5-99ee-dd107aa0beb4"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "12d2ebbe-d346-473a-aa1d-936ef2c99151",
+        "resource": "https://www.instagram.com/officialthebangles/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "20482e78-0553-4740-9094-374c783142d1",
+        "resource": "https://www.songkick.com/artists/481494"
+      },
+      "attributes": [],
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "22092949-072f-4ce1-b09e-1d8a46d98cef",
+        "resource": "https://music.apple.com/gb/artist/3932789"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/3932789",
+        "id": "4689d7da-c4c5-4361-8bd8-d8c550684dbe"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/11242",
+        "id": "00ed443a-432d-43dc-8b90-2daf14a9b17f"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/158408654",
+        "id": "2be06e13-ee9b-49d9-86a3-3306d4b7d781"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "02a3d512-6178-496e-be4e-d5654803227c",
+        "resource": "https://www.wikidata.org/wiki/Q214418"
+      }
+    },
+    {
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "0fd574e5-8e30-45fd-b61e-707dee8e76e4",
+        "resource": "https://www.youtube.com/channel/UCAYH1oaK2xUntHxXIq5-4Dw"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "9c5c818f-6ef4-4b28-b777-350d1aeffb9a",
+        "resource": "https://www.youtube.com/channel/UCzIOJfQMRe_-TlUOeVMqzzQ"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "906e4e8b-af9f-4678-b393-caf50a6744c3",
+        "resource": "https://music.youtube.com/channel/UCbDhmIEDPG3_mLHfkfolSaA"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "ended": false,
+      "type": "youtube music",
+      "attribute-values": {},
+      "source-credit": ""
+    }
+  ],
+  "country": "US",
+  "isnis": [
+    "0000000106752527"
+  ],
+  "ipis": [],
+  "begin-area": {
+    "name": "Los Angeles",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "sort-name": "Los Angeles",
+    "type": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "gender": null,
+  "life-span": {
+    "ended": true,
+    "end": null,
+    "begin": "1981"
+  },
+  "disambiguation": "",
+  "id": "f31ec2ac-9071-4306-acd1-d2c8321033b5",
+  "gender-id": null,
+  "sort-name": "Bangles, The",
+  "name": "The Bangles",
+  "area": {
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "type-id": null,
+    "name": "United States"
+  },
+  "end-area": null
+}

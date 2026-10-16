@@ -1,0 +1,238 @@
+{
+  "gender": null,
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "type-id": null,
+    "name": "Los Angeles",
+    "type": null,
+    "sort-name": "Los Angeles",
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "isnis": [],
+  "country": "US",
+  "relations": [
+    {
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000287080",
+        "id": "74c61937-237a-4f95-963d-1a6a316aec92"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "054ba5e3-ffd2-48dd-a620-66267d32a529",
+        "resource": "https://www.discogs.com/artist/391670"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/0fgtHVpOPfXb07S8Jx443z",
+        "id": "b0e6a38a-97b2-45aa-b7ee-56fea1f17293"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/5655",
+        "id": "dcf9c780-975d-40a4-a1c0-8479c00bfbea"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://player-theband.com/",
+        "id": "c3abf735-5912-444c-b35b-95230a066ced"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/player",
+        "id": "e2426a85-0919-4016-98cd-8f47fd765891"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "eee6564d-d2d0-47b2-bcf8-df55af6ffa17",
+        "resource": "https://itunes.apple.com/us/artist/id6241828"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "e470e9ff-6e6b-43fa-b86e-9de0e5592099",
+        "resource": "https://secondhandsongs.com/artist/72904"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/55342",
+        "id": "dd6fd8c8-49be-455f-a294-185952c223a6"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q378491",
+        "id": "305bd5ba-0f11-4f52-a66f-0eede92c27de"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "29651736-fa6d-48e4-aadc-a557c6add1cb",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikipedia",
+      "attributes": [],
+      "url": {
+        "resource": "https://en.wikipedia.org/wiki/Player_(band)",
+        "id": "af23fbc6-dd79-4df5-a5d2-e5f94f1243b8"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    }
+  ],
+  "end-area": null,
+  "area": {
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "type": null,
+    "name": "United States",
+    "type-id": null
+  },
+  "name": "Player",
+  "sort-name": "Player",
+  "gender-id": null,
+  "disambiguation": "1970\u2019s UK/US rock band known for \u201cBaby Come Back\u201d",
+  "id": "7ad4ef1c-4f82-4755-a74b-94cd3096d221",
+  "life-span": {
+    "begin": "1977",
+    "end": null,
+    "ended": false
+  }
+}

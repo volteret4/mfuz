@@ -1,0 +1,260 @@
+{
+  "relations": [
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000463268",
+        "id": "913da77b-24a1-4d9e-8f02-76f4358ab9c2"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "biography",
+      "attributes": [],
+      "url": {
+        "id": "007f9cc0-ac6a-4c48-b1bb-ac5d985f8da6",
+        "resource": "http://www.maplemusic.com/artists/rsh/bio.asp"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "0978ee23-0a6e-4653-a4f8-a9d73659798c",
+        "resource": "https://www.discogs.com/artist/103977"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "97b2e57c-2957-4055-87a5-d05a5f7a31df",
+        "resource": "https://www.imdb.com/name/nm1391602/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.last.fm/music/Remy%20Shand",
+        "id": "7e9d24e7-1243-4b4c-88d3-055923f6736c"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "f8488d56-e9be-4adf-865f-e94a41d0f526",
+        "resource": "http://muzikum.eu/en/122-9820/remy-shand/lyrics.html"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://www.remyshandworld.com/",
+        "id": "fefb3073-ff40-4d82-969d-067fc7e7a917"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "d25e6a69-4fa4-4d58-a0c2-39b907876d59",
+        "resource": "https://rateyourmusic.com/artist/remy_shand"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/RemingtonShand",
+        "id": "112935ca-d0e7-4786-96bb-3294b6b63384"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/46983819",
+        "id": "9c9c7801-eed7-4de2-9a7a-17a1f7b39225"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1070770",
+        "id": "a0be4892-2859-43cd-b12a-a7107ca1989b"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC-iR-hgVg0qhIf3sGflaj0w",
+        "id": "a8c2a033-d549-4697-82a0-8ef5e182b1c2"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "begin": null,
+      "end": null
+    }
+  ],
+  "isnis": [
+    "0000000073657741"
+  ],
+  "country": "CA",
+  "ipis": [
+    "00408302297"
+  ],
+  "begin-area": {
+    "type-id": null,
+    "name": "Winnipeg",
+    "type": null,
+    "id": "35307acf-aba0-4ca7-9df6-b9398d873a8f",
+    "disambiguation": "",
+    "sort-name": "Winnipeg"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "gender": "Male",
+  "life-span": {
+    "begin": "1977-10-14",
+    "end": null,
+    "ended": false
+  },
+  "id": "4043e97e-8a69-424f-bf59-16bc8aac71e6",
+  "disambiguation": "",
+  "sort-name": "Shand, Remy",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "area": {
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "disambiguation": "",
+    "sort-name": "Canada",
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "type": null,
+    "name": "Canada",
+    "type-id": null
+  },
+  "name": "Remy Shand",
+  "end-area": null
+}

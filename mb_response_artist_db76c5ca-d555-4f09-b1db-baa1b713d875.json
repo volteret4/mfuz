@@ -1,0 +1,1106 @@
+{
+  "end-area": null,
+  "id": "db76c5ca-d555-4f09-b1db-baa1b713d875",
+  "ipis": [
+    "00336896223"
+  ],
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "name": "The Bronx",
+    "disambiguation": "",
+    "sort-name": "The Bronx",
+    "id": "eb4a386e-1178-4e3a-a371-30418dd6fd2e"
+  },
+  "disambiguation": "",
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "8c980c63-4af1-4915-aa33-df7ce7f382dd",
+        "resource": "https://www.allmusic.com/artist/mn0000376204"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/84",
+        "id": "07e09818-3839-4425-9848-ba820f46fbad"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandsintown",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/db76c5ca-d555-4f09-b1db-baa1b713d875",
+        "id": "3c5c8fe6-79fe-4e78-a21f-c66fc8c24ace"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "end": "2020-11-19",
+      "target-credit": "",
+      "attributes": [],
+      "ended": true,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/4778",
+        "id": "89460525-91c3-4f9c-b324-7708803f650f"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1XkoF8ryArs86LZvFOkbyr",
+        "id": "bb36e1ca-cfd6-42f1-86e1-e0df37072d84"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "8b5fb284-34a6-43df-8e93-7ae8ca0a3934",
+        "resource": "https://www.deezer.com/artist/152"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "54a1b68c-8d54-4df7-9851-5758b41da6c5",
+        "resource": "https://commons.wikimedia.org/wiki/File:MaryJBligeJan10.jpg"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "image",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "7a8cec4f-7554-47dd-a0ed-f9097c36712b",
+        "resource": "https://www.imdb.com/name/nm0004763/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/Mary+J.+Blige",
+        "id": "84967b1f-cfeb-4033-b833-0f3bd0f0a5fe"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-4137/mary-j.-blige/lyrics.html",
+        "id": "3eb55af1-ea11-4dad-a1c3-e01b73e4fd6b"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://genius.com/artists/Mary-j-blige",
+        "id": "f3c64773-6bb2-4568-89a7-a07eded253c9"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Mary-J-Blige",
+        "id": "3150e9ed-ce6b-4635-80bb-3fd453eb87ea"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "5815ff1d-1e63-4fa7-a10f-3cceb8a5bbc5",
+        "resource": "https://myspace.com/maryjblige"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.maryjblige.com/",
+        "id": "635a49cd-f0f5-4166-991f-b2ba60d0be77"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.mjbligeuk.com/",
+        "id": "66839f85-27bd-47b6-87db-0e2d51799cda"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a053b5f7-7b7e-407d-b454-29f22b956956",
+        "resource": "http://id.loc.gov/authorities/names/no96014488"
+      },
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a901b033-4118-45a7-a898-3a1d7fe0bcc6",
+        "resource": "http://musicmoz.org/Bands_and_Artists/B/Blige,_Mary_J./"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "73e596d7-4976-47f6-ba58-e59e357efa79",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139640459"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/134778790",
+        "id": "cf71880a-f930-47e7-81b3-585e947005dd"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJbRjXF9DGrtQ8V9XHRMyd",
+        "id": "f9a8e53d-2b61-4a98-9e9b-75332c66631f"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "94619ea3-e110-41f6-b91d-6766f3503624",
+        "resource": "https://imvdb.com/n/mary-j.-blige"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w60g4kgg",
+        "id": "929a1ce2-7ae5-4ef5-ba28-2427845c97ee"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/mary_j__blige",
+        "id": "ef6c1dc5-ab0a-4c1e-839d-267f1e413da7"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "702de893-b5cc-4a52-9a5c-4d3368cbe2af",
+        "resource": "https://www.45cat.com/12single/artist/mary-j-blige"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "eebe9b57-16ca-45f9-98cd-3cf904e6ce0f",
+        "resource": "https://www.45cat.com/artist/mary-j-blige"
+      },
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.45cat.com/artist/mary-j-blige2",
+        "id": "c5112c21-8297-4e50-97b2-7eb117437fe8"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "Mary J Blige"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d63fe21c-052e-430a-9725-d62b30513b51",
+        "resource": "https://www.45cat.com/cdalbum/artist/mary-j-blige"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.45cat.com/cdsingle/artist/mary-j-blige",
+        "id": "14bb3d79-23db-4b73-aa0f-117cdfd39240"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "Mary J Blige",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "be956065-4e29-4245-91f3-b3a1b9efb923",
+        "resource": "https://www.45cat.com/cdsingle/artist/mary-j-blige2"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "62a605c8-412e-470c-8306-8f61f7cdb771",
+        "resource": "https://www.45cat.com/live/artist/mary-j-blige"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c356a870-71bb-4e05-bab7-eb5305767a87",
+        "resource": "https://www.45cat.com/tape/artist/mary-j-blige"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "31d5691c-c9bd-48e0-973a-a94129efb65c",
+        "resource": "https://www.musik-sammler.de/artist/3322/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "url": {
+        "id": "62361959-9e52-4bf9-bd72-16a3e292a590",
+        "resource": "https://www.muziekweb.nl/Link/M00000092011/POPULAR/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/Mary-J.-Blige/",
+        "id": "2b0632e4-bc8a-411a-9058-00aed95fe8a8"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no96014488",
+        "id": "51dbd3c2-cbeb-4458-9939-293a4af47b02"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "fd82f319-93e7-4e38-b9f8-5fc59ef8c738",
+        "resource": "https://itunes.apple.com/us/artist/id1392280"
+      },
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "86db2134-477f-415e-8a6b-ffd373acd239",
+        "resource": "https://music.apple.com/us/artist/1392280"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.beatport.com/artist/mary-j-blige/253910",
+        "id": "a0595426-d7c9-4783-8be3-f108818e585d"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/mary-j-blige/42560",
+        "id": "5d9befdb-1c17-409a-b043-f66ea59edf23"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "url": {
+        "id": "cdd91eef-f64b-4d76-a24e-72d911654598",
+        "resource": "http://www.purevolume.com/maryjblige"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purevolume",
+      "target-credit": "",
+      "end": "2018-06-30",
+      "attributes": [],
+      "ended": true,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "4db66b0e-ce82-4063-8e57-659b4b3dfa48",
+        "resource": "https://secondhandsongs.com/artist/542"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "setlistfm",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/mary-j-blige-63d6f2d7.html",
+        "id": "78b2b850-bda0-457e-beb2-37dd047cce79"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207"
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "ac1f9207-74f9-4053-9e36-631cebac7072",
+        "resource": "https://twitter.com/maryjblige"
+      }
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "fa3ea819-1d40-4e55-b108-d7a24b888ebc",
+        "resource": "https://www.facebook.com/maryjblige"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/therealmaryjblige/",
+        "id": "4ee06c65-c6da-4864-b0d4-84159b18c020"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.tiktok.com/@maryjblige",
+        "id": "24fddb7b-5e75-471b-b553-625a5db5b05a"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "4831c5cd-e626-4f61-8856-446954dbfa35",
+        "resource": "https://www.songkick.com/artists/532016"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "soundcloud",
+      "attribute-values": {},
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "e2613a81-4bed-4e60-ae53-f4833404ae8f",
+        "resource": "https://soundcloud.com/officialmaryjblige"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "6cdd6bde-3b0b-4fbc-8b6d-9214164fa184",
+        "resource": "https://music.amazon.com/artists/B001Q9CTIU"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1392280",
+        "id": "86db2134-477f-415e-8a6b-ffd373acd239"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/7036",
+        "id": "9db1d7b2-6fa5-410e-9ec7-082372908afe"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "2357c867-2aa6-4522-b684-7ab6977148ed",
+        "resource": "https://us.napster.com/artist/mary-j-blige"
+      }
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": true,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "88b25eae-45e4-4c08-b4e9-d352490495a9",
+        "resource": "https://music.apple.com/gb/artist/1392280"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "url": {
+        "id": "ba8b33f6-19ef-4278-8429-0c40ca49a5a6",
+        "resource": "https://www.ticketmaster.com/artist/767544"
+      },
+      "type": "ticketing",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "type": "VIAF",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "c59812c5-270b-428c-96da-8abb82805707",
+        "resource": "http://viaf.org/viaf/54339397"
+      },
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q228909",
+        "id": "31f8b2ab-2034-4aa8-b0fd-d886a9960c61"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC4qgfoPLnM-5V3aVckCLtKg",
+        "id": "d42f330d-1ba2-4cf0-95a2-16ad627fbdd6"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "youtube",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCQ-ttSCwBiGhgM5GLY1hzWA",
+        "id": "2b4e818e-106d-43d9-8f2f-6dc9b28dc419"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "youtube music",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UC4qgfoPLnM-5V3aVckCLtKg",
+        "id": "189990d7-4bd0-4198-9a2d-55607adf447b"
+      },
+      "direction": "forward"
+    }
+  ],
+  "gender": "Female",
+  "country": "US",
+  "sort-name": "Blige, Mary J.",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "name": "Mary J. Blige",
+  "area": {
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "name": "United States",
+    "disambiguation": ""
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "000000006310393X"
+  ],
+  "life-span": {
+    "begin": "1971-01-11",
+    "ended": false,
+    "end": null
+  },
+  "type": "Person"
+}

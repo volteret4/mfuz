@@ -1,0 +1,788 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "United States",
+    "sort-name": "United States",
+    "type-id": null
+  },
+  "end-area": {
+    "type": null,
+    "name": "Camden",
+    "disambiguation": "",
+    "sort-name": "Camden",
+    "id": "5e830f20-c612-4128-9729-5d00410ddd11",
+    "type-id": null
+  },
+  "gender": "Female",
+  "type": "Person",
+  "name": "Patsy Cline",
+  "begin-area": {
+    "sort-name": "Winchester",
+    "id": "17160c4f-5390-453c-a901-0bb5529f186e",
+    "type-id": null,
+    "name": "Winchester",
+    "type": null,
+    "disambiguation": ""
+  },
+  "country": "US",
+  "sort-name": "Cline, Patsy",
+  "life-span": {
+    "ended": true,
+    "end": "1963-03-05",
+    "begin": "1932-09-08"
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "isnis": [
+    "0000000055125610",
+    "0000000368370879"
+  ],
+  "relations": [
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000014651",
+        "id": "a43561ff-cfc2-485b-a34d-4ddc7c42de35"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "bandsintown",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "id": "fd6c5e12-2e11-4891-8f06-e5e2b77ca5a8",
+        "resource": "https://www.bandsintown.com/a/50294"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": "2020-11-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/ad82dd72-0df3-4a09-8d7a-1af9c9e80522",
+        "id": "891c8444-971f-4faf-a3bf-7428906be3dd"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "resource": "http://www.patsyclinediscography.com/index.php",
+        "id": "c1f46f1b-4546-4190-8770-aaa264b102ad"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "discography page",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/227842",
+        "id": "3e701e9b-ed56-445b-90a1-ed6df5d8a937"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/719870",
+        "id": "d5646fde-f18b-4dcf-9fd8-fae3125eb88a"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "Virginia Patterson Hensley",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "cd83f480-5b67-48b4-90e8-12bc061ba14d",
+        "resource": "https://open.spotify.com/artist/7dNsHhGeGU5MV01r06O8gK"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "8e11ae1c-b001-49d3-b0b4-53c195b38c36",
+        "resource": "https://www.deezer.com/artist/4602"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "IMDb",
+      "attribute-values": {},
+      "url": {
+        "id": "1d521fb7-8298-4deb-9887-7c880d72e5dc",
+        "resource": "https://www.imdb.com/name/nm0007177/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "faf392d0-478c-4587-9ac8-0c61eb583301",
+        "resource": "http://muzikum.eu/en/122-4846/patsy-cline/lyrics.html"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Patsy-cline",
+        "id": "fd68fe2a-3859-4df0-ab3c-27b1a14e72f6"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Patsy-Cline",
+        "id": "79466e37-bca7-4e50-9410-82a6384a006f"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n87141298",
+        "id": "ed6a23cc-9123-4f1d-8903-b849bb452e21"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/C/Cline,_Patsy/",
+        "id": "4a36b732-97b6-4ed1-ae35-cfe91e5097e2"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "5c579a3d-794f-4670-9567-157fa187e860",
+        "resource": "https://adp.library.ucsb.edu/names/308894"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "4bf42699-1ccf-40d4-a795-99703b4bdec0",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13185069k"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://d-nb.info/gnd/119260719",
+        "id": "e7e4c125-e3cf-4f89-acb2-9a485c361a53"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://id.ndl.go.jp/auth/ndlna/00690129",
+        "id": "aca02258-3c12-46a4-8616-3a6e8c4f488c"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJgcXwcF38QP7Jjm7t8cT3",
+        "id": "51a957f8-19a9-43fe-aeac-61d1c9c86260"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6pr7t06",
+        "id": "56d66bab-d01b-4067-9c1c-6096a54bba74"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "328450a0-9d39-454c-989c-282bd7b349f1",
+        "resource": "https://openlibrary.org/works/OL4889946A"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/patsy_cline",
+        "id": "65956020-f167-403b-91d1-fed97bd9e9db"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "29de6bdb-4e0e-4caa-b0d3-63a7bdec2301",
+        "resource": "https://www.idref.fr/159835666"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/patsy-cline/",
+        "id": "a80ebc49-6b18-40f1-b37b-f5e253524ae8"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000035249/POPULAR/",
+        "id": "8321f174-1834-445e-941a-af70ba0b2c32"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "00aa2d21-7ca6-4a3c-bb19-430e3aeba8d0",
+        "resource": "https://www.worldcat.org/identities/lccn-n87141298"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/us/artist/95778",
+        "id": "b2f951d1-2e88-4edf-8db9-429bc2cd4146"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/patsy-cline/61991",
+        "id": "4db532f6-ddb2-4a4b-b8f5-c2c087b1cdf1"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/1939",
+        "id": "375a7f4f-e341-4938-bba7-2f522037c51e"
+      }
+    },
+    {
+      "url": {
+        "id": "cf9855d8-ce8a-4c44-9e56-2aae86947158",
+        "resource": "https://www.setlist.fm/setlists/patsy-cline-63d6c21f.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "4cea15a2-848b-4273-b433-cec95ef8f891",
+        "resource": "https://www.facebook.com/pages/Patsy-Cline-songs/40677118498"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://www.songkick.com/artists/95249",
+        "id": "e8c8e822-e94c-4807-8143-d22c90bc4239"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "begin": null,
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/95778",
+        "id": "b28b3622-d7d6-4adb-af16-d61c73031d2d"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "b2f951d1-2e88-4edf-8db9-429bc2cd4146",
+        "resource": "https://music.apple.com/us/artist/95778"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/27405",
+        "id": "03fb893f-e738-477b-a22d-efbd17c4e15c"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/patsy-cline/61991",
+        "id": "4db532f6-ddb2-4a4b-b8f5-c2c087b1cdf1"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "http://viaf.org/viaf/51831496",
+        "id": "e86ae147-8ced-4c4e-af54-deb48a57ab47"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "a859fa23-86a8-46f5-961a-bd2cfef85d3a",
+        "resource": "https://www.wikidata.org/wiki/Q273080"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC71k5QkRl8IgmgfgTqhDVBQ",
+        "id": "77df0760-b1de-4a4f-9b63-4b0712df8a20"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCAESb2cubKXF2G4-JRhGjVQ",
+        "id": "a44c4131-21e9-4d39-b540-0851a3a58792"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube music",
+      "url": {
+        "id": "0f354647-5549-4f99-858c-7fbc8d43dc86",
+        "resource": "https://music.youtube.com/channel/UCAESb2cubKXF2G4-JRhGjVQ"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    }
+  ],
+  "id": "ad82dd72-0df3-4a09-8d7a-1af9c9e80522",
+  "ipis": [],
+  "disambiguation": ""
+}

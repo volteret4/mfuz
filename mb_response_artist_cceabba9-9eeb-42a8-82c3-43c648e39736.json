@@ -1,0 +1,59 @@
+{
+  "id": "cceabba9-9eeb-42a8-82c3-43c648e39736",
+  "isnis": [],
+  "name": "Beautiful Bend",
+  "disambiguation": "disco studio assemblage created by Boris Midney",
+  "begin-area": null,
+  "end-area": null,
+  "sort-name": "Beautiful Bend",
+  "gender-id": null,
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  },
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": null,
+  "gender": null,
+  "relations": [
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/146821",
+        "id": "7815c447-9f90-48a6-8eee-352918bcb55f"
+      }
+    },
+    {
+      "url": {
+        "id": "81ea9708-dd85-44cd-b1f5-2b66ee2b27b2",
+        "resource": "https://www.last.fm/music/Beautiful+Bend"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "last.fm",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    }
+  ],
+  "area": null,
+  "ipis": []
+}

@@ -1,0 +1,438 @@
+{
+  "disambiguation": "Nashville-based singer/songwriter",
+  "id": "a9c38fd2-04be-4bc6-a3bc-96508b226508",
+  "sort-name": "Sanchez, Stephen",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "area": {
+    "type": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United States"
+  },
+  "name": "Stephen Sanchez",
+  "end-area": null,
+  "life-span": {
+    "begin": "2002",
+    "end": null,
+    "ended": false
+  },
+  "type": "Person",
+  "gender": "Male",
+  "isnis": [
+    "0000000507020917"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0004009436",
+        "id": "dc0744b9-1c3e-4810-ad54-fa35e97e6d82"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "26f56702-fa71-4891-a4ac-2051f43458b6",
+        "resource": "https://www.discogs.com/artist/4020841"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "a8f8ed2f-cba5-47d5-aa77-b1cdedc28ea8",
+        "resource": "https://open.spotify.com/artist/5XKFrudbV4IiuE5WuTPRmT"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/13129925",
+        "id": "a0c96dee-525b-43eb-a394-5504b45a0ec7"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm13633154/",
+        "id": "b94fd8fe-9d3b-42ff-946f-eb350a2838f2"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/Stephen+Sanchez",
+        "id": "34742b5a-d047-408b-8106-1650e9d1fcec"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.stephensanchezofficial.com/",
+        "id": "9a6f3328-523c-4389-bfe5-1d9ee9974b82"
+      }
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "fb6f46e8-b60f-44fb-a38f-726d6d25915c",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb18110501c"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "98f08d44-0bec-4a9a-aeb5-97e963c239f3",
+        "resource": "https://rateyourmusic.com/artist/stephen-sanchez"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id1276541872",
+        "id": "dc6901f0-2a78-4340-8c54-c0d9aab4ac77"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://twitter.com/stephencsanchez",
+        "id": "f1c1a496-1159-4bb8-8f48-bf868db2e14f"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "68f38007-785e-455d-9386-b895e47e4e62",
+        "resource": "https://www.facebook.com/stephensanchezofficial"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.instagram.com/stephensanchezofficial/",
+        "id": "475e9bc0-b5f1-4dbd-9d25-a8a4654487a5"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.tiktok.com/@stephensanchezofficial",
+        "id": "7b31462b-538b-4196-8d92-29a57e1b855e"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "ac70a097-8387-4196-9d67-591fa76ed682",
+        "resource": "https://www.songkick.com/artists/10218072"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/1276541872",
+        "id": "d0570849-03be-440d-a2b8-6fc646fbf7c8"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1276541872",
+        "id": "834b03eb-b460-4615-871e-92161c0c3867"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "b8f294c5-cf29-4a36-aa77-3a9fc8bef5dd",
+        "resource": "https://tidal.com/artist/14535968"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "ecabfb21-4184-4f3c-af26-26eeac931518",
+        "resource": "http://viaf.org/viaf/4170000541671902326"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q113023532",
+        "id": "6ff1b0d5-7cee-4f6c-bb27-b1e3aaf37efb"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCkT9AFJN7QIzApwhT825V7A",
+        "id": "9c247db7-5b02-4420-8080-0deda5be15a8"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "6dde4fef-98e2-40a1-b985-459ad355accd",
+        "resource": "https://music.youtube.com/channel/UCZukHZtjqY72iSEgkBF1QYA"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "youtube music",
+      "attribute-values": {}
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [],
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "341a940d-ad58-44d4-8fec-f429126ee1a0",
+    "sort-name": "El Dorado Hills",
+    "type-id": null,
+    "name": "El Dorado Hills"
+  }
+}

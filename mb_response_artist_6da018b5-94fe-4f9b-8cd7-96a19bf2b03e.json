@@ -1,0 +1,258 @@
+{
+  "type": "Person",
+  "ipis": [],
+  "end-area": null,
+  "name": "Michelle",
+  "begin-area": {
+    "sort-name": "Villingen-Schwenningen",
+    "id": "c28fbeba-73ec-4c1a-9dec-964a836ec9b9",
+    "name": "Villingen-Schwenningen",
+    "type-id": null,
+    "disambiguation": "",
+    "type": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000368690557"
+  ],
+  "area": {
+    "type": null,
+    "sort-name": "Germany",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "name": "Germany",
+    "type-id": null
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "6da018b5-94fe-4f9b-8cd7-96a19bf2b03e",
+  "country": "DE",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "id": "d35f3044-4468-4e2e-975e-9bcf8e1f89c2",
+        "resource": "https://www.discogs.com/artist/384635"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/4140075",
+        "id": "e7e8eda5-f934-4351-89cf-0ea588189838"
+      },
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/4819781",
+        "id": "ab4978a3-ef51-4852-8042-6ed7d18323eb"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "55e7c0d9-d7dc-4355-ac32-66a285df12da",
+        "resource": "https://www.deezer.com/artist/5645"
+      },
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1492987/",
+        "id": "e6e0daca-e037-41f2-a047-a480897a468c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "IMDb",
+      "ended": false
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.michelle-aktuell.de/",
+        "id": "2eca8c85-2abe-452b-a138-26fada0d60c1"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "type": "official homepage",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "5350d8ec-9edf-47f2-b131-fb0b5db9e018",
+        "resource": "https://d-nb.info/gnd/134671686"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "95fa3193-78f0-48b4-b15e-92421bdee130",
+        "resource": "https://www.musik-sammler.de/artist/michelle-2/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "url": {
+        "id": "4927da17-c68f-4795-a242-8004d4fde6f8",
+        "resource": "https://www.facebook.com/michellefanseite"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "social network",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "id": "7a92b416-de29-4e88-9c58-f9641c73d9a5",
+        "resource": "https://tidal.com/artist/2867"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "767f6c13-e0a8-4698-ac20-3e445960e20d",
+        "resource": "http://viaf.org/viaf/233429166"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "VIAF",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "wikidata",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "1379dd40-90b4-40e0-b89b-98cd8059c205",
+        "resource": "https://www.wikidata.org/wiki/Q70014"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    }
+  ],
+  "gender": "Female",
+  "sort-name": "Michelle",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1972-02-15"
+  },
+  "disambiguation": "German schlager singer Tanja Hewer"
+}

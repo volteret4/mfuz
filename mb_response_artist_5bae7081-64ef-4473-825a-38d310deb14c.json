@@ -1,0 +1,818 @@
+{
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "name": "United States",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "sort-name": "United States"
+  },
+  "type": "Person",
+  "name": "Will Smith",
+  "country": "US",
+  "begin-area": {
+    "id": "0eeb01c2-6e31-46ad-96b8-319749f731d2",
+    "sort-name": "Philadelphia",
+    "type-id": null,
+    "disambiguation": "",
+    "name": "Philadelphia",
+    "type": null
+  },
+  "gender": "Male",
+  "life-span": {
+    "begin": "1968-09-25",
+    "ended": false,
+    "end": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Smith, Will",
+  "ipis": [
+    "00128161982"
+  ],
+  "disambiguation": "US actor aka The Fresh Prince",
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "9360f9ec-927a-4dd9-b8e7-cebc772b1164",
+        "resource": "https://www.allmusic.com/artist/mn0000963005"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "bandsintown",
+      "attribute-values": {},
+      "url": {
+        "id": "b155b6f2-80a1-4af4-bf4e-534f1c1d03a4",
+        "resource": "https://www.bandsintown.com/a/545"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2"
+    },
+    {
+      "url": {
+        "id": "1c79d474-9b88-49fa-90c2-694a8c638050",
+        "resource": "https://www.discogs.com/artist/74169"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/41qil2VaGbD194gaEcmmyx",
+        "id": "ddc77490-b42b-4d78-9a93-2a0f3439faa7"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/745",
+        "id": "f8074367-8827-4ae3-a810-9c2798d28a89"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "0238ce85-1626-47c4-b07f-ae29e478b5e6",
+        "resource": "https://commons.wikimedia.org/wiki/File:Nobel_Peace_Price_Concert_2009_Will_Smith_and_Jada_Pinkett_Smith_with_children1.jpg"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "image"
+    },
+    {
+      "url": {
+        "id": "734778ab-dc48-48a0-a0e3-6c02970b1ff9",
+        "resource": "https://www.imdb.com/name/nm0000226/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attribute-values": {},
+      "type": "IMDb",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "a30f433b-84d2-41a0-a289-4df85dc7583f",
+        "resource": "https://www.last.fm/music/Will+Smith"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-3991/will-smith/lyrics.html",
+        "id": "b7c2aff6-62de-4509-9300-6532a3c81a56"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "1e8fe1a0-292b-4ae0-8cb2-b6340ea494d6",
+        "resource": "https://genius.com/artists/Will-smith"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "url": {
+        "id": "f0ab767b-f10e-465d-9faa-ff84850190da",
+        "resource": "http://www.willsmith.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n92045012",
+        "id": "9fbd5222-b6ee-4393-bf94-ab880cbdb1af"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "1df5422f-83f8-47a0-a164-2f74878fa4ab",
+        "resource": "http://musicmoz.org/Bands_and_Artists/S/Smith,_Will/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13613667g",
+        "id": "d4cf7b02-9c25-45b9-926f-198c077a0642"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/12100869X",
+        "id": "153c13b2-a729-499b-9491-87b8f921ecf6"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "ba4dd52c-3e5d-47c8-854a-6f6927e42374",
+        "resource": "https://imvdb.com/n/will-smith"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "c9926cb2-544e-4fc0-9abd-73481acd8b9a",
+        "resource": "http://snaccooperative.org/ark:/99166/w6bk295h"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "68892f99-d6b4-45f4-ad85-ca400d08989e",
+        "resource": "https://nla.gov.au/nla.party-1441704"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "c9dc9b2b-a8fa-4098-9a7e-157075bda2ae",
+        "resource": "https://rateyourmusic.com/artist/will_smith"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.ibdb.com/person.php?id=495361",
+        "id": "b6c88c6d-937a-42be-adc8-8aa0c6da8643"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/will-smith/",
+        "id": "4904a19a-82cb-4f94-8448-e60da830f4fc"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "93f5230b-3a55-4b79-8e29-b244d528ba7c",
+        "resource": "https://www.worldcat.org/identities/lccn-n92045012"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id628845",
+        "id": "a3c32131-78c8-4ba5-ab09-0459beed60f2"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "d325ea60-1607-4f3a-9f9a-ad2494c44469",
+        "resource": "https://secondhandsongs.com/artist/61"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "url": {
+        "id": "718250b9-90b7-4841-8b56-cfe3925b71c9",
+        "resource": "https://www.setlist.fm/setlists/will-smith-63d68667.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "c5835654-6374-4820-8050-e01af84a0c40",
+        "resource": "https://twitter.com/WillSmith2real"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/WillSmith",
+        "id": "636130bb-5ed5-47f1-b51a-3e3406d66a4e"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "fb28bdab-4b01-4bf7-9ef2-131f229a0d67",
+        "resource": "https://www.instagram.com/willsmith/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.threads.com/@willsmith",
+        "id": "f8d51d1e-6643-4212-a646-7b6d786b9cc4"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.tiktok.com/@willsmith",
+        "id": "5dcdca24-3c0d-49ca-a646-dc36480ddbf7"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/125977",
+        "id": "c074ceb6-b6a1-41a6-9a26-671b20d49f6e"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "ef3447e6-5da0-408c-914e-691063b4c733",
+        "resource": "https://soundcloud.com/will-smith-official"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://music.amazon.com/artists/B001RAFFR0",
+        "id": "b2c509b2-83c8-4582-acef-e5b90b2ff935"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "bbef9174-44d5-4e82-8d78-1ef9c0c51138",
+        "resource": "https://music.apple.com/gb/artist/628845"
+      }
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "000c33d1-3ca8-46d2-82f1-dbc33549b15a",
+        "resource": "https://music.apple.com/us/artist/628845"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "id": "efc7d03d-0d0b-4928-a467-74955b7c2c1a",
+        "resource": "https://tidal.com/artist/3962"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "0dca5053-6e54-4bfe-9279-a2690e704d26",
+        "resource": "https://us.napster.com/artist/will-smith"
+      }
+    },
+    {
+      "type": "ticketing",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "url": {
+        "id": "bf314a11-8014-46e2-98b0-b230e9934737",
+        "resource": "https://www.ticketmaster.com/artist/798099"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/118073838",
+        "id": "d18f7e02-ec42-48b7-a0db-1dfca52237af"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q40096",
+        "id": "2d1a92e6-3a9f-4c26-8c55-7621b2ee31ed"
+      },
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.youtube.com/user/WillSmithVEVO",
+        "id": "e355327d-7da2-45ec-8947-0395e71cdd2b"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/WillSmith",
+        "id": "18011875-6c3b-492e-b977-d769143294e4"
+      },
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCdHscQsCBWSfcW50NjdJWkA",
+        "id": "d1987100-a3e1-413c-9477-4241a2fa1192"
+      },
+      "type": "youtube music",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "isnis": [
+    "000000011507289X"
+  ],
+  "id": "5bae7081-64ef-4473-825a-38d310deb14c"
+}

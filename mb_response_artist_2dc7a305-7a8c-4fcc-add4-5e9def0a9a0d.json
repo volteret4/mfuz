@@ -1,0 +1,366 @@
+{
+  "id": "2dc7a305-7a8c-4fcc-add4-5e9def0a9a0d",
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "225889c6-44ef-4407-b783-fc67ab5e9f8b",
+        "resource": "https://www.allmusic.com/artist/mn0000182155"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "url": {
+        "resource": "https://officialflea.bandcamp.com/",
+        "id": "1340c0ac-75e8-4042-a94a-03ec7375c048"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/39600",
+        "id": "fad8c865-124a-4475-b8b2-78875d371fcf"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "url": {
+        "resource": "https://www.discogs.com/artist/700584",
+        "id": "dc5036bf-d745-429e-b726-181a5f254846"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "Michael Peter Balzary",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "095a3e72-f7ad-4f50-8f3a-855c5e208f22",
+        "resource": "https://open.spotify.com/artist/0Xl5J6iOgiQHFqgri7TF8j"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0yCyupuozJqbksvEg2A5Zi",
+        "id": "39a62d7f-63bd-449c-ba6f-5b75d69b2223"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/67485",
+        "id": "f3b17567-c5d0-4e33-88f2-f3e964b99519"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "c616c9e6-cb8a-4b0d-9b34-39ba7c286887",
+        "resource": "https://www.imdb.com/name/nm0281359/"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "ec2e792f-3cfe-4780-b05a-59bddc48c736",
+        "resource": "https://www.last.fm/music/Flea"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/flea_f1",
+        "id": "f1ec515b-8b5d-454a-89f0-5415246de757"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/flea333",
+        "id": "4d76b1cf-3310-4ec1-a7d4-59d343123136"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/flea",
+        "id": "1003e2f5-811f-4241-81b6-4c14988e2bc4"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/flea333/",
+        "id": "e05e15a8-cf41-4e3f-b47f-cf8a67d2f6e7"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/463953572",
+        "id": "a32fb491-87b8-4376-a9c8-6279ab557d0c"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/12451",
+        "id": "4efb4ba8-23f4-4a09-89b2-40ca68ca8b97"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/87560132",
+        "id": "5b8c4e07-6edf-47d7-9750-5e04415d837a"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q202859",
+        "id": "fa074aef-05a5-4bcc-aed7-73a0d9617666"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCRdIhqH_RuIdhtEa9gjwYQg",
+        "id": "3e58f4c3-0258-48d6-a40b-27b890bed2c3"
+      },
+      "type": "youtube",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "isnis": [
+    "0000000114769986"
+  ],
+  "ipis": [
+    "00141682092",
+    "00141682190"
+  ],
+  "disambiguation": "US bassist",
+  "sort-name": "Flea",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1962-10-16"
+  },
+  "gender": "Male",
+  "type": "Person",
+  "name": "Flea",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Melbourne",
+    "id": "b4e9352c-8edf-4911-8fa3-e852afa30501",
+    "name": "Melbourne",
+    "type": null,
+    "disambiguation": ""
+  },
+  "country": "US",
+  "area": {
+    "name": "Malibu",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Malibu",
+    "id": "fb0c4113-d177-4f3f-be56-4fa05d4807b9"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null
+}

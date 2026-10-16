@@ -1,0 +1,294 @@
+{
+  "type": "Group",
+  "life-span": {
+    "begin": "1988",
+    "ended": false,
+    "end": null
+  },
+  "isnis": [
+    "0000000115336461"
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type": null,
+    "disambiguation": "",
+    "name": "United Kingdom",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "GB"
+    ]
+  },
+  "name": "Galliano",
+  "gender-id": null,
+  "sort-name": "Galliano",
+  "relations": [
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "cea68cec-9769-4cb1-85cd-121e84c320d9",
+        "resource": "https://www.allmusic.com/artist/mn0000190529"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attribute-values": {},
+      "type": "allmusic",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "c18a8e1d-8b3f-4ffe-9cc5-31f22ffcc7f4",
+        "resource": "https://www.discogs.com/artist/1561"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "287f8cc0-e966-494c-9af6-a5d3ac209f15",
+        "resource": "https://open.spotify.com/artist/5wCNzQ86Wfer6KdOxaPlQG"
+      },
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/6333",
+        "id": "21ebe080-023e-4a90-a6c2-775a6dba5b33"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2005013364",
+        "id": "9f55c935-75e8-47a7-905c-9ba747c1bf6f"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "16002e85-36c1-4f75-8b42-60396a9daab9",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139220210"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/5550322-6",
+        "id": "07c8660d-4f17-4489-bc80-80f83bf501e1"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/galliano",
+        "id": "82fafc38-564b-4e15-81ce-6f933d874cbf"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "8f076b03-a3d0-4fbf-9fd8-23b5ffd98f41",
+        "resource": "https://www.musik-sammler.de/artist/galliano/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2005013364",
+        "id": "f41ddc8a-6d2d-4890-89ff-a0f0e0a0c715"
+      },
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "type": "songkick",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/45856",
+        "id": "ef7cd4e6-9c39-4585-9a3f-259463ac4c98"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "f377bde5-a4f5-4304-9b4c-22b18d71ae25",
+        "resource": "https://tidal.com/artist/24881"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a7dfae33-d8f5-488d-a581-f7331b2fc167",
+        "resource": "http://viaf.org/viaf/129977492"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-values": {},
+      "type": "VIAF",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q286110",
+        "id": "149db2ab-8ce1-49d5-936b-cf45a5fd3c25"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    }
+  ],
+  "disambiguation": "London acid jazz group",
+  "gender": null,
+  "country": "GB",
+  "ipis": [],
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "Greater London",
+    "name": "London",
+    "type": null,
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "sort-name": "London"
+  },
+  "id": "5588744b-0032-48d2-9ea5-ac74defefcdd",
+  "end-area": null
+}

@@ -1,0 +1,330 @@
+{
+  "name": "Taana Gardner",
+  "type": "Person",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Newark",
+    "id": "85c7cd5f-6fe2-4195-a44d-69fa390bd6ec",
+    "type": null,
+    "name": "Newark",
+    "disambiguation": ""
+  },
+  "country": "US",
+  "gender": "Female",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "type-id": null
+  },
+  "ipis": [],
+  "disambiguation": "",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "url": {
+        "id": "1e721a03-0b42-45db-b260-f82c751102ee",
+        "resource": "https://www.allmusic.com/artist/mn0000011518"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/10592",
+        "id": "231294ba-b138-4096-b7ca-352492b765fa"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "e4d1d215-3be0-4eeb-9e42-d46bc81d402d",
+        "resource": "https://open.spotify.com/artist/4kkfqDFX2t4QBOwuHqAROF"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1279942",
+        "id": "9e3adcc7-c7fb-49c7-b7c4-1bce47cc7ced"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "24510210-f35f-4779-9a6e-4e110bb9d68b",
+        "resource": "https://www.imdb.com/name/nm3202594/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "049ff582-a951-4f3c-ae74-e857c2a69a2c",
+        "resource": "https://www.last.fm/music/Taana+Gardner"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "007c509c-54a1-45da-a010-56e7329b8406",
+        "resource": "https://genius.com/artists/Taana-gardner"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "7eeedf3a-7b21-445f-a101-961fa192778e",
+        "resource": "http://id.loc.gov/authorities/names/no98048023"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "43a926aa-3aff-4a5c-8294-ceef3e908fba",
+        "resource": "https://www.45cat.com/12single/artist/taana-gardner"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.45cat.com/artist/taana-gardner",
+        "id": "df71b999-3760-4541-9bc9-4f02d689a17a"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no98048023",
+        "id": "09a7cad4-981f-4b2c-8d36-2dffbf755a46"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://web.archive.org/web/20100504095022/https://myspace.com/taanagardner",
+        "id": "236fdcef-13a4-4a24-b467-b0cf8da7277d"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "e6136cad-382c-470c-be34-1ed038afb303",
+        "resource": "https://www.songkick.com/artists/1687687"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/142384120",
+        "id": "62068967-ade7-4b6b-8048-09537cb3b589"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/41455250",
+        "id": "de6f05a5-3a5e-4755-ab9a-f03bf83e439e"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q7672810",
+        "id": "b57b0c13-cafe-4689-8580-eef6d61b118b"
+      },
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "isnis": [
+    "0000000055475135"
+  ],
+  "id": "2e213623-7c7c-45c6-9bc5-d555f73f7bca",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1960-09-03"
+  },
+  "sort-name": "Gardner, Taana"
+}

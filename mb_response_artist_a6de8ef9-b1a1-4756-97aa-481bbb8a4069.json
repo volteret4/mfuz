@@ -1,0 +1,602 @@
+{
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "end": null,
+    "begin": "1943-11-07",
+    "ended": false
+  },
+  "sort-name": "Mitchell, Joni",
+  "disambiguation": "",
+  "begin-area": {
+    "disambiguation": "",
+    "sort-name": "Fort Macleod",
+    "id": "9327dc24-3664-4283-8540-faeda7dd387e",
+    "name": "Fort Macleod",
+    "type": null,
+    "type-id": null
+  },
+  "end-area": null,
+  "id": "a6de8ef9-b1a1-4756-97aa-481bbb8a4069",
+  "isnis": [
+    "0000000114765598"
+  ],
+  "name": "Joni Mitchell",
+  "ipis": [
+    "00021007060"
+  ],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000270491",
+        "id": "9b8fab81-ed4c-47e2-8487-99e607086a57"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/a6de8ef9-b1a1-4756-97aa-481bbb8a4069",
+        "id": "cb7799c2-85f7-4b19-9024-9df851a37616"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "BBC Music page",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": true,
+      "end": "2020-11-19"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "b1e4a355-15a4-4453-b229-fae3a336bedf",
+        "resource": "https://www.discogs.com/artist/90233"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "e6172910-9394-4e6e-b5b8-ff9c64280f82",
+        "resource": "https://open.spotify.com/artist/5hW4L92KnC6dX9t7tYM4Ve"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/3283",
+        "id": "a1c88872-f01e-4a98-bd55-04029bece637"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Joni_Mitchell_1983.jpg",
+        "id": "a1e9e290-69c5-4a12-b6d2-3f063fdc9f2c"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "image",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0593474/",
+        "id": "876bc0f5-e7c5-4f61-a7f2-cd89942891bc"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "last.fm",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "f68c4730-f0aa-4a8c-b39f-990d52b00116",
+        "resource": "https://www.last.fm/music/Joni+Mitchell"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "09b56f9f-a2bf-4260-8867-f939ede75028",
+        "resource": "http://muzikum.eu/en/122-6840/joni-mitchell/lyrics.html"
+      }
+    },
+    {
+      "url": {
+        "id": "2cbd3785-9d0a-4068-8881-6f3e0cc4b3ea",
+        "resource": "https://jonimitchell.com/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "6633900b-fabf-4527-800a-85934c866a03",
+        "resource": "http://id.loc.gov/authorities/names/n82108794"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13897572r",
+        "id": "ebc1c707-5411-46ea-a179-fd492802fe3f"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "33269568-0d55-4d47-88b2-61fe618cc82b",
+        "resource": "https://d-nb.info/gnd/121085600"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "55fe8827-a655-4193-a8cb-a99eb880a29b",
+        "resource": "https://ibdb.com/person.php?id=84088"
+      }
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "9d8b1cc9-a2d6-4624-9244-56aba4243b57",
+        "resource": "https://imvdb.com/n/joni-mitchell"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://openlibrary.org/works/OL396367A",
+        "id": "437a37d9-d799-4d3e-8c7b-30a91fab5315"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/joni_mitchell",
+        "id": "5b461f4d-cc53-4c32-bf30-8f6c78b55e45"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c79c0d03-43dc-4321-ae43-28eec1af6361",
+        "resource": "https://www.worldcat.org/identities/lccn-n82108794"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/joni-mitchell/35384",
+        "id": "2cae5607-deaf-44e5-85cc-6e2af3072a13"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "6037efae-9f7d-4b65-8b97-c16d485c208c",
+        "resource": "https://secondhandsongs.com/artist/5191"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "secondhandsongs"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "ef4693cf-c4f4-4c47-8f4b-30d3343875b9",
+        "resource": "https://twitter.com/jonimitchell"
+      }
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/jonimitchell",
+        "id": "ef7e9568-fca1-45ed-8203-35c456e2fcad"
+      }
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.instagram.com/jonimitchell/",
+        "id": "034e5ac4-d662-430d-a158-dea77be90ea6"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/310304",
+        "id": "1e23a778-481e-4898-a32e-4fdca298f5cd"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "78de340f-099d-4d45-8096-1b34af706436",
+        "resource": "https://music.apple.com/ca/artist/203373"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/203373",
+        "id": "81cae865-6f23-4bc8-9054-55b6b1e50f8b"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "a8bd2e5b-f761-44b2-bc8d-123e332862c7",
+        "resource": "https://tidal.com/artist/13572"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/joni-mitchell/35384",
+        "id": "2cae5607-deaf-44e5-85cc-6e2af3072a13"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type": "VIAF",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/85454013",
+        "id": "97f1f8ee-6d6d-4014-ae0f-d1361cf9b930"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "ac6a0179-40f5-45ba-ad6c-4c4ce3313c42",
+        "resource": "https://www.wikidata.org/wiki/Q205721"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "31d249ee-1a17-43d7-8783-465bb5bc9264",
+        "resource": "https://www.youtube.com/@JoniMitchell"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    }
+  ],
+  "area": {
+    "type-id": null,
+    "type": null,
+    "name": "Canada",
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "disambiguation": "",
+    "sort-name": "Canada"
+  },
+  "gender": "Female",
+  "country": "CA",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person"
+}

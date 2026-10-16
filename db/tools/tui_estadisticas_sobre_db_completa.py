@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import pandas as pd
 from datetime import datetime
 import os
@@ -20,6 +24,7 @@ def get_missing_data_stats(db_path):
     
     # Conectar a la base de datos
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Obtener todas las tablas de la base de datos (excluyendo tablas del sistema y FTS)
@@ -180,6 +185,7 @@ def analyze_specific_cases(db_path):
         dict: Diccionario con casos específicos por tabla
     """
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     specific_cases = {}

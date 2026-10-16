@@ -1,0 +1,371 @@
+{
+  "life-span": {
+    "ended": true,
+    "begin": "1944-06-06",
+    "end": "2015-01-20"
+  },
+  "disambiguation": "",
+  "country": "DE",
+  "gender": "Male",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "1f722105-7991-48ca-ab7f-296f9f7e8b2e",
+        "resource": "https://www.allmusic.com/artist/mn0000147638"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/10361",
+        "id": "db32df34-a1f1-454b-ad56-37a745c9d765"
+      },
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "resource": "https://open.spotify.com/artist/2XP4UvuJoUxBIjO95l8Mlr",
+        "id": "4f363f1e-35a2-4ff5-b0d7-4dacc94c77eb"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.deezer.com/artist/211322",
+        "id": "bee893d4-d707-4ca7-9e63-e5fe3110698c"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Tangerine-dream-ebw-2.jpg",
+        "id": "97294570-7cbc-4776-9ee2-4edf65ce99d0"
+      },
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "image",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "IMDb",
+      "end": null,
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "2f660df0-45ee-45e5-9cf1-8652f5dfcf7d",
+        "resource": "https://www.imdb.com/name/nm0296209/"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "last.fm",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Edgar+Froese",
+        "id": "96e5da4e-4d9f-417e-87c9-82aec6b5508f"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "ended": false,
+      "type": "myspace",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "4660cceb-4e19-45a2-bfc2-cd4075315abf",
+        "resource": "https://myspace.com/edgarfroese"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "705739a9-f09c-47da-be71-1bd88498e0e8",
+        "resource": "http://www.edgarfroese.com/"
+      },
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "id": "3900f6e4-dedd-4c8e-a075-ad06bd8c47df",
+        "resource": "http://id.loc.gov/authorities/names/n96009020"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13979526t",
+        "id": "644824ea-e8d2-4abb-b776-0e43a28b5d1b"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "9ea9cfd6-1cd6-4882-9261-191af21326e9",
+        "resource": "https://d-nb.info/gnd/134378989"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "5d48a0f7-2c31-46d5-96a4-f99f884118b0",
+        "resource": "https://rateyourmusic.com/artist/edgar_froese"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n96009020/",
+        "id": "53cd1564-6da4-41ac-9190-6699b68b7ae3"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "a1ece102-0413-46a8-b751-eee21f3fa226",
+        "resource": "https://itunes.apple.com/us/artist/id10519"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/13049",
+        "id": "247ecaaa-8084-41a8-9584-8cbf8ccb37b1"
+      },
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3"
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/120173304",
+        "id": "c179bfc0-3ad6-449e-aeb6-83385add6425"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "VIAF"
+    },
+    {
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q505957",
+        "id": "3fd36b27-5082-4736-a3c4-bc067e96357c"
+      },
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    }
+  ],
+  "sort-name": "Froese, Edgar",
+  "name": "Edgar Froese",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": null,
+  "isnis": [
+    "0000000081891554"
+  ],
+  "area": {
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "type-id": null,
+    "name": "Germany",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "sort-name": "Germany",
+    "type": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "610a62e8-541b-42e4-a3fe-8dd595be93a8",
+  "type": "Person",
+  "ipis": [
+    "00040131935"
+  ],
+  "end-area": {
+    "id": "afff1a94-a98b-4322-8874-3148139ab6da",
+    "sort-name": "Wien",
+    "name": "Wien",
+    "type-id": null,
+    "iso-3166-2-codes": [
+      "AT-9"
+    ],
+    "disambiguation": "",
+    "type": null
+  }
+}

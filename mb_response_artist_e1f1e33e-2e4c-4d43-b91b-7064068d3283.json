@@ -1,0 +1,1147 @@
+{
+  "id": "e1f1e33e-2e4c-4d43-b91b-7064068d3283",
+  "isnis": [
+    "0000000123153016"
+  ],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "27cdcac8-032e-48db-92a2-7f8ee9d2c496",
+        "resource": "https://www.allmusic.com/artist/mn0000084209"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "0eb21b29-9a77-40a4-bcd8-c7fad0d401c2",
+        "resource": "https://www.bandsintown.com/a/50049"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandsintown"
+    },
+    {
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/e1f1e33e-2e4c-4d43-b91b-7064068d3283",
+        "id": "9c505484-ec1b-4918-8afc-439d973c6b62"
+      },
+      "end": "2020-11-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "resource": "http://www.its-official.com/kiss.html",
+        "id": "a9ed3797-96f0-4baa-83cb-681d5126f13f"
+      },
+      "type": "discography page",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/153073",
+        "id": "0e74b5fb-7393-4fe0-b063-48c2af97b328"
+      },
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "3ce11487-cf47-49f5-bcea-b1d8eecc2371",
+        "resource": "https://music.migu.cn/v3/music/artist/395"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/07XSN3sPlIlB2L2XNcTwJw",
+        "id": "0517e8a8-0d48-4f17-bfd0-0a0d339aa90a"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/67",
+        "id": "a12973a6-3c57-41fe-a5c2-65b9d05e206f"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "image",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Kiss_Love_Gun_era.png",
+        "id": "23be3e7b-d914-490d-9295-43ba0d1135a4"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "IMDb",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1653348/",
+        "id": "0f6535d0-dd94-4228-a4a8-2dba618ef54d"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "6a4b945e-4345-445c-98a2-604e9faf4ba7",
+        "resource": "https://www.last.fm/music/Kiss"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "ddee6eed-010d-4899-9277-364e4f9615f9",
+        "resource": "http://muzikum.eu/en/122-5281/kiss/lyrics.html"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://genius.com/artists/Kiss",
+        "id": "0552a055-ef98-4b9c-bd1d-e436e0cf019f"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics",
+      "url": {
+        "id": "81d746bd-dba9-41af-bf8d-1b79f309b7ae",
+        "resource": "https://www.musixmatch.com/artist/%E3%82%AD%E3%83%BC%E3%83%A4%E3%82%AD%E3%83%83%E3%82%B9"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "18d4c6dc-dac1-4bd1-b67e-37db1de79643",
+        "resource": "https://myspace.com/kiss"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attribute-values": {},
+      "type": "myspace",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://www.kissonline.com/",
+        "id": "7d1d964b-9baa-4701-975d-16fa0c451cae"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "url": {
+        "resource": "http://mvdbase.com/person.php?id=A5200",
+        "id": "ad8dcd8a-ef1c-4e31-bb45-722d86d40775"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "9cebf41e-6197-4262-8eb6-6e908ce772be",
+        "resource": "https://d-nb.info/gnd/6059853-0"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://imvdb.com/n/kiss",
+        "id": "01254129-fa6f-42d2-b982-8987b617d41d"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "64c7a453-1c28-40b8-a90f-ac8f00523c59",
+        "resource": "https://nla.gov.au/nla.party-980863"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/kiss",
+        "id": "f94629a3-4ae6-49de-8378-d7da0c76166e"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://worldcat.org/identities/np-kiss/",
+        "id": "8952bd87-e90a-44c0-acb6-945934edd80b"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "420a366a-652a-429b-bd6a-7ece97c5c15f",
+        "resource": "https://www.45cat.com/artist/kiss"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.45cat.com/live/artist/kiss",
+        "id": "ceb815f0-30fd-49eb-8e16-6a30e61eedfe"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.45cat.com/vinyl/artist/kiss",
+        "id": "9189b4f9-9441-4971-9402-0afdbc0987ca"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.livefans.jp/artists/3967",
+        "id": "d1384ffa-355b-4a17-abff-8efc318ce278"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "80cf20e1-4193-43b4-8163-a47245a07f5b",
+        "resource": "https://www.musik-sammler.de/artist/kiss/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000069829/POPULAR/",
+        "id": "2d160ec8-1424-4f03-8bf4-5c7b1ced44e5"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/Kiss/",
+        "id": "45974ec3-d2ab-4635-bbe3-824f03075f25"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "d1753cb1-b71c-46e1-ab55-192f760e78d2",
+        "resource": "http://www.spirit-of-metal.com/groupe-groupe-Kiss-l-en.html"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "ef583b89-4a3b-42c2-b6d5-b3be17b38812",
+        "resource": "http://www.spirit-of-rock.com/groupe-groupe-Kiss-l-en.html"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": "2019-05-19",
+      "url": {
+        "id": "733a088e-177b-4063-b2bc-aae3bc826aa8",
+        "resource": "https://itunes.apple.com/us/artist/id118108"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": "2020-10-12",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Adtzjfq4zpkvchcuv4mkpfx7pha",
+        "id": "9f6ec52c-18bc-4f17-ab9f-19ecdc1e00a3"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "09f4bdae-001b-42b1-81ce-eeb11869ebaa",
+        "resource": "https://mora.jp/artist/21916/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "4090ae6f-f10c-4a5c-bc23-457db177229b",
+        "resource": "https://music.apple.com/de/artist/118108"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "e42afec1-8a89-4c39-9349-0238947d32ba",
+        "resource": "https://music.apple.com/us/artist/118108"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "320fb1f1-4fb2-44f2-a6ef-17e4880a3f13",
+        "resource": "https://us.7digital.com/artist/kiss"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.hdtracks.com/music/artist/view/id/4634/",
+        "id": "bb986e72-114d-4ae4-aa9f-147a08108577"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "82c583fa-0db1-428b-bc8f-6b0e2f9e6688",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/kiss/download-streaming-albums"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700164504",
+        "id": "ae9f85ca-df43-4f27-8012-4f22b2649e51"
+      },
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "resource": "https://www.yesasia.com/0-aid1248065-0-bpt.47-en/list.html",
+        "id": "363af4dc-c0ee-498e-b35f-050a92e1de10"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/1533",
+        "id": "ddf1e21e-2179-4e81-993a-3957cc253c58"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/kiss-6bd69ec6.html",
+        "id": "61babf8f-700a-4a59-b25a-4e185a7e3366"
+      }
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://twitter.com/kiss",
+        "id": "ae31c0e0-ac39-44d3-aad0-338c616eae0f"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "df3761ef-6f90-425e-92f5-1828b87dcee2",
+        "resource": "https://www.facebook.com/KISS"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/kissonline/",
+        "id": "4c6c78a8-479f-4ac1-abd0-069d5ca859ab"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.songkick.com/artists/337267",
+        "id": "5d510ddc-c9ac-4980-9bf7-407d6f2058ae"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://soundcloud.com/kiss-official",
+        "id": "8dd21155-f14e-430f-8097-fe5c89b6c00f"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "soundcloud"
+    },
+    {
+      "end": "2022-06-08",
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://us.napster.com/artist/kiss",
+        "id": "835157a2-155c-4092-9bbd-dd24aba7c6f4"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B001E30DWC",
+        "id": "1171fdf1-39e5-4f39-87da-9226cf7da6cc"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "4090ae6f-f10c-4a5c-bc23-457db177229b",
+        "resource": "https://music.apple.com/de/artist/118108"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "29341c88-1657-42c5-9dc5-0576d86dc86c",
+        "resource": "https://music.apple.com/fr/artist/118108"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "8036c05d-4bdd-4458-b262-8b7f3c35b120",
+        "resource": "https://music.apple.com/gb/artist/118108"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/118108",
+        "id": "e42afec1-8a89-4c39-9349-0238947d32ba"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "b860246d-3399-4c90-a869-0c425ebd10ce",
+        "resource": "https://tidal.com/artist/27478"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/146095513",
+        "id": "09d8b8be-bf17-4d95-88c2-8f7fad8614f6"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "url": {
+        "id": "0da4d86a-7191-49f8-a2e2-7cf5a0c10ed7",
+        "resource": "https://www.wikidata.org/wiki/Q124179"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCL0dlEc0rXV1CIawUKeme4g",
+        "id": "3a7cbe35-4a65-492f-aeda-9f56ac9bced5"
+      },
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "KISS - Topic",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "KISS",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "ce53df83-ad3c-472a-9660-96e4d7ede1cc",
+        "resource": "https://www.youtube.com/channel/UCyOw2FDjfQOFQH7paKxNVvA"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCY_ZXmsISy8JUBHPorQ9j6g",
+        "id": "93a4eddb-5c07-46b8-91f3-a1d817111a54"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "source-credit": "KissVEVO",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "8c7ebfb1-640e-4fa0-855e-adc5438acc01",
+        "resource": "https://music.youtube.com/channel/UCL0dlEc0rXV1CIawUKeme4g"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "type": "youtube music",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    }
+  ],
+  "disambiguation": "US rock band",
+  "ipis": [],
+  "sort-name": "KISS",
+  "gender-id": null,
+  "life-span": {
+    "end": "2023-12-02",
+    "ended": true,
+    "begin": "1973-01"
+  },
+  "gender": null,
+  "begin-area": {
+    "type": null,
+    "name": "Queens",
+    "disambiguation": "",
+    "sort-name": "Queens",
+    "id": "431a085b-9f4c-4fbb-82de-2ca7ce735da8",
+    "type-id": null
+  },
+  "country": "US",
+  "name": "KISS",
+  "type": "Group",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "end-area": {
+    "type": null,
+    "name": "Midtown Manhattan",
+    "disambiguation": "",
+    "sort-name": "Midtown Manhattan",
+    "id": "edd27a39-ff8a-4af4-8bbf-f369b0fb1899",
+    "type-id": null
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "disambiguation": "",
+  "sort-name": "Lustwerk, Galcher",
+  "id": "a7e71145-6ce7-41d3-a70c-bd7436598f4b",
+  "area": {
+    "name": "Brooklyn",
+    "type-id": null,
+    "type": null,
+    "id": "a71b0d32-7752-49e9-8594-2247ad6ac12c",
+    "disambiguation": "",
+    "sort-name": "Brooklyn"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "name": "Galcher Lustwerk",
+  "country": "US",
+  "end-area": null,
+  "relations": [
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "allmusic",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003347538",
+        "id": "ef2226d0-de0a-4281-9cb2-74a5e6f24376"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "bandcamp",
+      "attributes": [],
+      "url": {
+        "id": "f5676f63-7634-4295-9178-e3241ecdf47d",
+        "resource": "https://galcherlustwerk.bandcamp.com/"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "http://galcher-lustwerk.tumblr.com/",
+        "id": "2cefd5bc-a94d-41d8-bed7-04e516983668"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "blog",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "9399d1e2-cadb-414b-8b11-042e88dbf594",
+        "resource": "https://www.discogs.com/artist/3288914"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1c7bxvBwJrMuZKwx4EDPHf",
+        "id": "83a712b1-1538-439d-b5b7-46347d637d65"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "free streaming"
+    },
+    {
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "9fcf7f2e-048f-4d4c-995b-74cb30e8a685",
+        "resource": "https://www.deezer.com/artist/362455602"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/7891216",
+        "id": "c36e8f1e-a149-4efa-aafe-d52d421630ba"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "81816c33-b314-48e4-a68e-1b4deb12dbc4",
+        "resource": "https://www.last.fm/music/Galcher+Lustwerk"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.beatport.com/artist/galcher-lustwerk/472143",
+        "id": "c6e5dff4-c3a4-43da-b83c-9c39c5d2b6a5"
+      },
+      "direction": "forward"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/galcher-lustwerk/2210329",
+        "id": "f28d5b77-ded6-4c45-b0c3-0009c857a84a"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://soundcloud.com/galcher-lustwerk",
+        "id": "4fb4a3ee-37b8-4c3f-bdd6-0b8befbfa4ac"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/982608901",
+        "id": "2ce59f6c-a302-42cf-a0d9-5272edf4aa77"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "b0dc82fc-89e6-4caf-9ff8-52f9e5472467",
+        "resource": "https://tidal.com/artist/6730851"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming"
+    }
+  ],
+  "type": "Person",
+  "isnis": [],
+  "begin-area": {
+    "name": "Cleveland",
+    "id": "7b2ca1e7-e7f6-4155-881d-c660a45c11e8",
+    "sort-name": "Cleveland",
+    "disambiguation": "",
+    "type": null,
+    "type-id": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": []
+}

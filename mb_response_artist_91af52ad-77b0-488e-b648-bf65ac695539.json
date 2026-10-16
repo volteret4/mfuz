@@ -1,0 +1,333 @@
+{
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "2014"
+  },
+  "disambiguation": "UK jazz\u2010rock band",
+  "country": "GB",
+  "sort-name": "Maruja",
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "bandcamp",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "c7235ed0-51f7-4745-8f31-a77a6496fc76",
+        "resource": "https://marujaofficial.bandcamp.com/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "id": "d4db7e13-320d-4f99-a381-afa1c9b5e4b3",
+        "resource": "https://marujamusic.bandcamp.com/"
+      },
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "type": "bandcamp",
+      "end": null,
+      "begin": null,
+      "ended": true,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "discogs",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/12980004",
+        "id": "98c15461-488f-45d3-90c2-e0752eaec5fd"
+      },
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "aab42c7e-81e5-4d8a-a342-1af573c5282b",
+        "resource": "https://open.spotify.com/artist/71ISXR7gtIq5E2AdI3jGf0"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "type": "free streaming",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/242816921",
+        "id": "8f75aca2-7f42-40b7-8606-81fab71dbd73"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "lyrics",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "82432027-7942-4d7e-a3f4-008272790b28",
+        "resource": "https://genius.com/artists/Maruja-uk"
+      },
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "official homepage",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "55ce9867-9d8f-439d-83f6-fa589bbe4e95",
+        "resource": "https://marujaofficial.co.uk/"
+      },
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/maruja-1",
+        "id": "26db897e-b749-4bdc-85ea-889248452d88"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "setlistfm",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "d5c33e63-cab8-4eb3-9c0d-ee4c6ad73ca7",
+        "resource": "https://www.setlist.fm/setlists/maruja-bfb0172.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "url": {
+        "id": "c5fd881d-8b7c-4057-9311-58a5db4bb54b",
+        "resource": "https://twitter.com/Maruja_Band"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.facebook.com/Marujaband",
+        "id": "2c083591-1fe3-4502-887b-1135cd22795c"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "7335663d-290a-4ead-b637-10450201e5e1",
+        "resource": "https://www.instagram.com/marujaofficial/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/188299143",
+        "id": "7a39d17c-48a3-488d-acc9-08c7d0f44f94"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/4828104",
+        "id": "b56e22e4-50da-4192-92dc-47085bd98d22"
+      },
+      "source-credit": "",
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "b4bd2cec-808e-44dd-9654-f49ffd5876ac",
+        "resource": "https://www.wikidata.org/wiki/Q131824514"
+      }
+    },
+    {
+      "url": {
+        "id": "316b3122-c6ef-4be6-becc-555295b8bdb4",
+        "resource": "https://www.youtube.com/channel/maruja7281"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "end": null,
+      "type": "youtube",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    }
+  ],
+  "gender": null,
+  "gender-id": null,
+  "id": "91af52ad-77b0-488e-b648-bf65ac695539",
+  "name": "Maruja",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000511440498"
+  ],
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-MAN"
+    ],
+    "name": "Manchester",
+    "type-id": null,
+    "sort-name": "Manchester",
+    "id": "852531bf-3410-401f-b432-9c3157a386b9"
+  },
+  "area": {
+    "type": null,
+    "sort-name": "United Kingdom",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type-id": null,
+    "name": "United Kingdom"
+  },
+  "type": "Group",
+  "ipis": [],
+  "end-area": null
+}

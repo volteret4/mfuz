@@ -1,0 +1,170 @@
+{
+  "end-area": null,
+  "area": {
+    "sort-name": "United Kingdom",
+    "type-id": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type": null,
+    "name": "United Kingdom"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "name": "Putney",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Putney",
+    "id": "79e9cadb-c71e-40fc-bf78-950ef290517e"
+  },
+  "country": "GB",
+  "name": "Kieran Hebden",
+  "type": "Person",
+  "gender": "Male",
+  "life-span": {
+    "begin": "1977-09",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Hebden, Kieran",
+  "disambiguation": "",
+  "ipis": [
+    "00268697500"
+  ],
+  "id": "cb661251-3bc2-4373-bd7c-4b1531275c4c",
+  "isnis": [
+    "0000000360409302"
+  ],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000769541",
+        "id": "ce5a2c7f-d20e-4cec-8535-25061303ea11"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "4bd19ea1-1f68-4ea8-8a1e-4a06553d68f6",
+        "resource": "https://www.discogs.com/artist/60342"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "resource": "https://open.spotify.com/artist/4HcUiDJk4PN2Ac2b1ZJT3E",
+        "id": "f5d767d4-6c55-431f-a7c8-5cb237c78566"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "c8536eb7-89f9-4cb2-b71a-ad847bd23686",
+        "resource": "https://www.last.fm/music/Kieran+Hebde"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "Kieran Hebden and Steve Reid",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true,
+      "begin": null,
+      "target-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "fa340f7d-1b80-4e03-944e-1c37cafc4616",
+        "resource": "http://www.kieranhebdenandstevereid.com/"
+      }
+    },
+    {
+      "url": {
+        "id": "4b32bdcc-4f3b-4296-84c7-d843b5727a8b",
+        "resource": "https://rateyourmusic.com/artist/kieran-hebden"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "438e2656-e452-40c2-bac6-7b885dc05b39",
+        "resource": "https://www.wikidata.org/wiki/Q959655"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    }
+  ]
+}

@@ -1,0 +1,368 @@
+{
+  "end-area": null,
+  "area": {
+    "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "JP"
+    ],
+    "name": "Japan",
+    "type": null,
+    "type-id": null,
+    "sort-name": "Japan"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "name": "\u5409\u7530\u7f8e\u5948\u5b50",
+  "begin-area": {
+    "name": "\u014cmiya-ku",
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "\u014cmiya-ku",
+    "id": "06eaa9d4-99f9-4188-89a4-859a14fb0798",
+    "type-id": null
+  },
+  "country": "JP",
+  "gender": "Female",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1953-04-07"
+  },
+  "sort-name": "Yoshida, Minako",
+  "ipis": [
+    "00130865192"
+  ],
+  "disambiguation": "",
+  "id": "4ee954e7-f20b-46e6-8e7a-972395673e2f",
+  "isnis": [
+    "0000000372552819"
+  ],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000526673",
+        "id": "a1e6553c-0ff0-4bb8-8d8e-21ed8ce3f0ab"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "bf2d2bc3-4ba2-4801-9e90-864030338afb",
+        "resource": "https://www.allmusic.com/artist/mn0001239326"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/315098",
+        "id": "b02584dd-19c0-4642-9952-0ea3e1253769"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "62a63ae0-3d29-4733-9709-b88056dea073",
+        "resource": "https://open.spotify.com/artist/5vYmBw71RC0kABACDCq4Zi"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "4f133e21-5328-430b-9e90-431ccb6b1269",
+        "resource": "https://www.last.fm/music/%E5%90%89%E7%94%B0%E7%BE%8E%E5%A5%88%E5%AD%90"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "79c9e073-e6af-4e7f-81d6-747d104a6b60",
+        "resource": "http://www.la-la-bells.com/"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "7568b8d7-ad46-4d82-a748-4b73d5c84ae5",
+        "resource": "https://rateyourmusic.com/artist/%E5%90%89%E7%94%B0%E7%BE%8E%E5%A5%88%E5%AD%90"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "e8a9faed-73cb-4fd5-8d7c-d27c2cf4736d",
+        "resource": "https://play.google.com/store/music/artist?id=Atmqfhn3wvcuuhnsv2jialeqdqy"
+      },
+      "attributes": [],
+      "end": "2020-10-12",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true
+    },
+    {
+      "url": {
+        "id": "b31ae404-c9d6-4922-92d6-55a7b49f1682",
+        "resource": "https://itunes.apple.com/jp/artist/id76116804"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.amazon.co.jp/-/e/B000AR9DOC",
+        "id": "18fcca10-3e6d-4855-9e01-c07edf6e44fc"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "url": {
+        "id": "21ac33ef-72a7-4a5e-8cf6-1103e63dd176",
+        "resource": "https://tower.jp/artist/280288/"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "18fcca10-3e6d-4855-9e01-c07edf6e44fc",
+        "resource": "https://www.amazon.co.jp/-/e/B000AR9DOC"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for mail-order",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.amazon.co.jp/artists/B003VSADA0",
+        "id": "2752fbec-84bb-43ad-b229-134e1cd981fc"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "84214ce4-623c-4e23-bbe2-4a3397c5898b",
+        "resource": "https://music.amazon.co.jp/artists/B0045IGQCO"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "55b22a56-9281-4442-ac4e-4315f9f401b7",
+        "resource": "https://music.apple.com/jp/artist/76116804"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "vgmdb",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "url": {
+        "id": "72eb2fe3-7674-4522-920e-c57c9a9e539f",
+        "resource": "https://vgmdb.net/artist/23138"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q11414060",
+        "id": "aab3359c-61de-4a6f-839b-d81274bcf4b2"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "ea490739-86fe-4619-baef-46b9cdc87f45",
+        "resource": "https://www.youtube.com/channel/UCcI-Z7kHFyYXjm1ddn7WCfA"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {}
+    }
+  ]
+}

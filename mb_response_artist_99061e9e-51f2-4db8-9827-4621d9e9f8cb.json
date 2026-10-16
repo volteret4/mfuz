@@ -1,0 +1,233 @@
+{
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  },
+  "sort-name": "Prurient",
+  "disambiguation": "noise musician",
+  "ipis": [],
+  "isnis": [
+    "000000037260747X"
+  ],
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "2029691f-d522-46d2-b453-cc94fcd37514",
+        "resource": "https://www.allmusic.com/artist/mn0000857062"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "6edceb52-7307-41d0-8eef-37afdcb54457",
+        "resource": "https://prurient.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "14006b02-1b5f-49c3-8f3a-88e954a2c951",
+        "resource": "https://www.discogs.com/artist/27012"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "resource": "https://open.spotify.com/artist/00NwpiTtYKYzE6yEhSbFIk",
+        "id": "7ec9c669-7386-40df-8d3f-f38c9e925bf1"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "a78318c0-8a91-4c48-a8b7-b0b5c62aa8af",
+        "resource": "https://www.deezer.com/artist/995283"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "82a93632-6abd-4f9f-b241-2fc0bf6de5d4",
+        "resource": "https://ra.co/dj/prurient"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "f26c62aa-8b44-4ed1-bbee-e7fa81059ec8",
+        "resource": "https://rateyourmusic.com/artist/prurient"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "62cfb83f-6623-468b-8eee-a59d5797aa91",
+        "resource": "https://www.beatport.com/artist/prurient/80388"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "ce2d93ff-4155-422f-8685-cf4d7095c032",
+        "resource": "https://www.facebook.com/pages/Prurient/193966790651327"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/198576600",
+        "id": "c3a9f5b8-8a06-47fa-b540-de13a413e4da"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "5c5c0d03-db1b-4df6-952b-4df43367dc01",
+        "resource": "https://www.wikidata.org/wiki/Q287486"
+      }
+    }
+  ],
+  "id": "99061e9e-51f2-4db8-9827-4621d9e9f8cb",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "begin-area": null,
+  "country": "US",
+  "type": "Person",
+  "name": "Prurient",
+  "gender": "Male"
+}

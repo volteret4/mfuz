@@ -1,0 +1,59 @@
+{
+  "isnis": [],
+  "name": "Nine Inch Noize",
+  "id": "f108a041-0581-4387-b741-3867c38c1e35",
+  "end-area": null,
+  "begin-area": null,
+  "disambiguation": "",
+  "sort-name": "Nine Inch Noize",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "2025-09-15"
+  },
+  "gender-id": null,
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": null,
+  "gender": null,
+  "relations": [
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.instagram.com/nineinchnoize/",
+        "id": "c6c424a9-a8fb-47dd-b63c-b127b8f42644"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "22b53145-af30-4304-aa42-13f0cddb4f14",
+        "resource": "https://www.wikidata.org/wiki/Q136541277"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "wikidata",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    }
+  ],
+  "area": null,
+  "ipis": []
+}

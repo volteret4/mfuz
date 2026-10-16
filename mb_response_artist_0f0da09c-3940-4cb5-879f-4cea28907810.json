@@ -1,0 +1,638 @@
+{
+  "end-area": null,
+  "area": {
+    "name": "United States",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "sort-name": "United States"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Burbank",
+    "id": "6c6a147d-4c26-409c-9d26-543836ed57f8",
+    "name": "Burbank",
+    "type": null,
+    "disambiguation": ""
+  },
+  "country": "US",
+  "type": "Person",
+  "name": "Bonnie Raitt",
+  "gender": "Female",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "begin": "1949-11-08",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Raitt, Bonnie",
+  "disambiguation": "",
+  "ipis": [
+    "00066331584"
+  ],
+  "id": "0f0da09c-3940-4cb5-879f-4cea28907810",
+  "isnis": [
+    "0000000083868091"
+  ],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000096613",
+        "id": "6ed8eb74-2d99-4672-834b-ef2283cb09bc"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": "2020-11-19",
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/0f0da09c-3940-4cb5-879f-4cea28907810",
+        "id": "b25109ad-0afe-4dc5-a285-d8b28525e1fb"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54"
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "cdeaae86-c274-4220-a4e1-020d7069375c",
+        "resource": "https://www.discogs.com/artist/271392"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/4KDyYWR7IpxZ7xrdYbKrqY",
+        "id": "de6d8f1c-0feb-4e01-b641-f7fcf9172b82"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/199",
+        "id": "61927991-a8f0-40de-b2f7-639585aee29f"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "33e90b1c-c2bf-4178-8a3f-ac5aa94e760c",
+        "resource": "https://www.imdb.com/name/nm0707248/"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "893ff0e4-df8e-4e94-a2ec-765def64213b",
+        "resource": "https://www.last.fm/music/Bonnie%20Raitt"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "url": {
+        "id": "c59189fe-87f1-4569-ac3a-7b6cae8400e5",
+        "resource": "http://muzikum.eu/en/122-4545/bonnie-raitt/lyrics.html"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "f108c4f5-ce07-4021-bb1b-dc54265b8759",
+        "resource": "https://genius.com/artists/Bonnie-raitt"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "a8aebf4f-db00-41f7-a3ef-481b1c08c639",
+        "resource": "https://myspace.com/bonnieraitt"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "official homepage",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.bonnieraitt.com/",
+        "id": "8654d08f-b444-4a82-ba0b-3ae0bd725687"
+      }
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n90714709",
+        "id": "214943f4-9312-43d9-85a6-190b0545f02b"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "29531bae-213e-4bf2-9afe-6e775871d394",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13931239k"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/11935442X",
+        "id": "fa50609f-c752-46ae-84bf-46b269f601d0"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "8ba31e66-10c3-45d0-99ad-810a0ed7e8c5",
+        "resource": "https://imvdb.com/n/bonnie-raitt"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6vm58g8",
+        "id": "dd67b032-742f-4aa6-abfa-71f1d82271e2"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/bonnie_raitt",
+        "id": "45f41f8b-03dd-49d3-8879-9fc468c58267"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "732ba247-55b6-4640-b2ba-ac57e94a923b",
+        "resource": "https://www.musik-sammler.de/artist/bonnie-raitt/"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "5c612f71-291e-4b4f-9d4f-0a7222e83f98",
+        "resource": "https://www.muziekweb.nl/Link/M00000047735/POPULAR/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://www.whosampled.com/Bonnie-Raitt/",
+        "id": "d7ce6187-0d92-41d1-bd77-91180a881cd1"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "56c1b8a9-7025-4034-a8dd-d47daa8099e6",
+        "resource": "https://www.worldcat.org/identities/lccn-n90714709"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://www.maniadb.com/artist/118146",
+        "id": "8c4eb3d5-a776-4001-a8c0-f7ba8b822254"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "a85ef549-8117-4064-b7ac-4131b4b0022e",
+        "resource": "https://itunes.apple.com/gb/artist/id22677"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "1978961d-046e-4840-83e5-91aea654d0b6",
+        "resource": "https://secondhandsongs.com/artist/721"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "f4073b9d-4434-4378-9d9c-69905b1e5d89",
+        "resource": "https://twitter.com/TheBonnieRaitt"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "f8665956-42aa-4cb9-8780-b96f667d48e5",
+        "resource": "https://www.facebook.com/officialbonnieraitt"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/bonnieraittofficial/",
+        "id": "ec413060-3afe-4dfd-ba3a-d84b5ff999e6"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "songkick",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "210f06ea-cf26-4bcb-bdd5-3fc28f84fea9",
+        "resource": "https://www.songkick.com/artists/135398"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "url": {
+        "resource": "https://soundcloud.com/bonnie-raitt",
+        "id": "e7edb190-b484-4813-9387-5a0f45cdce5e"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "e19641a6-3fde-4f46-856c-ecb14a360334",
+        "resource": "https://tidal.com/artist/10918"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/59892402",
+        "id": "b56c7557-3025-46be-a327-7e45c4126ca6"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "wikidata",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q234693",
+        "id": "0b2292e8-2840-4ec3-8397-cf77fabdfccc"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/user/TheBonnieRaitt",
+        "id": "9aae71ad-3c71-48fd-839b-3591df5c2ba0"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "type": "youtube",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    }
+  ]
+}

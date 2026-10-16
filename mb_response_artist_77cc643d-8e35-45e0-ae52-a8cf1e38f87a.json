@@ -1,0 +1,350 @@
+{
+  "gender": "Male",
+  "begin-area": {
+    "id": "7db5cd0d-d7f8-4c11-a329-acf169d76ec8",
+    "sort-name": "Le Blanc-Mesnil",
+    "type-id": null,
+    "disambiguation": "",
+    "type": null,
+    "name": "Le Blanc-Mesnil"
+  },
+  "country": "FR",
+  "name": "Patrick Hernandez",
+  "type": "Person",
+  "area": {
+    "sort-name": "France",
+    "type-id": null,
+    "name": "France",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "FR"
+    ],
+    "id": "08310658-51eb-3801-80de-5a0739207115"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null,
+  "id": "77cc643d-8e35-45e0-ae52-a8cf1e38f87a",
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000012554",
+        "id": "2ee8f066-7888-40b0-850a-9fb5c69f7aa7"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "biography",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "url": {
+        "id": "ec508ce5-8527-4f61-8b01-a5210f117278",
+        "resource": "https://web.archive.org/web/20080509063444/http://www.discomuseum.com/PatrickHernandez.html"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/76656",
+        "id": "cdd6488a-913c-4ce5-84ff-5d6cd22d0513"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/309",
+        "id": "7559e5a0-3d75-4da0-9a21-6bd1fd10c104"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "85195815-d03c-4745-a005-789a2c7a8d8d",
+        "resource": "https://www.imdb.com/name/nm0379667/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/Patrick+Hernandez",
+        "id": "7a6bae69-ba63-441d-b2d0-b0b9341c53b4"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "4a27aeff-d16b-4b32-b364-05cc50d3f2d3",
+        "resource": "http://muzikum.eu/en/122-761/patrick-hernandez/lyrics.html"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attribute-values": {},
+      "type": "lyrics",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Patrick-hernandez",
+        "id": "19883f31-75ab-4201-abba-d51ab33ca27c"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "url": {
+        "id": "a3b8b2b3-1fd6-4850-bd8a-d77fefcb3208",
+        "resource": "http://www.patrick-hernandez.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "ceec1472-bc07-4d75-b1e7-53e37bec3f58",
+        "resource": "http://id.loc.gov/authorities/names/n93044691"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13925928m",
+        "id": "b001c4cc-3222-4682-b338-980a8ccdd96c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "2adf6b60-10ba-4c55-9d55-8c4496aacd82",
+        "resource": "https://d-nb.info/gnd/134404157"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "24b9f0be-a43d-4e64-a1cd-c4f58728083a",
+        "resource": "https://www.worldcat.org/identities/lccn-n93044691"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/27775",
+        "id": "dc39f55c-a33a-449d-b4a9-32370b8bb420"
+      },
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "setlistfm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/patrick-hernandez-73d6b2ad.html",
+        "id": "000f06d4-c991-42dc-b121-316ee395e5d1"
+      }
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "b93215a5-5dbb-4173-8726-fb7598ae428f",
+        "resource": "http://viaf.org/viaf/5120075"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "a850cc0a-bdc9-4645-8b04-47390938164a",
+        "resource": "https://www.wikidata.org/wiki/Q123121"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    }
+  ],
+  "isnis": [
+    "0000000055131340"
+  ],
+  "disambiguation": "",
+  "ipis": [
+    "00043412123"
+  ],
+  "sort-name": "Hernandez, Patrick",
+  "life-span": {
+    "begin": "1949-04-06",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9"
+}

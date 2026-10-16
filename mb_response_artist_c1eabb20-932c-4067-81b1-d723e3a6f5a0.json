@@ -1,0 +1,41 @@
+{
+  "end-area": null,
+  "area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "name": "Minako",
+  "begin-area": null,
+  "country": null,
+  "gender": null,
+  "gender-id": null,
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": null
+  },
+  "sort-name": "Minako",
+  "ipis": [],
+  "disambiguation": "house vocalist Minako Sasajima",
+  "id": "c1eabb20-932c-4067-81b1-d723e3a6f5a0",
+  "isnis": [],
+  "relations": [
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/3435215",
+        "id": "7f62e55e-cbe7-4779-b611-395cbd0a5fc7"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    }
+  ]
+}

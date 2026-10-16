@@ -1,0 +1,330 @@
+{
+  "life-span": {
+    "begin": "1971",
+    "end": "1984",
+    "ended": true
+  },
+  "name": "First Choice",
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "type": null
+  },
+  "end-area": null,
+  "id": "bd1510da-7c76-4be3-a71e-9f5c71273176",
+  "disambiguation": "",
+  "gender-id": null,
+  "sort-name": "First Choice",
+  "ipis": [],
+  "begin-area": {
+    "type-id": null,
+    "name": "Philadelphia",
+    "type": null,
+    "sort-name": "Philadelphia",
+    "disambiguation": "",
+    "id": "0eeb01c2-6e31-46ad-96b8-319749f731d2"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "320ff445-5eeb-402b-9421-c4792c1f1a1e",
+        "resource": "https://www.allmusic.com/artist/mn0000175538"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "2538e991-c728-44bb-859d-7ba1094ee3aa",
+        "resource": "https://web.archive.org/web/20080413234641/http://www.discomuseum.com/FirstChoice.html"
+      },
+      "attributes": []
+    },
+    {
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "38ced84b-d304-4a27-b830-a4ca672a9cca",
+        "resource": "http://www.soulwalking.co.uk/First%20Choice.html"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/8600",
+        "id": "fe1613c7-dac6-424f-b2eb-3eab82cc0995"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "157e06ab-eec7-4e24-8707-7d4b0d1ad8a1",
+        "resource": "https://open.spotify.com/artist/20v3nhzoeaO2WvDSCdY0f4"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "be22a815-3e30-4522-b0b4-a1194142d42d",
+        "resource": "https://www.deezer.com/artist/11832"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "5c2ab94f-1d3c-4969-a978-fb726b65eaef",
+        "resource": "https://www.last.fm/music/First+Choice"
+      }
+    },
+    {
+      "url": {
+        "id": "e28fe71e-e873-4b5a-abc8-fe89a88d3003",
+        "resource": "https://myspace.com/firstchoicero"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "181c17f8-e32d-4467-a8f6-f6e4099b4ce9",
+        "resource": "https://rateyourmusic.com/artist/first_choice"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "3582a384-f28d-4487-ae47-c74905c178c8",
+        "resource": "https://www.whosampled.com/First-Choice"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.beatport.com/artist/first-choice/82",
+        "id": "c3671a50-e39f-4106-8d94-7ccd65dc2d72"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "setlistfm",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/first-choice-3d6397b.html",
+        "id": "7ba4b26a-cb5f-497a-a0b5-022efcce1e15"
+      }
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1412064047",
+        "id": "484275a3-8f3b-4f51-99de-f97843251b6a"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/us/artist/41775690",
+        "id": "dae3b961-d801-436b-84e3-fea9177f6d6e"
+      }
+    },
+    {
+      "url": {
+        "id": "7d78bdd6-793b-4f50-a9a7-7901eba792d4",
+        "resource": "https://tidal.com/artist/3537373"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "597db8b0-b797-4082-8e60-6ad9ac3f9f38",
+        "resource": "https://www.wikidata.org/wiki/Q5452618"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "isnis": [
+    "0000000115234983"
+  ],
+  "country": "US",
+  "gender": null,
+  "type": "Group"
+}

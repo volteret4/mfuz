@@ -1,0 +1,1382 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Concert Calendar//Music App//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-0@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260327T210000
+DTEND:20260327T240000
+SUMMARY:Ø @ Espacio Broadway
+DESCRIPTION:Apreta'o pero contentas
+ Venue: Espacio Broadway
+ Ticket Info: https://www.universe.com/events/apretao-pero-contentas-tickets-6SBFXQ?ref=ticketmaster
+LOCATION:Espacio Broadway, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-1@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260330T203000
+DTEND:20260330T233000
+SUMMARY:ROSALÍA @ Movistar Arena
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/1080090300?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-2@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260401T203000
+DTEND:20260401T233000
+SUMMARY:ROSALÍA @ Movistar Arena
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/1863262240?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-3@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260401T150000
+DTEND:20260401T180000
+SUMMARY:Wednesday @ Cúpula de las Arenas
+DESCRIPTION:Antarctica Experience
+ Venue: Cúpula de las Arenas
+ Ticket Info: https://www.universe.com/events/antarctica-experience-tickets-67BSRN?ref=ticketmaster
+LOCATION:Cúpula de las Arenas, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-4@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260403T203000
+DTEND:20260403T233000
+SUMMARY:ROSALÍA @ Movistar Arena
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/1450180268?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-5@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260403T210000
+DTEND:20260403T240000
+SUMMARY:Ø @ Espacio Broadway
+DESCRIPTION:Apreta'o pero contentas
+ Venue: Espacio Broadway
+ Ticket Info: https://www.universe.com/events/apretao-pero-contentas-tickets-6SBFXQ?ref=ticketmaster
+LOCATION:Espacio Broadway, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-6@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260404T203000
+DTEND:20260404T233000
+SUMMARY:ROSALÍA @ Movistar Arena
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/1305728528?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-7@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260408T183000
+DTEND:20260408T213000
+SUMMARY:Wednesday @ Cúpula de las Arenas
+DESCRIPTION:Antarctica Experience
+ Venue: Cúpula de las Arenas
+ Ticket Info: https://www.universe.com/events/antarctica-experience-tickets-67BSRN?ref=ticketmaster
+LOCATION:Cúpula de las Arenas, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-8@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260410T210000
+DTEND:20260410T240000
+SUMMARY:Ø @ Espacio Broadway
+DESCRIPTION:Apreta'o pero contentas
+ Venue: Espacio Broadway
+ Ticket Info: https://www.universe.com/events/apretao-pero-contentas-tickets-6SBFXQ?ref=ticketmaster
+LOCATION:Espacio Broadway, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-9@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260412T210000
+DTEND:20260412T240000
+SUMMARY:ROSALÍA @ Espacio Broadway
+DESCRIPTION:MOTOMAMI, MOTOMAMI... Tributo a Rosalía
+ Venue: Espacio Broadway
+ Ticket Info: https://www.universe.com/events/motomami-motomami-tributo-a-rosalia-tickets-973ZM2?ref=ticketmaster
+LOCATION:Espacio Broadway, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-10@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260412T203000
+DTEND:20260412T233000
+SUMMARY:We @ Palau Sant Jordi
+DESCRIPTION:Louis Tomlinson - How Did We Get Here? World Tour
+ Venue: Palau Sant Jordi
+ Ticket Info: https://www.ticketmaster.es/event/louis-tomlinson-how-did-we-get-here-world-tour-tickets/693527901?language=en-us
+LOCATION:Palau Sant Jordi, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-11@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260413T203000
+DTEND:20260413T233000
+SUMMARY:ROSALÍA @ Palau Sant Jordi
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Palau Sant Jordi
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/1119975472?language=en-us
+LOCATION:Palau Sant Jordi, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-12@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260413T203000
+DTEND:20260413T233000
+SUMMARY:We @ Movistar Arena
+DESCRIPTION:Louis Tomlinson - How Did We Get Here? World Tour
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/louis-tomlinson-how-did-we-get-here-world-tour-tickets/194541228?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-13@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260415T203000
+DTEND:20260415T233000
+SUMMARY:ROSALÍA @ Palau Sant Jordi
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Palau Sant Jordi
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/809793647?language=en-us
+LOCATION:Palau Sant Jordi, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-14@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260415T173000
+DTEND:20260415T203000
+SUMMARY:Wednesday @ Cúpula de las Arenas
+DESCRIPTION:Antarctica Experience
+ Venue: Cúpula de las Arenas
+ Ticket Info: https://www.universe.com/events/antarctica-experience-tickets-67BSRN?ref=ticketmaster
+LOCATION:Cúpula de las Arenas, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-15@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260417T203000
+DTEND:20260417T233000
+SUMMARY:ROSALÍA @ Palau Sant Jordi
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Palau Sant Jordi
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/172524182?language=en-us
+LOCATION:Palau Sant Jordi, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-16@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260417T210000
+DTEND:20260417T240000
+SUMMARY:Ø @ Espacio Broadway
+DESCRIPTION:Apreta'o pero contentas
+ Venue: Espacio Broadway
+ Ticket Info: https://www.universe.com/events/apretao-pero-contentas-tickets-6SBFXQ?ref=ticketmaster
+LOCATION:Espacio Broadway, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-17@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260418T203000
+DTEND:20260418T233000
+SUMMARY:ROSALÍA @ Palau Sant Jordi
+DESCRIPTION:ROSALÍA: LUX TOUR 2026
+ Venue: Palau Sant Jordi
+ Ticket Info: https://www.ticketmaster.es/event/rosalia-lux-tour-2026-tickets/716275777?language=en-us
+LOCATION:Palau Sant Jordi, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-18@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260422T110000
+DTEND:20260422T140000
+SUMMARY:Wednesday @ Cúpula de las Arenas
+DESCRIPTION:Antarctica Experience
+ Venue: Cúpula de las Arenas
+ Ticket Info: https://www.universe.com/events/antarctica-experience-tickets-67BSRN?ref=ticketmaster
+LOCATION:Cúpula de las Arenas, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-19@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260424T210000
+DTEND:20260424T240000
+SUMMARY:Extremoduro @ Ya'sta Club
+DESCRIPTION:TRIBUTO A EXTREMODURO
+ Venue: Ya'sta Club
+ Ticket Info: https://www.universe.com/events/tributo-a-extremoduro-tickets-96PGYQ?ref=ticketmaster
+LOCATION:Ya'sta Club, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-20@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260424T210000
+DTEND:20260424T240000
+SUMMARY:RÜFÜS @ Palau Sant Jordi
+DESCRIPTION:RÜFÜS DU SOL EUROPE '26
+ Venue: Palau Sant Jordi
+ Ticket Info: https://www.ticketmaster.es/event/rufus-du-sol-europe-26-tickets/36543091?language=en-us
+LOCATION:Palau Sant Jordi, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-21@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260424T210000
+DTEND:20260424T240000
+SUMMARY:Ø @ Espacio Broadway
+DESCRIPTION:Apreta'o pero contentas
+ Venue: Espacio Broadway
+ Ticket Info: https://www.universe.com/events/apretao-pero-contentas-tickets-6SBFXQ?ref=ticketmaster
+LOCATION:Espacio Broadway, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-22@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260426T210000
+DTEND:20260426T240000
+SUMMARY:RÜFÜS @ Movistar Arena
+DESCRIPTION:RÜFÜS DU SOL EUROPE '26
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/rufus-du-sol-europe-26-tickets/617923780?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-23@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260429T110000
+DTEND:20260429T140000
+SUMMARY:Wednesday @ Cúpula de las Arenas
+DESCRIPTION:Antarctica Experience
+ Venue: Cúpula de las Arenas
+ Ticket Info: https://www.universe.com/events/antarctica-experience-tickets-67BSRN?ref=ticketmaster
+LOCATION:Cúpula de las Arenas, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-24@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260430T210000
+DTEND:20260430T240000
+SUMMARY:Moby @ Moby Dick Club
+DESCRIPTION:Marlon Magnée - World Tour Part 1
+ Venue: Moby Dick Club
+ Ticket Info: https://www.ticketmaster.es/event/marlon-magnee-world-tour-part-1-tickets/906842899?language=en-us
+LOCATION:Moby Dick Club, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-25@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260430T210000
+DTEND:20260430T240000
+SUMMARY:The The @ Palacio Vistalegre
+DESCRIPTION:5 Seconds of Summer - UPGRADE ‘BITE THE APPLE’ (entrada no incluida)
+ Venue: Palacio Vistalegre
+ Ticket Info: https://www.ticketmaster.es/event/5-seconds-of-summer-upgrade-bite-the-apple-entrada-no-incluida--tickets/1756188146?language=en-us
+LOCATION:Palacio Vistalegre, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-26@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260501T210000
+DTEND:20260501T240000
+SUMMARY:The The @ Roig Arena
+DESCRIPTION:5 Seconds of Summer - UPGRADE ‘BITE THE APPLE’ (entrada no incluida)
+ Venue: Roig Arena
+ Ticket Info: https://www.ticketmaster.es/event/5-seconds-of-summer-upgrade-bite-the-apple-entrada-no-incluida--tickets/1526444435?language=en-us
+LOCATION:Roig Arena, Valencia
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-27@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260516T220000
+DTEND:20260516T250000
+SUMMARY:R.E.M. @ Sala Rem
+DESCRIPTION:Uña Y Carne -  QUE LA RUMBA TE ACOMPAÑE
+ Venue: Sala Rem
+ Ticket Info: https://www.universe.com/events/una-y-carne-que-la-rumba-te-acompane-tickets-0B3N5J?ref=ticketmaster
+LOCATION:Sala Rem, Murcia
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-28@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260520T203000
+DTEND:20260520T233000
+SUMMARY:The The @ Sala Razzmatazz 3
+DESCRIPTION:The Commoners - Runnin' Blind Tour
+ Venue: Sala Razzmatazz 3
+ Ticket Info: https://www.ticketmaster.es/event/the-commoners-runnin-blind-tour-tickets/193549169?language=en-us
+LOCATION:Sala Razzmatazz 3, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-29@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260521T203000
+DTEND:20260521T233000
+SUMMARY:The The @ Sala B
+DESCRIPTION:The Commoners - Runnin' Blind Tour
+ Venue: Sala B
+ Ticket Info: https://www.ticketmaster.es/event/the-commoners-runnin-blind-tour-tickets/828683112?language=en-us
+LOCATION:Sala B, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-30@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260523T190000
+DTEND:20260523T220000
+SUMMARY:The Jam @ Marbella Arena
+DESCRIPTION:RnB & Slow Jams
+ Venue: Marbella Arena
+ Ticket Info: https://www.ticketmaster.es/event/rnb--slow-jams-tickets/1408804806?language=en-us
+LOCATION:Marbella Arena, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-31@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260524T210000
+DTEND:20260524T240000
+SUMMARY:The The @ Palacio Vistalegre
+DESCRIPTION:Madison Beer: the locket tour
+ Venue: Palacio Vistalegre
+ Ticket Info: https://www.ticketmaster.es/event/madison-beer-the-locket-tour-tickets/1421049294?language=en-us
+LOCATION:Palacio Vistalegre, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-32@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260525T203000
+DTEND:20260525T233000
+SUMMARY:Moby @ Moby Dick Club
+DESCRIPTION:Elle Coves
+ Venue: Moby Dick Club
+ Ticket Info: https://www.ticketmaster.es/event/elle-coves-tickets/1724047737?language=en-us
+LOCATION:Moby Dick Club, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-33@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260526T203000
+DTEND:20260526T233000
+SUMMARY:The The @ Sant Jordi Club
+DESCRIPTION:Madison Beer: the locket tour
+ Venue: Sant Jordi Club
+ Ticket Info: https://www.ticketmaster.es/event/madison-beer-the-locket-tour-tickets/1325202553?language=en-us
+LOCATION:Sant Jordi Club, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-34@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260529T203000
+DTEND:20260529T233000
+SUMMARY:Public Image Ltd @ Sala Razzmatazz 2
+DESCRIPTION:PUBLIC IMAGE LTD - THIS IS NOT THE LAST TOUR
+ Venue: Sala Razzmatazz 2
+ Ticket Info: https://www.ticketmaster.es/event/public-image-ltd-this-is-not-the-last-tour-tickets/69084800?language=en-us
+LOCATION:Sala Razzmatazz 2, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-35@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260529T203000
+DTEND:20260529T233000
+SUMMARY:The The @ Sala Razzmatazz 2
+DESCRIPTION:PUBLIC IMAGE LTD - THIS IS NOT THE LAST TOUR
+ Venue: Sala Razzmatazz 2
+ Ticket Info: https://www.ticketmaster.es/event/public-image-ltd-this-is-not-the-last-tour-tickets/69084800?language=en-us
+LOCATION:Sala Razzmatazz 2, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-36@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260530T203000
+DTEND:20260530T233000
+SUMMARY:Public Image Ltd @ Sala But
+DESCRIPTION:PUBLIC IMAGE LTD - THIS IS NOT THE LAST TOUR
+ Venue: Sala But
+ Ticket Info: https://www.ticketmaster.es/event/public-image-ltd-this-is-not-the-last-tour-tickets/1677259367?language=en-us
+LOCATION:Sala But, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-37@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260530T203000
+DTEND:20260530T233000
+SUMMARY:The The @ Sala But
+DESCRIPTION:PUBLIC IMAGE LTD - THIS IS NOT THE LAST TOUR
+ Venue: Sala But
+ Ticket Info: https://www.ticketmaster.es/event/public-image-ltd-this-is-not-the-last-tour-tickets/1677259367?language=en-us
+LOCATION:Sala But, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-38@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART;VALUE=DATE:20260623
+DTEND;VALUE=DATE:20260623
+SUMMARY:Linkin Park @ Auditorio Miguel Ríos
+DESCRIPTION:LINKIN PARK: From Zero World Tour 2026
+ Venue: Auditorio Miguel Ríos
+ Ticket Info: https://www.ticketmaster.es/event/linkin-park-from-zero-world-tour-2026-tickets/1823666272?language=en-us
+LOCATION:Auditorio Miguel Ríos, Rivas-Vaciamadrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-39@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART;VALUE=DATE:20260624
+DTEND;VALUE=DATE:20260624
+SUMMARY:Linkin Park @ Auditorio Miguel Ríos
+DESCRIPTION:LINKIN PARK: From Zero World Tour 2026
+ Venue: Auditorio Miguel Ríos
+ Ticket Info: https://www.ticketmaster.es/event/linkin-park-from-zero-world-tour-2026-tickets/1308638313?language=en-us
+LOCATION:Auditorio Miguel Ríos, Rivas-Vaciamadrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-40@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260626T200000
+DTEND:20260626T230000
+SUMMARY:BT @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:BTS WORLD TOUR ‘ARIRANG’ IN MADRID
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.es/event/bts-world-tour-arirang-in-madrid-tickets/2003633313?language=en-us
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-41@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260626T203000
+DTEND:20260626T233000
+SUMMARY:War @ Sala Razzmatazz 3
+DESCRIPTION:Culture Wars - 2026 World Tour
+ Venue: Sala Razzmatazz 3
+ Ticket Info: https://www.ticketmaster.es/event/culture-wars-2026-world-tour-tickets/1116533859?language=en-us
+LOCATION:Sala Razzmatazz 3, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-42@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260627T200000
+DTEND:20260627T230000
+SUMMARY:BT @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:BTS WORLD TOUR ‘ARIRANG’ IN MADRID
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.es/event/bts-world-tour-arirang-in-madrid-tickets/2017561781?language=en-us
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-43@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260627T203000
+DTEND:20260627T233000
+SUMMARY:War @ Sala Villanos
+DESCRIPTION:Culture Wars - 2026 World Tour
+ Venue: Sala Villanos
+ Ticket Info: https://www.ticketmaster.es/event/culture-wars-2026-world-tour-tickets/522779133?language=en-us
+LOCATION:Sala Villanos, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-44@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260630T220000
+DTEND:20260630T250000
+SUMMARY:The The @ Auditorio Starlite
+DESCRIPTION:The Alan Parsons Live Project
+ Venue: Auditorio Starlite
+ Ticket Info: https://www.ticketmaster.es/event/the-alan-parsons-live-project-tickets/679058648?language=en-us
+LOCATION:Auditorio Starlite, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-45@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260703T220000
+DTEND:20260703T250000
+SUMMARY:AnD @ Auditorio Starlite
+DESCRIPTION:Gipsy Kings Featuring Nicolas Reyes And Tonino Baliardo
+ Venue: Auditorio Starlite
+ Ticket Info: https://www.ticketmaster.es/event/gipsy-kings-featuring-nicolas-reyes-and-tonino-baliardo-tickets/1900567164?language=en-us
+LOCATION:Auditorio Starlite, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-46@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART;VALUE=DATE:20260704
+DTEND;VALUE=DATE:20260704
+SUMMARY:Fatboy Slim @ Masia d'En Cabanyes
+DESCRIPTION:Vida Festival 2026
+ Venue: Masia d'En Cabanyes
+ Ticket Info: https://www.ticketmaster.es/event/vida-festival-2026-tickets/1104066323?language=en-us
+LOCATION:Masia d'En Cabanyes, Vilanova i la Geltrú
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-47@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260709T200000
+DTEND:20260709T230000
+SUMMARY:Faithless @ Marbella Arena
+DESCRIPTION:Faithless
+ Venue: Marbella Arena
+ Ticket Info: https://www.ticketmaster.es/event/faithless-tickets/1555783165?language=en-us
+LOCATION:Marbella Arena, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-48@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260710T203000
+DTEND:20260710T233000
+SUMMARY:Bruno Mars @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:Bruno Mars
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.com/event/Z7r9jZ1A7OE_O
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-49@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260710T200000
+DTEND:20260710T230000
+SUMMARY:The Doors @ Marbella Arena
+DESCRIPTION:Two Door Cinema Club
+ Venue: Marbella Arena
+ Ticket Info: https://www.ticketmaster.es/event/two-door-cinema-club-tickets/1321008846?language=en-us
+LOCATION:Marbella Arena, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-50@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260710T203000
+DTEND:20260710T233000
+SUMMARY:The The @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:Bruno Mars - The Romantic Tour
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.es/event/bruno-mars-the-romantic-tour-tickets/369958004?language=en-us
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-51@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260711T203000
+DTEND:20260711T233000
+SUMMARY:Bruno Mars @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:Bruno Mars
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.com/event/Z7r9jZ1A7O01e
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-52@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260711T203000
+DTEND:20260711T233000
+SUMMARY:The The @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:Bruno Mars - The Romantic Tour
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.es/event/bruno-mars-the-romantic-tour-tickets/470744507?language=en-us
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-53@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART;VALUE=DATE:20260711
+DTEND;VALUE=DATE:20260711
+SUMMARY:Ø @ Unknown venue
+DESCRIPTION:O Gozo Festival 2026
+ Venue: Unknown venue
+ Ticket Info: https://www.ticketmaster.es/event/o-gozo-festival-2026-tickets/94114753?language=en-us
+LOCATION:Unknown venue, Santiago de Compostela
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-54@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260716T223000
+DTEND:20260716T253000
+SUMMARY:Jamiroquai @ Plaza de España
+DESCRIPTION:Jamiroquai - Icónica Santalucia Sevilla Fest.
+ Venue: Plaza de España
+ Ticket Info: https://www.ticketmaster.es/event/jamiroquai-iconica-santalucia-sevilla-fest-tickets/2034594644?language=en-us
+LOCATION:Plaza de España, Sevilla
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-55@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260718T210000
+DTEND:20260718T240000
+SUMMARY:The The @ Iberdrola Music
+DESCRIPTION:My Chemical Romance - The Black Parade 2026
+ Venue: Iberdrola Music
+ Ticket Info: https://www.ticketmaster.es/event/my-chemical-romance-the-black-parade-2026-tickets/1381547263?language=en-us
+LOCATION:Iberdrola Music, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-56@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260721T220000
+DTEND:20260721T250000
+SUMMARY:Diana Krall @ Auditorio Starlite
+DESCRIPTION:Diana Krall
+ Venue: Auditorio Starlite
+ Ticket Info: https://www.ticketmaster.es/event/diana-krall-tickets/1994956036?language=en-us
+LOCATION:Auditorio Starlite, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-57@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260721T200000
+DTEND:20260721T230000
+SUMMARY:Jacob Collier @ Auditoria Alfredo Kraus
+DESCRIPTION:Jacob Collier
+ Venue: Auditoria Alfredo Kraus
+ Ticket Info: https://www.ticketmaster.com/event/Z7r9jZ1A7-S8V
+LOCATION:Auditoria Alfredo Kraus, Las Palmas
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-58@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260722T200000
+DTEND:20260722T230000
+SUMMARY:Jacob Collier @ Auditorio de Tenerife
+DESCRIPTION:Jacob Collier
+ Venue: Auditorio de Tenerife
+ Ticket Info: https://www.ticketmaster.com/event/Z7r9jZ1A7-S8g
+LOCATION:Auditorio de Tenerife, Santa Cruz De Tenerife
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-59@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260723T220000
+DTEND:20260723T250000
+SUMMARY:The The @ Auditorio Starlite
+DESCRIPTION:Kool & The Gang
+ Venue: Auditorio Starlite
+ Ticket Info: https://www.ticketmaster.es/event/kool--the-gang-tickets/474845891?language=en-us
+LOCATION:Auditorio Starlite, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-60@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260820T220000
+DTEND:20260820T250000
+SUMMARY:An-tonio @ Auditorio Starlite
+DESCRIPTION:Antonio José
+ Venue: Auditorio Starlite
+ Ticket Info: https://www.ticketmaster.es/event/antonio-jose-tickets/1005579883?language=en-us
+LOCATION:Auditorio Starlite, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-61@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260828T200000
+DTEND:20260828T230000
+SUMMARY:The The @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:The Weeknd: After Hours Til Dawn Tour
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.es/event/the-weeknd-after-hours-til-dawn-tour-tickets/1894732982?language=en-us
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-62@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260829T203000
+DTEND:20260829T233000
+SUMMARY:Hermanos Gutiérrez @ La Riviera
+DESCRIPTION:Hermanos Gutierrez
+ Venue: La Riviera
+ Ticket Info: https://www.ticketmaster.es/event/hermanos-gutierrez-tickets/2057149757?language=en-us
+LOCATION:La Riviera, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-63@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260829T213000
+DTEND:20260829T243000
+SUMMARY:The The @ Marbella Arena
+DESCRIPTION:The tribute - Inspired by Abba Voyage London
+ Venue: Marbella Arena
+ Ticket Info: https://www.ticketmaster.es/event/the-tribute-inspired-by-abba-voyage-london-tickets/1628507111?language=en-us
+LOCATION:Marbella Arena, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-64@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260829T200000
+DTEND:20260829T230000
+SUMMARY:The The @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:The Weeknd: After Hours Til Dawn Tour
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.es/event/the-weeknd-after-hours-til-dawn-tour-tickets/1513387482?language=en-us
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-65@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260829T213000
+DTEND:20260829T243000
+SUMMARY:Voyage @ Marbella Arena
+DESCRIPTION:The tribute - Inspired by Abba Voyage London
+ Venue: Marbella Arena
+ Ticket Info: https://www.ticketmaster.es/event/the-tribute-inspired-by-abba-voyage-london-tickets/1628507111?language=en-us
+LOCATION:Marbella Arena, Marbella
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-66@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260830T203000
+DTEND:20260830T233000
+SUMMARY:Hermanos Gutiérrez @ Gran Teatre del Liceu
+DESCRIPTION:Hermanos Gutierrez
+ Venue: Gran Teatre del Liceu
+ Ticket Info: https://www.ticketmaster.es/event/hermanos-gutierrez-tickets/1129406292?language=en-us
+LOCATION:Gran Teatre del Liceu, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-67@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260830T200000
+DTEND:20260830T230000
+SUMMARY:The The @ Estadio Riyadh Air Metropolitano
+DESCRIPTION:The Weeknd: After Hours Til Dawn Tour
+ Venue: Estadio Riyadh Air Metropolitano
+ Ticket Info: https://www.ticketmaster.es/event/the-weeknd-after-hours-til-dawn-tour-tickets/1765379991?language=en-us
+LOCATION:Estadio Riyadh Air Metropolitano, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-68@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260831T203000
+DTEND:20260831T233000
+SUMMARY:Hermanos Gutiérrez @ Gran Teatre del Liceu
+DESCRIPTION:Hermanos Gutierrez
+ Venue: Gran Teatre del Liceu
+ Ticket Info: https://www.ticketmaster.es/event/hermanos-gutierrez-tickets/1365979689?language=en-us
+LOCATION:Gran Teatre del Liceu, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-69@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260901T200000
+DTEND:20260901T230000
+SUMMARY:The The @ Estadi Olímpic Lluis Companys
+DESCRIPTION:The Weeknd: After Hours Til Dawn Tour
+ Venue: Estadi Olímpic Lluis Companys
+ Ticket Info: https://www.ticketmaster.es/event/the-weeknd-after-hours-til-dawn-tour-tickets/730393634?language=en-us
+LOCATION:Estadi Olímpic Lluis Companys, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-70@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260904T203000
+DTEND:20260904T233000
+SUMMARY:The The @ Sala Wagon
+DESCRIPTION:The Living Tombstone: The Multiplayer Tour
+ Venue: Sala Wagon
+ Ticket Info: https://www.ticketmaster.es/event/the-living-tombstone-the-multiplayer-tour-tickets/968387695?language=en-us
+LOCATION:Sala Wagon, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-71@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART;VALUE=DATE:20260905
+DTEND;VALUE=DATE:20260905
+SUMMARY:La Plazuela @ Explanada del Recinto Expo
+DESCRIPTION:Festival Vive Latino España 2026
+ Venue: Explanada del Recinto Expo
+ Ticket Info: https://www.ticketmaster.es/event/festival-vive-latino-espana-2026-tickets/1496370416?language=en-us
+LOCATION:Explanada del Recinto Expo, Zaragoza
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-72@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART;VALUE=DATE:20260905
+DTEND;VALUE=DATE:20260905
+SUMMARY:Ø @ Explanada del Recinto Expo
+DESCRIPTION:Festival Vive Latino España 2026
+ Venue: Explanada del Recinto Expo
+ Ticket Info: https://www.ticketmaster.es/event/festival-vive-latino-espana-2026-tickets/1496370416?language=en-us
+LOCATION:Explanada del Recinto Expo, Zaragoza
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-73@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260906T203000
+DTEND:20260906T233000
+SUMMARY:The The @ Sala Wagon
+DESCRIPTION:The Living Tombstone: The Multiplayer Tour
+ Venue: Sala Wagon
+ Ticket Info: https://www.ticketmaster.es/event/the-living-tombstone-the-multiplayer-tour-tickets/985903547?language=en-us
+LOCATION:Sala Wagon, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-74@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260907T203000
+DTEND:20260907T233000
+SUMMARY:The The @ Sala Razzmatazz 1
+DESCRIPTION:The Living Tombstone: The Multiplayer Tour
+ Venue: Sala Razzmatazz 1
+ Ticket Info: https://www.ticketmaster.es/event/the-living-tombstone-the-multiplayer-tour-tickets/2031649631?language=en-us
+LOCATION:Sala Razzmatazz 1, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-75@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260910T210000
+DTEND:20260910T240000
+SUMMARY:The The @ Palacio Vistalegre
+DESCRIPTION:The Neighbourhood: THE WOURLD TOUR
+ Venue: Palacio Vistalegre
+ Ticket Info: https://www.ticketmaster.es/event/the-neighbourhood-the-wourld-tour-tickets/507938422?language=en-us
+LOCATION:Palacio Vistalegre, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-76@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260913T210000
+DTEND:20260913T240000
+SUMMARY:The Black Keys @ Movistar Arena
+DESCRIPTION:The Black Keys: PEACHES ‘N KREAM
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/the-black-keys-peaches-n-kream-tickets/1634798402?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-77@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20260913T210000
+DTEND:20260913T240000
+SUMMARY:The The @ Movistar Arena
+DESCRIPTION:The Black Keys: PEACHES ‘N KREAM
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/the-black-keys-peaches-n-kream-tickets/1634798402?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-78@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20261001T210000
+DTEND:20261001T240000
+SUMMARY:Moby @ Moby Dick Club
+DESCRIPTION:Blood Red Shoes
+ Venue: Moby Dick Club
+ Ticket Info: https://www.ticketmaster.es/event/blood-red-shoes-tickets/147660545?language=en-us
+LOCATION:Moby Dick Club, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-79@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20261001T204500
+DTEND:20261001T234500
+SUMMARY:placebo @ Movistar Arena
+DESCRIPTION:Placebo - 30th Anniversary Tour 
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/placebo-30th-anniversary-tour-tickets/1057685783?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-80@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20261003T204500
+DTEND:20261003T234500
+SUMMARY:placebo @ Sant Jordi Club
+DESCRIPTION:Placebo - 30th Anniversary Tour 
+ Venue: Sant Jordi Club
+ Ticket Info: https://www.ticketmaster.es/event/placebo-30th-anniversary-tour-tickets/1478263449?language=en-us
+LOCATION:Sant Jordi Club, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-81@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20261021T203000
+DTEND:20261021T233000
+SUMMARY:The The @ Sala Razzmatazz 1
+DESCRIPTION:Band of Horses - Celebrating 20 Years of Everything All The Time
+ Venue: Sala Razzmatazz 1
+ Ticket Info: https://www.ticketmaster.es/event/band-of-horses-celebrating-20-years-of-everything-all-the-time-tickets/1189938192?language=en-us
+LOCATION:Sala Razzmatazz 1, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-82@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20261022T203000
+DTEND:20261022T233000
+SUMMARY:The The @ La Riviera
+DESCRIPTION:Band of Horses - Celebrating 20 Years of Everything All The Time
+ Venue: La Riviera
+ Ticket Info: https://www.ticketmaster.es/event/band-of-horses-celebrating-20-years-of-everything-all-the-time-tickets/1354212769?language=en-us
+LOCATION:La Riviera, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-83@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20261205T203000
+DTEND:20261205T233000
+SUMMARY:The The @ La 2 de Apolo
+DESCRIPTION:THE SHEEPDOGS - Out All Night Tour
+ Venue: La 2 de Apolo
+ Ticket Info: https://www.ticketmaster.es/event/the-sheepdogs-out-all-night-tour-tickets/1431066550?language=en-us
+LOCATION:La 2 de Apolo, Barcelona
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-84@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20261206T203000
+DTEND:20261206T233000
+SUMMARY:The The @ Sala But
+DESCRIPTION:THE SHEEPDOGS - Out All Night Tour
+ Venue: Sala But
+ Ticket Info: https://www.ticketmaster.es/event/the-sheepdogs-out-all-night-tour-tickets/1945596877?language=en-us
+LOCATION:Sala But, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:dc42c151-3604-4190-a261-599cd8ea161d-85@musicapp
+DTSTAMP:20260326T165922Z
+DTSTART:20270109T203000
+DTEND:20270109T233000
+SUMMARY:WarCry @ Movistar Arena
+DESCRIPTION:Warcry - XXV Aniversario
+ Venue: Movistar Arena
+ Ticket Info: https://www.ticketmaster.es/event/warcry-xxv-aniversario-tickets/1814603154?language=en-us
+LOCATION:Movistar Arena, Madrid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,313 @@
+{
+  "type": "Group",
+  "gender": null,
+  "country": "JP",
+  "isnis": [],
+  "relations": [
+    {
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "1732699e-c8a6-4175-95d6-3621aa6a3420",
+        "resource": "https://www.discogs.com/artist/1807588"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/5Yur3Z4Wrte4GfVCAbxObl",
+        "id": "faf1aa30-4412-43d1-af13-20d7ac3e0506"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/112201092",
+        "id": "89cb114b-fd58-4fd6-8c59-a62df9d6ba44"
+      },
+      "attributes": []
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "38278f7f-34ae-4f51-82b7-b301ebb09567",
+        "resource": "https://mora.jp/artist/1005415/"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://mora.jp/artist/1348201/",
+        "id": "4cb2eb2b-005c-491f-8a73-fe6f76e75748"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "754b78bd-4f27-4441-b8cf-9c4c35854aaf",
+        "resource": "https://mora.jp/artist/1349225/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://mora.jp/artist/1622623/",
+        "id": "6517b10b-f1d0-421c-9b36-fb45ab02d2b5"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://mora.jp/artist/1849363/",
+        "id": "0aa2dd52-5b8a-4397-bb52-acd9fac4adc4"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "url": {
+        "id": "c1f412ec-f39d-4919-a5be-d6c1e1d50bed",
+        "resource": "https://mora.jp/artist/921183/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://twitter.com/n0ririn",
+        "id": "b4250b49-7a6b-4d9e-ba95-abf3ba9b4928"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/poison_girl_friend_official/",
+        "id": "5e799338-40e4-4da3-b24a-da96a8660cee"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/jp/artist/1150337276",
+        "id": "d34a35de-3f79-4c95-8e9d-30773b816161"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://tidal.com/artist/22073506",
+        "id": "97352180-fb97-4f86-a1f8-18df349a3969"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q17230190",
+        "id": "afc3826f-3f8f-4ab6-88a4-4b0468f1777d"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "29651736-fa6d-48e4-aadc-a557c6add1cb",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikipedia",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "89c6f026-b51a-4390-992a-cdc924207170",
+        "resource": "https://en.wikipedia.org/wiki/Poison_Girl_Friend"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    }
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "type": null,
+    "sort-name": "Tokyo",
+    "iso-3166-2-codes": [
+      "JP-13"
+    ],
+    "disambiguation": "",
+    "id": "8dc97297-ac95-4d33-82bc-e07fab26fb5f",
+    "type-id": null,
+    "name": "Tokyo"
+  },
+  "ipis": [],
+  "gender-id": null,
+  "sort-name": "POiSON GiRL FRiEND",
+  "disambiguation": "Japanese solo music project by Noriko Sekiguchi",
+  "id": "b87b543b-fc65-40d6-83e1-88e6b6e7ab72",
+  "end-area": null,
+  "area": {
+    "disambiguation": "",
+    "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+    "sort-name": "Japan",
+    "iso-3166-1-codes": [
+      "JP"
+    ],
+    "type": null,
+    "name": "Japan",
+    "type-id": null
+  },
+  "name": "POiSON GiRL FRiEND",
+  "life-span": {
+    "ended": false,
+    "begin": "1990",
+    "end": null
+  }
+}

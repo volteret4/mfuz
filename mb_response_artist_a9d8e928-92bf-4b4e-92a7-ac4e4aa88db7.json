@@ -1,0 +1,282 @@
+{
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Grad_U",
+  "id": "a9d8e928-92bf-4b4e-92a7-ac4e4aa88db7",
+  "disambiguation": "Lithuanian techno producer",
+  "end-area": null,
+  "area": {
+    "name": "Vilnius",
+    "type-id": null,
+    "id": "cadab571-5d70-45d7-9e1d-843f6cb78bb5",
+    "disambiguation": "",
+    "sort-name": "Vilnius",
+    "type": null
+  },
+  "name": "Grad_U",
+  "isnis": [],
+  "country": "LT",
+  "relations": [
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "biography",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://scale-limited.com/grad_u/",
+        "id": "727249cc-bb34-420c-b178-601ad6a44262"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "727249cc-bb34-420c-b178-601ad6a44262",
+        "resource": "https://scale-limited.com/grad_u/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "discography page",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "37f1f360-5985-472b-b727-54ada985835d",
+        "resource": "https://www.discogs.com/artist/621780"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0CwNn8CqML5AVF3MHl5Q2D",
+        "id": "feef9e11-241a-48b4-89e8-df996222b130"
+      }
+    },
+    {
+      "url": {
+        "id": "e9aeb052-c8fe-48fb-b267-ac1d62a55872",
+        "resource": "https://www.deezer.com/artist/1589091"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://ra.co/dj/gradu",
+        "id": "e2626ad2-45e9-4c17-b174-b68e85282148"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.beatport.com/artist/grad_u/108901",
+        "id": "824c805d-0856-4913-a704-5820dbb8869e"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "295e4e2d-8166-4b7a-8b49-828b7df0f3e6",
+        "resource": "https://www.facebook.com/gradlt"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.instagram.com/grad_u/",
+        "id": "455660c0-9f14-465e-8e5e-281fafb1a578"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "a0160447-5736-4555-8181-1d729ae26a86",
+        "resource": "https://www.mixcloud.com/grad_u/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://soundcloud.com/grad_u",
+        "id": "a3f383e4-0b3b-4f0f-8656-ee404161b35e"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/325274449",
+        "id": "c163396a-ac1a-4d7b-b24b-56fef96c7d97"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "b118cd2f-08cc-44c3-8847-c660b81ab8c0",
+        "resource": "https://tidal.com/artist/4150465"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "af4b5991-6f69-41ad-9d96-14e26558d009",
+        "resource": "https://www.youtube.com/gradu"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": null,
+  "ipis": [],
+  "type": "Person",
+  "gender": "Male"
+}

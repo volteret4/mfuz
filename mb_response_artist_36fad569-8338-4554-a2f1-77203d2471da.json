@@ -1,0 +1,149 @@
+{
+  "end-area": null,
+  "area": null,
+  "type-id": null,
+  "type": null,
+  "name": "Karriem",
+  "country": null,
+  "begin-area": null,
+  "gender": null,
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "gender-id": null,
+  "sort-name": "Karriem",
+  "ipis": [],
+  "disambiguation": "",
+  "id": "36fad569-8338-4554-a2f1-77203d2471da",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "b24f3901-3ddf-4ccc-ac00-41cb2fee4f84",
+        "resource": "https://www.discogs.com/artist/1125544"
+      }
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0NadnuC5kb7WZgpZcqqM2d",
+        "id": "79697245-8ab7-43f6-8de4-aa3ca3f00b9b"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "resource": "https://www.deezer.com/artist/11042744",
+        "id": "c69f2208-0196-4d0a-adb1-3cd4a770db2b"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/karriem",
+        "id": "bfc30a65-e143-4398-aac6-260058f2914c"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.45cat.com/12single/artist/karriem",
+        "id": "11c41e2c-f4a5-4eb4-b1d4-3bfa7b38208a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "6ac85271-534e-423c-b3c5-38e8bff22437",
+        "resource": "https://music.apple.com/us/artist/594610677"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "url": {
+        "id": "579194ef-f449-46e0-b8bf-21b27b4eb46a",
+        "resource": "https://tidal.com/artist/8135496"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "isnis": []
+}

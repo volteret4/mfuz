@@ -1,0 +1,159 @@
+{
+  "isnis": [],
+  "name": "Acid Junkies",
+  "id": "404852df-e3e5-4376-a743-0f4fea5a7e65",
+  "sort-name": "Acid Junkies",
+  "begin-area": null,
+  "disambiguation": "",
+  "end-area": null,
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "type": "Group",
+  "country": "NL",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "relations": [
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000925067",
+        "id": "6c1c4d11-98a4-4928-979e-7cebe089d4c8"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "allmusic",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/738",
+        "id": "e64db427-2215-4900-ba6a-32cb32bfe2b3"
+      }
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "920a8a61-c8c0-41f0-80aa-6141831a2c64",
+        "resource": "https://www.last.fm/music/Acid+Junkies"
+      }
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://www.acidjunkies.com/",
+        "id": "8a001128-0595-4b8f-bef4-5f39496c41ef"
+      }
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "5e54841a-3e58-4969-a8e6-6e56c0495dc4",
+        "resource": "https://www.songkick.com/artists/111030"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/155272700",
+        "id": "50bdff78-9f65-40ae-b3e4-ffe1650723f2"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q2384570",
+        "id": "faa9384a-87e6-474d-b9a5-d7257fce071f"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "area": {
+    "type-id": null,
+    "name": "Netherlands",
+    "type": null,
+    "id": "ef1b7cc0-cd26-36f4-8ea0-04d9623786c7",
+    "iso-3166-1-codes": [
+      "NL"
+    ],
+    "sort-name": "Netherlands",
+    "disambiguation": ""
+  },
+  "ipis": []
+}

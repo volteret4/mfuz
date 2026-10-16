@@ -1,0 +1,346 @@
+{
+  "sort-name": "Love",
+  "life-span": {
+    "ended": true,
+    "end": "2005",
+    "begin": "1965"
+  },
+  "gender-id": null,
+  "relations": [
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "04c43030-2f65-48d6-8914-3ea7a42df432",
+        "resource": "https://www.allmusic.com/artist/mn0000314600"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "id": "b796798d-e526-4664-82ad-41151e4fbbb1",
+        "resource": "https://www.bbc.co.uk/music/artists/34ec9a8d-c65b-48fd-bcdd-aad2f72fdb47"
+      },
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": "2020-11-19",
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/48410",
+        "id": "fc5af14d-dac6-4d2c-b396-d1b3b7ea25ea"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "35235382-12f1-436c-8c8b-0e518774a5dd",
+        "resource": "http://love.torbenskott.dk/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "fanpage",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/3Q6OOkfssqoMSTtl11J5Uk",
+        "id": "7c285a01-3ac4-47dc-95e2-917f6dcc1e68"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/4715",
+        "id": "c4bc3646-196e-4342-9b27-1c15f3bac223"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "http://muzikum.eu/en/122-9883/love/lyrics.html",
+        "id": "a542242c-c92e-4624-8b3d-584f959aff02"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://lovearthurlee.com/",
+        "id": "605084fd-4b51-4b43-949b-5869464f8577"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/L/Love/",
+        "id": "466dedef-0b75-494d-b374-f6db53dedd0e"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/4768120-2",
+        "id": "a224a3e2-efd1-4f15-bfa4-f5425a6cc06c"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "9d65f852-af9f-46c6-a2c6-775bd2b25728",
+        "resource": "https://rateyourmusic.com/artist/love"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "ef2555d4-11af-408a-a1cf-89e9620f7a6b",
+        "resource": "https://twitter.com/loverevisited66"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "resource": "https://www.facebook.com/LOVErevisitedband",
+        "id": "278ca4d4-06bd-4833-8742-ce688182fb0f"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "e0692de0-a83f-4c30-aef9-23ab7dbb379b",
+        "resource": "https://www.songkick.com/artists/181019"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/13735",
+        "id": "446f6885-5137-42b2-813b-1bf52b6c4a8b"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/237025391",
+        "id": "a4674b46-0fef-41d4-aeec-7dcb5636ebfc"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q664248",
+        "id": "ef41f137-f640-48fe-b485-eaa81673e5a5"
+      }
+    }
+  ],
+  "isnis": [],
+  "id": "34ec9a8d-c65b-48fd-bcdd-aad2f72fdb47",
+  "disambiguation": "folk-rock/psychedelic band",
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "type-id": null,
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "name": "United States",
+    "type": null
+  },
+  "end-area": null,
+  "gender": null,
+  "begin-area": {
+    "name": "Los Angeles",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Los Angeles",
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62"
+  },
+  "country": "US",
+  "type": "Group",
+  "name": "Love"
+}

@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import argparse
 import json
 import os
@@ -32,6 +36,7 @@ COLOR_BOLD = "\033[1m"
 def init_database(db_path):
     """Inicializa la base de datos añadiendo las columnas necesarias si no existen"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Función auxiliar para verificar y añadir columnas
@@ -127,6 +132,7 @@ def save_log_file(log_file, data):
 def get_database_stats(db_path):
     """Obtiene estadísticas sobre enlaces existentes y faltantes"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Artistas
@@ -582,6 +588,7 @@ def get_song_details(conn, song_id):
 def get_artist_albums(db_path, artist_id):
     """Obtiene los álbumes asociados a un artista"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     cursor.execute("""
@@ -601,6 +608,7 @@ def get_artist_albums(db_path, artist_id):
 def update_artists_wikipedia(db_path, log_file, user_agent=None, modo='manual', force_update=False):
     """Actualiza los enlaces y contenido de Wikipedia para artistas"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Cargar el registro
@@ -806,6 +814,7 @@ def update_artists_wikipedia(db_path, log_file, user_agent=None, modo='manual', 
 def update_albums_wikipedia(db_path, log_file, user_agent=None, modo='manual', mb_username=None, mb_password=None, force_update=False):
     """Actualiza los enlaces y contenido de Wikipedia para álbumes"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Cargar el registro
@@ -998,6 +1007,7 @@ def update_albums_wikipedia(db_path, log_file, user_agent=None, modo='manual', m
 def update_content_only(db_path, entity_type, user_agent=None, modo='manual'):
     """Actualiza solo el contenido para entidades que ya tienen URL de Wikipedia pero no contenido"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     if entity_type == 'artists':
@@ -1172,6 +1182,7 @@ def update_content_only(db_path, entity_type, user_agent=None, modo='manual'):
 def get_label_info(db_path, label_id):
     """Obtiene información básica sobre un sello"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     cursor.execute("""
@@ -1195,6 +1206,7 @@ def get_label_info(db_path, label_id):
 def update_labels_wikipedia(db_path, log_file, user_agent=None, modo='manual', force_update=False):
     """Actualiza los enlaces y contenido de Wikipedia para sellos"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Cargar el registro

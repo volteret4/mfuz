@@ -1,0 +1,202 @@
+{
+  "gender": "Male",
+  "name": "Botany",
+  "type": "Person",
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Weatherford",
+    "type-id": null,
+    "id": "745d5359-2902-479d-b052-8c154b8f2648",
+    "sort-name": "Weatherford"
+  },
+  "country": "US",
+  "area": {
+    "type": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "sort-name": "United States"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null,
+  "id": "e7a12497-bb39-4310-b7cc-cd0f29f96889",
+  "isnis": [],
+  "relations": [
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002734114",
+        "id": "f105f63b-ffe7-4d92-a350-5160e6e4c99e"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/2428640",
+        "id": "8bb1fbb7-fff3-425c-947a-0a7a13afb45a"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Botany",
+        "id": "99327235-4160-493d-8eff-685b2a132e99"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "http://www.botanymusic.com/",
+        "id": "f36d75e4-8806-44cf-a7c6-2dd0dc91b20c"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attribute-values": {},
+      "type": "official homepage",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/botany",
+        "id": "0bb7fd5e-8059-48df-9507-76a42da9e9a4"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "id": "83791912-f5b4-41dd-af4d-4b4101b36072",
+        "resource": "https://twitter.com/BotanyMusic"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.facebook.com/BotanyMusic",
+        "id": "fe84ba4e-3af6-404d-b179-c71f348e704d"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "attribute-values": {},
+      "type": "soundcloud",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "d3206211-82d6-4851-ad86-c786eb2ca194",
+        "resource": "https://soundcloud.com/botany"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "882e52da-2e55-4aae-831a-67fb239a3dc7",
+        "resource": "https://tidal.com/artist/4863311"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {}
+    }
+  ],
+  "ipis": [],
+  "disambiguation": "Texan producer Spencer Stephenson",
+  "sort-name": "Botany",
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9"
+}

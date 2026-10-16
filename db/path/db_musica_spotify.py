@@ -16,6 +16,8 @@ import json
 import logging
 import argparse
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Set, Tuple
@@ -236,6 +238,7 @@ class MusicSpotifyManager:
     def init_database(self):
         """Inicializa la base de datos si no existe o actualiza el esquema si es necesario."""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         # Crear todas las tablas necesarias primero
@@ -757,6 +760,7 @@ class MusicSpotifyManager:
             int: ID del artista en la base de datos o None si hay error
         """
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         try:
@@ -858,6 +862,7 @@ class MusicSpotifyManager:
             int: ID del álbum en la base de datos
         """
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         try:
@@ -1048,6 +1053,7 @@ class MusicSpotifyManager:
             int: ID de la pista en la base de datos o None si ocurre un error
         """
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         try:
@@ -1197,6 +1203,7 @@ class MusicSpotifyManager:
                 
             # Si el artista ya existía con origen 'local' y estamos omitiendo artistas existentes, saltar
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             cursor.execute("SELECT origen FROM artists WHERE id = ?", (artist_id,))
             result = cursor.fetchone()

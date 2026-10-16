@@ -2006,18 +2006,10 @@ class MusicBrainzManager:
 
     def handle_background_auth_result(self, success):
         """Handle the result of background authentication"""
+        # Se ejecuta en el hilo de la interfaz: no hacer peticiones de red aquí.
+        # Las colecciones se descargan al abrir el menú que las usa.
         if success:
             self.logger.info("Background MusicBrainz authentication successful")
-            # Pre-fetch collections to make menu faster later
-            if hasattr(self, 'musicbrainz_auth') and self.musicbrainz_auth.is_authenticated():
-                try:
-                    # Fetch collections in a non-blocking way (just store for later use)
-                    if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
-                        self._mb_collections = self.musicbrainz_auth.get_collections_by_api()
-                    elif hasattr(self.musicbrainz_auth, 'get_user_collections'):
-                        self._mb_collections = self.musicbrainz_auth.get_user_collections()
-                except Exception as e:
-                    self.logger.error(f"Error pre-fetching collections: {e}")
         else:
             self.logger.warning("Background MusicBrainz authentication failed")
 

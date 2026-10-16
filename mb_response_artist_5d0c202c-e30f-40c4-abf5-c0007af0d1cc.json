@@ -1,0 +1,562 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "disambiguation": "",
+    "id": "d107417f-3659-4b21-92cf-b840af98c506",
+    "sort-name": "City of St Albans",
+    "type": null,
+    "name": "City of St Albans",
+    "type-id": null
+  },
+  "ipis": [],
+  "isnis": [],
+  "country": "GB",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "d0bdb42d-c540-483a-aa02-5c1202433b7d",
+        "resource": "https://www.allmusic.com/artist/mn0002064065"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "ended": false,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://clark.bandcamp.com/",
+        "id": "cd03603b-8570-487e-8779-207d11e93b76"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.bandsintown.com/a/13673",
+        "id": "de5f9ed8-b6fc-427b-bf52-d0a410b95a8b"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/6396",
+        "id": "794de133-d0a8-4802-8357-2d0d54020c5f"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/3PuqaHGW9dXVpqLgrVw3Pe",
+        "id": "b2676468-289e-456d-be4c-07da5c0b67bc"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6kic5bCjlohhDn9KzXbOta",
+        "id": "218332de-cff4-44f8-9d1c-1f3606a01407"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "1c2a2aea-aede-48b8-869d-b6d4d82a8920",
+        "resource": "https://www.deezer.com/artist/5983"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Clark-Soundcheck-Mutek-2013.jpg",
+        "id": "aea2ad7b-67c4-4b82-9f71-6a57bb800e4f"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "type": "image",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm6291736/",
+        "id": "83fe0735-3133-425c-894e-374f0f75b0cc"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/Clark",
+        "id": "2ec6d406-266f-4305-a8d0-cb4804db822c"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "myspace",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "074a6c34-e564-4a9e-b2a0-f3d3969a5828",
+        "resource": "https://myspace.com/throttleclark"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "06bbaf50-fc2c-4b81-9855-081e8410bde2",
+        "resource": "https://throttleclark.com/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://imvdb.com/n/clark",
+        "id": "5720bcaa-0190-4633-ab08-94dbefc5139f"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://ra.co/dj/clark",
+        "id": "062f65f6-9961-44af-b26b-06df31cfaed6"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id136731821",
+        "id": "4d32089c-d5d3-4afa-a28a-0c4d49af110a"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": ""
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.beatport.com/artist/clark/26348",
+        "id": "e0c426e0-7e3e-4659-9ea6-20f446b186f4"
+      },
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": true,
+      "begin": null,
+      "end": "2019-04",
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://plus.google.com/+throttleclark",
+        "id": "aa6072bb-8101-4d3e-b202-ac73c36b4223"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "9daa3d8f-0cf5-431e-9a78-0210d6286753",
+        "resource": "https://twitter.com/throttleclark"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/throttleclark",
+        "id": "f34b3867-08ec-4537-8a9e-6038864449d6"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.instagram.com/throttleclark/",
+        "id": "fc56afa1-aad6-402c-bd51-929b94feedd1"
+      }
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.threads.com/@throttleclark",
+        "id": "1bc1b6ac-a982-4ebd-af52-f7c701fb4a37"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "061842d8-dd57-4c55-8271-546ebea8ea01",
+        "resource": "https://www.tiktok.com/@throttleclark"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/339591",
+        "id": "bb522bd6-d060-43f6-89d0-5d38b2bfe6d4"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "c1078015-c458-40f3-ba45-5c14375f636e",
+        "resource": "https://soundcloud.com/throttleclark"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "8adcc994-6cdf-49b3-b6a2-f710a68b4e63",
+        "resource": "https://music.apple.com/fr/artist/136731821"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "93882a19-3312-4cb9-9b79-b06d84961e2e",
+        "resource": "https://tidal.com/artist/3568944"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9e23c464-bcb7-4894-9d70-f78f5539f8a8",
+        "resource": "https://www.wikidata.org/wiki/Q1077108"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "25371bda-bd9c-4421-b506-404e36a608ec",
+        "resource": "https://www.youtube.com/channel/UCE9KxzVnWmzHMqdRF0iBIfQ"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "47021236-b268-4f8a-b7d0-3bab6faaada1",
+        "resource": "https://www.youtube.com/user/throttleclark"
+      },
+      "attributes": []
+    }
+  ],
+  "gender": "Male",
+  "type": "Person",
+  "life-span": {
+    "end": null,
+    "begin": "1979-08-29",
+    "ended": false
+  },
+  "end-area": null,
+  "name": "Clark",
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "type": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "sort-name": "Clark",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "disambiguation": "British electronic musician",
+  "id": "5d0c202c-e30f-40c4-abf5-c0007af0d1cc"
+}

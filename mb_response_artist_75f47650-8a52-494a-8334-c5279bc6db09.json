@@ -1,0 +1,564 @@
+{
+  "life-span": {
+    "begin": "1932",
+    "end": "1954",
+    "ended": true
+  },
+  "gender-id": null,
+  "sort-name": "Ink Spots, The",
+  "ipis": [],
+  "disambiguation": "",
+  "id": "75f47650-8a52-494a-8334-c5279bc6db09",
+  "relations": [
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000082831",
+        "id": "418ecbbb-83f3-46e4-8a7c-8711129eee64"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "end": "2020-11-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "id": "8f8da8f6-ff9a-4945-af77-9770185d1e6b",
+        "resource": "https://www.bbc.co.uk/music/artists/75f47650-8a52-494a-8334-c5279bc6db09"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "biography",
+      "url": {
+        "resource": "http://www.rockabilly.nl/references/messages/ink_spots.htm",
+        "id": "e13c5dff-050c-4eb8-bcc0-0d1f168890d0"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5"
+    },
+    {
+      "url": {
+        "resource": "http://www.vocalhalloffame.com/Inductees/ink_spots.htm",
+        "id": "edc27c47-2934-480f-a992-a3236cb58427"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "type": "biography",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "id": "4ba136d9-455d-408f-8e8a-ecf2be5b84e5",
+        "resource": "http://inkspots.ca/DISCOGRAPHY.htm"
+      },
+      "type": "discography page",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "c016cb20-b68b-4b99-abd8-f5162d470186",
+        "resource": "https://www.discogs.com/artist/322272"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "http://inkspots.ca/",
+        "id": "fd1085fa-162d-43c1-b159-180458549a95"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "http://inkspotsevolution.com/",
+        "id": "5b00ce7d-b075-49b6-804a-e4c6f9aaf1db"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "ab8aa312-f027-4f44-8fc5-8f5a81da7e1c",
+        "resource": "https://open.spotify.com/artist/5bOsFzuJ6QZMr86ezC4oXY"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "1dce317e-b852-49d4-b6b9-b00d0266152b",
+        "resource": "https://www.deezer.com/artist/92588"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "url": {
+        "id": "92e9a75b-5c32-42a6-b2b5-75fe686e64d9",
+        "resource": "https://www.imdb.com/name/nm1311414/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/The+Ink+Spots",
+        "id": "31206578-1737-4ac5-82e4-a95b075ff3f9"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "url": {
+        "resource": "http://muzikum.eu/en/122-4672/the-ink-spots/lyrics.html",
+        "id": "531afcd4-851e-4880-a35d-110728e54949"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://www.theinkspots.com/",
+        "id": "730072a6-be5e-4f85-8745-dcf24190fefd"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "abafb518-551e-4c6a-899c-68a9362fbbfb",
+        "resource": "http://id.loc.gov/authorities/names/n91117004"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://adp.library.ucsb.edu/names/106451",
+        "id": "b5746819-c3ba-4ba0-b1c7-768c3196145d"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "id": "68becde0-3441-42f9-ac32-1128f90d7251",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13943523q"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "3e1c55d3-9950-4c2d-a2f5-77a15f774fa7",
+        "resource": "https://d-nb.info/gnd/6511890-X"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1456270",
+        "id": "6f993dc4-c06b-40d8-b757-3cfa294ab653"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d021d4c1-77e3-4ee4-878f-bb9cd80f56fe",
+        "resource": "https://rateyourmusic.com/artist/the_ink_spots"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "196dde91-6a08-4830-b5c1-d65b1d904be8",
+        "resource": "https://www.worldcat.org/identities/lccn-n91117004"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "a4fcbbf4-4fe2-4796-9b95-79919a737929",
+        "resource": "https://itunes.apple.com/us/artist/id25833"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000AQ0KF4",
+        "id": "87bfe470-3234-4790-aaa7-d59308549de9"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "url": {
+        "id": "4094a673-d0e9-48f4-b319-59417237e0b2",
+        "resource": "https://www.facebook.com/pages/The-Ink-Spots/112755678736199"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "url": {
+        "resource": "https://www.songkick.com/artists/386871",
+        "id": "3ec00380-8835-45be-9f73-f543538bd8f1"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/25833",
+        "id": "cd9d5458-4c10-4052-ab27-e4a78aa7826b"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "11719348-ee5b-4230-a519-68d01d58de8f",
+        "resource": "https://tidal.com/artist/32845"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "97489796-f185-43c0-8fed-ad6ac15d95dd",
+        "resource": "http://viaf.org/viaf/132474717"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q127140",
+        "id": "063c92ed-caad-4a78-8a08-916917191ccd"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "isnis": [
+    "0000000110106659"
+  ],
+  "end-area": null,
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "sort-name": "United States",
+    "type-id": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "name": "The Ink Spots",
+  "country": "US",
+  "begin-area": {
+    "disambiguation": "",
+    "name": "Indianapolis",
+    "type": null,
+    "id": "3bb238a4-c2a4-44e5-9843-a63e71b17e83",
+    "sort-name": "Indianapolis",
+    "type-id": null
+  },
+  "gender": null
+}

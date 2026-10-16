@@ -1,0 +1,112 @@
+{
+  "gender": "Male",
+  "begin-area": {
+    "name": "Houlton",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Houlton",
+    "id": "9c752c40-65b6-4295-ab14-c05b3d808bfb"
+  },
+  "country": "US",
+  "type": "Person",
+  "name": "William Dufris",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "United States"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null,
+  "id": "5fe3e1bf-ba2b-4cf6-9bf8-e6700b702b4d",
+  "relations": [
+    {
+      "url": {
+        "id": "6b9aed62-5660-40a0-9bb3-df20564022fa",
+        "resource": "https://www.discogs.com/artist/2778531"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "IMDb",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "e1e55242-fd91-42cd-b27a-e97362fa4459",
+        "resource": "https://www.imdb.com/name/nm0240482/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "4ab41cdc-1214-4662-a44c-059420b69093",
+        "resource": "https://www.animenewsnetwork.com/encyclopedia/people.php?id=115384"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q8008071",
+        "id": "e556009e-8334-4834-b49b-2b9b9dfb3fed"
+      }
+    }
+  ],
+  "isnis": [],
+  "disambiguation": "",
+  "ipis": [],
+  "sort-name": "Dufris, William",
+  "life-span": {
+    "end": "2020-03-24",
+    "ended": true,
+    "begin": "1958-02-01"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9"
+}

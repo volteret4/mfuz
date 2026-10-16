@@ -1,0 +1,287 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "name": "United Kingdom",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "sort-name": "United Kingdom",
+    "type-id": null
+  },
+  "end-area": null,
+  "gender": "Male",
+  "type": "Person",
+  "name": "Plant43",
+  "begin-area": null,
+  "country": "GB",
+  "sort-name": "Plant43",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": null
+  },
+  "isnis": [
+    "0000000467149790"
+  ],
+  "relations": [
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://plant43.bandcamp.com/",
+        "id": "e9347a74-3c7d-46b8-89e0-0a953144cddc"
+      },
+      "type": "bandcamp",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/430952",
+        "id": "29d620dc-0c03-44d4-b91c-4f451f013300"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1Knqr98gY1JxSElifR2aNW",
+        "id": "64c8ee5c-9970-4e7c-bf7e-aeba149729dc"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/4737517",
+        "id": "79c9c2dd-14ee-43ab-ad2a-ad31f762254c"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "interview",
+      "url": {
+        "resource": "https://www.juno.co.uk/junodaily/2024/02/05/plant43-interview-playing-tresor-is-a-bit-like-guiding-a-huge-ship/",
+        "id": "c7260307-1232-43ae-95a0-47e8629a2097"
+      },
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://ra.co/dj/plant43",
+        "id": "6427ad80-40fa-4cb5-b77a-bd79cd8a194f"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/plant43",
+        "id": "18352cdd-4aae-4136-bea8-1292e1a271fd"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.beatport.com/artist/plant43/43242",
+        "id": "58df688a-b9c5-4397-ad7d-5f8751806f69"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://twitter.com/plant43_",
+        "id": "a330af52-96cf-4228-aa8c-d8429ceb9511"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "a6a23c61-cd5e-474f-990d-2f5595b244c4",
+        "resource": "https://www.facebook.com/plant43electro"
+      },
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.instagram.com/plant43/",
+        "id": "3517b5e8-70dc-4fce-907c-4335cc877a80"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://soundcloud.com/plant43",
+        "id": "62da8547-1529-4629-90f3-99bda2e1bc07"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "f64f6602-9570-4dac-ac81-e62edb94fbac",
+        "resource": "https://music.apple.com/gb/artist/252137817"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://tidal.com/artist/4856663",
+        "id": "0f98c0a2-4d58-449c-a1b9-2ed93435a863"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    }
+  ],
+  "id": "dc28b858-3abb-46ef-8233-baf41d3e5ed6",
+  "ipis": [],
+  "disambiguation": "UK electro producer"
+}

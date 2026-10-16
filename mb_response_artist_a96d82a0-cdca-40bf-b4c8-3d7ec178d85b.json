@@ -1,0 +1,780 @@
+{
+  "disambiguation": "",
+  "life-span": {
+    "ended": false,
+    "begin": "1974",
+    "end": null
+  },
+  "sort-name": "Stranglers, The",
+  "gender": null,
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "allmusic",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "8cd5da84-3509-4cee-8041-e4d044fcabca",
+        "resource": "https://www.allmusic.com/artist/mn0000568071"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "bandsintown",
+      "end": null,
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "a50c37f7-99f0-43d5-8d1a-823936d14d1a",
+        "resource": "https://www.bandsintown.com/a/47699"
+      }
+    },
+    {
+      "ended": true,
+      "type": "BBC Music page",
+      "end": "2020-11-19",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "307338be-6eaf-4866-a1f1-b4494bc2aeb4",
+        "resource": "https://www.bbc.co.uk/music/artists/a96d82a0-cdca-40bf-b4c8-3d7ec178d85b"
+      },
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "type": "discogs",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/71891",
+        "id": "96de92b4-a6be-4da4-b5f2-273c1da2b39d"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0RUEHcBiENFEqxgicqS2ig",
+        "id": "e930cebd-982e-4eb0-8da4-482acd51d202"
+      },
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "type": "free streaming",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1729",
+        "id": "096e750b-9479-480b-a532-7b37bfdf455f"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm2165205/",
+        "id": "d264e4fd-a53d-443d-9146-a0b13705abbe"
+      },
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null,
+      "end": null,
+      "type": "IMDb",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "id": "66f0b883-ed77-4027-8eef-714820251511",
+        "resource": "https://www.last.fm/music/The+Stranglers"
+      },
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-5540/the-stranglers/lyrics.html",
+        "id": "98a333df-883b-4593-8a38-37ba5e516be8"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "lyrics",
+      "ended": false
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "url": {
+        "id": "2527b255-a206-46b5-b650-be5df99e50b3",
+        "resource": "https://genius.com/artists/The-stranglers"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "type": "lyrics",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "lyrics",
+      "end": null,
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "url": {
+        "id": "30ee4544-1624-4361-a707-aa9643137ce9",
+        "resource": "https://www.musixmatch.com/artist/The-Stranglers"
+      },
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "a5195f6a-6d4e-4453-b11d-b443fff8bea0",
+        "resource": "http://www.stranglers.net/"
+      },
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "url": {
+        "resource": "http://www.thestranglers.co.uk/",
+        "id": "4f1cf84c-741e-426d-bd9e-5ae8a3159bea"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n91075528",
+        "id": "3d9319a0-551a-4e9b-b649-5bd54dd23216"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13906794p",
+        "id": "25e73466-568d-4cd8-b2e4-ea22d625e0ca"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1217777-5",
+        "id": "0ca1cfa3-1d3d-4978-be6d-efecdbb48037"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "913c2fce-b442-4967-8f29-e6ce1e076c25",
+        "resource": "https://imvdb.com/n/the-stranglers"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "550be773-ea24-463d-ab8b-472f5c26c635",
+        "resource": "https://rateyourmusic.com/artist/the_stranglers"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.45cat.com/artist/the-stranglers",
+        "id": "19b7a4c4-1666-431b-8737-c1c592cc9238"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/the-stranglers/",
+        "id": "84ec7059-171a-495f-8302-9b376134ab11"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "id": "fc756a73-9366-4d16-ab8f-e99844fb4025",
+        "resource": "https://www.spirit-of-rock.com/en/band/The_Stranglers"
+      },
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.whosampled.com/The-Stranglers/",
+        "id": "addc46df-bf87-4c2c-83c9-023205b89f42"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n91075528",
+        "id": "d817c3d6-77f0-4ce1-9027-ff217640eb88"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "9ee751ba-9e51-418e-ad90-32ddc25a1243",
+        "resource": "https://play.google.com/store/music/artist?id=Aqod45licpc7rbhytbo3uvgnmee"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": true,
+      "end": "2020-10-12",
+      "type": "purchase for download",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "1bc59a43-9a35-446a-8b3b-f8ad0deeabd0",
+        "resource": "https://itunes.apple.com/gb/artist/id20828456"
+      }
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "id": "f54553f0-d61b-42e6-8275-908dba6aa9cc",
+        "resource": "https://uk.7digital.com/artist/the-stranglers"
+      },
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.beatport.com/artist/the-stranglers/157676",
+        "id": "4e19d6e1-351c-4315-86cd-f65861bf2b32"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.junodownload.com/artists/The+Stranglers/releases/",
+        "id": "7ee1a3aa-1390-4d25-9b81-d9ce176528a8"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "end": null,
+      "type": "purchase for download",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "purchase for mail-order",
+      "end": null,
+      "begin": null,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "resource": "https://tower.jp/artist/199853",
+        "id": "650da3dc-e475-4c67-8732-a052895631b4"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for mail-order",
+      "begin": null,
+      "ended": false,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000APTIJY",
+        "id": "79a27363-0ebb-4068-a6f4-8e2a3e08b840"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "8b02564b-bd83-45d5-b56c-285d13a25f87",
+        "resource": "https://secondhandsongs.com/artist/390"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "secondhandsongs",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "65ef95a0-d649-4b3e-95a2-ba8ad73de121",
+        "resource": "https://www.setlist.fm/setlists/the-stranglers-1bd66d20.html"
+      },
+      "target-type": "url",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "ended": false,
+      "type": "setlistfm",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/thestranglers",
+        "id": "71c3489e-b298-4622-839a-ced95587c88c"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "ended": true,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://twitter.com/StranglersSite",
+        "id": "559e639d-6fd6-4dba-95a4-88561d14365a"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/115227",
+        "id": "e3bc9fe3-29a2-492d-bef2-e282200e8b47"
+      },
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "songkick",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "c0372b66-30ba-485f-9599-b4500b1d2e99",
+        "resource": "https://soundcloud.com/the-stranglers"
+      },
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "end": null,
+      "type": "soundcloud",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "f45dbd79-4706-4ef5-8f28-782ea1e261e2",
+        "resource": "https://music.apple.com/gb/artist/20828456"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "a3603324-3449-42e9-9cb2-2f1f682f7389",
+        "resource": "https://tidal.com/artist/1181"
+      },
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "http://viaf.org/viaf/151408689",
+        "id": "6dc44dcd-b1a8-47c6-a522-9ae0f3b21b2e"
+      },
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "VIAF",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "d99feb2b-c443-4a5e-9b7f-39151771cc3c",
+        "resource": "https://www.wikidata.org/wiki/Q1532854"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC9nz7lwupHQIIcZwq1mmewg",
+        "id": "cd14afb6-1714-47c1-933e-f6644b8dea55"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "type": "youtube",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    }
+  ],
+  "country": "GB",
+  "id": "a96d82a0-cdca-40bf-b4c8-3d7ec178d85b",
+  "gender-id": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000115080443"
+  ],
+  "area": {
+    "type": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "sort-name": "Guildford",
+    "id": "f63466fa-e170-4262-840e-85eaab2d454f",
+    "type-id": null,
+    "name": "Guildford"
+  },
+  "name": "The Stranglers",
+  "end-area": null,
+  "ipis": [],
+  "type": "Group"
+}

@@ -1,0 +1,405 @@
+{
+  "life-span": {
+    "end": null,
+    "begin": "1993",
+    "ended": false
+  },
+  "name": "Lighthouse Family",
+  "area": {
+    "name": "United Kingdom",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom",
+    "type": null
+  },
+  "end-area": null,
+  "disambiguation": "",
+  "id": "3ebe18d1-dfb6-41eb-8447-4a7693f79d9a",
+  "gender-id": null,
+  "sort-name": "Lighthouse Family",
+  "ipis": [],
+  "begin-area": {
+    "id": "80a26267-4f75-4976-ae82-aad848ec096a",
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-NET"
+    ],
+    "sort-name": "Newcastle upon Tyne",
+    "type": null,
+    "name": "Newcastle upon Tyne",
+    "type-id": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000268329",
+        "id": "3b7b0566-bad6-4d28-80b8-4a6ba0544130"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/9519",
+        "id": "dc89e2a8-4e94-41fa-9275-a35a3beb37e2"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "end": "2020-11-19",
+      "begin": null,
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/3ebe18d1-dfb6-41eb-8447-4a7693f79d9a",
+        "id": "f87e4218-fd33-477b-9a9c-bb01b3c750aa"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "2f8d9bc5-1ea3-47e3-a330-ed3260d8150b",
+        "resource": "https://www.discogs.com/artist/27949"
+      }
+    },
+    {
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "31448e4a-6d11-444c-adb7-50d2f6e384c4",
+        "resource": "https://open.spotify.com/artist/6edGSAX5dVpeJVwu1Q0NwJ"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/504",
+        "id": "eb4c6c1f-c6ec-4cd6-9fbd-ee107cbfedde"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "2aeceff5-c98e-4513-bf44-18a0b5b475ad",
+        "resource": "https://www.last.fm/music/Lighthouse+Family"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://muzikum.eu/en/122-3744/lighthouse-family/lyrics.html",
+        "id": "dabc306c-8081-4aeb-843e-06cab4f07041"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/L/Lighthouse_Family/",
+        "id": "bb7b7dec-16a8-4d4a-bf32-300f4b58c125"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "6107e19a-d46f-474d-b8a0-6f40dc8e912e",
+        "resource": "https://rateyourmusic.com/artist/lighthouse_family"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id376558",
+        "id": "8fc8c2c3-b9b7-4f20-8797-83c4f7d154fb"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "748b11f7-c72a-463f-b81a-dc5098f7421a",
+        "resource": "https://tower.jp/artist/209354"
+      },
+      "attributes": [],
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "setlistfm",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/lighthouse-family-7bd6ba70.html",
+        "id": "39daf44b-b5fc-4e63-b99a-47464da89720"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "id": "de2c33dc-2b4b-4203-b449-043cc6c5da41",
+        "resource": "https://twitter.com/lighthousefamly"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9d33b195-0643-4a62-9c8b-8050a2db366c",
+        "resource": "https://www.facebook.com/LighthouseFamilyBand"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://soundcloud.com/lighthouse-family",
+        "id": "549ccaee-cdd9-4166-a0e6-adc92877bb22"
+      },
+      "attributes": [],
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "e8e36725-d300-4800-bc0d-0367b720f4d9",
+        "resource": "https://tidal.com/artist/27547"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "4737d716-a692-469c-a68c-d30a2005c6e2",
+        "resource": "http://viaf.org/viaf/131543695"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "dc96bfa2-5007-4d01-84c7-8b76cc07e5da",
+        "resource": "https://www.wikidata.org/wiki/Q707351"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "d5ab546e-d2dd-4db9-8021-442fc6df268c",
+        "resource": "https://www.youtube.com/user/thelighthousefamily"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    }
+  ],
+  "isnis": [
+    "0000000122598929"
+  ],
+  "country": "GB",
+  "gender": null,
+  "type": "Group"
+}

@@ -1,0 +1,420 @@
+{
+  "life-span": {
+    "ended": false,
+    "begin": "2016",
+    "end": null
+  },
+  "id": "e0c97a4d-c392-41a9-a374-57af3e3eeab3",
+  "disambiguation": "Brooklyn, NY",
+  "gender-id": null,
+  "sort-name": "Geese",
+  "area": {
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United States"
+  },
+  "name": "Geese",
+  "end-area": null,
+  "isnis": [
+    "000000050401831X"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0004130176",
+        "id": "07996d33-7abb-49ad-95fb-bdf4a319616f"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://geesebandnyc.bandcamp.com/",
+        "id": "fdca6f42-b587-451d-8c94-322b36b60702"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "eb38a1f1-75c0-4650-b1dd-52f0ba2ab016",
+        "resource": "https://www.discogs.com/artist/9780763"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0WCo84qtCKfbyIf1lqQWB4",
+        "id": "fbc2f6f2-6626-47cb-a65b-db2e9c88d60f"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/137555232",
+        "id": "7304dc64-bcf6-4d11-9c94-5665c53676e2"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Geese",
+        "id": "db9c2818-44e6-4524-b62a-4356eacda738"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://geeseband.com/",
+        "id": "d2f21cc8-5768-467d-a20e-1b2197729761"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://discord.gg/5S6XkWgE3c",
+        "id": "400c7611-60e5-488e-ab8c-0c82d4a888bd"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "35b3a50f-bf0e-4309-a3b4-58eeed8cee6a",
+      "type": "online community",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/geese-2",
+        "id": "72b30604-ce62-4474-826d-6c8806c00f49"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "bda626a2-35bf-4329-a771-85706ebb4f08",
+        "resource": "https://itunes.apple.com/us/artist/id1378038472"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "8bf5a26c-4246-4664-820b-8f57e9f03168",
+        "resource": "https://tiktok.com/@geese.band"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/geese_band",
+        "id": "e69f0373-5a6a-472f-be18-5e9d332f34c8"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "967a3ab5-7325-4270-9595-a94408904d2f",
+        "resource": "https://www.facebook.com/geesebandnyc"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "0b26b2eb-4bef-4f34-bc37-d53f90498a33",
+        "resource": "https://www.instagram.com/geesebandnyc/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "a05dd680-1cd5-4513-8e5e-8f50d049b1f0",
+        "resource": "https://www.songkick.com/artists/780777"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "121213d9-d224-40a1-b4cb-9f8a339b447b",
+        "resource": "https://soundcloud.com/geeseband"
+      },
+      "attributes": [],
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "54e2f962-7105-4cb7-9361-d5f54edcc21a",
+        "resource": "https://music.apple.com/gb/artist/1378038472"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1378038472",
+        "id": "63af4263-31bd-4da2-a4c8-aa78ae5d5e08"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "22ae8bf1-9b5a-49fe-a905-59fc74e63cce",
+        "resource": "https://tidal.com/artist/3578350"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b",
+      "ended": false,
+      "type": "video channel",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "ccf04326-48f0-4598-bc78-7fdab1bc4237",
+        "resource": "https://www.twitch.tv/geeseband"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q110565450",
+        "id": "5cfd8715-708b-4903-9364-9bca6c52108f"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "ipis": [],
+  "begin-area": {
+    "name": "Brooklyn",
+    "type-id": null,
+    "sort-name": "Brooklyn",
+    "disambiguation": "",
+    "id": "a71b0d32-7752-49e9-8594-2247ad6ac12c",
+    "type": null
+  },
+  "type": "Group",
+  "gender": null
+}

@@ -1,0 +1,458 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type-id": null,
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": ""
+  },
+  "end-area": null,
+  "gender": "Male",
+  "begin-area": {
+    "disambiguation": "",
+    "name": "New York",
+    "type": null,
+    "type-id": null,
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "sort-name": "New York"
+  },
+  "country": "US",
+  "type": "Person",
+  "name": "Julian Casablancas",
+  "sort-name": "Casablancas, Julian",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1978-08-23"
+  },
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000337135",
+        "id": "1ba0dead-bc89-4332-a49d-a30a93f14576"
+      },
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": "2020-11-19",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "id": "1c4ea5f1-03e6-4002-863a-4a9ea217f0bc",
+        "resource": "https://www.bbc.co.uk/music/artists/c5ce487b-0462-444e-a184-4de0fef7e028"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "7c98e599-27af-40ff-8fc5-65e2ba0e5708",
+        "resource": "https://www.discogs.com/artist/430106"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1rAv1GhTQ2rmG94p9lU3rB",
+        "id": "dd150045-9b0d-4851-a472-4819fdfaa548"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/295821",
+        "id": "cd98affc-1dc2-4318-b872-87b63d8e37c6"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "IMDb",
+      "attribute-values": {},
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1148114/",
+        "id": "8efd2294-bb43-4ce9-9f96-4431e4626ef4"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "last.fm",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.last.fm/music/Julian+Casablancas",
+        "id": "7bc58ff4-46d3-47e2-9e75-77a6ece4cc8f"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-5216/julian-casablancas/lyrics.html",
+        "id": "a834d32c-8103-43db-8ea1-81561a0ec8a4"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://myspace.com/juliancasablancas",
+        "id": "2df9f7fb-530b-4bc8-b1d2-e587a8afe705"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attribute-values": {},
+      "type": "myspace",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://juliancasablancas.com/",
+        "id": "c9150102-ca42-43c5-afc8-1a70d6e847bd"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-credit": "",
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "2968291c-b482-4997-a9d5-9d912a73ceaa",
+        "resource": "http://id.loc.gov/authorities/names/nb2007005476"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb161691105",
+        "id": "090457d0-598c-4954-ab69-8ac086dc81bd"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "id": "f9de11bf-ee93-431d-9138-295b6d95e6dc",
+        "resource": "https://d-nb.info/gnd/135240433"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://imvdb.com/n/julian-casablancas",
+        "id": "d1f3e0e2-5443-48c3-aef5-3ba5bb9bd998"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/julian_casablancas",
+        "id": "094f5417-873f-4abd-b723-91be4d5b0894"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b2fdbcf4-7637-4f47-9cc1-659d4bba87c4",
+        "resource": "https://www.worldcat.org/identities/lccn-nb2007005476"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "542821d2-069f-4032-a88d-7acbeb0417f3",
+        "resource": "https://twitter.com/Casablancas_J"
+      },
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "6f842845-f9a4-43bf-b9f6-d0bb8500c1a6",
+        "resource": "https://www.facebook.com/JulianCasablancas"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick",
+      "url": {
+        "id": "fc4da74e-a0cd-46bc-9b4d-6fe02a903984",
+        "resource": "https://www.songkick.com/artists/692472"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "4757ad6f-9344-4c54-99fa-731bc9e93642",
+        "resource": "https://tidal.com/artist/3636357"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "590f9e2c-3e72-4149-833a-3c77252a03ec",
+        "resource": "http://viaf.org/viaf/96940780"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "VIAF",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q350511",
+        "id": "6917c54a-2fcf-4c0f-904d-361e4fc49159"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "url": {
+        "id": "5a068ce8-13ab-46a7-8d10-45ff490b94ce",
+        "resource": "https://www.youtube.com/channel/UCFWBQt1w1DTCiFgrGKeWCGw"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    }
+  ],
+  "isnis": [
+    "0000000114958015"
+  ],
+  "id": "c5ce487b-0462-444e-a184-4de0fef7e028",
+  "disambiguation": "",
+  "ipis": [
+    "00344723564"
+  ]
+}

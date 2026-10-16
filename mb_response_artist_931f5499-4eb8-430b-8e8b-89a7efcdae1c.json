@@ -1,0 +1,323 @@
+{
+  "life-span": {
+    "ended": false,
+    "begin": "1975-05-19",
+    "end": null
+  },
+  "name": "DJ Hidden",
+  "country": "NL",
+  "end-area": null,
+  "relations": [
+    {
+      "url": {
+        "resource": "https://djhidden.bandcamp.com/",
+        "id": "ba92243f-d6ad-44eb-83b2-3fb5414d0949"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "bandcamp",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.discogs.com/artist/22773",
+        "id": "b8eefed0-1292-4a0b-a6dc-8cb47b96827f"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "1933f5b5-14ee-4633-9290-4932d8ee2a61",
+        "resource": "https://open.spotify.com/artist/4y8yC7wff5szyY9QuKbGjv"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.deezer.com/artist/153352",
+        "id": "80fee0e0-4d1f-4dab-bca6-f731256e2f00"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "fbed2408-8fff-42f4-a93b-9dafb71e1a4a",
+        "resource": "http://www.djhidden.com/"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "official homepage",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/dj-hidden",
+        "id": "b86bccd6-59a0-48e3-8680-54b3ed6af0b9"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "11f5c6f7-dc04-47ac-b4f3-17b6da6bec42",
+        "resource": "https://www.beatport.com/artist/dj-hidden/1439"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/DJHidden",
+        "id": "02927fd4-b686-4ffc-b28e-4452174117cf"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/djhidden/",
+        "id": "0a711a5a-25e5-4f0f-99dd-dab79534ab24"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.songkick.com/artists/515919",
+        "id": "7835dfaa-8901-4bb1-8276-fa66c25ef1f2"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "songkick"
+    },
+    {
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "soundcloud",
+      "attributes": [],
+      "url": {
+        "id": "421b0826-5293-4a3c-b8b5-893f5244f686",
+        "resource": "https://soundcloud.com/dj-hidden"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/79616344",
+        "id": "0503107e-de06-40a7-8dfd-cca38be9d19a"
+      },
+      "ended": false
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "07e600de-c31a-410d-baa7-a68019c0ef65",
+        "resource": "https://music.apple.com/nl/artist/79616344"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "3ca6d3d2-ad90-49a4-86e6-fd4023953b7d",
+        "resource": "https://tidal.com/artist/3532094"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "wikidata",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "11e6acbf-443b-4c52-8eba-64dfeec7557c",
+        "resource": "https://www.wikidata.org/wiki/Q5205341"
+      }
+    },
+    {
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "youtube",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/user/DJHiddenMusic",
+        "id": "ee09d364-e3dd-4577-9549-4e951fe1dd68"
+      },
+      "ended": false
+    }
+  ],
+  "disambiguation": "",
+  "sort-name": "Hidden, DJ",
+  "id": "931f5499-4eb8-430b-8e8b-89a7efcdae1c",
+  "area": {
+    "disambiguation": "",
+    "sort-name": "Netherlands",
+    "id": "ef1b7cc0-cd26-36f4-8ea0-04d9623786c7",
+    "type": null,
+    "type-id": null,
+    "name": "Netherlands",
+    "iso-3166-1-codes": [
+      "NL"
+    ]
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "isnis": [],
+  "begin-area": null,
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [
+    "00263976819"
+  ],
+  "type": "Person"
+}

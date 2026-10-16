@@ -1,0 +1,48 @@
+{
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "sort-name": "johnny sais quoi",
+  "disambiguation": "",
+  "ipis": [],
+  "id": "c60fa9cf-21bd-4172-8c37-3eaabbbd5ad8",
+  "isnis": [],
+  "relations": [
+    {
+      "url": {
+        "id": "f2966212-0cbf-4ae0-91de-1ed4e150a85b",
+        "resource": "https://johnnysaisquoi.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "begin": null,
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "id": "e815db74-f1aa-4fbc-a78c-f3e76f53409e",
+    "sort-name": "Marseille",
+    "disambiguation": "",
+    "name": "Marseille",
+    "type": null
+  },
+  "type-id": null,
+  "begin-area": null,
+  "country": "FR",
+  "type": null,
+  "name": "johnny sais quoi",
+  "gender": null
+}

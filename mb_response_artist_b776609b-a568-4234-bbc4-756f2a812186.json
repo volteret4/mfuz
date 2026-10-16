@@ -1,0 +1,261 @@
+{
+  "life-span": {
+    "begin": "1950-07-15",
+    "end": null,
+    "ended": false
+  },
+  "area": {
+    "name": "Italy",
+    "type-id": null,
+    "sort-name": "Italy",
+    "iso-3166-1-codes": [
+      "IT"
+    ],
+    "disambiguation": "",
+    "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+    "type": null
+  },
+  "name": "Tony Esposito",
+  "end-area": null,
+  "id": "b776609b-a568-4234-bbc4-756f2a812186",
+  "disambiguation": "",
+  "sort-name": "Esposito, Tony",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00038661664",
+    "00038679930"
+  ],
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "86fbdd3c-aaac-4aed-916a-b361f7e1a8de",
+    "sort-name": "Napoli",
+    "type-id": null,
+    "name": "Napoli"
+  },
+  "isnis": [
+    "000000011862475X"
+  ],
+  "country": "IT",
+  "relations": [
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/61848",
+        "id": "15976c7b-77a8-4dee-8489-c7ad35f4f536"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "21c62562-134f-4f60-8635-cd8dd4ea634f",
+        "resource": "https://www.discogs.com/artist/659972"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "6b74a9e0-94bf-4377-b35b-dd17aca9791d",
+        "resource": "https://open.spotify.com/artist/2E236rsxSkaqZfJpv57gYF"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Tony%20Esposito.jpg",
+        "id": "10527f08-2a24-4bb7-8ce8-65b70b4af851"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0261208/",
+        "id": "e7c2395f-44ab-459b-adc9-e838985b2e1d"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "IMDb"
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/13436869X",
+        "id": "183d8666-ec9c-42a5-b5e2-729742fd3c8e"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.jazzmusicarchives.com/artist/toni-esposito",
+        "id": "8554e5ad-7f18-4bf7-92d1-cd57c3d745d1"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/23582",
+        "id": "6d86a40f-8d80-4faa-b29a-f436bdd24c67"
+      },
+      "attributes": [],
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "ended": false,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "054225d9-aaf7-40f7-8b88-ae96823854b3",
+        "resource": "https://www.setlist.fm/setlists/tony-esposito-73d7da59.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "cc7dd0c2-2456-4e4f-80ea-dbc5346ba06a",
+        "resource": "https://music.apple.com/gb/artist/81897415"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "693c25a3-f4ce-41a7-bbd7-57e4f5ef5fd5",
+        "resource": "http://viaf.org/viaf/85896705"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9cc110f1-a300-4a44-a6d9-6bf106d8abb8",
+        "resource": "https://www.wikidata.org/wiki/Q1360782"
+      },
+      "attributes": []
+    }
+  ],
+  "gender": "Male",
+  "type": "Person"
+}

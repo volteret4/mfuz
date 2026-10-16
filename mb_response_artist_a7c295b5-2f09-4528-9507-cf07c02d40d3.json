@@ -1,0 +1,213 @@
+{
+  "sort-name": "Amulets",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "a7c295b5-2f09-4528-9507-cf07c02d40d3",
+  "disambiguation": "ambient, drone, noise musician",
+  "end-area": null,
+  "area": {
+    "type": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "name": "United States"
+  },
+  "name": "Amulets",
+  "life-span": {
+    "ended": false,
+    "begin": null,
+    "end": null
+  },
+  "type": "Person",
+  "gender": "Male",
+  "relations": [
+    {
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://amulets.bandcamp.com/",
+        "id": "f6a86da7-2513-4765-af9e-befb890bea02"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "054ad330-f66a-4cb0-9698-09096fabfa29",
+        "resource": "https://www.discogs.com/artist/3831782"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/5e96t65iOLrmqH2gzEXhIt",
+        "id": "e9c55116-6bcc-4cab-b1ea-5e64ae8ae0fe"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "a628c685-2460-425c-b370-70dd18d1f2b5",
+        "resource": "http://www.amuletsmusic.com/"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/amulets",
+        "id": "99ef494f-d379-4223-910f-9edf32574ebf"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "d8440df6-2dda-43d0-9a2f-8aca36d077c8",
+        "resource": "https://twitter.com/amuletsmusic"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.facebook.com/amuletsamulets",
+        "id": "585b0917-9154-47fa-b32a-33f47e15bd79"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://soundcloud.com/amulets",
+        "id": "e77f9706-07fb-4f9c-ab20-a6fab370445b"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q112265334",
+        "id": "3c5d154b-341c-427c-85c6-72678f440172"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "939d179a-6b58-4862-a4ae-b4c13b541107",
+        "resource": "https://www.youtube.com/user/amuletsmusic"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    }
+  ],
+  "country": "US",
+  "isnis": [],
+  "begin-area": null,
+  "ipis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

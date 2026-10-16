@@ -1,0 +1,389 @@
+{
+  "end-area": null,
+  "name": "Sofia Kourtesis",
+  "area": {
+    "name": "Berlin",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "c9ac1239-e832-41bc-9930-e252a1fd1105",
+    "iso-3166-2-codes": [
+      "DE-BE"
+    ],
+    "sort-name": "Berlin",
+    "type": null
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "sort-name": "Kourtesis, Sofia",
+  "id": "2f8d2007-7666-45af-89d4-dec4921dce04",
+  "disambiguation": "Peruvian DJ and record producer",
+  "life-span": {
+    "ended": false,
+    "begin": "1985-08-18",
+    "end": null
+  },
+  "gender": "Female",
+  "type": "Person",
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "927c394e-4c75-46d7-980f-cd7a6af2ca33",
+    "sort-name": "Lima",
+    "iso-3166-2-codes": [
+      "PE-LIM"
+    ],
+    "type-id": null,
+    "name": "Lima"
+  },
+  "ipis": [
+    "00608964221"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "url": {
+        "id": "ba9bf37e-adc7-4dfe-bcda-ce7239270a00",
+        "resource": "https://www.allmusic.com/artist/mn0003125572"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "64ab78ad-cf68-4ab3-86c2-90963da2c72a",
+        "resource": "https://sofiakourtesis.bandcamp.com/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "bandcamp",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "id": "d09014f9-5af7-4123-be48-69a2b5d05c42",
+        "resource": "https://www.discogs.com/artist/3414726"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "40d40f6b-9d71-42fd-8af7-027e3ecd3f38",
+        "resource": "https://open.spotify.com/artist/7wXTWO45lqpUejDkike0Gf"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "2c61709e-5661-4bc4-92c7-d17720f9e623",
+        "resource": "https://www.deezer.com/artist/6932525"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "250122fb-2e2c-4269-93af-8deb50577794",
+        "resource": "https://www.last.fm/music/Sofia+Kourtesis"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://ra.co/dj/sofiakourtesis",
+        "id": "bf4c78eb-0298-4013-b854-1b379a560e69"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "3dd4a729-4959-4015-bcb7-42e7c766113b",
+        "resource": "https://rateyourmusic.com/artist/sofia-kourtesis"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/931699087",
+        "id": "4a50e674-01bf-466e-9a92-3c183870fdda"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.beatport.com/artist/sofia-kourtesis/458233",
+        "id": "665ecad7-979e-4f79-b8ce-2aba76b5923d"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/SofiaKourtesis",
+        "id": "df0f1f05-dc22-4900-adf0-d0baadddd090"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/sofia.kourtesis",
+        "id": "6f9f10a2-ec43-42a0-9331-afdd2b4027cb"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/sofiakourtesis/",
+        "id": "651fd527-71cb-4cbd-8c5e-cf0f69857605"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "46928342-70d0-483b-af00-7021877fae9b",
+        "resource": "https://www.tiktok.com/@sofiakourtesis"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://soundcloud.com/sofia-kourtesis",
+        "id": "05c85f18-342d-4314-9b5d-ff0fe7fb1485"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "4a50e674-01bf-466e-9a92-3c183870fdda",
+        "resource": "https://music.apple.com/gb/artist/931699087"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "b8d18b8d-0d6c-49c2-8dd5-2c3d5bc094a4",
+        "resource": "https://tidal.com/artist/6158921"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q106409111",
+        "id": "782b6032-6e02-4129-9251-3b4ac57cc849"
+      },
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "e77d8f5f-a2e8-4161-ae3e-2444fb6013f5",
+        "resource": "https://www.youtube.com/channel/UCeADAV2jHvccWXpD7SdxbuA"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": ""
+    }
+  ],
+  "country": "DE",
+  "isnis": [
+    "0000000467562358"
+  ]
+}

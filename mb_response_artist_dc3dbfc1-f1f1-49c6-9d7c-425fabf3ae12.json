@@ -1,0 +1,744 @@
+{
+  "disambiguation": "",
+  "ipis": [],
+  "id": "dc3dbfc1-f1f1-49c6-9d7c-425fabf3ae12",
+  "isnis": [
+    "0000000131564907"
+  ],
+  "relations": [
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "20e6f115-1036-4496-81cc-21c3883eaa87",
+        "resource": "https://www.allmusic.com/artist/mn0000927009"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "attribute-values": {},
+      "type": "bandcamp",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "34aa9918-5c49-4e46-a109-d406be043dcb",
+        "resource": "https://apparatberlin.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "39e64db0-552b-4ad5-ab6a-588b78d6621c",
+        "resource": "https://apparatitscomplicated.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://apparat-music.bandcamp.com/",
+        "id": "295c86eb-a2b3-4e6c-a11c-5d524016a40d"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.bandsintown.com/a/51937",
+        "id": "0b37ca5a-e33c-40e3-87cf-9a567ed6b4d5"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/dc3dbfc1-f1f1-49c6-9d7c-425fabf3ae12",
+        "id": "27356a1b-5e9f-41c7-919d-97b859506012"
+      },
+      "attributes": [],
+      "end": "2020-11-19",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": true,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "url": {
+        "id": "03a87fa9-709b-48af-aa9d-68b2dfe37a32",
+        "resource": "https://www.discogs.com/artist/50406"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "6fefba46-8321-47d6-94d9-b1d6ae81d61c",
+        "resource": "https://open.spotify.com/artist/40Ojab0UtVQFjA76qXr8Ot"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "32223b17-cc4e-49c6-ae58-73f5f9886cea",
+        "resource": "https://www.deezer.com/artist/6069"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Apparat_(musician)_in_2009.jpg",
+        "id": "9ee73eed-425e-46b0-af65-5b79fae62fd0"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "type": "image",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm2925247/",
+        "id": "b22d2dd1-fa75-48b1-924e-600a9b9a3324"
+      },
+      "attribute-values": {},
+      "type": "IMDb",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "84dc6075-9041-419a-a23d-f73f325426ff",
+        "resource": "https://www.last.fm/music/Apparat"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "723d787a-f4ed-4eeb-92ec-a98df442c24a",
+        "resource": "https://genius.com/artists/Apparat"
+      }
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://myspace.com/apparat",
+        "id": "1a44191e-1726-4c7e-aaf4-22208feb59d2"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "59038ecc-9aba-4180-b145-1d874f6a0fdc",
+        "resource": "http://www.apparat.net/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d79fc140-23d6-4b33-bd7d-d420398d6d9e",
+        "resource": "http://id.loc.gov/authorities/names/no2011173571"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16545099s",
+        "id": "18803f04-fe3b-4bea-96b2-ff561f1d3e4e"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://d-nb.info/gnd/135514711",
+        "id": "78ec839d-7788-49b8-a034-5812a71d4175"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f568964f-28bc-486c-90af-b64f1db93cdb",
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJcGmy6YCgrTTYDVGkvT73"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f4154b9d-5a1b-4304-aa8b-51eeb2ed9349",
+        "resource": "https://ra.co/dj/apparat"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/apparat",
+        "id": "7863dfba-4f74-4c2a-970d-486851f6081a"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000165322/POPULAR/",
+        "id": "ce500d39-7832-42d2-97a3-66d5e4707033"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://bleep.com/artist/1922",
+        "id": "7f2312b6-f1bc-4eb3-a3b7-de9f3f7234b9"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://boomkat.com/artists/apparat",
+        "id": "fbce73c8-1141-4b0f-b0f0-7d7a3ca2ccf1"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/de/artist/id5415039",
+        "id": "6f0bf2f4-3112-4270-9fc6-ea224843312b"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.beatport.com/artist/-/6266",
+        "id": "bf356925-663b-4219-a942-734246203cc1"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "7f2312b6-f1bc-4eb3-a3b7-de9f3f7234b9",
+        "resource": "https://bleep.com/artist/1922"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "resource": "https://boomkat.com/artists/apparat",
+        "id": "fbce73c8-1141-4b0f-b0f0-7d7a3ca2ccf1"
+      },
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://twitter.com/apparatofficial",
+        "id": "d1ef05b6-929e-4ea9-97ab-6cffbeeefd7a"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "58a72335-2542-4536-9dcb-a33f6a328d13",
+        "resource": "https://www.facebook.com/apparat.official"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/apparat3000/",
+        "id": "8554f30f-45f6-46f5-8b1b-476e9cd5145d"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "e6c19600-f413-42c6-aaa0-04058c0baaeb",
+        "resource": "https://www.songkick.com/artists/396628"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "8ad47d5a-716e-46e7-a652-448c2ce19dd4",
+        "resource": "https://soundcloud.com/apparat"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "7054b99a-ffff-47c0-8899-f33147b495e3",
+        "resource": "https://music.apple.com/de/artist/5415039"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/3519747",
+        "id": "feeeb18a-14c7-430e-8b18-7013ad2951c4"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/230366911",
+        "id": "0051c3e4-a8f5-4f76-ae50-2eb75057bb6a"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "VIAF",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/232309639",
+        "id": "d6dc2560-88d4-4721-96b2-661f9963f5eb"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "url": {
+        "id": "8a7524c2-8930-408b-b0b3-306da4753c3b",
+        "resource": "https://www.wikidata.org/wiki/Q620679"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "f0c9599a-dacd-4d46-a0fe-f8b4ee0ae5e5",
+        "resource": "https://www.youtube.com/channel/UCYTeaSzqH4QNnX_PR8JK0Rw"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    }
+  ],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1978-06-27",
+    "ended": false,
+    "end": null
+  },
+  "sort-name": "Apparat",
+  "country": "DE",
+  "begin-area": {
+    "name": "Quedlinburg",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Quedlinburg",
+    "id": "13fea8ff-d84e-4b37-a269-a51054828dcc"
+  },
+  "name": "Apparat",
+  "type": "Person",
+  "gender": "Male",
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "Germany",
+    "name": "Germany",
+    "type": null,
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "disambiguation": "",
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

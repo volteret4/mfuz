@@ -35,6 +35,7 @@ import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import PROJECT_ROOT
+from base.db_connection import apply_pragmas
 
 
 class MusicLibraryManager:
@@ -42,6 +43,7 @@ class MusicLibraryManager:
         self.root_path = Path(root_path).resolve()
         self.db_path = Path(db_path).resolve()
         self.supported_formats = ('.mp3', '.flac', '.m4a')
+        self._song_links_table_verified = False  # checked once per scan, not per file
         
         # Logging configuration
         logging.basicConfig(
@@ -77,10 +79,8 @@ class MusicLibraryManager:
             self.logger.info(f"Creando nueva base de datos en: {self.db_path}")
         
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
-        
-        # Habilitar claves foráneas
-        c.execute("PRAGMA foreign_keys = ON")
         
         # Check for existing tables solo si la DB ya existía
         existing_tables = []
@@ -516,6 +516,7 @@ class MusicLibraryManager:
     def _verify_tables_exist(self):
         """Verifica que todas las tablas necesarias existen, y las crea si no."""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         required_tables = ['songs', 'artists', 'albums', 'genres', 'lyrics', 'song_links']
@@ -537,6 +538,7 @@ class MusicLibraryManager:
     def create_indices(self):
         """Crea índices optimizados para mejorar el rendimiento de consultas."""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         try:
@@ -645,6 +647,7 @@ class MusicLibraryManager:
     def optimize_database(self):
         """Aplica configuraciones de rendimiento a la base de datos SQLite."""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         try:
@@ -654,7 +657,7 @@ class MusicLibraryManager:
             pragmas = [
                 "PRAGMA journal_mode = WAL",  # Write-Ahead Logging para mejor concurrencia
                 "PRAGMA synchronous = NORMAL", # Balance entre rendimiento y seguridad
-                "PRAGMA cache_size = -8000",   # Usar aproximadamente 8MB de caché (valor negativo para KB)
+                "PRAGMA cache_size = -65536",  # 64 MB
                 "PRAGMA temp_store = MEMORY",  # Almacenar tablas temporales en memoria
                 "PRAGMA foreign_keys = ON"     # Habilitar claves foráneas
             ]
@@ -683,6 +686,7 @@ class MusicLibraryManager:
     def update_schema_with_musicbrainz_metadata(self):
         """Actualiza el esquema para incluir nuevos metadatos de MusicBrainz."""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         # Nuevas columnas para la tabla songs
@@ -751,6 +755,7 @@ class MusicLibraryManager:
         
         if missing_album_ids:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             c = conn.cursor()
             
             try:
@@ -951,6 +956,7 @@ class MusicLibraryManager:
         
         # Método 1: Comparación directa con la base de datos (consulta por consulta)
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         missing_album_ids = []
@@ -997,6 +1003,7 @@ class MusicLibraryManager:
         """
         # Conectar a la base de datos
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
 
         try:
@@ -1124,6 +1131,7 @@ class MusicLibraryManager:
         Actualiza los rangos de bitrate para todos los álbumes en la base de datos.
         """
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         try:
@@ -1185,7 +1193,9 @@ class MusicLibraryManager:
     def scan_library(self, force_update=False):
         """Comprehensive library scanning with selective updates."""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
+        self._song_links_table_verified = False  # reset for this scan run
         
         error_log_path = PROJECT_ROOT / '.content' / 'logs' / 'db' / 'db_musica_path_error.log'
         if not error_log_path.exists():
@@ -1385,8 +1395,7 @@ class MusicLibraryManager:
                                 error_files += 1
                                 error_logger.error(f"Metadata extraction failed: {abs_path}")
                         
-                        # Hacemos commit más frecuentemente para evitar perder trabajo
-                        if processed_files % 10 == 0:
+                        if processed_files % 200 == 0:
                             conn.commit()
                     
                     except Exception as file_error:
@@ -1411,27 +1420,29 @@ class MusicLibraryManager:
 
     def _ensure_song_links_entry(self, cursor, file_path):
         """Asegurarse de que existe una entrada en song_links para esta canción"""
-        # Primero, verificar si la tabla song_links existe
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'")
-        if not cursor.fetchone():
-            # Si la tabla no existe, crearla
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS song_links (
-                    id INTEGER PRIMARY KEY,
-                    song_id INTEGER,
-                    spotify_url TEXT,
-                    spotify_id TEXT,
-                    lastfm_url TEXT,
-                    links_updated TIMESTAMP,
-                    youtube_url TEXT,
-                    musicbrainz_url TEXT,
-                    musicbrainz_recording_id TEXT,
-                    bandcamp_url TEXT,
-                    soundcloud_url TEXT,
-                    boomkat_url TEXT,
-                    FOREIGN KEY(song_id) REFERENCES songs(id)
-                )
-            ''')
+        if not self._song_links_table_verified:
+            cursor.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'"
+            )
+            if not cursor.fetchone():
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS song_links (
+                        id INTEGER PRIMARY KEY,
+                        song_id INTEGER,
+                        spotify_url TEXT,
+                        spotify_id TEXT,
+                        lastfm_url TEXT,
+                        links_updated TIMESTAMP,
+                        youtube_url TEXT,
+                        musicbrainz_url TEXT,
+                        musicbrainz_recording_id TEXT,
+                        bandcamp_url TEXT,
+                        soundcloud_url TEXT,
+                        boomkat_url TEXT,
+                        FOREIGN KEY(song_id) REFERENCES songs(id)
+                    )
+                ''')
+            self._song_links_table_verified = True
         
         # Ahora obtener el ID de la canción
         cursor.execute("SELECT id FROM songs WHERE file_path = ?", (file_path,))
@@ -1635,6 +1646,7 @@ class MusicLibraryManager:
     def update_replay_gain_only(self):
         """One-time update to extract replay gain for all files in the database."""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         try:
@@ -1709,6 +1721,7 @@ class MusicLibraryManager:
         - Marca como 'antiguo_local' artistas/álbumes cuyos archivos ya no existen
         """
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         c = conn.cursor()
         
         try:

@@ -1,0 +1,852 @@
+{
+  "country": "US",
+  "begin-area": {
+    "type-id": null,
+    "id": "96280e48-70ce-4d28-9a7b-798b9b68b9f8",
+    "sort-name": "Amityville",
+    "disambiguation": "",
+    "type": null,
+    "name": "Amityville"
+  },
+  "type": "Group",
+  "name": "De La Soul",
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "sort-name": "United States"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "disambiguation": "",
+  "ipis": [],
+  "id": "a8ebde98-7e91-46c7-992c-90039ba42017",
+  "isnis": [
+    "0000000121119957"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000238322",
+        "id": "d5aa61e5-e084-4e35-94ea-4c91cfc0f360"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "url": {
+        "resource": "https://delasoul.bandcamp.com/",
+        "id": "32b06364-2561-40a8-b924-ea86b322fabb"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2020-11-19",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/a8ebde98-7e91-46c7-992c-90039ba42017",
+        "id": "d14fe8dd-a40c-4b34-af93-a3d07e4eaab9"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/4091",
+        "id": "3b52e7cc-9c24-4824-b3c7-f385921fa14c"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1Z8ODXyhEBi3WynYw0Rya6",
+        "id": "6ad34fbd-7e2a-4f07-855c-d1c1324a4030"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1312",
+        "id": "0d1adb03-2b30-43fd-9a88-39efa94477cd"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "image",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "id": "3a17e1c4-8a9b-40e5-bbc6-0515aefa943b",
+        "resource": "https://commons.wikimedia.org/wiki/File:De_La_Soul_by_foto_di_matti.jpg"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:DeLa_Soul-mika.jpg",
+        "id": "0053d620-c95b-4e51-8fee-980d42a38502"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "begin": null,
+      "target-credit": "",
+      "type": "image",
+      "attribute-values": {}
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "c956d65f-def5-4f1b-a33f-33d8382cafd2",
+        "resource": "https://www.imdb.com/name/nm0857252/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "interview",
+      "attribute-values": {},
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "url": {
+        "resource": "http://www.muzines.co.uk/articles/de-la-soul/958",
+        "id": "61847833-13b0-480a-bb87-220c7baa2336"
+      }
+    },
+    {
+      "url": {
+        "id": "00c8aa56-a29f-494e-9330-0cb0e3f88839",
+        "resource": "https://www.last.fm/music/De+La+Soul"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://muzikum.eu/en/122-4313/de-la-soul/lyrics.html",
+        "id": "791fe94d-5a16-4fdc-a6c8-3828d22e679e"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "32070791-748f-4008-87bf-0cc1fec28b62",
+        "resource": "https://genius.com/artists/De-la-soul"
+      },
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "50c1ab1a-b276-42a4-bfbe-9fb5abb81bc3",
+        "resource": "https://myspace.com/delasoul"
+      }
+    },
+    {
+      "type": "official homepage",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://www.wearedelasoul.com/",
+        "id": "31d3296e-bc59-4160-90d9-2fdee8733f38"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n92025865",
+        "id": "a58f6576-68cb-466e-ba0f-d0ecaf92f6db"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "3ddf29f3-acea-4def-b738-4083900149d1",
+        "resource": "http://musicmoz.org/Bands_and_Artists/D/De_La_Soul/"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "f688eb87-e84b-4c2f-a280-8d70747b60b6",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139460472"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "766d369c-e3f0-4ebd-b4c7-aadcca0587d1",
+        "resource": "https://d-nb.info/gnd/5247454-9"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://imvdb.com/n/de-la-soul",
+        "id": "4f681260-0913-4175-a0e1-1d4862e4a3d7"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/de_la_soul",
+        "id": "708cc105-c41f-4337-aac7-87119a2ff18c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "8dad8b08-2d1a-4428-85b7-0a70a12eb254",
+        "resource": "https://www.musik-sammler.de/artist/3694/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "6ac92ea3-ab2b-43e4-8e69-96ae8178c424",
+        "resource": "https://www.whosampled.com/De-La-Soul/"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n92025865",
+        "id": "b78b7f47-5ab0-42c4-8e28-ebcdb8d94d2b"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "6072f72f-2c87-4469-9d2a-21deca0832f6",
+        "resource": "https://itunes.apple.com/us/artist/id3496517"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000APWHWO",
+        "id": "a9dc71b4-0f5b-4885-8e1b-d0a73ae9c248"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.beatport.com/artist/de-la-soul/90362",
+        "id": "fc1144e4-c3f9-4815-9aa9-eb210cae4662"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "3e0c152e-7e30-4d13-9c57-a0aff66d74b1",
+        "resource": "https://www.qobuz.com/us-en/interpreter/de-la-soul/111708"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "url": {
+        "id": "9ceea141-145c-4fb3-9cc7-83559abc0fe4",
+        "resource": "https://tower.jp/artist/175880"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "a9dc71b4-0f5b-4885-8e1b-d0a73ae9c248",
+        "resource": "https://www.amazon.com/-/e/B000APWHWO"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": "2018-06-30",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true,
+      "begin": null,
+      "target-credit": "",
+      "type": "purevolume",
+      "attribute-values": {},
+      "url": {
+        "id": "e056b6f0-a317-453a-b43c-6aeb9b5d876e",
+        "resource": "http://www.purevolume.com/delasoul"
+      },
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "e2f11249-7544-459c-af49-dae476d8c985",
+        "resource": "https://secondhandsongs.com/artist/2500"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://twitter.com/WeAreDeLaSoul",
+        "id": "0c71f7a1-0754-4ae8-8795-0910effc3e88"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/wearedelasoul",
+        "id": "6a4b8cd0-73f2-48c2-b96d-bf9f9d362c7f"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/wearedelasoul/",
+        "id": "3ce9413a-3475-43b9-ab3c-a9fbd39b3b93"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.reverbnation.com/delasoul",
+        "id": "84103124-b728-4504-a4cc-cad696ecf19f"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "9969475d-da14-46ba-becb-63982d168fee",
+        "resource": "https://www.songkick.com/artists/73301"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "ee302208-cedf-4fee-9785-c8786dd24a4c",
+        "resource": "https://soundcloud.com/wearedelasoul"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/3496517",
+        "id": "9df130b9-1322-47b5-8c3f-d7e73fbdf9dc"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/11405",
+        "id": "b700b5cf-f750-427d-922c-e7155b7d7108"
+      }
+    },
+    {
+      "url": {
+        "id": "3e0c152e-7e30-4d13-9c57-a0aff66d74b1",
+        "resource": "https://www.qobuz.com/us-en/interpreter/de-la-soul/111708"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "9105a935-3577-46fa-8004-afc8761d6b91",
+        "resource": "http://viaf.org/viaf/152137217"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q685595",
+        "id": "8be90ccc-2da2-4cc4-a7a6-9ad4f854848e"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "url": {
+        "id": "8549d043-99e1-48d1-9f86-3097364000c7",
+        "resource": "https://www.youtube.com/channel/UCngimeRWT1E9ZlasMs-eQSg"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube music",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCnLCApgMiI8wopT2tWVuMLw",
+        "id": "cf75464b-793d-4615-9454-eeb4fc5bf0b3"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4"
+    }
+  ],
+  "life-span": {
+    "begin": "1987",
+    "ended": false,
+    "end": null
+  },
+  "gender-id": null,
+  "sort-name": "De La Soul"
+}

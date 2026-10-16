@@ -1,0 +1,790 @@
+{
+  "id": "8be0594f-8c13-46bb-ab06-f93ffba5c776",
+  "disambiguation": "US jazz/standards vocalist",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Bennett, Tony",
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "name": "Tony Bennett",
+  "end-area": {
+    "type": null,
+    "id": "edd27a39-ff8a-4af4-8bbf-f369b0fb1899",
+    "disambiguation": "",
+    "sort-name": "Midtown Manhattan",
+    "type-id": null,
+    "name": "Midtown Manhattan"
+  },
+  "life-span": {
+    "ended": true,
+    "begin": "1926-08-03",
+    "end": "2023-07-21"
+  },
+  "type": "Person",
+  "gender": "Male",
+  "isnis": [
+    "0000000114762370",
+    "0000000361398027"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "950af505-e1be-49cd-9eb4-65df5f6f98a8",
+        "resource": "https://www.allmusic.com/artist/mn0000006334"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bandsintown.com/a/28472",
+        "id": "ccc72586-8a48-4c4d-b1d9-80c4a63a30b5"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "74c17eac-8e34-4cc4-8b3b-85861d16167f",
+        "resource": "https://www.bbc.co.uk/music/artists/8be0594f-8c13-46bb-ab06-f93ffba5c776"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/170754",
+        "id": "f4e5e806-ff75-450d-931e-c659aff012e6"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/2lolQgalUvZDfp5vvVtTYV",
+        "id": "4440fcea-2c10-4c3d-9519-790fbd9d43c6"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "c66fcbb4-7791-4160-a745-e703473504ed",
+        "resource": "https://www.deezer.com/artist/4088"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Tony_Bennett_in_2003.jpg",
+        "id": "98058fe9-458c-4870-95e1-155bffb8451b"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "type": "image",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "18de7868-4efc-4082-addc-331fea4370c3",
+        "resource": "https://www.imdb.com/name/nm0004746/"
+      },
+      "attributes": [],
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.last.fm/music/Tony+Bennett",
+        "id": "88ebbdd0-b741-4972-a99a-459949b98e74"
+      }
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://muzikum.eu/en/122-3820/tony-bennett/lyrics.html",
+        "id": "f9145ca5-cba4-4130-8ef3-ac3f6a651612"
+      },
+      "attributes": [],
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://genius.com/artists/Tony-bennett",
+        "id": "f7347998-7e3d-4556-ae9d-726c37475a2e"
+      },
+      "attributes": [],
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "d0254232-5791-437a-8f97-b6d0237d8ab2",
+        "resource": "https://myspace.com/tonybennett"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "6a9f8516-b1a1-4753-b6a3-d1b066fba85d",
+        "resource": "https://tonybennett.com/"
+      }
+    },
+    {
+      "url": {
+        "id": "42499833-32e0-43f2-99d7-7eb38b97e123",
+        "resource": "http://www.tonybennett.net/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": null
+    },
+    {
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": "2025-12-17",
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://jaxsta.com/profile/54295b09-6769-4bef-afc7-5e2571b22620",
+        "id": "c6ba62cd-e956-417d-8869-5e2b29bcaddf"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "b8861d38-4085-4374-9663-5946215aaeca",
+        "resource": "http://id.loc.gov/authorities/names/n85006632"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/B/Bennett,_Tony/",
+        "id": "04710ec5-b3b0-4e40-af07-76aab7f3cf0f"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "2edd882d-cb55-4bb8-be9e-f097a5d5acb4",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb138913644"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "58fec273-4aa5-4edb-877f-d0d631114d88",
+        "resource": "https://d-nb.info/gnd/119508044"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://ibdb.com/person.php?id=31735",
+        "id": "fa6db957-eb51-4d61-86bd-b31441a78bce"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://imvdb.com/n/tony-bennett",
+        "id": "60d18e21-e9e4-4b28-abbd-a278d1b727b3"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6qr5hx4",
+        "id": "a310633f-ae2e-47cb-a6a8-a71de9598159"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1094431",
+        "id": "1eb3b6b1-b183-4da1-96fa-d456e417eb4b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/tony_bennett",
+        "id": "fe92aeab-c6e1-444c-be12-900e482c1b33"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "71dc1bb5-5d51-4d83-8556-6181b2e0a658",
+        "resource": "https://www.worldcat.org/identities/lccn-n85006632"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "7adec75d-83aa-43e7-9c4b-e1fca61d6f98",
+        "resource": "https://music.apple.com/us/artist/484980"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "58752d4e-44dc-48fa-a2f6-96c0bede123c",
+        "resource": "https://itunes.apple.com/us/artist/id484980"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": true,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://tower.jp/artist/174567",
+        "id": "9393328f-590f-4047-b14e-51c023c6b453"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "192b8020-4d78-42a3-ba64-fec0c193f38f",
+        "resource": "https://secondhandsongs.com/artist/2682"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://twitter.com/itstonybennett",
+        "id": "839e40a4-2d68-4862-9a24-61a54a1164ac"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "1635d0a2-cd80-401a-b3ae-e4b9fc006adc",
+        "resource": "https://www.facebook.com/tonybennett"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.instagram.com/itstonybennett/",
+        "id": "5466a1a5-e410-4667-9824-2413adfd27b0"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://plus.google.com/110163307600385560741",
+        "id": "62d7eabf-cf19-4930-b41c-68380dc10223"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.songkick.com/artists/500873",
+        "id": "b1bed327-577f-47ba-aaf9-851b19b4395e"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "songkick"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://soundcloud.com/tonybennett",
+        "id": "c6272508-681c-4a7e-9ebb-77748ef1dbbb"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "7adec75d-83aa-43e7-9c4b-e1fca61d6f98",
+        "resource": "https://music.apple.com/us/artist/484980"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "2aaeadca-51aa-45b1-96b7-8b5be7aefd3d",
+        "resource": "https://tidal.com/artist/96"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://viaf.org/viaf/84563171",
+        "id": "936b6152-397b-4ca6-8397-9fdbe2ff6be0"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q296729",
+        "id": "8c36ce7b-3027-46bf-b505-f636d5eaac0f"
+      },
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "27597da7-5451-4739-b86f-4bffd8cc39d8",
+        "resource": "https://www.youtube.com/channel/UCtCM_6Hb76yWu2oKS59l-mw"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "source-credit": "tonybennettVEVO",
+      "type": "youtube",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCwo4ZnAcFI-AyDsitZvBRvg",
+        "id": "822e2822-323e-45ea-8eee-f520edb3d9a6"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": ""
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00002720928"
+  ],
+  "begin-area": {
+    "type": null,
+    "sort-name": "Long Island City",
+    "disambiguation": "",
+    "id": "dce45ea2-f0be-4568-82a6-072837b54cf1",
+    "type-id": null,
+    "name": "Long Island City"
+  }
+}

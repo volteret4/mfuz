@@ -11,6 +11,8 @@ import sys
 import json
 import time
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import logging
 import requests
 import hashlib
@@ -572,6 +574,7 @@ class ArtistasImagenes:
         """Conecta a la base de datos"""
         try:
             self.conn = sqlite3.connect(self.db_path)
+            apply_pragmas(self.conn)
             self.conn.row_factory = sqlite3.Row
             self.cursor = self.conn.cursor()
             logger.info(f"Conectado a la base de datos: {self.db_path}")

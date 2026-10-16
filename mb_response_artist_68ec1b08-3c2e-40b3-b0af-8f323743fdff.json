@@ -1,0 +1,690 @@
+{
+  "name": "Soulwax",
+  "type": "Group",
+  "country": "BE",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Ghent",
+    "id": "45125c6a-db29-4300-bd26-9ff9ed24a3e7",
+    "name": "Ghent",
+    "type": null,
+    "disambiguation": ""
+  },
+  "gender": null,
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "Belgium",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "BE"
+    ],
+    "disambiguation": "",
+    "name": "Belgium",
+    "type": null,
+    "id": "5b8a5ee5-0bb3-34cf-9a75-c27c44e341fc"
+  },
+  "ipis": [],
+  "disambiguation": "Belgian indie/rock/electro band",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {},
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000048806",
+        "id": "e2e05580-bf3f-4560-8c2c-21b0e9d74ba5"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://soulwax.bandcamp.com/",
+        "id": "3db7d794-817c-4a63-ac23-7a5e72cd0371"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "dd0e1b2b-f603-4a4d-9d75-20b2472082e3",
+        "resource": "https://www.bandsintown.com/a/3888"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2"
+    },
+    {
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "5870ce42-4e30-47a8-985d-44614814fa24",
+        "resource": "https://www.bbc.co.uk/music/artists/68ec1b08-3c2e-40b3-b0af-8f323743fdff"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://www.kevinenjoyce.com/soulwax/",
+        "id": "00953612-d329-427d-a1c6-bf7a667406b7"
+      },
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discography page"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/34128",
+        "id": "4ad40377-5b72-4f9b-a51c-851077d09712"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "0f2fa521-7c9a-41f4-8af0-ec9c6d8d7abc",
+        "resource": "https://open.spotify.com/artist/43mWhBXSflupNLuNjM5vff"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "7635dd1d-fc8b-4874-bff5-8bf86ac835d9",
+        "resource": "https://www.deezer.com/artist/1091"
+      }
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "a263ccf4-925d-4e89-8660-5fe95837ceeb",
+        "resource": "https://www.imdb.com/name/nm1552050/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "a6134d12-847e-4693-995a-fa1884003991",
+        "resource": "https://www.last.fm/music/Soulwax"
+      },
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "myspace",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://myspace.com/soulwax",
+        "id": "d6174097-7128-4516-8979-44e6364411a5"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "993e7b03-9384-45d3-8c31-a2eb1f17e843",
+        "resource": "http://www.soulwax.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2006108834",
+        "id": "9d38b0f7-c064-4310-9d96-92874b33c0df"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/S/Soulwax/",
+        "id": "d0907ed4-33e4-455f-8287-68c8ea9ca8e1"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14031330b",
+        "id": "6875c670-b89f-4fa7-bd29-803e010aadab"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/16043388-5",
+        "id": "8673ebe1-bd9e-4772-b75f-4581c778e876"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://ra.co/dj/soulwax",
+        "id": "f42abf1f-488e-4ffd-8a91-b29addf216cd"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/soulwax",
+        "id": "1e93d9dd-2270-4896-988d-d9b810ba2c2c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a8489217-064d-4c13-846b-85ed154610f5",
+        "resource": "https://www.muziekweb.nl/Link/M00000029250/POPULAR/"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "bd6df974-e4c6-44f4-b62b-37bfa3653712",
+        "resource": "https://www.whosampled.com/Soulwax/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2006108834",
+        "id": "bc7b842a-e629-422f-894c-7be473be7dad"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "08e64492-14a5-4ad9-922b-81595c1ee403",
+        "resource": "http://www.maniadb.com/artist/133847"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id15159081",
+        "id": "0b80bbbb-669a-4fcf-aa70-500a3f6ed172"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "resource": "https://www.beatport.com/artist/soulwax/10547",
+        "id": "c2a19c4e-3013-4a7a-bdb8-5427abaae131"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "2e833313-1128-4dce-a862-8c85f2fb0393",
+        "resource": "https://secondhandsongs.com/artist/23307"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "url": {
+        "id": "c4179023-b54a-4200-94e0-610c1d7f42cb",
+        "resource": "https://www.setlist.fm/setlists/soulwax-63d69283.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/soulwax",
+        "id": "13a19ff7-eb03-46c5-9c75-bd0cfcdda0da"
+      }
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/soulwax",
+        "id": "3198052c-37cb-4f3b-98ce-88edcf82fc55"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "f7b2a27a-10f9-4550-8933-31239c897662",
+        "resource": "https://www.songkick.com/artists/3715721"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "soundcloud",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "35896fcd-aba8-41de-8c77-6034b851fceb",
+        "resource": "https://soundcloud.com/soulwaxofficial"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/3523887",
+        "id": "a647cc00-de20-4765-a37a-95872529cb17"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/138276365",
+        "id": "68e60f14-37e2-4d7f-8174-9d7ab94e3482"
+      },
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b",
+      "url": {
+        "id": "0846521c-e022-4afe-b66a-6f101ff7f5b3",
+        "resource": "https://vimeo.com/radiosoulwax"
+      },
+      "attribute-values": {},
+      "type": "video channel",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1288216",
+        "id": "56d59d14-dbdc-4d0d-8225-801e0b240225"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC9RzO7phej8T2Bj0YtpkSyA",
+        "id": "724cbe0d-bfe4-4961-a8b7-fa774117d74a"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCHvcelhZMS1T1bUTCC5r54w",
+        "id": "251fcebd-64c2-42a9-8ae2-32012ed01487"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "type": "youtube music",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    }
+  ],
+  "isnis": [
+    "0000000106649837"
+  ],
+  "id": "68ec1b08-3c2e-40b3-b0af-8f323743fdff",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1993"
+  },
+  "gender-id": null,
+  "sort-name": "Soulwax"
+}

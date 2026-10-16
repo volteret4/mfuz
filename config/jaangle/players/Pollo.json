@@ -31,7 +31,7 @@
     "avoid_last_seconds": 15
   },
   "advanced_settings": {
-    "penalty_seconds": 3,
+    "penalty_seconds": 0,
     "reward_seconds": 1,
     "favorite_penalty": 10,
     "min_font_size": 8,
@@ -44,12 +44,12 @@
     "enable_debug": false
   },
   "statistics": {
-    "games_played": 0,
-    "total_questions": 0,
-    "correct_answers": 0,
-    "accuracy": 0.0,
-    "total_time_played": 0,
+    "games_played": 1,
+    "total_questions": 20,
+    "correct_answers": 17,
+    "accuracy": 85.0,
+    "total_time_played": 242,
     "favorite_genre": null,
-    "last_played": null
+    "last_played": "2026-03-26T01:15:51.606664"
   }
 }

@@ -1,0 +1,274 @@
+{
+  "ipis": [],
+  "disambiguation": "Mick Kenney alias for phonk music",
+  "id": "e97e9533-a69b-431d-a88f-e9a519be6c0d",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://kordhell.bandcamp.com/",
+        "id": "72b06487-dde5-4338-bbd0-5beab2d5e7d6"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/12585488",
+        "id": "55034902-9aab-4e33-a953-aced544e1f3e"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "d0c9ff05-bc83-4ba7-b92a-ef54138528c7",
+        "resource": "https://open.spotify.com/artist/2W6WP4pHQTFlbr2z9S4n54"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/125722472",
+        "id": "3b1004e4-9741-4a1f-a05c-90be21b26c9f"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "190047f9-bf19-4dc8-ae19-9f8b1a79d5f5",
+        "resource": "https://rateyourmusic.com/artist/kordhell"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1557035452",
+        "id": "376aa268-54aa-40eb-9c6e-8af7cbc737c2"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.beatport.com/artist/kordhell/1060404",
+        "id": "3a62f37e-6ea2-4aed-89e0-47c962f06da7"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/kordhell/",
+        "id": "78047839-e6d3-4135-bda0-1f0ebe5d48d8"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://soundcloud.com/kordhell/",
+        "id": "5aa8f30f-e74f-44dc-971d-cbddb8aa61ad"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/1557035452",
+        "id": "c9aba653-bc27-4a07-a41b-5e4be7580855"
+      },
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "376aa268-54aa-40eb-9c6e-8af7cbc737c2",
+        "resource": "https://music.apple.com/us/artist/1557035452"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "b4bb2908-2711-4d3d-8044-b5785e58e367",
+        "resource": "https://tidal.com/artist/23826729"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCS8OjP50HmdeXeKYLvF3rdA",
+        "id": "899bbe91-1650-4d40-b6f4-3a6dfc5c86f8"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "isnis": [],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1980-01-18"
+  },
+  "sort-name": "Kordhell",
+  "name": "Kordhell",
+  "type": "Person",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Birmingham",
+    "iso-3166-2-codes": [
+      "GB-BIR"
+    ],
+    "id": "226c4dca-ef2a-4d4b-ba25-4118d116557a",
+    "type": null,
+    "name": "Birmingham",
+    "disambiguation": ""
+  },
+  "country": "US",
+  "gender": "Male",
+  "end-area": null,
+  "area": {
+    "disambiguation": "",
+    "name": "Los Angeles",
+    "type": null,
+    "type-id": null,
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "sort-name": "Los Angeles"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

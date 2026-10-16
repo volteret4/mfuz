@@ -1,0 +1,213 @@
+{
+  "relations": [
+    {
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attributes": [],
+      "url": {
+        "id": "1925f23f-9415-41ba-bdad-93c031785244",
+        "resource": "https://www.allmusic.com/artist/mn0000795841"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "8ba294df-c3e7-4f1b-afd1-ff1d54ef86a8",
+        "resource": "https://www.discogs.com/artist/18977"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.donblackman.com/",
+        "id": "fc8c82cc-3c0a-4b14-83a9-f9e4af9620f3"
+      },
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2006122005",
+        "id": "308a40e6-daee-4006-af37-4b038b132872"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/135127831",
+        "id": "dfd29e92-e449-43cf-9601-fbc4c40f2551"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "369356c1-2c71-49c4-af98-5869cdcb88cf",
+        "resource": "https://www.worldcat.org/identities/lccn-no2006122005"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/212540",
+        "id": "73e3e7c7-aee7-47d5-bf10-939cb615b70f"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "VIAF",
+      "attributes": [],
+      "url": {
+        "id": "c8ebda4a-38b4-45cd-9c9a-b2052d110858",
+        "resource": "http://viaf.org/viaf/44064221"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1238935",
+        "id": "1c183d7a-b34f-4469-a452-aa0794b5a12a"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": ""
+    }
+  ],
+  "end-area": {
+    "name": "New York",
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "disambiguation": "",
+    "sort-name": "New York",
+    "type": null,
+    "type-id": null
+  },
+  "country": "US",
+  "name": "Don Blackman",
+  "life-span": {
+    "end": "2013-04-11",
+    "begin": "1953-09-01",
+    "ended": true
+  },
+  "gender": "Male",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type-id": null,
+    "type": null,
+    "sort-name": "United States",
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States"
+  },
+  "id": "20e5ca41-9bc6-44df-a55f-63ff2b5edaa8",
+  "disambiguation": "",
+  "sort-name": "Blackman, Don",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [
+    "00043561692"
+  ],
+  "begin-area": {
+    "sort-name": "Jamaica",
+    "disambiguation": "",
+    "id": "0993002c-8666-4857-b333-e35cd713ff8e",
+    "type": null,
+    "type-id": null,
+    "name": "Jamaica"
+  },
+  "isnis": [
+    "0000000043892564"
+  ],
+  "type": "Person"
+}

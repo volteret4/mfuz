@@ -1,0 +1,386 @@
+{
+  "disambiguation": "Italian drummer, percussionist and singer",
+  "end-area": null,
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Napoli",
+    "id": "86fbdd3c-aaac-4aed-916a-b361f7e1a8de",
+    "type": null,
+    "name": "Napoli"
+  },
+  "sort-name": "De Piscopo, Tullio",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1946-02-24",
+    "end": null,
+    "ended": false
+  },
+  "name": "Tullio De Piscopo",
+  "isnis": [
+    "000000005936554X"
+  ],
+  "id": "f5a2a32e-3fbb-46c9-b34d-dca87250aa47",
+  "relations": [
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000208513",
+        "id": "ff809da7-c301-44a5-bf1d-3a211c24a24f"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "afc8dc3a-dfd7-4511-84b6-d2a81cf6d65f",
+        "resource": "https://www.discogs.com/artist/31759"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/677NtrMPiyPumrSUs8lBKk",
+        "id": "96628d34-3728-47b8-96b0-ead7bd19e489"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "af315f05-20ea-4eaf-ae43-44605b098889",
+        "resource": "https://www.deezer.com/artist/71668"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "url": {
+        "id": "310275eb-6cb9-4a5a-a869-e72e0c6848e4",
+        "resource": "https://www.imdb.com/name/nm0210979/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "87518803-cde1-4a2e-ba16-1d4336844148",
+        "resource": "https://genius.com/artists/Tullio-de-piscopo"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "8b7c7485-1739-4293-bd5f-1318a2f2a3f0",
+        "resource": "http://www.tulliodepiscopo.it/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "official homepage",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://discografia.dds.it/scheda_artista.php?ida=1099",
+        "id": "633c8ff4-7834-4407-b0e9-da1ed404b254"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no98044511",
+        "id": "ebae5182-b284-4719-a71c-883636296737"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13945070b",
+        "id": "2e9f64a6-cae3-4477-98cc-d2e5b97d975f"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://d-nb.info/gnd/134485580",
+        "id": "57594686-1a54-40d5-94f4-8118557dcbaa"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "cb6e2ea1-1cbd-4ae8-b1ac-a1a5afb0a857",
+        "resource": "https://www.45cat.com/artist/tullio-de-piscopo"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no98044511",
+        "id": "8dd41e27-0b36-4f8d-9887-068c1d99a7e8"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "setlistfm",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "5a6359ea-c8d4-45b1-bfb7-32ff3207aae5",
+        "resource": "https://www.setlist.fm/setlists/tullio-de-piscopo-23d76ccb.html"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/474576",
+        "id": "ee3397df-ea24-4934-adf4-441bfb9863de"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/it/artist/73749918",
+        "id": "3029e66e-7688-4a17-99a4-9513015007aa"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming"
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/3893422",
+        "id": "f06c1e7b-40a6-4ac0-965f-fb25e0eb9f4e"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "VIAF",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a9df3ca7-44c9-43a5-b0ee-ed7de01d28f7",
+        "resource": "http://viaf.org/viaf/37107104"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1682114",
+        "id": "4c0cdea5-f12d-4b86-b687-1ce8fa7e1a02"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata"
+    }
+  ],
+  "area": {
+    "type-id": null,
+    "type": null,
+    "name": "Italy",
+    "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+    "iso-3166-1-codes": [
+      "IT"
+    ],
+    "sort-name": "Italy",
+    "disambiguation": ""
+  },
+  "gender": "Male",
+  "ipis": [
+    "00014530523"
+  ],
+  "type": "Person",
+  "country": "IT",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

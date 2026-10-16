@@ -1,0 +1,202 @@
+{
+  "area": {
+    "type-id": null,
+    "sort-name": "Brazil",
+    "id": "f45b47f8-5796-386e-b172-6c31b009a5d8",
+    "name": "Brazil",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "BR"
+    ]
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null,
+  "gender": "Female",
+  "begin-area": {
+    "disambiguation": "",
+    "name": "Rio de Janeiro",
+    "type": null,
+    "id": "9443d4f5-668c-4f30-96bd-6caf831de30f",
+    "sort-name": "Rio de Janeiro",
+    "type-id": null
+  },
+  "country": "BR",
+  "type": "Person",
+  "name": "Sandra de S\u00e1",
+  "sort-name": "S\u00e1, Sandra de",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1955-08-27"
+  },
+  "id": "04547553-efb6-4be3-8190-37a76a1a4e35",
+  "isnis": [],
+  "relations": [
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/358470",
+        "id": "1876c7f2-ccd2-48fd-9695-8a4d76282ab3"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "bbde54d3-91a3-46aa-aa46-5f449f65981a",
+        "resource": "https://www.imdb.com/name/nm2091924/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "bbc6e119-422e-474b-8abf-96506007944a",
+        "resource": "http://www.sandradesa.com.br/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c8b19c8d-a551-46c2-ae77-663970b1a271",
+        "resource": "http://id.loc.gov/authorities/names/no98016839"
+      }
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no98016839",
+        "id": "79a55354-ea17-4dc1-a183-8c12f7c96b10"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://twitter.com/sandradesa",
+        "id": "d135333b-de02-4b47-a25f-2a50738388df"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/414646",
+        "id": "00eff5ea-86a9-40dd-a914-04bd381b593d"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "3b7626a3-b8c1-404f-8bcd-8e3d27e2cd38",
+        "resource": "http://viaf.org/viaf/75928088"
+      }
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q545519",
+        "id": "3eaf6c72-207e-4f71-91e3-8d759d248cb1"
+      },
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    }
+  ],
+  "disambiguation": "",
+  "ipis": []
+}

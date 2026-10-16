@@ -1,0 +1,786 @@
+{
+  "sort-name": "Dean, Olivia",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "name": "Olivia Dean",
+  "end-area": null,
+  "id": "15e0d608-0869-429b-898d-3d8db3ecedd5",
+  "ipis": [
+    "00362192861",
+    "00362192959"
+  ],
+  "begin-area": {
+    "sort-name": "Haringey",
+    "id": "cd46362d-4a6e-429e-a970-c3a0134e0b10",
+    "type": null,
+    "iso-3166-2-codes": [
+      "GB-HRY"
+    ],
+    "disambiguation": "",
+    "name": "Haringey",
+    "type-id": null
+  },
+  "gender": "Female",
+  "relations": [
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003812041",
+        "id": "f089445e-c5e0-45da-a2d3-2fe74ee15b2f"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://oliviadean.bandcamp.com/",
+        "id": "644be3b6-5a89-4d2c-bc15-7a81d5d1a7d2"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandsintown",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/11137816",
+        "id": "b5ba82bc-ffaa-4fee-b282-d88439b83aa3"
+      }
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/9686557",
+        "id": "a5d3006d-9e16-4e87-9e17-4198f10de6ef"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "063a775b-8a61-486d-bb9e-740722e2565a",
+        "resource": "https://open.spotify.com/artist/00x1fYSGhdqScXBRpSj3DW"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/75659582",
+        "id": "3d6600b5-9944-4cc1-9791-3a89703e7f99"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm7715767/",
+        "id": "fd80d87f-7534-40c3-9ad5-6814ce1231a7"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "IMDb"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Olivia+Dean",
+        "id": "13466c75-09bb-4b2a-aaab-6d06e2775942"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "url": {
+        "id": "d65a8871-c618-4282-8863-13d813015fc4",
+        "resource": "https://genius.com/artists/Olivia-dean"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Olivia-Dean",
+        "id": "649b6332-5aaf-42e9-9924-ca2fd9621e57"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "url": {
+        "id": "cebfdcec-b616-4980-8f2a-8f4630c153a3",
+        "resource": "https://www.oliviadeano.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9f32534b-9e00-45f8-8b2a-3adcde0e8bc5",
+        "resource": "http://id.loc.gov/authorities/names/n2025028723"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d0164be3-9c85-477f-b999-3b0705012e47",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb18098276v"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/1355282950",
+        "id": "ff3b5486-a320-4c68-8298-3d08ece868cc"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://imvdb.com/n/olivia-dean",
+        "id": "15612a82-49a1-40ce-a4e5-841bd36f7432"
+      },
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/olivia-dean",
+        "id": "2dc3c103-df9c-403b-a63b-6dbb2458fc3f"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "id": "73a284a1-011e-4609-b727-a9181df880f9",
+        "resource": "https://www.livefans.jp/artists/175957"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "url": {
+        "id": "9bfd18de-7d19-4766-9f3a-202c0b1f7e02",
+        "resource": "https://www.musik-sammler.de/artist/618443/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000593466/POPULAR/",
+        "id": "e21d7ca2-f59c-4870-b272-7ff6c0b9d01c"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.themoviedb.org/person/4315851",
+        "id": "f5a67c81-da17-4803-a767-87b8b100ac2a"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "3f57d456-cdbf-4e96-a6ff-4d701f027262",
+        "resource": "https://www.whosampled.com/Olivia-Dean/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "bffa63ca-4239-4705-85bb-979d68b192c5",
+        "resource": "https://mora.jp/artist/1186233/"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "06d05489-fb12-4e86-8ce8-768899482fc1",
+        "resource": "https://music.apple.com/gb/artist/1487253329"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://us.7digital.com/artist/olivia-dean",
+        "id": "8dc7ee8f-ea69-412c-82f8-a555d08ee345"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/olivia-dean/5639782",
+        "id": "cdf4ba5a-d5e0-41b7-a7c8-953190670337"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700936292",
+        "id": "baa8031d-8cc9-430e-b749-997664975d91"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/175687",
+        "id": "7ff88f1e-3556-4ce8-a138-5a4fd1bf30fe"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-type": "url"
+    },
+    {
+      "type": "setlistfm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/olivia-dean-6bf77ef2.html",
+        "id": "b8e50b68-b5a9-48f7-8781-c1f87a9adc7b"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "id": "087db845-6fa4-4d21-85cd-a05f1cfd3afa",
+        "resource": "https://twitter.com/oliviadeano"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "f7bbfaed-1aed-46f1-96e3-abcc15f0dc1c",
+        "resource": "https://www.facebook.com/oliviadeanmusic"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "9d7f067d-d020-4b12-9f0e-1615000b0a10",
+        "resource": "https://www.instagram.com/oliviadeano/"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.tiktok.com/@oliviadeano_",
+        "id": "c7ada154-d0b3-410b-8ae7-700abf1d43b8"
+      }
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "580f4f27-78be-4ea8-a175-c0d6e3377a42",
+        "resource": "https://www.songkick.com/artists/9854184"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "songkick"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "610c5d72-2988-40d6-bf11-e1f03e610b13",
+        "resource": "https://soundcloud.com/olivialauryndean"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "soundcloud"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://music.amazon.com/artists/B07YZGWDLF",
+        "id": "5b56b249-c493-4e2d-a8de-d6534d635356"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "06d05489-fb12-4e86-8ce8-768899482fc1",
+        "resource": "https://music.apple.com/gb/artist/1487253329"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "9c5ac95f-0051-46e2-bc55-0f38c060d7f9",
+        "resource": "https://tidal.com/artist/17009569"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/8716169381408639550000",
+        "id": "a45be4c4-c2d1-4a38-b33c-b629c0beb0b4"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "d75c7c5a-3ee8-4237-85eb-9e4c2ca81976",
+        "resource": "https://www.wikidata.org/wiki/Q108106738"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "youtube",
+      "attribute-values": {},
+      "target-type": "url",
+      "url": {
+        "id": "3b66b760-3b49-4b16-a9b2-163298d60a05",
+        "resource": "https://www.youtube.com/channel/UCYKlku5Zg5FnAc3bgY7kQnA"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "efaf89d5-d7ed-4076-8c78-9c5070541d2c",
+        "resource": "https://music.youtube.com/channel/UCT3cEUoL1X0_BxN6q7LVH1w"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "begin": null,
+      "type": "youtube music",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    }
+  ],
+  "country": "GB",
+  "disambiguation": "",
+  "life-span": {
+    "ended": false,
+    "begin": "1999-03-14",
+    "end": null
+  },
+  "type": "Person",
+  "area": {
+    "disambiguation": "",
+    "name": "United Kingdom",
+    "type": null,
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type-id": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "sort-name": "United Kingdom"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "000000049379665X"
+  ]
+}

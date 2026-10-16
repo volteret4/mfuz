@@ -1,0 +1,377 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type": null,
+    "type-id": null,
+    "sort-name": "United States"
+  },
+  "end-area": null,
+  "gender": null,
+  "begin-area": null,
+  "country": "US",
+  "name": "Love Unlimited",
+  "type": "Group",
+  "sort-name": "Love Unlimited",
+  "gender-id": null,
+  "life-span": {
+    "begin": "1969",
+    "end": "1985",
+    "ended": true
+  },
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "963e2cec-fdd0-4f67-a2c8-0ecb72717ac7",
+        "resource": "https://www.allmusic.com/artist/mn0000249908"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "bd00cb10-454d-4d5b-849a-e361f1f48ccb",
+        "resource": "https://www.discogs.com/artist/164269"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/2M4KXzgedR4EKG4qgTeDKa",
+        "id": "06eef372-8be0-4638-a695-793b81bfd618"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/264",
+        "id": "4ca4831b-70e0-40a3-ab6b-bc1321a00b4b"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.last.fm/music/Love+Unlimited",
+        "id": "5e262557-dc03-450a-8646-14ea7c1ec35e"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n95096655",
+        "id": "66a1244d-be35-41ed-b9d5-3c94a8174aa2"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14022001z",
+        "id": "568bdaed-3428-418d-9698-cccc990e36c5"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "ec13bf67-0439-46f1-bc5f-20690187ac66",
+        "resource": "https://d-nb.info/gnd/10277258-7"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/love_unlimited",
+        "id": "502f517e-356f-45c4-be5b-0f13930b9626"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://www.whosampled.com/Love-Unlimited/",
+        "id": "4f3c7bfc-d39c-4f7c-b41b-31a2b96c8e51"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n95096655",
+        "id": "192843a6-d71f-4a3f-833d-063057737ef7"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/382895",
+        "id": "cd2f5d42-a445-4585-b38c-4c0e6ae75c89"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "f23ab726-fe8f-4c99-bf5d-41e8db9d778b",
+        "resource": "https://www.setlist.fm/setlists/love-unlimited-4bd7b7c6.html"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/de/artist/382895",
+        "id": "97e6cd49-c6ae-4955-90fe-99b6224176e6"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/382895",
+        "id": "0824f546-5fac-4d61-91e6-3a7275ad3bac"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "cd2f5d42-a445-4585-b38c-4c0e6ae75c89",
+        "resource": "https://music.apple.com/us/artist/382895"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/32912",
+        "id": "14ae15a8-9e99-4f93-943b-3810609613f8"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/136817138",
+        "id": "078735a7-37b2-4d75-a8a2-979cd9d09cfc"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "begin": null,
+      "type": "VIAF",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "9f25992b-8223-4022-86d0-2a5179aeb6bd",
+        "resource": "https://www.wikidata.org/wiki/Q3184492"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "isnis": [
+    "0000000110114966"
+  ],
+  "id": "18b148bf-17a7-4b2e-8dc6-04502bfc73e7",
+  "disambiguation": "",
+  "ipis": []
+}

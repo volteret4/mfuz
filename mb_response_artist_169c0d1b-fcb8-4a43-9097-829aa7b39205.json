@@ -1,0 +1,645 @@
+{
+  "begin-area": {
+    "disambiguation": "",
+    "sort-name": "Fort Worth",
+    "id": "ae96202a-e993-45de-adfe-a8c6b66a781d",
+    "type-id": null,
+    "type": null,
+    "name": "Fort Worth"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [
+    "00006493787"
+  ],
+  "isnis": [
+    "0000000117719685"
+  ],
+  "type": "Person",
+  "end-area": {
+    "name": "Manhattan",
+    "id": "261962ea-d8c2-4eaf-a80c-f14376ffadb0",
+    "sort-name": "Manhattan",
+    "disambiguation": "",
+    "type": null,
+    "type-id": null
+  },
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "allmusic",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000484396",
+        "id": "e8bfbd10-f148-4972-8b4b-e24dd62d827b"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "attributes": [],
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "id": "c66a3b83-5bd7-497f-94c4-8702fd1982f0",
+        "resource": "https://www.bbc.co.uk/music/artists/169c0d1b-fcb8-4a43-9097-829aa7b39205"
+      }
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "e09da607-2183-4165-ae75-e61324c635d1",
+        "resource": "http://www.jazzdisco.org/ornette/"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "discography page",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "50bf9317-183a-42da-b18d-77a912367535",
+        "resource": "https://www.discogs.com/artist/224506"
+      },
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "f034eebc-44fd-4fa0-990a-a750c0361528",
+        "resource": "https://open.spotify.com/artist/47odibUtrN3lnWx0p0pk2P"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url"
+    },
+    {
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/6531",
+        "id": "1e4974e5-c923-40a9-a562-a9b4202a6991"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "IMDb",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0171170/",
+        "id": "3585e5c6-55eb-4f1a-8acb-0bb8b6976620"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "last.fm",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "2f0d2359-392b-4dea-be5d-5d5d15c19791",
+        "resource": "https://www.last.fm/music/Ornette+Coleman"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "c92f5196-0ad0-45ec-958f-5d987a11cab2",
+        "resource": "https://genius.com/artists/Ornette-coleman"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.ornettecoleman.com/",
+        "id": "967eaf08-de6e-4e50-a316-f334a6288033"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "official homepage"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "da4e62bb-8215-4f08-b1bf-62cbd91a9a9d",
+        "resource": "http://id.loc.gov/authorities/names/n83071536"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "id": "39c84f1e-7547-4923-a540-c9fdf4dcfe75",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13892628b"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "a7391667-2a03-422e-b7e7-ff78116c5807",
+        "resource": "https://d-nb.info/gnd/118890964"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "d9882560-6786-4257-97da-b83400a89997",
+        "resource": "http://snaccooperative.org/ark:/99166/w6rz0q2w"
+      },
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "9f8eb06b-3528-41c2-8667-057f4d70e5c8",
+        "resource": "https://nla.gov.au/nla.party-941985"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4b672688-0451-48f4-8ca8-b1217e6e4675",
+        "resource": "https://rateyourmusic.com/artist/ornette-coleman"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.jazzmusicarchives.com/artist/ornette-coleman",
+        "id": "e4884457-07ca-4d97-bf28-135c2ab257d7"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/ornette-coleman/",
+        "id": "10467384-a268-4546-b813-eb6aa68281e9"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "0891681e-480b-4ebc-8657-ce01c3c8ecdc",
+        "resource": "https://www.themoviedb.org/person/998600-ornette-coleman"
+      },
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.whosampled.com/Ornette-Coleman/",
+        "id": "1cb686fb-21db-45ec-a8ef-01a9ea010702"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "6eba4133-ead3-40fb-84d5-dd0ff85d30be",
+        "resource": "https://www.worldcat.org/oclc/935032488"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id461909",
+        "id": "f255fde8-bdb4-4335-8098-b363cb3feef5"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download"
+    },
+    {
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/461909",
+        "id": "146ad4dd-3321-40e0-a64e-cfccc3d94a67"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "bdb385c3-0530-4f89-b997-d248919e213e",
+        "resource": "https://secondhandsongs.com/artist/4566"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "secondhandsongs",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/ornette-coleman-53d6b33d.html",
+        "id": "cfd367ab-1fc9-44c3-b7a8-a4e48d875444"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "setlistfm",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/officialornettecoleman",
+        "id": "ddb885b3-af48-4400-8bd7-95982829a90f"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "social network"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "c0b8222c-f4c4-4104-acad-69ecdf77dcce",
+        "resource": "https://www.songkick.com/artists/385737"
+      },
+      "attributes": [],
+      "type": "songkick",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/461909",
+        "id": "09745744-4a68-4f3d-aa0d-f32b503c321f"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://music.apple.com/us/artist/461909",
+        "id": "146ad4dd-3321-40e0-a64e-cfccc3d94a67"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/823",
+        "id": "ab4cbc95-d778-4e77-b2de-d68687833882"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "http://viaf.org/viaf/79166373",
+        "id": "43794f62-d323-4a98-8d8d-3a178a28e9b9"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "VIAF"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "wikidata",
+      "attributes": [],
+      "url": {
+        "id": "e94ff429-46d2-4765-8576-4c00bade6096",
+        "resource": "https://www.wikidata.org/wiki/Q208797"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCMD_nRrrkezVzMumc1hBuwQ",
+        "id": "1ec42f9c-7eca-492d-b9e4-4832578988da"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "youtube music",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "begin": null
+    }
+  ],
+  "name": "Ornette Coleman",
+  "life-span": {
+    "ended": true,
+    "begin": "1930-03-09",
+    "end": "2015-06-11"
+  },
+  "country": "US",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "disambiguation": "US jazz saxophonist, trumpeter, violinist, and composer",
+  "sort-name": "Coleman, Ornette",
+  "id": "169c0d1b-fcb8-4a43-9097-829aa7b39205",
+  "area": {
+    "type": null,
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States"
+  }
+}

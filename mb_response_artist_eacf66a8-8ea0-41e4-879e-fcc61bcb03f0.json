@@ -1,0 +1,672 @@
+{
+  "country": "IE",
+  "gender": null,
+  "relations": [
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "allmusic",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000854587",
+        "id": "49a97d1a-830c-4a06-93e4-fa151913b747"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "c7174b54-3adb-4623-9af0-1833ec891d0b",
+        "resource": "https://primordialofficial.bandcamp.com/"
+      },
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "bandsintown",
+      "end": null,
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/23175",
+        "id": "a5bec0ee-7cd5-4926-8cb2-1d652c3a4b96"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/206390",
+        "id": "0f91ceb5-08bf-48f3-bfb2-521099548eef"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "d83da0b9-a2e6-4a44-a700-766c4fd4dae4",
+        "resource": "https://open.spotify.com/artist/0BZr6WHaejNA63uhZZZZek"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/7643",
+        "id": "47c19318-eb4d-47bd-aa0e-9e5f43338cb7"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Primordial",
+        "id": "a315b2d3-98c6-4f31-bbdd-584718692a7f"
+      },
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "type": "last.fm",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "lyrics",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "f84a3271-34bf-4496-9eec-2000a0456768",
+        "resource": "https://genius.com/artists/Primordial"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "myspace",
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://myspace.com/primordialofficial",
+        "id": "f2f21a9c-0332-40a4-94e2-a9e656a31171"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://www.primordialofficial.com/",
+        "id": "59a8e944-de06-4248-82ee-31829e1d3df0"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "official homepage",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "0e145044-3089-4db0-9114-99a1e66cbf56",
+        "resource": "http://id.loc.gov/authorities/names/no2006017146"
+      },
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb142589026",
+        "id": "892da6f4-7b32-4197-ad91-92f14eebc478"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/10342891-4",
+        "id": "9e6d4ba1-0a0f-4a69-8207-75088e39b5fe"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/primordial",
+        "id": "38fff112-cda1-4adb-902a-36cb10d61b57"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Primordial/400",
+        "id": "d621cfdc-efba-44c9-b385-a8d0873479a4"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.metalmusicarchives.com/artist/primordial",
+        "id": "b09791f1-4eda-4df4-af3a-8f1ae500dee3"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/primordial/",
+        "id": "463d4715-5852-424d-ab6c-3fd2793c4741"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Primordial",
+        "id": "bda6bd95-3571-4c54-8faf-1ef0b9969dbb"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2006017146",
+        "id": "bd775d6f-fc82-47b1-b617-31c0586dfb20"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id60378148",
+        "id": "de65028f-9529-477b-8f89-24f891dcfe4b"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "2315bcce-2756-4add-9264-cc433ab41cb7",
+        "resource": "https://www.qobuz.com/us-en/interpreter/primordial/824855"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "type": "purchase for download",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "3db7e9b6-afa8-4a8b-b8d6-cc3052a9b702",
+        "resource": "https://secondhandsongs.com/artist/127497"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "6fee5572-f031-4357-b327-848b248826b7",
+        "resource": "https://www.setlist.fm/setlists/primordial-2bd6f4fa.html"
+      },
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "setlistfm",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "a6a7ca34-7aba-4b78-be09-2b22fbf449a0",
+        "resource": "https://twitter.com/PrimordialEire"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "eb1f621b-bfd8-4162-8b06-b3774a4be385",
+        "resource": "https://www.facebook.com/primordialofficial"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/primordial_official/",
+        "id": "9fb136a6-a9f0-4db3-9862-b48ff8ed6f0a"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "90e9d392-f002-42a4-98df-d0d7a46abbec",
+        "resource": "https://www.reverbnation.com/primordialofficial"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "songkick",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.songkick.com/artists/259499",
+        "id": "446e4c36-3f63-48c3-b93b-2be988fc0c49"
+      },
+      "target-type": "url"
+    },
+    {
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "resource": "https://soundcloud.com/primordial40239",
+        "id": "331b0ded-8b36-4f5d-9271-5157de76637c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "soundcloud",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/60378148",
+        "id": "7d5c5b39-6ace-4495-96f1-a55124f2cd99"
+      },
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "url": {
+        "id": "12255a7c-dfbf-4d20-8d10-d93f776d056f",
+        "resource": "https://tidal.com/artist/3526894"
+      },
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "url": {
+        "id": "2315bcce-2756-4add-9264-cc433ab41cb7",
+        "resource": "https://www.qobuz.com/us-en/interpreter/primordial/824855"
+      },
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "VIAF",
+      "source-credit": "",
+      "url": {
+        "id": "6d1f46ae-5fd7-4828-8146-d29787884e19",
+        "resource": "http://viaf.org/viaf/123519665"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "wikidata",
+      "end": null,
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1345756",
+        "id": "ffd1f4a2-a667-4f65-b580-c42aeca6f966"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "youtube music",
+      "source-credit": "",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCcZsujXLfWgLe_25y7MpiqA",
+        "id": "5bbf4daa-60fa-49d1-b960-4fb99f109be1"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    }
+  ],
+  "sort-name": "Primordial",
+  "disambiguation": "Irish black/folk/doom metal",
+  "life-span": {
+    "end": null,
+    "begin": "1987",
+    "ended": false
+  },
+  "type": "Group",
+  "end-area": null,
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000091167930"
+  ],
+  "begin-area": {
+    "sort-name": "Skerries",
+    "id": "c2b74f84-ee4a-4d98-9577-0cf179c13bc5",
+    "type-id": null,
+    "name": "Skerries",
+    "disambiguation": "",
+    "type": null
+  },
+  "area": {
+    "name": "Ireland",
+    "type-id": null,
+    "id": "390b05d4-11ec-3bce-a343-703a366b34a5",
+    "iso-3166-1-codes": [
+      "IE"
+    ],
+    "disambiguation": "",
+    "sort-name": "Ireland",
+    "type": null
+  },
+  "name": "Primordial",
+  "id": "eacf66a8-8ea0-41e4-879e-fcc61bcb03f0",
+  "gender-id": null
+}

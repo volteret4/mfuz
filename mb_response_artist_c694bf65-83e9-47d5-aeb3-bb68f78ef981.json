@@ -1,0 +1,240 @@
+{
+  "ipis": [],
+  "disambiguation": "",
+  "id": "c694bf65-83e9-47d5-aeb3-bb68f78ef981",
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000234406",
+        "id": "d5df7544-3852-4527-b237-916a7602aafe"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/8593",
+        "id": "8f7ce612-ed0e-48cd-be5f-c0162ba99488"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "11a17523-f785-4158-a1e3-52171b2a698a",
+        "resource": "https://open.spotify.com/artist/5x3mrCTZmkoTXURN7pWdGN"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/126917",
+        "id": "fd679b6c-da98-4aed-a153-a8a554be6643"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.amigosinvisibles.com/",
+        "id": "41c24a0b-9ada-45d7-9f3f-25e3d082c3e0"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/los_amigos_invisibles",
+        "id": "353d3015-04ab-4854-a069-69cc13436520"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "ff91644b-cdc7-4a6b-9136-8519cb0b4846",
+        "resource": "https://twitter.com/AmgsInvisibles"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "b5c562da-fb33-4c38-80c8-8b17b7e8015d",
+        "resource": "https://www.facebook.com/LosAmigosInvisiblesUSA"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "url": {
+        "id": "0dd7d64a-a2a4-4c50-b5c3-7af67eb40642",
+        "resource": "https://www.instagram.com/amgsinvisibles/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/290133",
+        "id": "ba383699-d36d-4040-a4f3-41172ec9aae0"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1043925",
+        "id": "33871816-2b21-4ab7-b4a9-d0341f1062fc"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "isnis": [
+    "000000010664100X"
+  ],
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1991"
+  },
+  "sort-name": "Amigos Invisibles, Los",
+  "name": "Los Amigos Invisibles",
+  "type": "Group",
+  "begin-area": {
+    "type": null,
+    "name": "Caracas",
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Caracas",
+    "id": "58ab1035-dbbb-4e58-87f7-210cd0351664"
+  },
+  "country": "VE",
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "name": "Venezuela",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "VE"
+    ],
+    "id": "2ac90d6b-04fa-3006-8a91-89da01032365",
+    "type-id": null,
+    "sort-name": "Venezuela"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b"
+}

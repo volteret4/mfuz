@@ -1,0 +1,295 @@
+{
+  "name": "Rome",
+  "gender-id": null,
+  "sort-name": "Rome",
+  "relations": [
+    {
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "be816b6c-f743-4bc4-ab69-bd13843fbd88",
+        "resource": "https://www.allmusic.com/artist/mn0001529434"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "832f75f8-aef3-4819-95a5-025dfc032948",
+        "resource": "https://www.discogs.com/artist/268792"
+      },
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/5Y9b87BZjL8FYMFiWfSFAL",
+        "id": "605a617a-cefa-4a1e-a776-a3bccaab4a09"
+      },
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/7108541",
+        "id": "3ca3c2f6-4c0e-41e6-9a7b-21f6c4cb1886"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Rome",
+        "id": "351b3ba4-ef8d-443d-96c1-d01e5c99f120"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/romecmi",
+        "id": "c217293d-5714-46ea-9e3d-d6827815d42a"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "130442d8-3dbf-4344-bb2c-e4ee1626d2b3",
+        "resource": "http://www.jeromereuter.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "official homepage",
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://www.rome.lu/",
+        "id": "e5fa0ed7-7692-45d8-a67a-0e97b0e013a0"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": true,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a679c644-f5d2-4d25-b5f4-65770215240a",
+        "resource": "https://twitter.com/ROMEjreuter"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "817f08f5-6e34-4913-b9d5-06821acc6cdf",
+        "resource": "https://www.facebook.com/romeproject"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "8059c70f-3f07-4036-8227-9afce116e0ee",
+        "resource": "https://www.songkick.com/artists/8465128"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "49122b4a-54d1-45b8-a4f6-c011df004527",
+        "resource": "https://music.apple.com/gb/artist/182699"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "a8875c31-7551-49cc-bf44-ebac754e0e4f",
+        "resource": "https://tidal.com/artist/7640849"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "22b7885f-e044-44f1-a6fa-a61f90332c6d",
+        "resource": "https://www.wikidata.org/wiki/Q952870"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    }
+  ],
+  "gender": null,
+  "disambiguation": "industrial/folk by J\u00e9r\u00f4me Reuter",
+  "country": "LU",
+  "begin-area": {
+    "sort-name": "Luxembourg",
+    "id": "f97ce969-d604-4c3b-9e68-cc32569993e3",
+    "type-id": null,
+    "type": null,
+    "iso-3166-2-codes": [
+      "LU-L"
+    ],
+    "name": "Luxembourg",
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "id": "9cc9a4f7-d11f-46c8-b97f-902b8a440cf4",
+  "end-area": null,
+  "type": "Group",
+  "life-span": {
+    "end": null,
+    "begin": "2005-11",
+    "ended": false
+  },
+  "isnis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "Luxembourg",
+    "id": "563d21b7-4a8e-35e2-83a7-7804baefbfa7",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "LU"
+    ],
+    "type": null,
+    "name": "Luxembourg",
+    "disambiguation": ""
+  }
+}

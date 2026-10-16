@@ -1,0 +1,1098 @@
+{
+  "life-span": {
+    "ended": true,
+    "end": "1741-07-28",
+    "begin": "1678-03-04"
+  },
+  "disambiguation": "Italian baroque composer and violinist",
+  "id": "ad79836d-9849-44df-8789-180bbc823f3c",
+  "sort-name": "Vivaldi, Antonio",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+    "sort-name": "Italy",
+    "iso-3166-1-codes": [
+      "IT"
+    ],
+    "type-id": null,
+    "name": "Italy"
+  },
+  "name": "Antonio Vivaldi",
+  "end-area": {
+    "type-id": null,
+    "name": "Wien",
+    "type": null,
+    "id": "afff1a94-a98b-4322-8874-3148139ab6da",
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "AT-9"
+    ],
+    "sort-name": "Wien"
+  },
+  "isnis": [
+    "0000000121299169"
+  ],
+  "country": "IT",
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000685058",
+        "id": "adfb3034-5c53-425b-af2a-80729b68dc77"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/ad79836d-9849-44df-8789-180bbc823f3c",
+        "id": "4dd4a653-571f-43ec-8a47-efe3779f3df7"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "begin": null,
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "6c3c07d8-603d-458d-a9f7-dc6e8613325e",
+        "resource": "https://musopen.org/music/composer/antonio-vivaldi/"
+      },
+      "attributes": [],
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "945a1434-7c59-4bda-a341-dc430ddbce21",
+        "resource": "http://www.pbs.org/wnet/gperf/education/vivaldi.html"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "biography",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "c240159e-4bcd-489d-8f58-db71f4ee328e",
+        "resource": "http://www.classical.net/music/composer/works/vivaldi/index.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "discography page",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/108566",
+        "id": "aec73bc2-49e7-44df-a159-b16b1d05c0cf"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "e148a75f-bcc5-4de9-bbc9-928fd95048ed",
+        "resource": "https://librivox.org/author/981"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "34ae77fe-defb-43ea-95d4-63c7540bac78",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "download for free",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "4f108efa-ef60-49d4-a8cb-836b8f4d672d",
+        "resource": "https://open.spotify.com/artist/2QOIawHpSlOwXDvSqQ9YJR"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/4081",
+        "id": "e46d0575-0376-4764-b17e-924e83bbfd11"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Antonio_Vivaldi.jpg",
+        "id": "a579a4b2-72b9-4cea-97e3-e9576ebcdb9c"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "567883f8-9161-4399-8066-de908a51f1a0",
+        "resource": "https://www.imdb.com/name/nm0006334/"
+      }
+    },
+    {
+      "type": "IMSLP",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "8147b6a2-ad14-4ce7-8f0a-697f9a31f68f",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "d17852b0-5c59-4429-9650-66a4b00f78fa",
+        "resource": "https://imslp.org/wiki/Category:Vivaldi,_Antonio"
+      },
+      "attributes": []
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "fe4da35a-9820-4ea1-adc4-9587eb5a1f00",
+        "resource": "https://www.last.fm/music/Antonio+Vivaldi"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://genius.com/artists/Antonio-vivaldi",
+        "id": "03726cdd-522e-4ba9-9394-50d8903f88b7"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://jaxsta.com/profile/adc05d91-3663-41bd-ad82-52f36e28f13f",
+        "id": "9e212afe-3a2e-4e98-9a19-fff0454cd4a8"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": "2025-12-17",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": true
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n79021280",
+        "id": "b9a1be33-d36e-4a5f-a568-5df07d60f42c"
+      }
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://adp.library.ucsb.edu/names/102302",
+        "id": "9f0e00ad-9c15-44e4-a032-3af8608c6e63"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139008966",
+        "id": "bcf23fac-f5b0-41bf-9f67-631fca89bf02"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "9b544bcd-a6d7-452d-91f6-84a297a122ec",
+        "resource": "https://ci.nii.ac.jp/author/DA05368763"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/118627287",
+        "id": "58e4ae26-547b-4a1f-a1bc-c472c2812202"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "456d6a69-4751-47ec-a3d3-a082e2f05242",
+        "resource": "https://id.ndl.go.jp/auth/ndlna/00527045"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "bdc6705f-7c6f-405a-869a-817cd0f79d2c",
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJrgGkmwkQr9PVpPyHKGHC"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "fd8d733f-3c21-4fa6-a194-51b6558775a8",
+        "resource": "https://imvdb.com/n/antonio-vivaldi"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "bce01800-c820-47d8-8ba5-4822ca1bc7fd",
+        "resource": "https://musicmoz.org/Composition/Composers/V/Vivaldi,_Antonio/"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "6876cbb1-a57a-4a15-9a4f-e63aefc1b43a",
+        "resource": "http://snaccooperative.org/ark:/99166/w6cj8bwk"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1274783",
+        "id": "54789807-566f-4313-96be-c77928502164"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "75427cd3-a7b1-488c-bed0-5fa11a6c0948",
+        "resource": "https://openlibrary.org/authors/OL2746101A"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://openlibrary.org/works/OL2746101A",
+        "id": "cd5f3e8a-87a1-4cd0-bb7c-c556d7a3a7ec"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://operabase.com/a2152141",
+        "id": "a4b335aa-820d-40c4-85de-83fcb688de71"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "6d3f49b5-b31b-4483-87a2-3e92451623f5",
+        "resource": "http://soundtrackcollector.com/composer/3075/"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/antonio_vivaldi",
+        "id": "2d1c7bfc-b6ef-46ea-a718-f0f6c6b86b71"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "6d5d1575-98e5-4f16-ae55-85e94e20ff60",
+        "resource": "https://rism.online/people/30003267"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "9877b6dc-e7bb-4e94-b6a1-300bfa3e5593",
+        "resource": "https://theatricalia.com/person/zbr/antonio-vivaldi"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "1b345738-2a7e-45e2-a9ac-8c0859d5f121",
+        "resource": "https://www.classicalarchives.com/composer/3521.html"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.dramonline.org/composers/vivaldi-antonio",
+        "id": "2dc7e913-4122-40d1-8a67-97a84a575dca"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "b9d0dedb-5f62-4866-820f-2ed41a686f84",
+        "resource": "https://www.goodreads.com/author/show/114744"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.idref.fr/027472183",
+        "id": "f7e3d573-ce41-47ad-b90e-94e44ae1da8f"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "723ef9ca-921a-42b2-b5e0-ff33ccb38581",
+        "resource": "https://www.librarything.com/author/vivaldiantonio"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "aad2f1c6-6d9d-4817-9b28-135ff1a0d8aa",
+        "resource": "https://www.musik-sammler.de/artist/10921/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "140e9cbd-9352-42d2-a842-cba1689b7823",
+        "resource": "https://www.muziekweb.nl/Link/M00000239836/CLASSICAL/"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.themoviedb.org/person/7587",
+        "id": "6115859b-8d51-4da4-b70e-c2562bc93e2a"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "8c15aee5-df9c-4e90-8689-f759b20557cb",
+        "resource": "https://www.whosampled.com/Antonio-Vivaldi/"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n79021280",
+        "id": "d0dfa6f3-c4f1-492b-bf1c-74e04dde1e4a"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.maniadb.com/artist/116066",
+        "id": "c0ebbf16-199d-475d-8ff9-56a66b9dac44"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "44dd2d46-ce52-43b1-9480-d9dba86e824c",
+        "resource": "https://itunes.apple.com/us/artist/id242604"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.qobuz.com/it-it/interpreter/_/720",
+        "id": "5144b8b8-7a85-45bb-894c-dd4c5f4e7847"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "ended": false,
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B002E0GU76",
+        "id": "b9c4282c-23c6-4783-be98-513876e13cb1"
+      }
+    },
+    {
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "attributes": [],
+      "url": {
+        "id": "5c65ad21-2d46-4020-b3cd-19e04e403b88",
+        "resource": "https://secondhandsongs.com/artist/135294"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "c88c2cd7-f4ed-4621-a146-9c93bf0918bc",
+        "resource": "https://www.setlist.fm/setlists/wd-73d63201.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "7da767fd-6b11-489b-aff3-999dd46e0131",
+        "resource": "https://www.songkick.com/artists/322371"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://open.qobuz.com/artist/720",
+        "id": "1dfc7d0c-186f-4aee-a4aa-b4decfb8b1db"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://music.apple.com/it/artist/242604",
+        "id": "7c7021ba-33f8-4ab1-b3c8-a5fde2c19ffc"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/3518585",
+        "id": "3c58d711-7bbb-4ee9-a69e-6afc15071b4f"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://vgmdb.net/artist/2858",
+        "id": "9ba84bc0-d875-42b8-96e7-e2172d683cc1"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "vgmdb",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "vgmdb",
+      "attributes": [],
+      "url": {
+        "resource": "https://vgmdb.net/artist/48848",
+        "id": "0cf972a5-1c39-411d-83fc-43b383b96c41"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "577d84ef-0c36-44d9-a0c9-704c7b646f3e",
+        "resource": "http://viaf.org/viaf/42027007"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "829ab5c3-0e1b-455b-b740-7571961a19dc",
+        "resource": "https://www.wikidata.org/wiki/Q1340"
+      },
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube music",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "df07ddd6-58a5-480b-b169-d9d897c56749",
+        "resource": "https://music.youtube.com/channel/UCgxn_fiPtuHCZDXQpBW2_Tg"
+      },
+      "attributes": []
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00032204634"
+  ],
+  "begin-area": {
+    "type-id": null,
+    "name": "Venezia",
+    "type": null,
+    "sort-name": "Venezia",
+    "disambiguation": "",
+    "id": "a6e08cd9-a712-4152-8808-9485c75e1196"
+  },
+  "type": "Person",
+  "gender": "Male"
+}

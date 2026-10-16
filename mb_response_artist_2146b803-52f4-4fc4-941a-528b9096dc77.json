@@ -1,0 +1,258 @@
+{
+  "gender": null,
+  "name": "Club Nouveau",
+  "type": "Group",
+  "begin-area": {
+    "disambiguation": "",
+    "name": "Sacramento",
+    "type": null,
+    "type-id": null,
+    "id": "21879fba-fe4e-4dbc-99e8-cad9142e5618",
+    "sort-name": "Sacramento"
+  },
+  "country": "US",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type-id": null,
+    "sort-name": "United States"
+  },
+  "end-area": null,
+  "isnis": [
+    "000000010944209X"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "42871353-9e4c-4081-bb71-2c557c472deb",
+        "resource": "https://www.allmusic.com/artist/mn0000152228"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/75718",
+        "id": "a770131a-af95-45f5-9b92-9ad0b231e40c"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "7d4df4d4-263e-41c4-8eef-2759af56afaa",
+        "resource": "https://open.spotify.com/artist/4kEAjV4pCBOkoowYYQydvO"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/16277",
+        "id": "f5a4bae7-6a43-4216-b49b-744684d8049f"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "9f95709c-f8bb-4a39-8373-392002545814",
+        "resource": "https://www.imdb.com/name/nm3133859/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "c7eea6da-7062-4413-9ec5-34f3829e7ca6",
+        "resource": "https://www.last.fm/music/Club+Nouveau"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "url": {
+        "id": "5f9f9dca-263d-4e0a-8e5e-7911bb731f08",
+        "resource": "http://muzikum.eu/en/122-7085/club-nouveau/lyrics.html"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "22b389da-2644-4637-829a-84a6da37e5a3",
+        "resource": "https://myspace.com/therealclubnouveau"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attribute-values": {},
+      "type": "myspace",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "25f19fc9-37ec-41ee-b566-c83a279c4859",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13902566x"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "f78f7ae8-02b8-4093-b49a-eca871775e6a",
+        "resource": "https://tidal.com/artist/13444"
+      },
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "484a404d-f784-43a5-934e-bbf9e86617c5",
+        "resource": "http://viaf.org/viaf/145551574"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "url": {
+        "id": "3bdaa861-e5d9-4f77-9216-94d81addd0c0",
+        "resource": "https://www.wikidata.org/wiki/Q1103063"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "id": "2146b803-52f4-4fc4-941a-528b9096dc77",
+  "ipis": [],
+  "disambiguation": "",
+  "sort-name": "Club Nouveau",
+  "life-span": {
+    "ended": true,
+    "end": "1998",
+    "begin": "1986"
+  },
+  "gender-id": null
+}

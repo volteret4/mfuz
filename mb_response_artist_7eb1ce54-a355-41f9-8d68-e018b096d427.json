@@ -1,0 +1,1053 @@
+{
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1994-02-01"
+  },
+  "area": {
+    "name": "England",
+    "type-id": null,
+    "sort-name": "England",
+    "iso-3166-2-codes": [
+      "GB-ENG"
+    ],
+    "disambiguation": "",
+    "id": "9d5dd675-3cf4-4296-9e39-67865ebee758",
+    "type": null
+  },
+  "name": "Harry Styles",
+  "end-area": null,
+  "disambiguation": "",
+  "id": "7eb1ce54-a355-41f9-8d68-e018b096d427",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Styles, Harry",
+  "ipis": [
+    "00661184351",
+    "00661184449"
+  ],
+  "begin-area": {
+    "type": null,
+    "sort-name": "Redditch",
+    "disambiguation": "",
+    "id": "1dc5377f-ddc3-4ee9-8cf1-07896f96cb63",
+    "type-id": null,
+    "name": "Redditch"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002854537",
+        "id": "2622f6de-d950-4b75-a398-6041848ed015"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "6998a47d-8444-47f8-becb-8c466f93e4c2",
+        "resource": "https://www.bandsintown.com/a/1121764"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/7eb1ce54-a355-41f9-8d68-e018b096d427",
+        "id": "345fcfdd-9596-4f2c-b9b5-b10df94d164b"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19"
+    },
+    {
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "id": "4e1158a7-9e81-4753-ba47-cbe137ed1bc8",
+        "resource": "https://www.discogs.com/artist/2508414"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "a95ab907-225e-4b84-9b8d-957b99b7f626",
+        "resource": "https://open.spotify.com/artist/6KImCVD70vtIoJWnq6nGn3"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/5313805",
+        "id": "678a3a80-013b-43a3-a1ce-ebffe61f7a11"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Harry_Styles_November_2014.jpg",
+        "id": "abf10048-b624-4419-bf13-f5d1c7d620ef"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "image",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm4089170/",
+        "id": "4c684d5e-6bd4-40f6-81c4-b2eaf8e13c74"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "e6ebebf0-19cb-45f5-ba50-39b85b0c29e6",
+        "resource": "https://www.last.fm/music/Harry+Styles"
+      },
+      "attributes": [],
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://genius.com/artists/Harry-styles",
+        "id": "370a61ea-438a-4a49-940d-4773f35ffa9a"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "2b15c727-0875-4091-b347-8642a3cbe134",
+        "resource": "https://muzikum.eu/en/122-34534/harry-styles/lyrics.html"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Harry-Styles",
+        "id": "fd84ea89-f5cf-4d03-b96a-01f5d6f7574a"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://hstyles.co.uk/",
+        "id": "a87fac3a-c6dc-4446-a62e-1e1a15971710"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2012116798",
+        "id": "7ef31b1e-4144-44ef-9532-19a4c94cf1e2"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "931ce86c-76ec-4137-af01-f6e78f7f14c2",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb17160406q"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "be24a168-6cf5-45d9-b2d7-ac81ae89fb50",
+        "resource": "https://d-nb.info/gnd/1129471454"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "id": "76a71aac-e67e-4ad8-9b7c-732c2329e02c",
+        "resource": "https://imvdb.com/n/harry-styles"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/harry-styles",
+        "id": "292bc32c-588e-44a0-8923-47e8b59de30f"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "id": "f44870ba-5fc0-4c88-b745-705fd748f96e",
+        "resource": "https://www.livefans.jp/artists/97354"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/harry-styles/",
+        "id": "683ca5ce-17ce-414b-8d29-78187e04c0ea"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "fb1722d6-f82b-4778-9c1b-6d2f662b96db",
+        "resource": "https://www.muziekweb.nl/Link/M00000494338/POPULAR/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "f1b22767-c9d6-4ba5-a0df-4e078eec97a7",
+        "resource": "https://www.themoviedb.org/person/1052109"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.whosampled.com/Harry-Styles/",
+        "id": "b52933b9-8d43-4c0b-afdc-0fac3956c951"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2012116798",
+        "id": "530d8bd1-1f14-48ad-b7d0-000ef5984b69"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "78eb964b-43de-44ed-a54c-5e7aa21b8ece",
+        "resource": "https://play.google.com/store/music/artist?id=Aysthsjacp5t44zr6ttepczhnu4"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": "2020-10-12",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": true
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id471260289",
+        "id": "cf1ea3cc-9f40-49d9-913a-02c391107480"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "39bab646-b8da-4069-b52e-2b4d32fdfdea",
+        "resource": "https://mora.jp/artist/776760/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/471260289",
+        "id": "1b27daac-30bc-49c0-8d21-92285919292c"
+      },
+      "attributes": []
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.bugs.co.kr/artist/80203520",
+        "id": "f89826fc-c0f3-48ca-a7b2-ebd53d6cee97"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://uk.7digital.com/artist/harry-styles",
+        "id": "36725b75-c73e-4c8c-a03c-3053ee6dc315"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "dce6d3db-4c6a-4080-9dd1-2d5c9e16c077",
+        "resource": "https://www.beatport.com/artist/harry-styles/1333411"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.junodownload.com/artists/Harry+Styles/releases/",
+        "id": "870f0c4d-ca9c-4fc8-92ca-383c59297caa"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/composer/harry-styles/download-streaming-albums",
+        "id": "3e31b677-58b9-455d-9a37-c8b467bd2579"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700615767",
+        "id": "b8fc1ad9-f303-44df-969d-2bcb696c7d90"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "63d58b9d-10f2-4d79-8c51-eac1bf413e73",
+        "resource": "https://secondhandsongs.com/artist/86741"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4f7db502-a1a5-44af-ab35-5be7e1818f6a",
+        "resource": "https://www.setlist.fm/setlists/harry-styles-23d294a7.html"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/Harry_Styles",
+        "id": "7e9650e6-9be8-49ea-9265-ff3480f80541"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "15c632c7-61ff-4fff-8136-8ba8494c0ef0",
+        "resource": "https://www.facebook.com/harrystyles"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "c5748a53-b0a5-4d5f-b7a2-8d0f6b960007",
+        "resource": "https://www.instagram.com/harrystyles/"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "b92d5c0d-cef7-4883-bf91-11071b28fe31",
+        "resource": "https://www.songkick.com/artists/5820634"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "28a6ad39-dc31-4bdb-8fb3-66ef9b7b025d",
+        "resource": "https://soundcloud.com/harrystyles"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "cc53a894-f9ba-4bdc-b7e9-9099e41723fb",
+        "resource": "https://music.amazon.com/artists/B005ZZ9Z6K"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/471260289",
+        "id": "1b27daac-30bc-49c0-8d21-92285919292c"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "73375b52-9d87-4992-9dd1-d40ef1f4a0cb",
+        "resource": "https://music.apple.com/us/artist/471260289"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "f89826fc-c0f3-48ca-a7b2-ebd53d6cee97",
+        "resource": "https://music.bugs.co.kr/artist/80203520"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.line.me/webapp/artist/mi000000000c0f6af0",
+        "id": "3ac867bc-4283-464b-b6eb-9cbb91a7b50c"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "462807fe-0fb2-4d70-904a-1bab2d55c48c",
+        "resource": "https://tidal.com/artist/8669861"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://us.napster.com/artist/harry-styles",
+        "id": "fceded73-8ff3-4e69-850b-10c6406071b0"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "74242e8b-f57f-4e3d-8d29-29ab229a0321",
+        "resource": "https://www.kkbox.com/tw/artist/H-8Kal60vbB0XGttN_"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "3e31b677-58b9-455d-9a37-c8b467bd2579",
+        "resource": "https://www.qobuz.com/gb-en/composer/harry-styles/download-streaming-albums"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "ticketing",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.ticketmaster.com/artist/2366444",
+        "id": "3eb5d69b-89d1-4d25-904c-3d2b2fbe852b"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/265057493",
+        "id": "d42c8920-334d-4505-9a19-90fd32b897e0"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "2db2e5c1-4ca6-4c62-be69-884126eab877",
+        "resource": "https://www.wikidata.org/wiki/Q3626966"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "wikipedia",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "29651736-fa6d-48e4-aadc-a557c6add1cb",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "79533638-5eed-4234-a7cc-a55be9d185f8",
+        "resource": "https://en.wikipedia.org/wiki/Harry_Styles"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCbOCbp5gXL8jigIBZLqMPrw",
+        "id": "84e15a0b-f122-4f37-b644-ba78c64be5a6"
+      }
+    },
+    {
+      "type": "youtube music",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCZFWPqqPkFlNwIxcpsLOwew",
+        "id": "623a5402-8240-491a-a7c5-05d2146430aa"
+      },
+      "attributes": []
+    }
+  ],
+  "isnis": [
+    "0000000382446382"
+  ],
+  "country": "GB",
+  "gender": "Male",
+  "type": "Person"
+}

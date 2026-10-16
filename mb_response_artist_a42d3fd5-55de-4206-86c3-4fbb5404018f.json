@@ -1,0 +1,837 @@
+{
+  "type": "Person",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [
+    "00008145801",
+    "00040658786"
+  ],
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "sort-name": "Brooklyn",
+    "disambiguation": "",
+    "id": "a71b0d32-7752-49e9-8594-2247ad6ac12c",
+    "name": "Brooklyn"
+  },
+  "isnis": [
+    "0000000073586197"
+  ],
+  "gender": "Male",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "sort-name": "United States",
+    "type": null,
+    "type-id": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "id": "a42d3fd5-55de-4206-86c3-4fbb5404018f",
+  "disambiguation": "",
+  "sort-name": "Diamond, Neil",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "aaa25805-a4ec-4043-b22d-54344302374b",
+        "resource": "https://www.allmusic.com/artist/mn0000864209"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "allmusic",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bandsintown.com/a/3531",
+        "id": "c6abfa5f-efb5-4cd1-9158-fb98f8fcf3bd"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "bandsintown",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "end": "2020-11-19",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "a12b5915-1cd7-4925-8f93-8d60a2cca14e",
+        "resource": "https://www.bbc.co.uk/music/artists/a42d3fd5-55de-4206-86c3-4fbb5404018f"
+      },
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "4702d828-19c4-4f26-aecd-fe0480e05307",
+        "resource": "https://www.discogs.com/artist/271516"
+      },
+      "attributes": []
+    },
+    {
+      "type": "fanpage",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.neildiamondhomepage.com/",
+        "id": "a4a44767-73e5-4f16-8151-7c3bceed2e42"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/7mEIug7XUlQHikrFxjTWes",
+        "id": "65b48d31-8617-4808-9724-bc1cd0506d4a"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "free streaming"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.deezer.com/artist/3094",
+        "id": "1b3bfb2a-8588-4f17-9f9f-5c0007c57037"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "a6b986d4-afc5-4bc8-807d-1f11e7c6bfcc",
+        "resource": "https://commons.wikimedia.org/wiki/File:Neil_Diamond_2.jpg"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "image"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "0c1735ed-61f0-4d1e-a4a8-c776fe842c5c",
+        "resource": "https://www.imdb.com/name/nm0004871/"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "IMDb"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "1af23549-5e05-4c5b-919a-fa14497812b0",
+        "resource": "https://www.last.fm/music/Neil+Diamond"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "9ca111bb-cf02-45b4-ad28-d05613d75012",
+        "resource": "http://muzikum.eu/en/122-4657/neil-diamond/lyrics.html"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "cbb38224-96fa-4bd8-baed-8216caacb788",
+        "resource": "https://genius.com/artists/Neil-diamond"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "myspace",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/neildiamond",
+        "id": "3c5f8fda-1970-4bd7-9c7f-1670c8148e31"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "e5168076-39a3-4176-91cf-b7753f7c83c5",
+        "resource": "http://www.neildiamond.com/"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "0d120a4a-d768-4cba-b4d4-7c2ceddb0972",
+        "resource": "http://id.loc.gov/authorities/names/n82020006"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "67160d43-b120-4b40-a929-400d5e47e583",
+        "resource": "http://musicmoz.org/Bands_and_Artists/D/Diamond,_Neil/"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13177507p",
+        "id": "d5abe337-1d76-4c1b-a295-b2efcf975ddc"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://d-nb.info/gnd/130091200",
+        "id": "b44c34f4-5d66-484b-964b-4acd3a38480c"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "e79f78ba-6b02-4c2f-a75b-f5d961b0879b",
+        "resource": "https://imvdb.com/n/neil-diamond"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "25114639-e4c8-42a8-888d-bca3394cda63",
+        "resource": "https://rateyourmusic.com/artist/neil_diamond"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "4c4632f1-a96d-49c6-a509-cbb652f0cb82",
+        "resource": "https://www.45cat.com/artist/neil-diamond"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "634c58f8-1678-4f5c-a225-fa44ed583185",
+        "resource": "https://www.ibdb.com/person.php?id=12689"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/neil-diamond/",
+        "id": "db110206-8470-473b-aea5-e972005eeee8"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "07ab5753-ff22-46f2-9465-48b54584b91e",
+        "resource": "https://www.whosampled.com/Neil-Diamond/"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n82020006",
+        "id": "c23e8141-ca26-4935-a0ee-48cd831528cf"
+      },
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url",
+      "end": "2020-04-14",
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "540c316f-5441-4ada-bae9-f442fcda380c",
+        "resource": "https://itunes.apple.com/us/artist/id94935"
+      },
+      "direction": "forward",
+      "ended": true
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Apfabvjuabdcqtwrw7f53l3dqau",
+        "id": "e344ce62-0674-4589-a4c3-437bdfec359b"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2020-10-12",
+      "type": "purchase for download"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/us/artist/94935",
+        "id": "ee2424a2-2751-4dfc-81d2-9c7d36194f67"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "10d81e62-a288-4428-a7d4-9f4c1193cd26",
+        "resource": "https://www.amazon.com/-/e/B000APYNHG"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "b98f1c21-d35e-48b3-b260-cf29a60f0722",
+        "resource": "https://tower.jp/artist/171860"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for mail-order"
+    },
+    {
+      "url": {
+        "id": "10d81e62-a288-4428-a7d4-9f4c1193cd26",
+        "resource": "https://www.amazon.com/-/e/B000APYNHG"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for mail-order",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "secondhandsongs",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "7fa25b2c-3a7c-45ad-986d-d5e1669f849b",
+        "resource": "https://secondhandsongs.com/artist/155"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "setlistfm",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "8e1e552e-858d-4ef3-a143-e36f9e5b8c7a",
+        "resource": "https://www.setlist.fm/setlists/neil-diamond-bd6bd42.html"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/neildiamond",
+        "id": "262460ff-f559-470c-8466-4933b12aa25a"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null
+    },
+    {
+      "type": "social network",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.facebook.com/neildiamond",
+        "id": "ce736373-c700-42af-972b-ca9d3bb15793"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/neildiamond/",
+        "id": "36c337ea-c145-45c0-b91b-509de056f45d"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "social network",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "songkick",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "12454f12-2124-42cd-8ee6-a0376c5fec09",
+        "resource": "https://www.songkick.com/artists/502849"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "streaming",
+      "source-credit": "",
+      "end": "2022-06-08",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "143ce587-1456-4024-8e86-3f51d61fdea2",
+        "resource": "https://us.napster.com/artist/neil-diamond"
+      },
+      "ended": true,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "64dcb771-57a0-4e87-9caa-a0bf4b40d4f3",
+        "resource": "https://music.amazon.com/artists/B000QJQ504"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/94935",
+        "id": "ee2424a2-2751-4dfc-81d2-9c7d36194f67"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "3a08564e-e29f-4423-a94a-bb6e3556c36a",
+        "resource": "https://tidal.com/artist/53"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "http://viaf.org/viaf/3570589",
+        "id": "257787ab-3d11-4fa3-8a30-ebea2fd612ec"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "VIAF",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "3ee09d0a-c7f3-439b-80ca-9c9a96da2900",
+        "resource": "https://www.wikidata.org/wiki/Q294531"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata"
+    },
+    {
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "youtube",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "3364ffef-40af-4a39-8667-2bf9f15b197e",
+        "resource": "https://www.youtube.com/user/neildiamond"
+      },
+      "attributes": []
+    }
+  ],
+  "end-area": null,
+  "country": "US",
+  "life-span": {
+    "ended": false,
+    "begin": "1941-01-24",
+    "end": null
+  },
+  "name": "Neil Diamond"
+}

@@ -1,0 +1,328 @@
+{
+  "life-span": {
+    "ended": false,
+    "begin": "1988-11-10",
+    "end": null
+  },
+  "sort-name": "Emerson, Avalon",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "disambiguation": "",
+  "id": "f91ec397-c4be-4672-8faa-2d2983682b1c",
+  "end-area": null,
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "type": null
+  },
+  "name": "Avalon Emerson",
+  "isnis": [],
+  "country": "US",
+  "relations": [
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003567547",
+        "id": "1d89524c-30c2-4771-a038-08617f441bb1"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "bandcamp",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://avalonemerson.bandcamp.com/",
+        "id": "1989c200-71ec-42a9-89a0-edd570f8751c"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "0a96b0f6-4763-46b0-add0-ed0a0cccd1cb",
+        "resource": "https://www.discogs.com/artist/3632916"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "37959d9e-9a46-46b7-b7d6-e78a4b30e490",
+        "resource": "https://open.spotify.com/artist/4yrO1N273PlTaixa4BNwBz"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/4869367",
+        "id": "062465cc-8f2f-44b2-a86d-a7290d7fc82c"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "3e505651-7cbf-4c9f-a2d4-939eaa326ef1",
+        "resource": "https://www.last.fm/music/Avalon+Emerson"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://ra.co/dj/avalonemerson",
+        "id": "853e94ca-fc79-4e3f-a8be-e47d4aee7b40"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id545759821",
+        "id": "7b2066cb-7875-4721-a88b-9dc22b1b063a"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.beatport.com/artist/avalon-emerson/340755",
+        "id": "9ef65b1b-9a0a-47b9-87a3-779b2ba34a4a"
+      }
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "a4db6049-3cea-40b9-9efa-70d4e218c150",
+        "resource": "https://twitter.com/avalon_emerson"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "fdaaff4e-282a-4c57-99e1-b496473c52fb",
+        "resource": "https://www.facebook.com/AvalonEmerson"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "5c5cefa6-8310-47df-a237-bba3a547c91b",
+        "resource": "https://www.instagram.com/avalon9000/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://soundcloud.com/avalonemerson",
+        "id": "a49e91bb-269e-428b-8571-6e301c99fa23"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "1e96bf1a-8d3a-4a27-9ae2-b7208828de62",
+        "resource": "https://music.apple.com/us/artist/545759821"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "95eaddb0-a431-4b96-bc78-9c72f199742a",
+        "resource": "https://tidal.com/artist/4959549"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "f766ede7-5767-4048-b69b-f6b99c200ac8",
+        "resource": "https://www.wikidata.org/wiki/Q106920445"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata"
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type-id": null,
+    "name": "San Francisco",
+    "type": null,
+    "sort-name": "San Francisco",
+    "id": "83f22bb6-4631-443c-bace-9fae8540362a",
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "type": "Person",
+  "gender": "Female"
+}

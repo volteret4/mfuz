@@ -1,0 +1,418 @@
+{
+  "gender-id": null,
+  "life-span": {
+    "begin": "2010",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Big Black Delta",
+  "disambiguation": "",
+  "begin-area": {
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "sort-name": "Los Angeles",
+    "name": "Los Angeles",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null
+  },
+  "end-area": null,
+  "id": "eab003ca-21bc-4cd4-8e46-9d4c4e2721ac",
+  "isnis": [],
+  "name": "Big Black Delta",
+  "ipis": [],
+  "area": {
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null
+  },
+  "relations": [
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002953851",
+        "id": "4744d99a-cf30-4f9d-9625-f32cc86de937"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "type": "bandsintown",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/1092701",
+        "id": "a2c5c420-83ee-41d9-891c-fd1460c77652"
+      }
+    },
+    {
+      "url": {
+        "id": "f37ce8ff-b462-498d-be02-99be01e09223",
+        "resource": "https://www.discogs.com/artist/2058742"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "70c6eed6-fd51-49a5-a23d-43228ee6b2ca",
+        "resource": "https://open.spotify.com/artist/2TXpVEw5FbzDh93tLoDm0i"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "66030037-8289-49d1-9198-896a89c01f0a",
+        "resource": "https://www.deezer.com/artist/2605211"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "65b3ae9f-a913-4f9d-a4ee-c51e8d4d26a1",
+        "resource": "https://www.imdb.com/name/nm9865639/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "url": {
+        "resource": "https://www.last.fm/music/Big%20Black%20Delta",
+        "id": "d781af01-0d51-4359-9019-95675b84f2a7"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "last.fm",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a7caeb79-9421-4029-88d5-300f8540d58a",
+        "resource": "https://genius.com/artists/Big-black-delta"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "lyrics"
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.bigblackdelta.com/",
+        "id": "6a4da7c4-777d-4c49-b46e-e47054291a3a"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/big_black_delta",
+        "id": "7a5e7798-797b-48e2-8f29-7bcede195630"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id387999323",
+        "id": "b0309397-5b95-4a97-a78d-d852049daacf"
+      }
+    },
+    {
+      "url": {
+        "id": "eb4a21e6-f70b-4df3-82ba-3e2132fc9faf",
+        "resource": "https://www.setlist.fm/setlists/big-black-delta-3d399c7.html"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "setlistfm",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://twitter.com/bigblackdelta",
+        "id": "d09f1e8d-7ae8-49b8-afbc-75e3b4ee5783"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/BBDarchive",
+        "id": "a93ae650-6235-434b-9ace-916c26025640"
+      }
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/bigblackdelta",
+        "id": "75681c80-a597-47ad-9541-43ab34a4e8a1"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a2e26b37-202f-4878-b53a-a10ab58f5581",
+        "resource": "https://www.instagram.com/big_black_delta/"
+      }
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/3424881",
+        "id": "d8d3688d-c5f5-46ef-a5b5-d955e6d4c5d8"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://soundcloud.com/big-black-delta",
+        "id": "a0e15eee-8a8d-4794-93ca-83577c6a1173"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "soundcloud",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/4200181",
+        "id": "d949d465-5e57-45e3-9f85-26c1aa028b69"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "556f06c4-1a11-4536-980c-727f4a0989df",
+        "resource": "https://vimeo.com/bigblackdelta"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "video channel",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b"
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q4905129",
+        "id": "e8a08336-f9c4-4c68-bac3-bd35f81ae07b"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "wikidata",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    }
+  ],
+  "gender": null,
+  "country": "US",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group"
+}

@@ -1,0 +1,582 @@
+{
+  "ipis": [],
+  "gender": null,
+  "relations": [
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000809266",
+        "id": "c6d44f60-95d4-41f2-b170-c76b35f1e9b3"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/7e786a4c-c743-4713-9340-a6f12d8515d4",
+        "id": "55626fa4-e038-4a98-b3c0-180eeb09c96e"
+      },
+      "end": "2020-11-19",
+      "ended": true,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "BBC Music page"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "1cb03b59-2bfe-49cd-bc33-49bc7287daa8",
+        "resource": "https://www.discogs.com/artist/70735"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/3iUjRVvYCsMfz7tuAQtBDI",
+        "id": "a635f208-8485-413b-8165-fe949c395e62"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/123684",
+        "id": "c2c7a827-33cb-4303-a456-2904d2f82c5f"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "965c265f-d3cd-4b1a-bbc1-c67797f4d31a",
+        "resource": "https://commons.wikimedia.org/wiki/File:Ultravox_Brilliant_Tour_London_2012.jpg"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "type": "image",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "IMDb",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "dd1c7c48-18a9-4c9d-b033-fcdd1005be03",
+        "resource": "https://www.imdb.com/name/nm1277757/"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "a0831ce1-1b7d-40ff-8302-44ee20bdb231",
+        "resource": "https://www.last.fm/music/Ultravox"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "last.fm"
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "17309cd7-7bc6-46b0-84d2-0aa773051225",
+        "resource": "http://muzikum.eu/en/122-5287/ultravox/lyrics.html"
+      }
+    },
+    {
+      "url": {
+        "id": "2d9ca064-a39e-4778-a04a-780fcd904775",
+        "resource": "http://www.ultravox.org.uk/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n92120905",
+        "id": "65b9a2a1-47ad-4d1f-a4e9-b48bc8e7825b"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a6b5b620-1974-40bc-8d1e-a753d93f9796",
+        "resource": "http://musicmoz.org/Bands_and_Artists/U/Ultravox/"
+      }
+    },
+    {
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "66823f4f-814b-4443-8281-c5f01e669c62",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13907225q"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "resource": "https://d-nb.info/gnd/5550323-8",
+        "id": "b1425878-a6a5-456f-9493-ef084f092bf8"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "e4aec1e3-849d-4fac-b1d5-1e350bcfbca5",
+        "resource": "https://imvdb.com/n/ultravox"
+      }
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "e16748a7-a3f1-4199-bf91-50fcda5ae301",
+        "resource": "https://nla.gov.au/nla.party-508277"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/ultravox",
+        "id": "fb167fd9-c518-493d-8dac-ea4b05843a22"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "id": "f3e2ddd7-2f40-4c22-ac87-d3168434cace",
+        "resource": "https://www.spirit-of-rock.com/en/band/Ultravox"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n92120905",
+        "id": "48468f8a-3303-4938-8b29-09bed3b63280"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "1b32ce19-227c-4111-82d1-fee75ccfb5d7",
+        "resource": "https://itunes.apple.com/gb/artist/id13811422"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "setlistfm",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/ultravox-63d6ba3b.html",
+        "id": "9de6602c-95c3-417b-8e80-d38c3ac4ca53"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://twitter.com/UltravoxUK",
+        "id": "8aa9e730-184b-43b0-a6e5-324f69ac97c3"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/ultravox",
+        "id": "0a4e6d09-a39b-44f0-92cc-e6d557cf3423"
+      }
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "1de3ff27-1027-48b8-b689-224013707f97",
+        "resource": "https://www.instagram.com/ultravoxuk/"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/309166",
+        "id": "5c9d0d48-8495-4d63-844f-32ae917b16d8"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "b385f121-d086-445c-9857-6dd991961a20",
+        "resource": "https://music.apple.com/gb/artist/13811422"
+      }
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "da8d0de5-92f7-459a-83bd-49a8c7b34672",
+        "resource": "https://tidal.com/artist/11019"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "c8536ef2-c3a0-4c60-a40f-48504eac2dcc",
+        "resource": "http://viaf.org/viaf/130257853"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "f7d1ad81-d866-40a6-a473-76676d3f73e5",
+        "resource": "https://www.wikidata.org/wiki/Q316485"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "type": "youtube",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.youtube.com/user/officialultravox",
+        "id": "af0f385a-d8c1-4a92-ab96-82c91af6fdff"
+      },
+      "begin": null,
+      "direction": "forward"
+    }
+  ],
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "type": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "sort-name": "United Kingdom"
+  },
+  "country": "GB",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "life-span": {
+    "begin": "1976",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "disambiguation": "",
+  "end-area": null,
+  "begin-area": {
+    "disambiguation": "Greater London",
+    "sort-name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "name": "London",
+    "type": null,
+    "type-id": null
+  },
+  "sort-name": "Ultravox",
+  "isnis": [
+    "0000000119453307"
+  ],
+  "name": "Ultravox",
+  "id": "7e786a4c-c743-4713-9340-a6f12d8515d4"
+}

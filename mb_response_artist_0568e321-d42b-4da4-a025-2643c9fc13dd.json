@@ -1,0 +1,421 @@
+{
+  "type": "Group",
+  "begin-area": {
+    "id": "11a44e18-a2e5-43a9-bee9-aa4f7c83f967",
+    "disambiguation": "",
+    "sort-name": "Hamburg",
+    "type-id": null,
+    "type": null,
+    "name": "Hamburg",
+    "iso-3166-2-codes": [
+      "DE-HH"
+    ]
+  },
+  "gender-id": null,
+  "ipis": [],
+  "isnis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "disambiguation": "German avant-garde group",
+  "sort-name": "Faust",
+  "area": {
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "disambiguation": "",
+    "sort-name": "Germany",
+    "type-id": null,
+    "type": null,
+    "name": "Germany",
+    "iso-3166-1-codes": [
+      "DE"
+    ]
+  },
+  "id": "0568e321-d42b-4da4-a025-2643c9fc13dd",
+  "end-area": null,
+  "relations": [
+    {
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://faust.bandcamp.com/",
+        "id": "53b92478-da00-450f-add4-907337a0dad3"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "64f0685a-cd1c-470c-a332-1e968ff085bc",
+        "resource": "https://faustmusic.bandcamp.com/"
+      },
+      "attributes": []
+    },
+    {
+      "type": "BBC Music page",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": "2020-11-19",
+      "source-credit": "",
+      "ended": true,
+      "url": {
+        "id": "67b3c80d-9f42-4091-bb2d-6cb11f230837",
+        "resource": "https://www.bbc.co.uk/music/artists/0568e321-d42b-4da4-a025-2643c9fc13dd"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "dc28820a-009e-4725-895b-30f30c84ceca",
+        "resource": "https://www.discogs.com/artist/26950"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://open.spotify.com/artist/4yBBNmdvVaoPEnr2lt14q7",
+        "id": "d1cc5479-3c2f-4295-bdf0-99e9ff32b923"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "14090fd2-f77d-4434-be7e-9422150f1f84",
+        "resource": "https://www.deezer.com/artist/1447"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://upload.wikimedia.org/wikipedia/en/a/a8/Faust_(early_1970s).jpg",
+        "id": "3949ac16-e1df-4dfe-8682-0b9b11d79af7"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "image",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "begin": null
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "951bbdfc-9c4e-46e2-a4d2-bd606fffe766",
+        "resource": "https://www.last.fm/music/Faust"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "myspace",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "7eb6e84d-c625-4ab5-b79d-b7b6743f58f7",
+        "resource": "https://myspace.com/faustpages"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "http://faust-pages.com/",
+        "id": "d9349046-5c10-42ed-abc6-b487939c510a"
+      },
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "adcc5029-cd5f-4f4e-aa81-04020b3fa3ec",
+        "resource": "http://id.loc.gov/authorities/names/nr97019000"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "1672983c-b6fa-4f6f-8dad-226b01cfc9df",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14612115r"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "4813b4ec-d8bc-4558-884c-6a6459c55c99",
+        "resource": "https://d-nb.info/gnd/6059159-6"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/faust",
+        "id": "568b8be0-50e6-408d-b8fb-03cf591400b6"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "169d9797-5d5a-446c-b51c-3850e20e739d",
+        "resource": "https://www.musik-sammler.de/artist/faust/"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-nr97019000",
+        "id": "695e4090-1e0b-47d4-8084-9b7f0587f617"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases"
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/14138999",
+        "id": "b4443a0b-3308-4c7d-b6d8-631e88a63dae"
+      },
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "24bc40a6-7621-4863-b727-3f0b4d5b928b",
+        "resource": "https://tidal.com/artist/3514623"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "e3a4b5d3-5db0-434f-895b-3388c48f2dee",
+        "resource": "https://tidal.com/artist/7951911"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "http://viaf.org/viaf/163599985",
+        "id": "850bcc79-f9d7-4820-bf08-eef7efba27bc"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "2f52abef-1e24-44e9-bf30-49be75150b23",
+        "resource": "https://www.wikidata.org/wiki/Q679697"
+      },
+      "attributes": []
+    }
+  ],
+  "life-span": {
+    "ended": false,
+    "begin": "1969",
+    "end": null
+  },
+  "name": "Faust",
+  "country": "DE"
+}

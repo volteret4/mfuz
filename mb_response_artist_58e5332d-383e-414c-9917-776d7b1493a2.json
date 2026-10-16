@@ -1,0 +1,566 @@
+{
+  "id": "58e5332d-383e-414c-9917-776d7b1493a2",
+  "disambiguation": "Montreal techno DJ/producer Tiga Sontag",
+  "sort-name": "Tiga",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "name": "Tiga",
+  "area": {
+    "type": null,
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "sort-name": "Canada",
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "disambiguation": "",
+    "type-id": null,
+    "name": "Canada"
+  },
+  "end-area": null,
+  "life-span": {
+    "begin": "1974-09-18",
+    "end": null,
+    "ended": false
+  },
+  "type": "Person",
+  "gender": "Male",
+  "country": "CA",
+  "isnis": [
+    "0000000073639244"
+  ],
+  "relations": [
+    {
+      "url": {
+        "id": "b7edaed0-04d9-431c-9c49-635292dcb0f6",
+        "resource": "https://www.allmusic.com/artist/mn0000596996"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://tigamusic.bandcamp.com/",
+        "id": "c69b51a4-5bd6-4a93-becf-bdf32426b67b"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/58e5332d-383e-414c-9917-776d7b1493a2",
+        "id": "7ad89d6f-92cd-4773-8367-5d0706d42c01"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "c063bb57-3abe-45ea-bde8-c7bb76cb9cba",
+        "resource": "https://www.discogs.com/artist/1543"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "Tiga Sontag",
+      "begin": null,
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "Tiga Sontag",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "aca0156a-6bac-452a-a0d5-7f7894b42b8b",
+        "resource": "https://www.discogs.com/artist/521735"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/5l9wiTZVfqQTfMDOt0HtwC",
+        "id": "4051a3b0-72bf-42d8-8087-1b23ac6b899e"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "c6000649-37c5-4871-9702-2735467c6206",
+        "resource": "https://www.deezer.com/artist/1090"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "e5363528-9a88-44aa-bf31-1415423ee096",
+        "resource": "https://www.last.fm/music/Tiga"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "9c980c5e-98ed-4cc3-866c-692346e3ba51",
+        "resource": "http://muzikum.eu/en/122-7176/tiga/lyrics.html"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "myspace",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a96f513e-0ed7-40bb-91c2-ea07a3be5e77",
+        "resource": "https://myspace.com/officialtiga"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "ended": true,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": "2007",
+      "begin": null,
+      "url": {
+        "id": "549f93e2-b11c-41d7-a2d3-4c8725c7f3b8",
+        "resource": "http://www.djtiga.com/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "14c516f2-5cfb-4f61-91e3-71bfd0ce0a45",
+        "resource": "http://tiga.ca/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2006057140",
+        "id": "af5cccb1-53ae-4c02-8d9b-0d02490c4b73"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb145762570",
+        "id": "2a35a247-4c5c-488d-89d2-825fe4da6de8"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "c2a0f0b9-de2e-49a6-af62-be199ade455d",
+        "resource": "https://d-nb.info/gnd/135328799"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://ra.co/dj/tiga",
+        "id": "f02f4bf9-7b63-4575-86f2-24022b712a5f"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "e98dd9e0-84e2-4411-afe3-899f2028ff87",
+        "resource": "https://rateyourmusic.com/artist/tiga"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "7e4edfc9-1423-4d51-bf2a-480109336f68",
+        "resource": "https://www.worldcat.org/identities/lccn-no2006057140/"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.beatport.com/artist/tiga/2782",
+        "id": "331ad5d8-64a9-4d4b-93a8-c7ec394e13b6"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "5d885284-3788-4310-83a5-bbd06fe31f46",
+        "resource": "https://twitter.com/tiga"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.facebook.com/officialtiga",
+        "id": "0bc0beae-5e05-476a-b7ba-6caf74a030ce"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "b5c63e38-c5e0-445e-b617-e77afa4db976",
+        "resource": "https://www.instagram.com/tiga/"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.songkick.com/artists/242571",
+        "id": "ba46bb2e-4bd4-4093-b760-cd971e7ce3c5"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "songkick"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://soundcloud.com/tiga",
+        "id": "726bd473-1e3e-4168-a54e-cc815c57faf9"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/3432052",
+        "id": "e9a91141-5c09-4a69-8a4e-a208c4df3335"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/3521097",
+        "id": "0dfbe141-071d-4167-a4b3-7b01d64ad1c4"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "d5ef6fbb-5ba0-4959-a6d2-ea27d5d1ddc7",
+        "resource": "http://viaf.org/viaf/7144803"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "10659776-c7a5-4518-82f3-c0f003db79f1",
+        "resource": "https://www.wikidata.org/wiki/Q725341"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "b1997f84-1502-440f-99e1-19fc1589e1f0",
+        "resource": "https://www.youtube.com/user/officialtiga"
+      }
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00456818815"
+  ],
+  "begin-area": {
+    "type": null,
+    "sort-name": "Montr\u00e9al",
+    "id": "c3cc624e-b963-49cf-ad0b-e318cb341963",
+    "disambiguation": "city",
+    "type-id": null,
+    "name": "Montr\u00e9al"
+  }
+}

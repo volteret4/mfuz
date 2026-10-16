@@ -1,0 +1,59 @@
+{
+  "sort-name": "Transformations",
+  "end-area": null,
+  "disambiguation": "dub techno",
+  "begin-area": null,
+  "gender-id": null,
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "name": "Transformations",
+  "isnis": [],
+  "id": "e6fff5b6-5386-41e8-ad07-924be13fdfb5",
+  "area": null,
+  "relations": [
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "e3571ff9-5d4e-4916-b5ea-a6974c380534",
+        "resource": "https://www.discogs.com/artist/2515109"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/transformations",
+        "id": "b542ab4e-c594-49fd-b84f-7838598cdf6b"
+      }
+    }
+  ],
+  "gender": null,
+  "ipis": [],
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": null
+}

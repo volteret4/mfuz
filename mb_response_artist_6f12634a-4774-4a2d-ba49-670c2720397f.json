@@ -1,0 +1,197 @@
+{
+  "disambiguation": "Belgian 1990s rave / techno act",
+  "sort-name": "T99",
+  "area": {
+    "id": "5b8a5ee5-0bb3-34cf-9a75-c27c44e341fc",
+    "disambiguation": "",
+    "sort-name": "Belgium",
+    "type": null,
+    "type-id": null,
+    "name": "Belgium",
+    "iso-3166-1-codes": [
+      "BE"
+    ]
+  },
+  "id": "6f12634a-4774-4a2d-ba49-670c2720397f",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "name": "T99",
+  "life-span": {
+    "ended": true,
+    "begin": "1989",
+    "end": "2000"
+  },
+  "country": "BE",
+  "end-area": null,
+  "relations": [
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000005658",
+        "id": "15c3fbe3-21db-4e38-b373-7f3df351f890"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "allmusic",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "https://www.discogs.com/artist/7060",
+        "id": "23a2a4c8-2a6d-402d-a290-11f4de64d00b"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": ""
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "a38992d3-0f9f-460c-995f-703d1fa171aa",
+        "resource": "https://open.spotify.com/artist/7A6k2eqQT5MnGj6Mq9vwcS"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "e64173ae-dd9f-4cc6-bcee-0c430f4f644f",
+        "resource": "https://www.deezer.com/artist/75873"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "48c788bd-5990-4638-aea9-78e733909c3d",
+        "resource": "https://rateyourmusic.com/artist/t99_f1"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "ba63747f-0ecd-46f1-b521-1a38e89d6925",
+        "resource": "https://itunes.apple.com/be/artist/id48656786"
+      },
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/t99-23d61c2f.html",
+        "id": "456f33da-82d1-4088-9cc3-0a20229b875a"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "setlistfm",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "82ac1fdd-6496-4b08-a27a-0b1beadb85c1",
+        "resource": "https://tidal.com/artist/3566468"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "d00d051d-6687-4503-9d56-c64c72695dad",
+        "resource": "https://www.wikidata.org/wiki/Q2558967"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "type": "Group",
+  "isnis": [
+    "0000000115038720"
+  ],
+  "begin-area": null,
+  "gender-id": null,
+  "ipis": []
+}

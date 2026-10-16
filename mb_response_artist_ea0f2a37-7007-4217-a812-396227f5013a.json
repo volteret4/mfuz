@@ -1,0 +1,726 @@
+{
+  "gender": null,
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "ipis": [],
+  "begin-area": {
+    "disambiguation": "",
+    "id": "c5293e2f-3756-4e4d-aa61-a67879d70c61",
+    "sort-name": "Palm Desert",
+    "type": null,
+    "name": "Palm Desert",
+    "type-id": null
+  },
+  "isnis": [
+    "0000000106689505"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000776011",
+        "id": "b27c54c0-1979-4a91-9616-a3acd960b034"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "url": {
+        "id": "21fb2877-6eff-4c5b-9b72-5499892c0aa6",
+        "resource": "https://www.bandsintown.com/a/26699"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19",
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/ea0f2a37-7007-4217-a812-396227f5013a",
+        "id": "a9a86f22-18ee-44a5-b1a8-b6d19e090741"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "240cd77d-714f-4ee1-a93b-9200a2557191",
+        "resource": "https://www.discogs.com/artist/105732"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://www.stonerrock.com/kyuss/",
+        "id": "af8ea854-db97-4835-949a-c22de1190d34"
+      },
+      "attributes": [],
+      "type": "fanpage",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24"
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/3HCpwNmFp2rvjkdjTs4uxs",
+        "id": "6eb0abec-c57b-4b05-ab07-1c38e950d12f"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "c0cafe9e-e466-4e50-84aa-23884b5d3bb2",
+        "resource": "https://www.deezer.com/artist/2982"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "40bc2572-6a76-4763-8f27-8e1a35b089eb",
+        "resource": "https://www.imdb.com/name/nm3297605/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/Kyuss",
+        "id": "7c8bba0b-dce0-4a55-b232-1c7a269d87eb"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "69846c59-6778-4244-b0e0-9c9c3a6e8bfa",
+        "resource": "https://genius.com/artists/Kyuss"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no00002736",
+        "id": "7e22ea59-562c-4ef2-8450-2b612fd6b46b"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139796592",
+        "id": "f62c7a01-2dc9-4435-815d-18b354ffeddc"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/10298927-8",
+        "id": "0d8ecced-e6cd-4e2f-880f-a8267d222d75"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "cdc86825-5a1e-4189-bd4b-ed4db4266065",
+        "resource": "https://id.oclc.org/worldcat/entity/E39QH7Jmp8wHYR7F6tp4DKhYqF"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "9f5ce0b1-6c1e-40eb-9e0d-288e2873662e",
+        "resource": "https://musicmoz.org/Bands_and_Artists/K/Kyuss/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/kyuss",
+        "id": "13657cdd-77cd-4f9c-93b9-5b6452bcbd9f"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "7a13edf4-78bf-491a-bd7e-c2d27bd4023f",
+        "resource": "https://www.45cat.com/artist/kyuss"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "35ce3999-d980-4009-aa42-e874ecaffd21",
+        "resource": "https://www.metal-archives.com/bands/Kyuss/398"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.metalmusicarchives.com/artist/kyuss",
+        "id": "bddc3c07-65ad-492a-9bd0-9e947cbee71f"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/kyuss/",
+        "id": "b3426ad7-c5e5-4d49-b812-8f069c6d0b84"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a7449dd0-ba30-40a7-8382-729960f2048e",
+        "resource": "https://www.spirit-of-metal.com/en/band/Kyuss"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.spirit-of-rock.com/en/band/Kyuss",
+        "id": "d839d0da-4969-4f86-8435-f6cff0abd391"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "d58a2276-50d0-4bf5-9cfa-f9173d96acf2",
+        "resource": "https://www.whosampled.com/Kyuss/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "6497b882-0cd9-4500-847f-e417971d0b44",
+        "resource": "https://play.google.com/store/music/artist?id=Atubjubix2yywspbfugoju2kgb4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": "2020-10-12",
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id762893",
+        "id": "2040f60e-c11e-4b94-97ff-52f57d8642a1"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/us/artist/762893",
+        "id": "a20bbdc6-6c38-474c-bce9-85c781e88d7e"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://us.7digital.com/artist/kyuss",
+        "id": "6615a347-36c0-45d5-b026-48152026a289"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/kyuss/460569",
+        "id": "bcbcc141-5a61-49c2-b497-7943bd3af7e5"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000APZ2BM",
+        "id": "2bf375a5-c496-4d9f-b867-cce4a8f44f13"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/37977",
+        "id": "e8fe757f-7a12-4c60-be1f-0bc2b35659e4"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "ended": false,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/kyuss-53d6afad.html",
+        "id": "a38e9794-972d-43f3-a423-4a121675e305"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.songkick.com/artists/356249",
+        "id": "283ee666-90df-437c-9373-92154d15f2cc"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "id": "a20bbdc6-6c38-474c-bce9-85c781e88d7e",
+        "resource": "https://music.apple.com/us/artist/762893"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/13021",
+        "id": "0b626651-5321-4960-b683-888028c68ec7"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "bcbcc141-5a61-49c2-b497-7943bd3af7e5",
+        "resource": "https://www.qobuz.com/us-en/interpreter/kyuss/460569"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/144444322",
+        "id": "71a3cf34-3d5e-41c9-8ee5-e469ce258811"
+      },
+      "attributes": [],
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q4991503",
+        "id": "fa3b4ab5-3e5e-4672-a784-e82bf3c7cc1d"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCd8AMfxIQBvKgPVNvyybWZg",
+        "id": "543d837d-ec5d-4426-bfce-b2c1ad1dde57"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "youtube music",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "end": null,
+      "begin": null
+    }
+  ],
+  "name": "Kyuss",
+  "area": {
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "name": "United States",
+    "type-id": null
+  },
+  "end-area": null,
+  "disambiguation": "",
+  "id": "ea0f2a37-7007-4217-a812-396227f5013a",
+  "sort-name": "Kyuss",
+  "gender-id": null,
+  "life-span": {
+    "ended": true,
+    "end": "1996",
+    "begin": "1987"
+  }
+}

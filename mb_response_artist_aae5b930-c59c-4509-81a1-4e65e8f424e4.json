@@ -1,0 +1,420 @@
+{
+  "sort-name": "Mu\u2010Ziq",
+  "disambiguation": "",
+  "id": "aae5b930-c59c-4509-81a1-4e65e8f424e4",
+  "area": {
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type-id": null,
+    "type": null,
+    "name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ]
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "life-span": {
+    "end": null,
+    "begin": "1971-09-26",
+    "ended": false
+  },
+  "name": "\u03bc\u2010Ziq",
+  "country": "GB",
+  "end-area": null,
+  "relations": [
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000510042",
+        "id": "e7877a59-3f83-4a5b-83b8-8cbab10fa2cb"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "854761cd-cce3-4a1c-929f-15caf135f17c",
+        "resource": "https://mikeparadinas.bandcamp.com/"
+      },
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "discogs",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/1075",
+        "id": "5b501593-6ee4-4125-bd90-1ce44b46645a"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "a4b764ec-79aa-417a-abfb-3057bb8e0491",
+        "resource": "https://open.spotify.com/artist/7AiamoV760pPGGM5PbOC6X"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.deezer.com/artist/9445",
+        "id": "acbc5bf3-e1f3-4cb6-92f2-7c0175a16c5f"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "c8d33443-e9fc-43ef-8671-b79779b8137d",
+        "resource": "https://commons.wikimedia.org/wiki/File:Mike_Paradinas.jpg"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "image",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/__ziq",
+        "id": "345906bd-f1e6-48b0-9d44-784233ba1db6"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": "2020-10-12",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "c866321c-c6f5-46c2-bd31-2728a42ea94d",
+        "resource": "https://play.google.com/store/music/artist?id=Ai2ikho4jsmmrnq452fesefoaei"
+      },
+      "ended": true
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "53587e8d-ac69-4151-961d-8b8f7929865f",
+        "resource": "https://bleep.com/artist/272-ziq"
+      },
+      "ended": false
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://boomkat.com/artists/ziq",
+        "id": "920fa22d-4d28-43f1-8456-ef11bac46d97"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "a011699a-b078-408a-abd4-4a9793a831ac",
+        "resource": "https://www.7digital.com/artist/%C2%B5-ziq"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "33b33241-0fce-4f5b-b57e-bbdb1ac7e595",
+        "resource": "https://www.beatport.com/artist/ziq/229181"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.beatport.com/artist/ziq/441058",
+        "id": "099583d8-9d53-45ed-817f-d64354f55161"
+      },
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.junodownload.com/artists/%5Cxb5-ziq/",
+        "id": "16755397-704d-4d84-a7cf-e2ffe6157cc5"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.junodownload.com/artists/Mu-ziq/",
+        "id": "93973457-e8f4-4847-bbc8-ee3481d295cf"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "1f938a2d-a790-498d-9686-091f1865ad75",
+        "resource": "https://www.onkyomusic.com/GB/artist/%C2%B5-ziq"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "3d5ab3e4-dfcb-4ea0-be5c-659bc366e63f",
+        "resource": "https://www.facebook.com/pages/%C2%B5-Ziq/6836918788"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "type": "soundcloud",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "db403313-41e3-4c86-a95c-a6b2227e29a0",
+        "resource": "https://soundcloud.com/mikep"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/64949011",
+        "id": "8a6a0f90-3e6f-4415-93b2-caac749602b6"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/3513690",
+        "id": "e454b142-20ad-4151-b2f4-41568040fe11"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "4480f182-d6cd-4ba2-9fab-2f63d55c7edf",
+        "resource": "https://www.wikidata.org/wiki/Q446572"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "wikidata"
+    }
+  ],
+  "type": "Person",
+  "isnis": [
+    "0000000080049189"
+  ],
+  "begin-area": {
+    "name": "Wimbledon",
+    "type": null,
+    "type-id": null,
+    "sort-name": "Wimbledon",
+    "disambiguation": "",
+    "id": "36eeafda-c557-483e-a7fd-7842c9a892e3"
+  },
+  "ipis": [],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9"
+}

@@ -1,6 +1,8 @@
 import os
 import sys
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import json
 import requests
 import time
@@ -22,6 +24,7 @@ class DiscogsArtistInfoUpdater:
     def create_table_if_not_exists(self):
         """Crea la tabla artists_discogs_info si no existe"""
         with sqlite3.connect(self.db_path) as conn:
+            apply_pragmas(conn)
             cursor = conn.cursor()
             cursor.execute('''
             CREATE TABLE IF NOT EXISTS artists_discogs_info (
@@ -44,6 +47,7 @@ class DiscogsArtistInfoUpdater:
     def get_artists_to_update(self):
         """Obtiene los artistas que necesitan actualización en la tabla artists_discogs_info"""
         with sqlite3.connect(self.db_path) as conn:
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             if self.force_update:
@@ -128,6 +132,7 @@ class DiscogsArtistInfoUpdater:
         
         # Guardar en la base de datos
         with sqlite3.connect(self.db_path) as conn:
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             # Usar INSERT OR REPLACE para manejar actualizaciones y nuevas inserciones

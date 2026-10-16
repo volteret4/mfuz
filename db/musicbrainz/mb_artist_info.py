@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import json
 import os
@@ -1031,6 +1035,7 @@ def main(config=None):
         # Conectar a base de datos y actualizar artistas
         try:
             conn = sqlite3.connect(db_path)
+            apply_pragmas(conn)
             conn.row_factory = sqlite3.Row
             
             # Creamos índices optimizados si se solicita

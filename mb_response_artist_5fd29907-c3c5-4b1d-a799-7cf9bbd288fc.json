@@ -1,0 +1,451 @@
+{
+  "gender": null,
+  "country": "CA",
+  "begin-area": {
+    "disambiguation": "",
+    "name": "Saguenay",
+    "type": null,
+    "type-id": null,
+    "id": "57dc83fc-eeea-4133-855c-61f20ad6576e",
+    "sort-name": "Saguenay"
+  },
+  "type": "Group",
+  "name": "Angine de Poitrine",
+  "area": {
+    "disambiguation": "city",
+    "name": "Montr\u00e9al",
+    "type": null,
+    "id": "c3cc624e-b963-49cf-ad0b-e318cb341963",
+    "sort-name": "Montr\u00e9al",
+    "type-id": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "end-area": null,
+  "id": "5fd29907-c3c5-4b1d-a799-7cf9bbd288fc",
+  "isnis": [],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0005005601",
+        "id": "0b06c4b9-dc91-4845-b387-c62dda20e66d"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "8ce89fdd-d974-4c94-9f1e-91bda534785e",
+        "resource": "https://anginedepoitrine.bandcamp.com/"
+      },
+      "attribute-values": {},
+      "type": "bandcamp",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "3f3b4b97-8e12-4b55-9a60-b2a06da88950",
+        "resource": "https://www.bandsintown.com/a/15537640"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/14721643",
+        "id": "1cfc2c2d-5a17-45b5-b1a8-d220146fad9d"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "id": "efcfb574-7719-4b25-8cf4-d4ea5cc79ff5",
+        "resource": "https://open.spotify.com/artist/13NmOYYfvONNZ9mn2qn8P2"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "d5a511e8-5162-48bd-9227-9cfb2917ec99",
+        "resource": "https://www.deezer.com/artist/268295892"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm18293307/",
+        "id": "4cb7d845-4a75-4e8b-9017-43e25c0b5481"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "IMDb"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "last.fm",
+      "attribute-values": {},
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "40fcca75-cd1e-4929-a550-c64924f30d43",
+        "resource": "https://www.last.fm/music/Angine+de+poitrine"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Angine-de-poitrine",
+        "id": "21779c00-1297-4d8f-942e-b34491eb5c03"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://anginedepoitrine.com/",
+        "id": "09baefde-66a8-4645-b24a-e2c182c25e9c"
+      },
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "718e9415-5cb1-4fb9-8618-2f8bbe3704a8",
+        "resource": "https://rateyourmusic.com/artist/angine-de-poitrine"
+      }
+    },
+    {
+      "url": {
+        "id": "c3dcb362-b808-4517-8b61-8dbc3d5b3d23",
+        "resource": "https://www.progarchives.com/artist.asp?id=13181"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "8fb15343-ab43-40f4-ac0b-d4b27394a6c4",
+        "resource": "https://music.apple.com/ca/artist/1750092191"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "580440c2-ebcb-44b8-9c11-780f79427c47",
+        "resource": "https://www.setlist.fm/setlists/angine-de-poitrine-53e0a7b5.html"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "63dfcbba-0190-44aa-a5e4-8f9cfafd473e",
+        "resource": "https://www.facebook.com/angine.poitrine"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "0649c672-81b2-4255-8402-23b4fb7380a7",
+        "resource": "https://www.instagram.com/anginedepoitrine/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "songkick",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "e459077c-0d22-4c11-84dd-b4aea7df80eb",
+        "resource": "https://www.songkick.com/artists/10366104"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "9f62593f-30bf-4bbb-912c-05251f1899a9",
+        "resource": "https://music.amazon.com/artists/B0D61BF68G"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/ca/artist/1750092191",
+        "id": "8fb15343-ab43-40f4-ac0b-d4b27394a6c4"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "id": "9939d095-4e46-4fe9-9182-d361a704de82",
+        "resource": "https://tidal.com/artist/48213083"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "91b6e5f8-5a94-4560-9e02-19d1244ce9a1",
+        "resource": "https://www.wikidata.org/wiki/Q138112351"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCX6REY5w2ZRmSOSbibakqnQ",
+        "id": "e8e296fd-4865-4d92-96f8-57ebd5e1d4e8"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "id": "83afdbb6-4001-4f98-b933-af82a711dcf0",
+        "resource": "https://music.youtube.com/channel/UCX6REY5w2ZRmSOSbibakqnQ"
+      },
+      "type": "youtube music",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "disambiguation": "",
+  "ipis": [],
+  "sort-name": "Angine de Poitrine",
+  "life-span": {
+    "begin": "2023",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null
+}

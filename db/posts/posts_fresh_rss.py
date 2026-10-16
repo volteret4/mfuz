@@ -1,17 +1,28 @@
 import os
 import json
 import sqlite3
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import logging
 from datetime import datetime
 from typing import Dict, List, Set, Optional, Tuple
 from urllib.parse import quote
 import requests
-import sys
 import re
 from html import unescape
 
 # Configurar logging
 logger = logging.getLogger(__name__)
+
+REQUEST_TIMEOUT = 30
+# Tokens de palabra (unicode) usados para indexar nombres y contenido
+WORD_RE = re.compile(r'\w+')
+
+
+def tokenize(text: str) -> Tuple[str, ...]:
+    """Divide un texto en palabras en minúsculas"""
+    return tuple(WORD_RE.findall(text.lower()))
 
 class FreshRSSContentFinder():
     def __init__(self, config):
@@ -37,12 +48,20 @@ class FreshRSSContentFinder():
             'podcast'
         ])
         
-        # Lista para mantener los posts ya rechazados
-        self.rejected_urls = set()
-        
+        # Sesión HTTP reutilizable (keep-alive, evita un handshake TLS por petición)
+        self.session = requests.Session()
+        self.session.headers['User-Agent'] = 'FreshRSS-Script/1.0'
+
         # Cargar cache si existe
         self.cache = self._load_cache()
-        
+
+        # Lista para mantener los posts ya rechazados
+        self.rejected_urls = set(self.cache.get('rejected_urls', []))
+
+        # Timestamps obtenidos en esta ejecución; solo se guardan en el cache al
+        # terminar la selección, para que una interrupción no pierda posts
+        self._pending_timestamps = {}
+
         # Inicializar la base de datos
         self._setup_database()
 
@@ -69,6 +88,7 @@ class FreshRSSContentFinder():
         """Configura la tabla feeds en la base de datos si no existe"""
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             # Crear tabla feeds si no existe
@@ -164,12 +184,13 @@ class FreshRSSContentFinder():
         }
         
         try:
-            response = requests.get(endpoint, params=params)
+            response = self.session.get(endpoint, params=params, timeout=REQUEST_TIMEOUT)
             response.raise_for_status()
             
             for line in response.text.splitlines():
                 if line.startswith('Auth='):
                     self.auth_token = line.replace('Auth=', '').strip()
+                    self.session.headers['Authorization'] = f'GoogleLogin auth={self.auth_token}'
                     logger.info(f"Token obtenido correctamente")
                     return True
             
@@ -178,108 +199,77 @@ class FreshRSSContentFinder():
         except Exception as e:
             logger.error(f"Error en login: {str(e)}")
             return False
-            
-    def get_headers(self) -> Dict[str, str]:
-        """Obtiene los headers para las peticiones a la API"""
-        if not self.auth_token:
-            raise ValueError("No se ha realizado el login")
-            
-        return {
-            'Authorization': f'GoogleLogin auth={self.auth_token}',
-            'User-Agent': 'FreshRSS-Script/1.0'
-        }
 
-    def get_feed_subscriptions(self) -> List[Dict]:
-        """Obtiene los feeds subscritos"""
-        endpoint = f"{self.api_endpoint}/reader/api/0/subscription/list"
-        params = {'output': 'json'}
-        
-        try:
-            response = requests.get(endpoint, headers=self.get_headers(), params=params)
-            response.raise_for_status()
-            return response.json().get('subscriptions', [])
-        except Exception as e:
-            logger.error(f"Error obteniendo subscripciones: {str(e)}")
-            return []
+    def get_category_posts(self, category_name: str, include_read: bool = False) -> List[Dict]:
+        """Obtiene los posts de todos los feeds de una categoría con una sola consulta paginada"""
+        return self.get_posts(f"user/-/label/{category_name}", include_read)
 
-    def get_category_feeds(self, category_name: str) -> List[Dict]:
-        """Obtiene los feeds de una categoría especificada"""
-        subscriptions = self.get_feed_subscriptions()
-        category_feeds = []
-        
-        for feed in subscriptions:
-            for category in feed.get('categories', []):
-                if category['label'] == category_name:
-                    category_feeds.append(feed)
-                    break
-                    
-        return category_feeds
-
-    def get_posts(self, feed_id: str, include_read: bool = False) -> List[Dict[str, str]]:
-        """Obtiene los posts de un feed, por defecto solo los no leídos"""
-        endpoint = f"{self.api_endpoint}/reader/api/0/stream/contents/{quote(feed_id)}"
+    def get_posts(self, stream_id: str, include_read: bool = False) -> List[Dict[str, str]]:
+        """Obtiene los posts de un stream (feed o categoría), por defecto solo los no leídos"""
+        endpoint = f"{self.api_endpoint}/reader/api/0/stream/contents/{quote(stream_id)}"
         params = {
             'output': 'json',
-            'n': 1000,  # Número máximo de artículos a obtener
+            'n': 1000,  # Número máximo de artículos por página
         }
         
         # Si solo queremos los no leídos
         if not include_read:
             params['xt'] = 'user/-/state/com.google/read'
         
-        # Obtener último timestamp guardado para este feed
-        last_timestamp = self.cache.get(feed_id, {}).get('last_timestamp', 0)
+        # Obtener último timestamp guardado para este stream
+        last_timestamp = self.cache.get(stream_id, {}).get('last_timestamp', 0)
         if last_timestamp > 0:
             params['ot'] = last_timestamp
         
+        posts = []
+        latest_timestamp = last_timestamp
+        
         try:
-            response = requests.get(endpoint, headers=self.get_headers(), params=params)
-            response.raise_for_status()
-            data = response.json()
-            
-            posts = []
-            latest_timestamp = last_timestamp
-            
-            for item in data.get('items', []):
-                url = None
-                if 'canonical' in item and item['canonical']:
-                    url = item['canonical'][0]['href']
-                elif 'alternate' in item and item['alternate']:
-                    url = item['alternate'][0]['href']
+            while True:
+                response = self.session.get(endpoint, params=params, timeout=REQUEST_TIMEOUT)
+                response.raise_for_status()
+                data = response.json()
                 
-                timestamp = item.get('published', 0)
-                if timestamp > latest_timestamp:
-                    latest_timestamp = timestamp
+                for item in data.get('items', []):
+                    url = None
+                    if 'canonical' in item and item['canonical']:
+                        url = item['canonical'][0]['href']
+                    elif 'alternate' in item and item['alternate']:
+                        url = item['alternate'][0]['href']
+                    
+                    timestamp = item.get('published', 0)
+                    if timestamp > latest_timestamp:
+                        latest_timestamp = timestamp
+                    
+                    if url:
+                        published_date = datetime.fromtimestamp(timestamp)
+                        content = item.get('summary', {}).get('content', '')
+                        content += item.get('content', {}).get('content', '')
+                        
+                        # Eliminar etiquetas HTML del contenido
+                        content_text = self._strip_html_tags(content)
+                        
+                        posts.append({
+                            'url': url,
+                            'date': published_date,
+                            'title': item.get('title', 'Sin título'),
+                            'month_key': published_date.strftime('%Y-%m'),
+                            'feed_title': item.get('origin', {}).get('title', 'Unknown Feed'),
+                            'content': content_text,
+                            'raw_content': content
+                        })
                 
-                if url:
-                    published_date = datetime.fromtimestamp(timestamp)
-                    content = item.get('summary', {}).get('content', '')
-                    content += item.get('content', {}).get('content', '')
-                    
-                    # Eliminar etiquetas HTML del contenido
-                    content_text = self._strip_html_tags(content)
-                    
-                    posts.append({
-                        'url': url,
-                        'date': published_date,
-                        'title': item.get('title', 'Sin título'),
-                        'month_key': published_date.strftime('%Y-%m'),
-                        'feed_title': item.get('origin', {}).get('title', 'Unknown Feed'),
-                        'content': content_text,
-                        'raw_content': content
-                    })
+                # Paginar solo si el servidor indica que hay más resultados
+                continuation = data.get('continuation')
+                if not continuation:
+                    break
+                params['c'] = continuation
             
-            # Actualizar cache con el timestamp más reciente
-            if feed_id not in self.cache:
-                self.cache[feed_id] = {}
-            
-            self.cache[feed_id]['last_timestamp'] = latest_timestamp
-            self.cache[feed_id]['feed_title'] = data.get('title', 'Unknown Feed')
-                    
+            self._pending_timestamps[stream_id] = latest_timestamp
             return posts
         except Exception as e:
-            logger.error(f"Error obteniendo posts de {feed_id}: {str(e)}")
-            return []
+            logger.error(f"Error obteniendo posts de {stream_id}: {str(e)}")
+            return posts
     
     def _strip_html_tags(self, html_content):
         """Elimina las etiquetas HTML de un string manteniendo el formato básico"""
@@ -322,28 +312,24 @@ class FreshRSSContentFinder():
         
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
-            # Obtener nombres de artistas con sus IDs
-            if self.search_artists:
-                cursor.execute("SELECT id, name FROM artists")
-                for row in cursor.fetchall():
-                    if row[1] and len(row[1]) > 2:  # Evitar nombres muy cortos
-                        terms['artists'].append({'id': row[0], 'name': row[1]})
+            existing_tables = {row[0] for row in cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             
-            # Obtener nombres de álbumes con sus IDs
-            if self.search_albums:
-                cursor.execute("SELECT id, name FROM albums")
+            # Obtener nombres de artistas, álbumes y sellos con sus IDs
+            for entity_type, table, enabled in (('artists', 'artists', self.search_artists),
+                                                ('albums', 'albums', self.search_albums),
+                                                ('labels', 'labels', self.search_labels)):
+                if not enabled:
+                    continue
+                if table not in existing_tables:
+                    logger.warning(f"La tabla '{table}' no existe en {self.db_path}; se omite la búsqueda de {entity_type}")
+                    continue
+                cursor.execute(f"SELECT id, name FROM {table}")
                 for row in cursor.fetchall():
                     if row[1] and len(row[1]) > 2:  # Evitar nombres muy cortos
-                        terms['albums'].append({'id': row[0], 'name': row[1]})
-            
-            # Obtener nombres de sellos discográficos con sus IDs
-            if self.search_labels:
-                cursor.execute("SELECT id, name FROM labels")
-                for row in cursor.fetchall():
-                    if row[1] and len(row[1]) > 2:  # Evitar nombres muy cortos
-                        terms['labels'].append({'id': row[0], 'name': row[1]})
+                        terms[entity_type].append({'id': row[0], 'name': row[1]})
             
             conn.close()
             
@@ -356,37 +342,45 @@ class FreshRSSContentFinder():
             logger.error(f"Error obteniendo términos de búsqueda: {str(e)}")
             return terms
     
-    def _check_post_exists(self, post_url: str) -> bool:
-        """Verifica si un post ya existe en la base de datos"""
+    def _get_existing_post_urls(self) -> Set[str]:
+        """Obtiene las URLs de posts que ya están en la base de datos (una sola consulta)"""
         try:
             conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute("SELECT id FROM feeds WHERE post_url = ?", (post_url,))
-            result = cursor.fetchone()
-            
+            apply_pragmas(conn)
+            urls = {row[0] for row in conn.execute("SELECT post_url FROM feeds")}
             conn.close()
-            return result is not None
+            return urls
         except Exception as e:
-            logger.error(f"Error verificando si el post existe: {str(e)}")
-            return False
+            logger.error(f"Error obteniendo posts existentes: {str(e)}")
+            return set()
+    
+    def _build_term_index(self, search_terms: Dict[str, List[Dict]]) -> Dict[Tuple[str, ...], List[Tuple[str, int, str]]]:
+        """Indexa los nombres por su secuencia de palabras para buscarlos en O(palabras del post)"""
+        index = {}
+        for entity_type, terms in search_terms.items():
+            for term in terms:
+                name = term['name']
+                # Saltarse términos cortos a menos que se permita explícitamente
+                if len(name) <= 4 and not self.search_short_terms:
+                    continue
+                key = tokenize(name)
+                if key:
+                    index.setdefault(key, []).append((entity_type, term['id'], name))
+        return index
     
     def _save_selected_posts(self, entity_type: str, entity_id: int, selected_posts: List[Dict]) -> int:
         """Guarda los posts seleccionados en la base de datos"""
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             posts_added = 0
             
             for post in selected_posts:
-                # Verificar si el post ya existe
-                if self._check_post_exists(post['url']):
-                    logger.info(f"El post ya existe en la base de datos: {post['url']}")
-                    continue
-                
+                # post_url es UNIQUE: si ya existe se ignora
                 cursor.execute('''
-                INSERT INTO feeds 
+                INSERT OR IGNORE INTO feeds 
                 (entity_type, entity_id, feed_name, post_title, post_url, post_date, content)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 ''', (
@@ -399,7 +393,10 @@ class FreshRSSContentFinder():
                     post['content']
                 ))
                 
-                posts_added += 1
+                if cursor.rowcount:
+                    posts_added += 1
+                else:
+                    logger.info(f"El post ya existe en la base de datos: {post['url']}")
             
             conn.commit()
             conn.close()
@@ -425,13 +422,6 @@ class FreshRSSContentFinder():
             else:
                 print("No hay progreso para guardar. Saliendo.")
                 sys.exit(0)
-        def search_whole_word(term, text):
-            """Busca una palabra completa en el texto, ignorando mayúsculas/minúsculas"""
-            # Escapar caracteres especiales de regex en el término de búsqueda
-            escaped_term = re.escape(term)
-            # Usar word boundaries (\b) para buscar palabras completas
-            pattern = r'\b' + escaped_term + r'\b'
-            return re.search(pattern, text, re.IGNORECASE) is not None
         # Registrar el manejador para SIGINT (Ctrl+C)
         signal.signal(signal.SIGINT, signal_handler)
 
@@ -440,117 +430,61 @@ class FreshRSSContentFinder():
             logger.error("No se pudo iniciar sesión en FreshRSS")
             return
         
-        # Obtener términos de búsqueda
+        # Obtener términos de búsqueda e indexarlos por palabras
         search_terms = self.get_search_terms()
+        term_index = self._build_term_index(search_terms)
+        term_lengths = sorted({len(key) for key in term_index})
+        
+        # Posts ya guardados o rechazados no se vuelven a analizar
+        known_urls = self._get_existing_post_urls() | self.rejected_urls
         
         # Mapa para almacenar los posts encontrados por entidad
         entity_posts = {
-            'artists': {},  # {artist_id: [posts]}
-            'albums': {},   # {album_id: [posts]}
-            'labels': {}    # {label_id: [posts]}
+            'artists': {},  # {artist_id: {'name', 'posts', 'urls'}}
+            'albums': {},   # {album_id: ...}
+            'labels': {}    # {label_id: ...}
         }
         
-        # Procesar cada categoría
+        # Procesar cada categoría con una sola consulta (paginada) al servidor
         for category in self.target_categories:
-            feeds = self.get_category_feeds(category)
-            logger.info(f"Procesando {len(feeds)} feeds en categoría '{category}'")
+            posts = self.get_category_posts(category)
+            logger.info(f"Categoría '{category}': {len(posts)} posts obtenidos para analizar")
             
-            # Procesar cada feed en la categoría
-            for feed in feeds:
-                feed_id = feed.get('id')
-                feed_title = feed.get('title', 'Unknown Feed')
-                logger.info(f"Analizando feed: {feed_title}")
+            # Buscar coincidencias en cada post
+            for post in posts:
+                if post['url'] in known_urls:
+                    continue
+                known_urls.add(post['url'])
                 
-                # Obtener posts
-                posts = self.get_posts(feed_id)
-                logger.info(f"  - {len(posts)} posts obtenidos para analizar")
+                # Añadir feed al post para referencia posterior
+                post['feed'] = post['feed_title']
+                post['category'] = category
                 
-        # Buscar coincidencias en cada post
-        for post in posts:
-            # Añadir feed al post para referencia posterior
-            post['feed'] = feed_title
-            post['category'] = category
-            
-            # Verificar si el post debe ser ignorado
-            if self._should_ignore_post(post):
-                continue
-            
-            content = f"{post['title']} {post['content']}"  # Sin .lower() aquí
-            
-            # Buscar coincidencias de artistas
-            if self.search_artists:
-                for artist in search_terms['artists']:
-                    artist_name = artist['name']
-                    # Saltarse términos cortos a menos que se permita explícitamente
-                    if len(artist_name) <= 4 and not self.search_short_terms:
-                        continue
-                        
-                    # Buscar el nombre completo del artista como palabra completa
-                    if search_whole_word(artist_name, content):
-                        artist_id = artist['id']
-                        if artist_id not in entity_posts['artists']:
-                            entity_posts['artists'][artist_id] = {
-                                'name': artist['name'],
-                                'posts': []
-                            }
-                        # Verificar que no esté duplicado
-                        post_urls = [p['url'] for p in entity_posts['artists'][artist_id]['posts']]
-                        if post['url'] not in post_urls:
-                            entity_posts['artists'][artist_id]['posts'].append(post)
-            
-            # Buscar coincidencias de álbumes
-            if self.search_albums:
-                for album in search_terms['albums']:
-                    album_name = album['name']
-                    # Saltarse términos cortos a menos que se permita explícitamente
-                    if len(album_name) <= 4 and not self.search_short_terms:
-                        continue
-                        
-                    # Buscar el nombre completo del álbum como palabra completa
-                    if search_whole_word(album_name, content):
-                        album_id = album['id']
-                        if album_id not in entity_posts['albums']:
-                            entity_posts['albums'][album_id] = {
-                                'name': album['name'],
-                                'posts': []
-                            }
-                        # Verificar que no esté duplicado
-                        post_urls = [p['url'] for p in entity_posts['albums'][album_id]['posts']]
-                        if post['url'] not in post_urls:
-                            entity_posts['albums'][album_id]['posts'].append(post)
-            
-            # Buscar coincidencias de sellos
-            if self.search_labels:
-                for label in search_terms['labels']:
-                    label_name = label['name']
-                    # Saltarse términos cortos a menos que se permita explícitamente
-                    if len(label_name) <= 4 and not self.search_short_terms:
-                        continue
-                        
-                    # Buscar el nombre completo del sello como palabra completa
-                    if search_whole_word(label_name, content):
-                        label_id = label['id']
-                        if label_id not in entity_posts['labels']:
-                            entity_posts['labels'][label_id] = {
-                                'name': label['name'],
-                                'posts': []
-                            }
-                        # Verificar que no esté duplicado
-                        post_urls = [p['url'] for p in entity_posts['labels'][label_id]['posts']]
-                        if post['url'] not in post_urls:
-                            entity_posts['labels'][label_id]['posts'].append(post)
-        
-        # Guardar el cache actualizado
-        self._save_cache()
+                # Verificar si el post debe ser ignorado
+                if self._should_ignore_post(post):
+                    continue
+                
+                words = tokenize(f"{post['title']} {post['content']}")
+                
+                # Buscar cada nombre como secuencia completa de palabras
+                matches = set()
+                for n in term_lengths:
+                    for i in range(len(words) - n + 1):
+                        entities = term_index.get(words[i:i + n])
+                        if entities:
+                            matches.update(entities)
+                
+                for entity_type, entity_id, name in matches:
+                    bucket = entity_posts[entity_type].setdefault(entity_id, {'name': name, 'posts': []})
+                    bucket['posts'].append(post)
         
         # Procesar interactivamente los resultados
         self._interactive_selection(entity_posts)
         
-        # Guardar el cache actualizado
+        # Solo al terminar la selección se avanzan los timestamps de cada categoría
+        for stream_id, timestamp in self._pending_timestamps.items():
+            self.cache.setdefault(stream_id, {})['last_timestamp'] = timestamp
         self._save_cache()
-        
-        # Procesar interactivamente los resultados
-        self._interactive_selection(entity_posts)
         
     def _interactive_selection(self, entity_posts: Dict):
         """Permite al usuario seleccionar interactivamente qué posts guardar"""
@@ -579,33 +513,18 @@ class FreshRSSContentFinder():
         print("=" * 40)
         print(f"{Colors.BOLD}Presiona Ctrl+C en cualquier momento para pausar el proceso.{Colors.END}")
         
-        # Verificar si hay progreso guardado
-        progress = self._get_progress()
-        start_from_type = None
-        start_from_index = 0
-        
-        if progress:
-            print(f"\n=== {Colors.BOLD}Progreso detectado{Colors.END} ===")
-            print(f"Última entidad procesada: {Colors.YELLOW}{progress.get('entity_type')}{Colors.END} (índice {Colors.YELLOW}{progress.get('entity_index')}{Colors.END})")
-            resume = input("¿Desea continuar desde el último punto guardado? (s/n): ").lower()
-            
-            if resume == 's':
-                start_from_type = progress.get('entity_type')
-                start_from_index = progress.get('entity_index', 0)
-                print(f"Continuando desde {Colors.YELLOW}{start_from_type}{Colors.END}, índice {Colors.YELLOW}{start_from_index}{Colors.END}...")
-        
-        # Cargar URLs rechazadas desde el cache si existen
-        if 'rejected_urls' in self.cache:
-            self.rejected_urls = set(self.cache.get('rejected_urls', []))
+        # Los posts ya guardados o rechazados se descartan antes de buscar, así que
+        # una sesión interrumpida continúa sola donde se quedó
+        if self._get_progress():
+            print(f"\n{Colors.BOLD}Continuando la sesión anterior{Colors.END} (se omiten los artículos ya revisados).")
+        if self.rejected_urls:
             print(f"Cargadas {Colors.YELLOW}{len(self.rejected_urls)}{Colors.END} URLs rechazadas anteriormente.")
+        
+        # URLs guardadas en esta sesión (un post puede mencionar varias entidades)
+        saved_urls = set()
         
         # Procesar cada tipo de entidad
         entity_types = ['artists', 'albums', 'labels']
-        
-        # Saltar tipos de entidad si estamos reanudando
-        if start_from_type:
-            skip_until = entity_types.index(start_from_type)
-            entity_types = entity_types[skip_until:]
         
         for entity_type in entity_types:
             entities = entity_posts[entity_type]
@@ -623,28 +542,25 @@ class FreshRSSContentFinder():
             # Convertir a lista para poder acceder por índice
             entity_items = list(entities.items())
             
-            # Saltar elementos si estamos reanudando y es el tipo de entidad correcto
-            start_idx = start_from_index if entity_type == start_from_type else 0
-            
             # Procesar cada entidad
-            for idx, (entity_id, entity_data) in enumerate(entity_items[start_idx:], start_idx):
+            for idx, (entity_id, entity_data) in enumerate(entity_items):
                 entity_name = entity_data['name']
                 posts = entity_data['posts']
                 
-                # Filtrar posts que ya han sido rechazados anteriormente
-                filtered_posts = [post for post in posts if post['url'] not in self.rejected_urls]
+                # Filtrar posts ya rechazados o guardados en esta sesión
+                filtered_posts = [post for post in posts if post['url'] not in self.rejected_urls and post['url'] not in saved_urls]
                 
                 # Si todos los posts han sido rechazados, pasar a la siguiente entidad
                 if not filtered_posts:
                     print(f"\n{Colors.BOLD}{type_name}{Colors.END}: {Colors.GREEN}{entity_name}{Colors.END} ({Colors.YELLOW}ID: {entity_id}{Colors.END}) - Progreso: {Colors.YELLOW}{idx+1}/{len(entity_items)}{Colors.END}")
-                    print(f"Todos los {len(posts)} posts para esta entidad ya han sido rechazados anteriormente. Pasando a la siguiente.")
+                    print(f"Todos los {len(posts)} posts para esta entidad ya han sido revisados. Pasando a la siguiente.")
                     self._save_progress(entity_type, idx + 1, entity_id)
                     continue
                 
                 print(f"\n{Colors.BOLD}{type_name}{Colors.END}: {Colors.GREEN}{entity_name}{Colors.END} ({Colors.YELLOW}ID: {entity_id}{Colors.END}) - Progreso: {Colors.YELLOW}{idx+1}/{len(entity_items)}{Colors.END}")
                 
                 if len(posts) > len(filtered_posts):
-                    print(f"Se encontraron {Colors.YELLOW}{len(posts)}{Colors.END} artículos, {Colors.RED}{len(posts) - len(filtered_posts)}{Colors.END} ya rechazados anteriormente.")
+                    print(f"Se encontraron {Colors.YELLOW}{len(posts)}{Colors.END} artículos, {Colors.RED}{len(posts) - len(filtered_posts)}{Colors.END} ya revisados.")
                 
                 print(f"Mostrando {Colors.YELLOW}{len(filtered_posts)}{Colors.END} artículos:")
                 
@@ -699,6 +615,7 @@ class FreshRSSContentFinder():
                 # Guardar los posts seleccionados
                 if selected_posts:
                     posts_added = self._save_selected_posts(entity_type, entity_id, selected_posts)
+                    saved_urls.update(post['url'] for post in selected_posts)
                     print(f"Se guardaron {Colors.GREEN}{posts_added}{Colors.END} posts nuevos para {Colors.YELLOW}{entity_name}{Colors.END}.")
                 else:
                     print(f"{Colors.RED}No se guardó ningún post{Colors.END} para {Colors.YELLOW}{entity_name}{Colors.END}.")
@@ -707,11 +624,7 @@ class FreshRSSContentFinder():
                 for post in rejected_posts:
                     self.rejected_urls.add(post['url'])
                 
-                # Guardar las URLs rechazadas en el cache
-                self.cache['rejected_urls'] = list(self.rejected_urls)
-                self._save_cache()
-                
-                # Guardar progreso después de procesar cada entidad
+                # Guardar progreso (y las URLs rechazadas) después de procesar cada entidad
                 self._save_progress(entity_type, idx + 1, entity_id)
         
         # Reiniciar el progreso cuando se completa todo

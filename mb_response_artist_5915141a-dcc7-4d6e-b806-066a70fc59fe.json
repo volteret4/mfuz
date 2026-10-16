@@ -1,0 +1,207 @@
+{
+  "end-area": null,
+  "area": {
+    "type": null,
+    "name": "Norway",
+    "iso-3166-1-codes": [
+      "NO"
+    ],
+    "disambiguation": "",
+    "id": "6743d351-6f37-3049-9724-5041161fff4d",
+    "type-id": null,
+    "sort-name": "Norway"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "id": "f80d529e-f242-46ef-a090-d193ed23075f",
+    "type": null,
+    "name": "Oslo",
+    "disambiguation": "",
+    "sort-name": "Oslo",
+    "type-id": null,
+    "iso-3166-2-codes": [
+      "NO-03"
+    ]
+  },
+  "country": "NO",
+  "type": "Group",
+  "name": "WE",
+  "gender": null,
+  "life-span": {
+    "begin": "1993",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "sort-name": "WE",
+  "disambiguation": "Norwegian hardrock band",
+  "ipis": [],
+  "id": "5915141a-dcc7-4d6e-b806-066a70fc59fe",
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000184988",
+        "id": "ad5cbbcb-7f73-4193-a3ca-d2d3272096ed"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "5ac001b1-a342-4534-b55d-9bea8bc2efcf",
+        "resource": "https://www.discogs.com/artist/263030"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "f1c4afd7-37a2-4828-82cd-8b589eff3291",
+        "resource": "http://www.werock.org/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9d342936-1756-4282-89d9-65653000a89b",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14023915c"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "e1e25fb1-f919-4207-b8b3-6de2e034a6f9",
+        "resource": "https://d-nb.info/gnd/10342593-7"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "546ce8eb-1958-439d-b03a-85ddf2ca62ad",
+        "resource": "https://rateyourmusic.com/artist/we"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "d3debaba-fa34-4e3d-a331-50164ab9c8b9",
+        "resource": "https://www.songkick.com/artists/85049"
+      }
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/159645398",
+        "id": "0e7dad3d-9a33-4493-9c04-8bcb9cd89e4e"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "cc76c4d0-36ca-43ef-8112-362c7ddc1cd3",
+        "resource": "https://www.wikidata.org/wiki/Q1115577"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata"
+    }
+  ],
+  "isnis": [
+    "0000000107918541"
+  ]
+}

@@ -1,0 +1,618 @@
+{
+  "ipis": [],
+  "disambiguation": "pianist",
+  "isnis": [
+    "0000000109160949"
+  ],
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000066570",
+        "id": "cd724f5b-d4f8-471e-b7ec-6fbcc24f0335"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "url": {
+        "id": "20ae7004-0170-4b01-91eb-3d7a0e81497b",
+        "resource": "https://www.bandsintown.com/a/16368"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "id": "be13abba-8a92-4e90-b98e-52d8c6b19c7f",
+        "resource": "https://www.bbc.co.uk/music/artists/061c4920-3ea6-4835-98f6-02f3b82f5e3a"
+      },
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "target-credit": "",
+      "begin": null,
+      "ended": true,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": "2020-11-19",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/145273",
+        "id": "759f333e-2f93-4f68-80d9-17995a0c5e56"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "ba5db03d-335d-4a7c-b843-fc702d485bd3",
+        "resource": "http://www.keithjarrett.org/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "97a6c7e7-f42c-464e-a324-3e2ab5c1dc70",
+        "resource": "https://open.spotify.com/artist/0F3Aew9DSd6fb6192K1K0Y"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/10611",
+        "id": "58ba981a-e7a0-4962-94d6-0f1008528402"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "image",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "id": "6bac3b33-f759-4d77-b098-37c4b2972e78",
+        "resource": "https://commons.wikimedia.org/wiki/File:Keith_Jarrett-commons.jpg"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Keith_Jarrett.jpg",
+        "id": "beeaaf15-f15b-4600-9e4e-5bcf0bfd409f"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "type": "image",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "aa3d9d85-a0cd-4b41-8001-6d527fb46361",
+        "resource": "https://www.imdb.com/name/nm0418949/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "b7f0d680-fbef-4a4b-9151-8ca959230578",
+        "resource": "https://www.last.fm/music/Keith+Jarrett"
+      },
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace",
+      "url": {
+        "resource": "https://myspace.com/keithjarrettmusic",
+        "id": "7034a8de-0b7f-4ac0-9703-bd7ca185e106"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2025-12-17",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://jaxsta.com/profile/001dff7f-6cc9-4372-8ff6-2175a7605531",
+        "id": "809a5d8d-c96f-4c5f-92eb-84866a8b28e2"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n81026503",
+        "id": "6e9176e5-69ba-4c7b-ae0e-8bd8cc7dc4cc"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://adp.library.ucsb.edu/names/323220",
+        "id": "c19badee-d54f-49df-af42-4b3b71c4ba40"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a2baae3a-c59b-4b20-a0ee-774b8604b594",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13895595x"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/118557068",
+        "id": "c08cdcb7-d9b3-4571-a8bb-1db6b4e4122e"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "fc05e549-bb1d-4bcd-9473-ea996c536ff3",
+        "resource": "http://snaccooperative.org/ark:/99166/w6jw95ww"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/keith_jarrett",
+        "id": "81e23d8a-f3e9-4990-a2be-73088eeb4279"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/keith-jarrett/",
+        "id": "c911a7eb-b4c9-40e3-b808-8dc7f9af5da3"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "94868f31-d54f-4191-a908-2202fdd3fbb7",
+        "resource": "https://www.worldcat.org/identities/lccn-n81026503"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "964b7ef5-36e5-4c01-a22a-ad6d235a3f3a",
+        "resource": "https://itunes.apple.com/us/artist/id58199076"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/72348",
+        "id": "26204234-89b7-4860-98c0-cb2553daf96a"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/27947",
+        "id": "5e2d1717-e960-4a5c-a5bc-a5fc852bc7d6"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "secondhandsongs"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/keith-jarrett-bd6b5ba.html",
+        "id": "adcbc7a2-be06-499b-9d90-471e2c98a276"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "begin": null,
+      "type": "setlistfm",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "acebbf42-763f-4d8c-9851-26e714c64113",
+        "resource": "https://www.songkick.com/artists/182208"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attribute-values": {},
+      "type": "songkick",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "fb5caeed-87e0-4263-b0ba-3fe1e28a9d39",
+        "resource": "https://music.apple.com/gb/artist/72348"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/72348",
+        "id": "26204234-89b7-4860-98c0-cb2553daf96a"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/1067",
+        "id": "481c57d7-f442-442d-aab7-b564be284fd5"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "1a57cd6f-657d-4fe5-9fc4-5087f900c560",
+        "resource": "http://viaf.org/viaf/74037900"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "VIAF"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "808204ab-3bc7-40e7-ba38-c6430711449e",
+        "resource": "https://www.wikidata.org/wiki/Q207034"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "youtube",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "1f3372e5-740f-47cb-b660-a8d3635fdfd0",
+        "resource": "https://www.youtube.com/channel/UCm3Mj3cmimqk3qMPK_UJHvw"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    }
+  ],
+  "id": "061c4920-3ea6-4835-98f6-02f3b82f5e3a",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1945-05-08"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Jarrett, Keith",
+  "type": "Person",
+  "name": "Keith Jarrett",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Allentown",
+    "id": "ec0c279e-382b-42f5-a75e-3767e33a5d7e",
+    "type": null,
+    "name": "Allentown",
+    "disambiguation": ""
+  },
+  "country": "US",
+  "gender": "Male",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "name": "United States",
+    "type": null,
+    "sort-name": "United States",
+    "type-id": null
+  }
+}

@@ -1,0 +1,366 @@
+{
+  "type": "Person",
+  "name": "Oren Ambarchi",
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Sydney",
+    "type-id": null,
+    "id": "3f179da4-83c6-4a28-a627-e46b4a8ff1ed",
+    "sort-name": "Sydney"
+  },
+  "country": "AU",
+  "gender": "Male",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "sort-name": "Australia",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "AU"
+    ],
+    "disambiguation": "",
+    "name": "Australia",
+    "type": null,
+    "id": "106e0bec-b638-3b37-b731-f53d507dc00e"
+  },
+  "ipis": [],
+  "disambiguation": "",
+  "relations": [
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "b6e2e3e3-66bf-4cf1-985c-52576ab5083f",
+        "resource": "https://www.allmusic.com/artist/mn0000406909"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "url": {
+        "id": "4e1e60d6-5ed2-4bba-ae21-62d16d23e1bc",
+        "resource": "https://orenambarchi.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "target-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "url": {
+        "id": "187856ff-03fb-402c-8bf0-c685ba9fd154",
+        "resource": "https://www.discogs.com/artist/549"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "1f5fc5fd-a566-4ace-9106-bf5c34f146a1",
+        "resource": "https://open.spotify.com/artist/1fIzM2bmsXG77E5EMPtdKW"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/185694",
+        "id": "b80a6fa3-d444-45e3-b74f-fd448ea8b8a1"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Oren+Ambarchi",
+        "id": "04755857-5990-4f2a-ba3e-20e53a5b5a3f"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "last.fm",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.orenambarchi.com/",
+        "id": "d7bcc6d2-f57c-4109-accf-0a3153bec839"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14603783x",
+        "id": "3ee188cb-9bc2-4334-802f-e469966fae65"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b5d7807b-c55e-4b23-a871-8de1a3bdeb79",
+        "resource": "https://rateyourmusic.com/artist/oren_ambarchi"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.metal-archives.com/artists/Oren_Ambarchi/1877",
+        "id": "e2efed72-838e-4279-bca7-ccb60676d4c7"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9fe4dadd-32d7-4595-b89f-e0b3e16f5dc2",
+        "resource": "https://www.muziekweb.nl/Link/M00000063919/"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "id": "6820d9d8-3606-4fd2-9cdd-988896922d16",
+        "resource": "https://itunes.apple.com/artist/id35216835"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.beatport.com/artist/oren-ambarchi/32147",
+        "id": "25606c7d-5cd7-4486-b888-a4ee3082ff80"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "d153823f-fc35-4834-a469-23839572fb97",
+        "resource": "https://bsky.app/profile/orenambarchi.bsky.social"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "id": "8a3419d7-2f00-471e-941f-ee8d87558463",
+        "resource": "https://twitter.com/orenambarchi"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://tidal.com/artist/3546011",
+        "id": "67ed1ba0-8744-493d-a4de-89257c1c753a"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "4f71421b-c5d9-4139-96f0-c58bba1d3e77",
+        "resource": "http://viaf.org/viaf/80035437"
+      },
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q7101536",
+        "id": "0a8bac13-6256-43e8-893d-7dd1b196e48b"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "isnis": [
+    "0000000372753952"
+  ],
+  "id": "9ece08c4-048a-4e5f-9c43-9cf16d580db2",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1969",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Ambarchi, Oren"
+}

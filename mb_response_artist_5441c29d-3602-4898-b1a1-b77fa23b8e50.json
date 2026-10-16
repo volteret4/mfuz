@@ -1,0 +1,1511 @@
+{
+  "sort-name": "Bowie, David",
+  "relations": [
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000531986",
+        "id": "7881f4f1-51c5-4574-be96-7c276edabca6"
+      },
+      "source-credit": "",
+      "end": null,
+      "type": "allmusic",
+      "begin": null,
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "bandsintown",
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/951",
+        "id": "a382fc3c-527c-450a-85c2-ff89d2b68bf5"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/5441c29d-3602-4898-b1a1-b77fa23b8e50",
+        "id": "1afedce6-159a-471a-b735-449fb96c7b6b"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "id": "f0f58843-f18a-4328-b41b-88610c90d886",
+        "resource": "https://www.illustrated-db-discography.nl/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "discography page",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "ea114c0a-f072-4e11-8729-0cd31e011e72",
+        "resource": "https://www.sonymusic.co.jp/artist/DavidBowie/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "ended": false,
+      "end": null,
+      "type": "discography page",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "url": {
+        "id": "a5aa403d-4a76-439a-813c-6f2df1516a03",
+        "resource": "http://www.davidbowiecatalogue.com/"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discography page",
+      "ended": true
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "id": "912b25a6-a5c3-4e2f-b68b-cca59c7516ca",
+        "resource": "https://www.discogs.com/artist/10263"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "type": "discogs",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "fanpage",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://bowiesongs.wordpress.com/",
+        "id": "c10b627d-9e4f-4199-bbf0-d8e51de6c4da"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "fanpage",
+      "begin": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bowiewonderworld.com/",
+        "id": "8ae9ecee-c804-439f-af30-3756f08a8f1c"
+      },
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "fanpage",
+      "begin": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "https://www.davidbowieitalia.it/",
+        "id": "30962356-35c0-4de9-8278-de1da0c106bd"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type": "fanpage",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "4cacf98e-1e33-4ae5-a745-351d39226d76",
+        "resource": "http://www.bowiedownunder.com/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "fanpage",
+      "ended": true,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "9c9b082a-cf92-44fb-a68f-5825ed45b818",
+        "resource": "http://www.algonet.se/~bassman/"
+      },
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "Harry the Butcher",
+      "type": "fanpage",
+      "end": null,
+      "begin": null,
+      "ended": true,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "http://www.helden.org.uk/Number/1970list.htm",
+        "id": "0cdb697a-6049-4dba-b717-f2142edd99d1"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": true,
+      "end": null,
+      "begin": null,
+      "type": "fanpage",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "url": {
+        "id": "f4ff8ae5-761e-47cf-81b0-1dc56c7464d1",
+        "resource": "http://www.littleoogie.com/"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-type": "url",
+      "url": {
+        "id": "b1c33715-5e76-4d14-9145-3434713418ee",
+        "resource": "http://www.teenagewildlife.com/"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "fanpage",
+      "ended": true
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://music.yandex.ru/artist/4650",
+        "id": "5b1af193-f18a-4b58-97f7-f438ad6ac861"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0oSGxfWSnnOXhD2fKuz2Gy",
+        "id": "63debbe5-79e0-4047-882d-a0dc8280b4b9"
+      },
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/997",
+        "id": "cb9f2aef-c926-4163-9ce1-d906283bbf6c"
+      },
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming"
+    },
+    {
+      "end": null,
+      "type": "image",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "ac114cf1-6688-4137-b046-8212ac7b1719",
+        "resource": "https://commons.wikimedia.org/wiki/File:David-Bowie_Chicago_2002-08-08_photoby_Adam-Bielawski-cropped.jpg"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "IMDb",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "96c65e3d-0b09-4bc9-bc0c-642e8d570750",
+        "resource": "https://www.imdb.com/name/nm0000309/"
+      },
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "last.fm",
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/David+Bowie",
+        "id": "8f293955-d74d-4e1b-b3e7-3548a97d0e9c"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://genius.com/artists/David-bowie",
+        "id": "1352e22f-e15a-4813-abe3-9c18890bd4d2"
+      },
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "end": null,
+      "type": "lyrics",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "lyrics",
+      "end": null,
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://muzikum.eu/en/david-bowie/lyrics",
+        "id": "b8e7d2fa-009d-4015-8e48-850cf5b98d9a"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/David-Bowie",
+        "id": "1e60fe92-9d2d-452f-aa57-be382b78ff03"
+      },
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "end": null,
+      "begin": null,
+      "type": "lyrics",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "myspace",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://myspace.com/davidbowie",
+        "id": "6b70bc79-1210-4408-8f15-5e3c5a4d597d"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "id": "c21f501e-99c5-4faf-ae0e-6d846187d98a",
+        "resource": "https://myspace.com/davidbowielegacy"
+      },
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "myspace",
+      "source-credit": ""
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://www.davidbowie.com/",
+        "id": "232c82ba-5106-4372-a423-726b80035e06"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n81112099",
+        "id": "9e54434c-d5a7-40c7-9e37-ce4fa28e047e"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "35e55d27-242d-40d2-b7d8-4fa057556333",
+        "resource": "https://castalbums.org/people/David-Bowie/10354"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "2ed36931-3e3b-427e-9276-0626f0b27672",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb11893660s"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/118514091",
+        "id": "7e997863-b146-4ba8-b12d-da1c1f8d657d"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://ibdb.com/person.php?id=78985",
+        "id": "6e583df4-b099-409d-82ca-d79932f774bf"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "4c488c5d-a02f-4563-827c-efb768b10889",
+        "resource": "https://id.oclc.org/worldcat/entity/E39PCjqFhpVfKMGwCwFpb37yV3"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "id": "58dc032f-d2a5-4841-b757-f9bbf8a96c51",
+        "resource": "https://imvdb.com/n/david-bowie"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "39ad979b-b3b5-40ba-9751-fee0325d5476",
+        "resource": "http://snaccooperative.org/ark:/99166/w6r22chc"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-931289",
+        "id": "31891c1b-bfe2-4689-a9eb-fc919e466c6d"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "https://openlibrary.org/works/OL2741620A",
+        "id": "80bf5e06-8469-427c-a285-4d97764ab047"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "199a71cb-359a-48fb-a18f-61b0d95f0138",
+        "resource": "http://soundtrackcollector.com/composer/2302/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/david-bowie",
+        "id": "c1d888bb-6933-45f6-962e-d35d5d409b71"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.45cat.com/artist/david-bowie",
+        "id": "b4e2e116-7ffb-40cf-b42b-59773eeefaa3"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/david-bowie/",
+        "id": "bc915d08-dc6b-4b57-b6bf-c9c2fe8b0b8a"
+      },
+      "target-type": "url"
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "Davy Jones",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/davy-jones-3/",
+        "id": "5ef23e53-8df3-473d-a0d2-bfe181b98b49"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000267529/POPULAR/",
+        "id": "40107911-ae5e-404a-b4cd-c05d3a8523b9"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "3cd07cae-e7b3-473d-8158-992211745204",
+        "resource": "https://www.progarchives.com/artist.asp?id=3790"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.spirit-of-rock.com/en/band/David_Bowie",
+        "id": "39bee45e-c02d-4d0c-b6af-748728c43df8"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "id": "5feed199-6741-4853-8ba4-192d969fd144",
+        "resource": "https://www.whosampled.com/David-Bowie/"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "end": "2020-10-12",
+      "begin": null,
+      "type": "purchase for download",
+      "ended": true,
+      "source-credit": "",
+      "url": {
+        "id": "c37e7514-f7d0-4bb4-83e8-595347d7c908",
+        "resource": "https://play.google.com/store/music/artist?id=Aty46ftvcy64xhxamjpp4irv6sy"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://mora.jp/artist/182672/",
+        "id": "70479879-09af-4119-b495-e232fa6ac513"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "purchase for download",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "a0106b28-c7b3-4d2b-836b-8b6fde9c88dc",
+        "resource": "https://mora.jp/artist/30434/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/551695",
+        "id": "9e8d2931-a5a4-4192-a502-3b46d5a46ef9"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "url": {
+        "resource": "https://ototoy.jp/_/default/a/117916",
+        "id": "112d934e-4086-4852-8f6e-afc41b98504d"
+      },
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "7fa0d0fa-11aa-4691-8507-d5bf10e8c461",
+        "resource": "https://www.7digital.com/artist/david-bowie"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.beatport.com/artist/david-bowie/126890",
+        "id": "f66def3e-b0b3-4fc8-a001-afe42c6d6b62"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "url": {
+        "id": "a545af68-94d2-4941-b45c-d9daacf4cdf7",
+        "resource": "https://www.junodownload.com/artists/David+Bowie/releases/"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/david-bowie/38326",
+        "id": "0a449a01-649b-4742-84e4-76fc28419e43"
+      },
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "purchase for download",
+      "ended": true,
+      "source-credit": "",
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id551695",
+        "id": "4b9d6c3d-c11c-4ae6-a978-7768a18d5383"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "purchase for mail-order",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.amazon.co.uk/-/e/B000AQ090A",
+        "id": "4ae4e07e-1d26-4caa-beb8-1d4d8faaf668"
+      },
+      "target-type": "url",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "secondhandsongs",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "ec0050d8-3207-4454-967d-22975fc398eb",
+        "resource": "https://secondhandsongs.com/artist/194"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "setlistfm",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "url": {
+        "id": "5de23f17-6d28-4b4e-972d-9b7bf50ec914",
+        "resource": "https://www.setlist.fm/setlists/david-bowie-6bd6ee66.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "begin": "2009-05",
+      "end": null,
+      "type": "social network",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://twitter.com/DavidBowieReal",
+        "id": "7af712fc-af74-49df-b635-31b2e4cb0d2a"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "type": "social network",
+      "begin": "2015-06-05",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.instagram.com/davidbowie/",
+        "id": "74fe21b6-345e-4d7f-8d5a-81ce6afddddb"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "dbe4d9e8-8224-481b-a991-5b56582f590a",
+        "resource": "https://bsky.app/profile/davidbowiereal.bsky.social"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "23779570-635f-49b3-91cc-8f79677d0578",
+        "resource": "https://www.facebook.com/davidbowie"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.threads.com/@davidbowie",
+        "id": "32c02b24-9a2a-4db4-956c-bb8513d0481e"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "1ed7b21d-2378-4c43-829e-1903721a7a53",
+        "resource": "https://www.tiktok.com/@davidbowie"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.songkick.com/artists/468870",
+        "id": "c953929e-dcda-4c8f-bc57-8e4ac8116020"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "songkick",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "id": "29753290-f467-4a9d-a3e2-9d554ed65108",
+        "resource": "https://soundcloud.com/davidbowieofficial"
+      },
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "soundcloud",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": "2022-06-08",
+      "type": "streaming",
+      "ended": true,
+      "source-credit": "",
+      "url": {
+        "id": "b3509578-2d89-4106-ac8b-3f62300e5d3e",
+        "resource": "https://us.napster.com/artist/david-bowie"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B001DTGMZE",
+        "id": "cacb2ee7-26b2-4f2a-8783-4237664f8aca"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/fr/artist/551695",
+        "id": "3802f9dd-5a82-4fd1-b340-d1272efa464c"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "source-credit": "",
+      "url": {
+        "id": "9e8d2931-a5a4-4192-a502-3b46d5a46ef9",
+        "resource": "https://music.apple.com/gb/artist/551695"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "694e994f-52dd-470c-995d-0fda62339c17",
+        "resource": "https://tidal.com/artist/4768"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/david-bowie/38326",
+        "id": "0a449a01-649b-4742-84e4-76fc28419e43"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "target-credit": "",
+      "url": {
+        "resource": "https://vgmdb.net/artist/16817",
+        "id": "b63f5b52-feec-43cf-b411-cf3d3fa49c29"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "vgmdb",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "VIAF",
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/56606484",
+        "id": "a2090ed0-9f84-49f6-9c14-26fc8edca295"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "video channel",
+      "source-credit": "",
+      "url": {
+        "resource": "https://vimeo.com/davidbowie",
+        "id": "50f30317-5e44-4b59-9d30-19b6700b3b1c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q5383",
+        "id": "391ba1fa-a9a8-4d9e-ba56-e38e9a1063ed"
+      },
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "end": "2007-09-30",
+      "type": "youtube",
+      "begin": "2005-10-19",
+      "ended": true,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "url": {
+        "id": "ab63d91b-47f9-42e9-b468-87471d3e5196",
+        "resource": "https://www.youtube.com/channel/UC3MD06xOSoPyfGY9GqWq3gQ"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC8YgWcDKi1rLbQ1OtrOHeDw",
+        "id": "30da4547-b3c8-40b3-aad2-8955df4610af"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "end": null,
+      "begin": "2007-09-30",
+      "type": "youtube",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "type": "youtube",
+      "begin": "2009-10-15",
+      "ended": false,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "e116021b-a980-43b9-985e-a91f624d27f6",
+        "resource": "https://www.youtube.com/channel/UCh8hlIe7EcmVilHjnrE7gNw"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "youtube music",
+      "begin": null,
+      "ended": false,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCvY1eVE6lTebXsdFbbXUtkQ",
+        "id": "6cc38157-15f0-46db-bd45-6c30d0bb9a95"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    }
+  ],
+  "gender": "Male",
+  "country": "GB",
+  "disambiguation": "English singer\u2010songwriter",
+  "life-span": {
+    "begin": "1947-01-08",
+    "end": "2016-01-10",
+    "ended": true
+  },
+  "end-area": {
+    "disambiguation": "",
+    "type": null,
+    "sort-name": "New York",
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "type-id": null,
+    "name": "New York"
+  },
+  "ipis": [
+    "00003960406",
+    "00015471209"
+  ],
+  "type": "Person",
+  "id": "5441c29d-3602-4898-b1a1-b77fa23b8e50",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "begin-area": {
+    "type-id": null,
+    "name": "Brixton",
+    "id": "61941444-5a83-43e2-ba48-4db7438e0f26",
+    "sort-name": "Brixton",
+    "type": null,
+    "disambiguation": ""
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000114448576",
+    "0000000458257298"
+  ],
+  "area": {
+    "name": "England",
+    "type-id": null,
+    "id": "9d5dd675-3cf4-4296-9e39-67865ebee758",
+    "sort-name": "England",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-ENG"
+    ]
+  },
+  "name": "David Bowie"
+}

@@ -1,0 +1,336 @@
+{
+  "name": "Donny Ben\u00e9t",
+  "type": "Person",
+  "begin-area": null,
+  "country": "AU",
+  "gender": "Male",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type-id": null,
+    "sort-name": "Sydney",
+    "id": "3f179da4-83c6-4a28-a627-e46b4a8ff1ed",
+    "name": "Sydney",
+    "type": null,
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "disambiguation": "",
+  "isnis": [],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "4bd8f3cd-2300-48c4-8d2b-96be0ddc495b",
+        "resource": "https://www.allmusic.com/artist/mn0003266439"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "url": {
+        "resource": "https://donnybenet.bandcamp.com/",
+        "id": "2cbcb0ac-bfe8-4fc6-ad66-c8d3ae5a9585"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "b4a28502-e849-4acf-9e59-ee41d1c5e7c5",
+        "resource": "https://www.bandsintown.com/a/1613901"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "b1587f33-ac87-44d4-b42d-9a32c0848753",
+        "resource": "https://www.discogs.com/artist/3413094"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "5c54a719-ba7e-4d7b-b770-d706a2fd87f2",
+        "resource": "https://open.spotify.com/artist/1EiNEyiSrpB6BVxt58BnNN"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/2349291",
+        "id": "ed3f3649-cbaf-435e-8ce0-1fbb348f2c39"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "ce03c3bf-7926-4998-bc6d-b93e70dacec8",
+        "resource": "https://www.imdb.com/name/nm8461099/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics",
+      "url": {
+        "resource": "https://genius.com/artists/Donny-benet",
+        "id": "ff1a96f3-f84a-4af5-bd3f-2cfa351c8298"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "24d19221-2fe9-4ad6-9681-426809ef5dae",
+        "resource": "https://donnybenet.com/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/donny-benet",
+        "id": "c02ab2b6-6fba-4cf9-8cc6-a77661c1f2ad"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/donny-benet-3bde545c.html",
+        "id": "30267bfb-e0d0-45c7-9a3d-506ee51ad224"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "resource": "https://www.facebook.com/donnybenet",
+        "id": "8d55e414-f0ed-4009-a370-83d561289f75"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "fef20000-5063-44df-9388-9a2ef8e1e00a",
+        "resource": "https://www.instagram.com/donnybenet/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "resource": "https://soundcloud.com/donny-benet",
+        "id": "f978d040-d780-4ccb-bcaa-d65317e1b6d2"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "soundcloud",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q5296727",
+        "id": "e57ca4c2-6ec7-4166-96dd-95dd39f91547"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata"
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCdmnl9PM8Aa8dZ_CAOUbAUg",
+        "id": "0347b0de-de24-4d5f-813d-81083e6e3b7e"
+      },
+      "type": "youtube",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "youtube",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "2922c36c-8444-48c3-815b-e754bd927989",
+        "resource": "https://www.youtube.com/channel/UCKnbqx5dxauhUGYxGS49c7Q"
+      }
+    }
+  ],
+  "id": "b5902d08-cc36-4748-bc78-d2090cc7ec9a",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1981"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Ben\u00e9t, Donny"
+}

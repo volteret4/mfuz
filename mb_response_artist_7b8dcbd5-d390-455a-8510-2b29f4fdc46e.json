@@ -1,0 +1,186 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "4757b525-2a60-324a-b060-578765d2c993",
+    "iso-3166-1-codes": [
+      "DK"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "Denmark",
+    "sort-name": "Denmark",
+    "type-id": null
+  },
+  "end-area": null,
+  "gender": null,
+  "type": "Group",
+  "name": "Diefenbach",
+  "country": "DK",
+  "begin-area": {
+    "name": "Copenhagen",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Copenhagen",
+    "id": "e0e3c82a-aea8-48d3-beda-9e587db0b969"
+  },
+  "sort-name": "Diefenbach",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1999"
+  },
+  "gender-id": null,
+  "isnis": [
+    "0000000469115420"
+  ],
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "189e4f1a-6cb3-4143-b878-96ed9c88e921",
+        "resource": "https://www.allmusic.com/artist/mn0000539258"
+      },
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "url": {
+        "id": "ecd9eb68-b511-431d-a75b-2e3a496c9b71",
+        "resource": "https://www.discogs.com/artist/302262"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm3633658/",
+        "id": "e50e89b7-b471-489c-aa5d-d80bc5969d10"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Diefenbach",
+        "id": "02105882-1a3c-4532-b237-c5236627e8f5"
+      },
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/diefenbachmusic",
+        "id": "a49ecb40-1555-4423-8671-365bee276889"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://diefenbach.dk/",
+        "id": "8424e564-1274-48bd-be09-d1fbcf811f74"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "adfae893-ce92-4c31-85c1-7d16a3293734",
+        "resource": "https://rateyourmusic.com/artist/diefenbach"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q12308592",
+        "id": "8b749885-a767-47ab-99ef-62d8714f0c1d"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "id": "7b8dcbd5-d390-455a-8510-2b29f4fdc46e",
+  "ipis": [],
+  "disambiguation": ""
+}

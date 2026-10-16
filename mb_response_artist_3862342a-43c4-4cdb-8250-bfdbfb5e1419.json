@@ -1,0 +1,564 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "disambiguation": "",
+  "sort-name": "M\u00e5neskin",
+  "id": "3862342a-43c4-4cdb-8250-bfdbfb5e1419",
+  "area": {
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "Italy",
+    "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+    "iso-3166-1-codes": [
+      "IT"
+    ],
+    "name": "Italy"
+  },
+  "end-area": null,
+  "relations": [
+    {
+      "ended": false,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003698978",
+        "id": "89eb1785-431a-40ed-8584-0ca6331aa133"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "allmusic",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "bandsintown",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "ac99c0ea-8591-46de-9e8d-ba2074560eb5",
+        "resource": "https://www.bandsintown.com/a/13745212"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "biography",
+      "attributes": [],
+      "url": {
+        "id": "3f3ea834-f654-4917-abad-dba86377de71",
+        "resource": "http://xfactor.sky.it/2017/10/19/maneskin-x-factor-2017/"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/6184259",
+        "id": "c40b2ab9-ce99-44f9-a292-b10164587831"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/0lAWpj5szCSwM4rUMHYmrr",
+        "id": "51ba3d38-0aa8-4bfa-9f94-076dfa85ded5"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "free streaming"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "894c4526-e0f9-4e1c-b7ac-bedc94d84946",
+        "resource": "https://www.deezer.com/artist/13612387"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "b4b7533b-6e7e-4009-8b7f-e541a4927c95",
+        "resource": "https://www.imdb.com/name/nm10149922/"
+      },
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.last.fm/music/M%C3%A5neskin",
+        "id": "e8f84eb0-e9d8-45b7-b1d6-2b4faf2bf7ad"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Maneskin",
+        "id": "c926b300-ba92-49e7-a7c9-ea88420c51e5"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "lyrics",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/M%C3%A5neskin",
+        "id": "f53ba3e9-6eeb-4e89-9b77-38c12b2badb0"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "lyrics"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.maneskin.it/",
+        "id": "1aa32680-3e31-4554-8df4-4a9b7c5851fc"
+      },
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "611c6420-f200-4de8-a190-e203c0c15ba8",
+        "resource": "https://d-nb.info/gnd/1175134465"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39QQPVp7XCYkFdHg6WRfjpcqF",
+        "id": "d3580aa2-c767-44e9-abb3-124ad0674cd5"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/maneskin",
+        "id": "9592d479-ec4e-43a1-b599-5054e4ccc494"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://itunes.apple.com/it/artist/id1312874741",
+        "id": "263afc61-b10e-4521-9858-8b536861a997"
+      }
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "6da0b637-8f2c-4872-ad48-01ab016f5b03",
+        "resource": "https://www.setlist.fm/setlists/maneskin-3bcd7ccc.html"
+      },
+      "attributes": [],
+      "type": "setlistfm",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "5e9f9201-dbfb-428b-862e-881ae1e25183",
+        "resource": "https://twitter.com/thisismaneskin"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/maneskinofficial",
+        "id": "268816ab-67ea-4147-8e0a-5c9a5f9c8496"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "e34b071f-c46c-4903-a0e7-d7335a997a03",
+        "resource": "https://www.instagram.com/maneskinofficial/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.tiktok.com/@therealmaneskin",
+        "id": "eecfa38f-fcaa-4c9d-b3a4-7470daa81d9f"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "songkick",
+      "attributes": [],
+      "url": {
+        "id": "4233a8f8-3971-4949-a372-582f8c4ece96",
+        "resource": "https://www.songkick.com/artists/9479899"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "7906a320-d5eb-45cb-a980-06bd8d92a53a",
+        "resource": "https://soundcloud.com/maneskin"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "soundcloud"
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://it.napster.com/artist/maneskin",
+        "id": "810e3d4f-c63e-41bf-bb09-5c8a5bc10f8d"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.amazon.it/artists/B077F27SVP",
+        "id": "b6ae747a-cabf-40b3-879e-8544c4644b24"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "75ab5061-1377-4a51-97ef-fea2b01af20d",
+        "resource": "https://music.apple.com/it/artist/1312874741"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/9274850",
+        "id": "96ed1219-e27f-4e5f-af45-140feefb3acd"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "b71e7a74-6cec-4680-9374-5199175eaa8e",
+        "resource": "http://viaf.org/viaf/51154739867752992289"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "VIAF",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "wikidata",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "78dce44d-26ad-4756-9eba-7260df199d77",
+        "resource": "https://www.wikidata.org/wiki/Q56884561"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "eeaed7c0-558a-4d69-8c78-b124024aa88f",
+        "resource": "https://www.youtube.com/channel/UCgQna2EqpzqzfBjlSmzT72w"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "youtube",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null
+    }
+  ],
+  "name": "M\u00e5neskin",
+  "life-span": {
+    "end": null,
+    "begin": "2016",
+    "ended": false
+  },
+  "country": "IT",
+  "type": "Group",
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "sort-name": "Roma",
+    "disambiguation": "",
+    "id": "dccd77b2-bd3d-49eb-a98f-fd58e87f481e",
+    "name": "Roma"
+  },
+  "gender-id": null,
+  "ipis": [],
+  "isnis": [
+    "0000000470836655"
+  ]
+}

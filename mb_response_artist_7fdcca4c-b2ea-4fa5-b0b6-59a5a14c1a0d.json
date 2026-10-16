@@ -1,0 +1,353 @@
+{
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "id": "023da4a0-acee-3fb1-b91e-5de74ccf787b",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "KE"
+    ],
+    "name": "Kenya",
+    "type": null,
+    "type-id": null,
+    "sort-name": "Kenya"
+  },
+  "name": "KMRU",
+  "type": "Person",
+  "begin-area": {
+    "iso-3166-2-codes": [
+      "KE-110"
+    ],
+    "type-id": null,
+    "sort-name": "Nairobi",
+    "disambiguation": "",
+    "name": "Nairobi",
+    "type": null,
+    "id": "4cc373f3-8b60-400b-8aa3-6df3fe4ab8fb"
+  },
+  "country": "KE",
+  "gender": "Male",
+  "life-span": {
+    "begin": "1997-01-10",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "KMRU",
+  "ipis": [
+    "01002587887"
+  ],
+  "disambiguation": "Joseph Kamaru, DJ/producer/experimental",
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "3ca1e75e-ff8a-4ff7-9b6f-e9511fe4a0b8",
+        "resource": "https://www.allmusic.com/artist/mn0003968135"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandcamp",
+      "url": {
+        "resource": "https://kmru.bandcamp.com/",
+        "id": "9e2a4aa5-c321-4324-acd0-ec87688862de"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "15670dcd-1c9e-407d-8a76-dd806c2abbc1",
+        "resource": "https://www.discogs.com/artist/7020237"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "8da99325-26e0-4856-8f5b-d084aa61ffae",
+        "resource": "https://open.spotify.com/artist/5blZUSGq0z7HhuSldSXV3a"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/11496302",
+        "id": "c90fdb0e-42ce-4c81-bf9c-7ec66ed4c001"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.last.fm/music/KMRU",
+        "id": "3909b4ff-9728-4b51-9052-8c6b2e4868b6"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "url": {
+        "resource": "https://kmru.info/",
+        "id": "30547b9d-cbd7-4f28-b29e-05ae12fa584e"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://ra.co/dj/kmru",
+        "id": "7004305a-99eb-493e-9a2e-2e30176aaac8"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "fef2682e-aaa2-48f7-9e64-25e8f4c99487",
+        "resource": "https://rateyourmusic.com/artist/kmru"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "755958c9-837a-4626-93bd-6b345ceb38e7",
+        "resource": "https://itunes.apple.com/us/artist/id1183270329"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "9de2d66d-5da8-4e7e-aab4-1ff86a1cc12e",
+        "resource": "https://twitter.com/joseph_kamaru"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/K4MARU",
+        "id": "ade5783e-875e-4f05-b0ad-f090bce6a3d8"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "7a63ed2f-e3fc-404f-a074-a6d682faa11a",
+        "resource": "https://www.instagram.com/_kamaru_/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "44781aa3-989b-4210-a608-7f6c2db46e9e",
+        "resource": "https://soundcloud.com/kamarujoseph"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "db25dd23-4d20-44c9-b12a-3a85c62746a3",
+        "resource": "https://music.amazon.com/artists/B01MRU56ON"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/8340145",
+        "id": "4c5210a3-f77b-44e4-a25a-4ab4d3c607c8"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "0610087e-e270-4ac8-8fe4-4db7bfec4131",
+        "resource": "https://www.wikidata.org/wiki/Q119576599"
+      }
+    }
+  ],
+  "isnis": [
+    "0000000482837794"
+  ],
+  "id": "7fdcca4c-b2ea-4fa5-b0b6-59a5a14c1a0d"
+}

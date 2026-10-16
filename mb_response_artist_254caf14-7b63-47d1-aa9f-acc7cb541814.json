@@ -1,0 +1,657 @@
+{
+  "gender": "Male",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "id": "22ce8b5d-0b65-4f6f-b515-2e9ff96eca25",
+    "disambiguation": "",
+    "sort-name": "Haverfordwest",
+    "type": null,
+    "name": "Haverfordwest",
+    "type-id": null
+  },
+  "ipis": [
+    "00259550150",
+    "00266408358"
+  ],
+  "country": "GB",
+  "isnis": [
+    "0000000110351734"
+  ],
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000552004",
+        "id": "24cf3172-739a-489f-93c0-e3ea46fff1aa"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "cf391872-b094-4530-9505-86f9c28ef5fc",
+        "resource": "https://gruffrhys.bandcamp.com/"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/254caf14-7b63-47d1-aa9f-acc7cb541814",
+        "id": "d363393e-a4ce-43b8-b951-ff39189b913a"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "begin": null
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "id": "c90796d2-c8c2-424c-9552-5607c7357796",
+        "resource": "https://www.discogs.com/artist/105594"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "9d107127-ff12-4d1a-a885-4f1f5b19456f",
+        "resource": "https://open.spotify.com/artist/0dLSQG3IV62UNVhWUe6mx6"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "16f9ba5b-8af3-4eb2-9c26-a44be16b35cc",
+        "resource": "https://www.deezer.com/artist/17263"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f688ff5c-3395-4baf-9f34-ba9d5b85ff7b",
+        "resource": "https://www.imdb.com/name/nm1797636/"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Gruff%20Rhys",
+        "id": "0f7bb393-6266-40f7-bc10-be39d7e96d59"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "url": {
+        "resource": "https://genius.com/artists/Gruff-rhys",
+        "id": "e6ef296a-82a7-4f5c-9c48-f3ab53ed4558"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type": "myspace",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://myspace.com/candylionmusic",
+        "id": "67d86c1e-238d-46b3-9bb2-7905dce47675"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://www.gruffrhys.com/",
+        "id": "1de8afb9-456e-4186-9d4f-40a9803e5628"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": true,
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.candylion.co.uk/",
+        "id": "2ea5fb3a-3183-41fd-b01a-e44fe4915d90"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2007060606",
+        "id": "601af5d7-538a-46fe-938a-2e85682526a4"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb166336481",
+        "id": "59e673ae-9bb8-4aef-bd84-d3102d01e24b"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "3b5b08b6-9906-49ec-ab38-ecebaddc380a",
+        "resource": "https://d-nb.info/gnd/1079303049"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/gruff_rhys",
+        "id": "0d863604-ad55-418e-bdc5-bbbe6c598192"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "6d3298c8-5f1d-4340-b3d8-c0f2f349786f",
+        "resource": "https://www.muziekweb.nl/Link/M00000208093/POPULAR/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "968d0736-20f9-4b10-8a86-acac123bf116",
+        "resource": "https://www.whosampled.com/Gruff-Rhys/"
+      }
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2007060606/",
+        "id": "c5d828e6-1834-4aa8-b380-a5d58518b789"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://www.maniadb.com/artist/201766",
+        "id": "95929192-da3a-4283-b7ce-a0d81bba8506"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id799705",
+        "id": "b0e34328-6fb2-45b4-a59d-d88cddab7169"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "9172869b-c80d-4725-a8fb-9ddf6b6e76d6",
+        "resource": "https://secondhandsongs.com/artist/21929"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "fb829c4b-0f93-42f3-a432-bb085341d32a",
+        "resource": "https://twitter.com/gruffingtonpost"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "214eb941-9c90-4ee0-90eb-9fb8284a0149",
+        "resource": "https://www.facebook.com/Gruffingtonpost"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.instagram.com/gruffingtonpost/",
+        "id": "ce9a6358-428f-4217-b383-2fb863ea8c7b"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "a10ec710-3bea-4390-8601-3e8b1a731d39",
+        "resource": "https://www.songkick.com/artists/210110"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://soundcloud.com/gruffrhys",
+        "id": "18a84763-b60e-46d6-ab24-2688a00d68a9"
+      },
+      "attributes": []
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/799705",
+        "id": "8fca5a54-5aae-40fa-8682-de2066f3399d"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/us/artist/799705",
+        "id": "672bb180-5239-4867-b827-bdb0e2221489"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://tidal.com/artist/3566067",
+        "id": "d2e5b372-57a4-40ec-bcb0-fa1e9d285c37"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "b607ed0e-415f-4684-92ed-c0e0b616ae20",
+        "resource": "http://viaf.org/viaf/2246684"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "5935e510-7572-41d5-b65c-a410c0bff7eb",
+        "resource": "http://viaf.org/viaf/231453596"
+      },
+      "attributes": [],
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q3050590",
+        "id": "4c86eada-04b3-4a81-a418-2744509a265b"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "58d8730b-3504-4769-a184-0bd29d91161f",
+        "resource": "https://www.youtube.com/channel/UC3DlKHM2k4mqVNP0M7cX6Qw"
+      }
+    }
+  ],
+  "end-area": null,
+  "name": "Gruff Rhys",
+  "area": {
+    "type": null,
+    "id": "f0b226db-8e22-40e6-9a53-d839cfec6228",
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-CRF"
+    ],
+    "sort-name": "Cardiff",
+    "type-id": null,
+    "name": "Cardiff"
+  },
+  "sort-name": "Rhys, Gruff",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "254caf14-7b63-47d1-aa9f-acc7cb541814",
+  "disambiguation": "",
+  "life-span": {
+    "ended": false,
+    "begin": "1970-07-18",
+    "end": null
+  }
+}

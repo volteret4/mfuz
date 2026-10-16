@@ -1,0 +1,402 @@
+{
+  "type": "Group",
+  "ipis": [],
+  "end-area": null,
+  "name": "The Whispers",
+  "isnis": [
+    "0000000106761079"
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "Watts, Los Angeles",
+    "type-id": null,
+    "sort-name": "Watts, Los Angeles",
+    "id": "819f3250-ecae-48b3-a589-227715b0f6e6"
+  },
+  "area": {
+    "sort-name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type-id": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "gender-id": null,
+  "id": "2e7afe0c-ec52-4c1d-9413-5d40f77922c7",
+  "country": "US",
+  "relations": [
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000482787",
+        "id": "88a10cb4-702d-4714-b33b-35a426f7ed7a"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "bd397e40-5ac3-4090-b9e0-831f93619218",
+        "resource": "https://www.bbc.co.uk/music/artists/2e7afe0c-ec52-4c1d-9413-5d40f77922c7"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true,
+      "end": "2020-11-19",
+      "begin": null,
+      "type": "BBC Music page",
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "biography",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://web.archive.org/web/20071009212152/http://www.discomuseum.com/Whispers.html",
+        "id": "9358b2ce-b896-4e85-9ac4-26829fe50bcd"
+      },
+      "target-type": "url",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "id": "b13f7ffd-39f8-47d8-905c-56d059fd6f95",
+        "resource": "https://www.discogs.com/artist/51979"
+      },
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "7abf1109-f1fa-40ce-bdc1-cd850408baf2",
+        "resource": "https://open.spotify.com/artist/2XzHxDFTNywDd5ReMhgxkg"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "e1e3fff3-75a7-4c8e-a6da-6d67178cce5e",
+        "resource": "https://www.deezer.com/artist/7933"
+      },
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "36cc95fc-ed75-41d4-b6ae-19eff301424d",
+        "resource": "https://www.imdb.com/name/nm2183044/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "end": null,
+      "begin": null,
+      "type": "IMDb",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "last.fm",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/The+Whispers",
+        "id": "23ec17ca-61de-45e9-a239-b22712f96280"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/therealwhispers",
+        "id": "18618427-bdbc-40d3-9691-c0ceadc8c0ba"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "myspace",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://thewhispers.com/",
+        "id": "e26ed2b6-e0aa-4410-8a00-40bca20336b3"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "end": null,
+      "type": "official homepage",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b1b69e56-1a5b-48b1-ad43-410fc64abcdf",
+        "resource": "https://rateyourmusic.com/artist/the_whispers"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f70ad2f1-f5e9-4c95-bad0-bbab5329de47",
+        "resource": "https://www.45cat.com/12single/artist/the-whispers"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "2bdb22c2-6e46-4dd6-b45d-27f03403609d",
+        "resource": "https://www.45cat.com/artist/the-whispers"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.45cat.com/cdalbum/artist/the-whispers",
+        "id": "8add8655-aeea-43ae-8abf-bb8470b5d701"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "67b5d8b9-ac93-49e5-9719-cd05004a3ce7",
+        "resource": "https://www.45cat.com/vinyl/artist/the-whispers"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/The-Whispers/",
+        "id": "03816b0d-6c64-4924-9718-a117f9fe5464"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://twitter.com/thewhispers",
+        "id": "49016a56-cbe4-4983-ac4c-466d49087b68"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "26f0ffaf-8e97-408e-b250-d902288ebc25",
+        "resource": "https://music.apple.com/gb/artist/360258"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "1b1289ae-6100-4431-8628-f5e095819d70",
+        "resource": "https://tidal.com/artist/9455"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1527931",
+        "id": "ecacac8d-d804-4075-9a33-f299c4752b12"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    }
+  ],
+  "gender": null,
+  "sort-name": "Whispers, The",
+  "life-span": {
+    "begin": "1963",
+    "end": null,
+    "ended": false
+  },
+  "disambiguation": "US R&B/dance vocal group"
+}

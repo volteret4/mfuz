@@ -1,8 +1,14 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 
 # Conectar a ambas bases de datos
 conn_copia = sqlite3.connect('base_copia.db')
+apply_pragmas(conn_copia)
 conn_original = sqlite3.connect('base_original.db')
+apply_pragmas(conn_original)
 
 # Asegurarte que las tablas existen en la base original
 cursor_original = conn_original.cursor()

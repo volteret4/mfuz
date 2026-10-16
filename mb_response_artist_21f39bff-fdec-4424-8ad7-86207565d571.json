@@ -1,0 +1,309 @@
+{
+  "end-area": {
+    "iso-3166-2-codes": [
+      "AT-9"
+    ],
+    "sort-name": "Wien",
+    "type-id": null,
+    "disambiguation": "",
+    "name": "Wien",
+    "type": null,
+    "id": "afff1a94-a98b-4322-8874-3148139ab6da"
+  },
+  "area": {
+    "id": "caac77d1-a5c8-3e6e-8e27-90b44dcc1446",
+    "iso-3166-1-codes": [
+      "AT"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "Austria",
+    "type-id": null,
+    "sort-name": "Austria"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "id": "10166876-8621-496b-9b6f-c1108b52948a",
+    "name": "Slovenj Gradec",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Slovenj Gradec",
+    "iso-3166-2-codes": [
+      "SI-112"
+    ]
+  },
+  "country": "AT",
+  "name": "Hugo Wolf",
+  "type": "Person",
+  "gender": "Male",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1860-03-13",
+    "end": "1903-02-22",
+    "ended": true
+  },
+  "sort-name": "Wolf, Hugo",
+  "disambiguation": "Austrian composer of Slovenian descent",
+  "ipis": [
+    "00033155120"
+  ],
+  "id": "21f39bff-fdec-4424-8ad7-86207565d571",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0001194278",
+        "id": "b88ce9fa-9e54-4138-91fe-fcdfa68c2f93"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/2162658",
+        "id": "347a45bd-76e1-4341-8bdb-dc82d7e68f2a"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "e99e4cb9-4204-452d-b751-5432f3e1c363",
+        "resource": "https://www.discogs.com/artist/460621"
+      },
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "id": "0f39c810-f670-4687-b5e2-9c1cc6604c98",
+        "resource": "https://open.spotify.com/artist/3JvFTHGx6J55BUnjL8l04T"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "image",
+      "attribute-values": {},
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Hugo_Wolf.jpg",
+        "id": "236a76f3-a006-468c-b908-78e256829174"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "IMSLP",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "91d87215-5908-4426-8ec7-3af858747109",
+        "resource": "https://imslp.org/wiki/Category:Wolf,_Hugo"
+      },
+      "type-id": "8147b6a2-ad14-4ce7-8f0a-697f9a31f68f",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "b1038431-aba5-4afa-a718-e9cb358a3e3d",
+        "resource": "https://adp.library.ucsb.edu/names/102575"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb121573752",
+        "id": "c47238e6-e0b1-4a79-b65b-a59332d88e9d"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/118634712",
+        "id": "e3b9f703-8910-4e16-8f69-ca8b5ce43952"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "ba93a2aa-08d8-489a-b9fe-6827a246cf2b",
+        "resource": "https://openlibrary.org/works/OL793450A"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "272a4f96-f8f5-456e-b8a5-835e3cf46468",
+        "resource": "https://rateyourmusic.com/artist/hugo_wolf"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/167007",
+        "id": "cac94179-0b02-431c-bf33-2ca005778d99"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "eab6b298-f1b2-4d07-a0d2-11aee820d7fb",
+        "resource": "http://viaf.org/viaf/120704169"
+      },
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "31260725-6cf1-492c-9330-c0ecc0cf1ac6",
+        "resource": "https://www.wikidata.org/wiki/Q215747"
+      }
+    }
+  ],
+  "isnis": [
+    "0000000117013180"
+  ]
+}

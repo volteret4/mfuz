@@ -1,0 +1,379 @@
+{
+  "country": "US",
+  "sort-name": "Horn, Shirley",
+  "relations": [
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000030925",
+        "id": "d854064b-ccb6-436a-af0f-8689f919ca07"
+      },
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "discography page",
+      "ended": false,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "resource": "http://www.jazzdiscography.com/Artists/Horn/sh-disc.htm",
+        "id": "97c62b00-7f9a-4c25-aa21-295a730337cb"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "id": "3427b673-51e8-4d42-a3cb-3354cb539b07",
+        "resource": "https://www.discogs.com/artist/33588"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0x9L9ChXVAf3hFOb0CbRmd",
+        "id": "b5bba035-b574-437a-83b6-f6d1fcab3402"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/8597",
+        "id": "2baa012d-f13f-49fd-a2f0-cd35a2cc9382"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0394917/",
+        "id": "c0b58d5a-0625-4b90-abe8-69b893ad01f8"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "d7fef9f0-63e7-434b-b802-0eb53527c97d",
+        "resource": "https://genius.com/artists/Shirley-horn"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "lyrics",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n92006094",
+        "id": "f164f767-2ddb-4b01-874b-12b2e18cd09c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13895329k",
+        "id": "23f0c082-f38b-4ec2-83fa-1cc4077804a3"
+      },
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "resource": "https://d-nb.info/gnd/13146776X",
+        "id": "e2eaa6b4-f956-4475-a3db-23e2ce7eda06"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/shirley-horn/",
+        "id": "99291774-f278-439a-9f45-9831c4cd0dec"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9716921c-821a-41e7-a5f2-9a5d494e72d8",
+        "resource": "https://www.worldcat.org/identities/lccn-n92006094"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/137162",
+        "id": "120f6940-8093-4e6c-bafe-35c79967cab5"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "purchase for download",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.songkick.com/artists/517069",
+        "id": "b33dcaf8-8076-4932-9f1d-361b0946d49d"
+      },
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "end": null,
+      "type": "songkick",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/137162",
+        "id": "120f6940-8093-4e6c-bafe-35c79967cab5"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/31957",
+        "id": "477b08c2-6c06-4965-adf8-e074aba3d591"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "type": "VIAF",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "http://viaf.org/viaf/85450461",
+        "id": "0996d4c3-853a-4213-b9ec-4be304886693"
+      },
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "6f3c78af-f3d4-4ea4-ada7-d115191425cd",
+        "resource": "https://www.wikidata.org/wiki/Q270893"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    }
+  ],
+  "gender": "Female",
+  "disambiguation": "",
+  "life-span": {
+    "end": "2005-10-20",
+    "begin": "1934-05-01",
+    "ended": true
+  },
+  "type": "Person",
+  "end-area": {
+    "iso-3166-2-codes": [
+      "US-DC"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "sort-name": "Washington, D.C.",
+    "id": "af59135f-38b5-4ea4-b4e2-dd28c5f0bad7",
+    "name": "Washington, D.C.",
+    "type-id": null
+  },
+  "ipis": [],
+  "id": "1f72d108-f2dc-44cd-8213-8d3426cc2c9a",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "isnis": [
+    "0000000114765563"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type-id": null,
+    "name": "Washington, D.C.",
+    "id": "af59135f-38b5-4ea4-b4e2-dd28c5f0bad7",
+    "sort-name": "Washington, D.C.",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "US-DC"
+    ]
+  },
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "sort-name": "United States",
+    "type": null
+  },
+  "name": "Shirley Horn"
+}

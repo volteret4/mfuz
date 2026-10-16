@@ -1,0 +1,494 @@
+{
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "sort-name": "Clifford, Linda",
+  "name": "Linda Clifford",
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "name": "Brooklyn",
+    "type": null,
+    "id": "a71b0d32-7752-49e9-8594-2247ad6ac12c",
+    "sort-name": "Brooklyn"
+  },
+  "ipis": [
+    "00046132210"
+  ],
+  "id": "2a7d1905-f1a0-4d12-9b42-e870e325fc29",
+  "end-area": null,
+  "disambiguation": "",
+  "relations": [
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "fe20c7bc-7b23-4aae-a7b6-7184676de1fa",
+        "resource": "https://www.allmusic.com/artist/mn0000294377"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "e840b7c0-16ee-4ade-a47a-7800084b2b91",
+        "resource": "https://web.archive.org/web/20080517165743/http://www.discomuseum.com/LindaClifford.html"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "type": "biography",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/6548",
+        "id": "4aae0a70-9d2c-4721-865c-38ba5e362be1"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "3af78aae-5862-4cc2-863b-5f17656e6133",
+        "resource": "https://open.spotify.com/artist/1yAHoX5jWFLYIKEwyb6ulM"
+      }
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "7bb9b857-2be8-409e-aeda-a3b04dfb41ef",
+        "resource": "https://www.imdb.com/name/nm1134282/"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "IMDb",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Linda+Clifford",
+        "id": "0557e017-889e-4eb2-b07f-605e74b4272c"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "97b17d0a-77fe-4364-9531-0e9735715a52",
+        "resource": "https://myspace.com/thelindaclifford"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "ace03b94-4582-48d1-be90-0431fc561cb0",
+        "resource": "http://thelindaclifford.com/"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "7c341ce6-b553-40ad-968d-38d522fb379d",
+        "resource": "http://id.loc.gov/authorities/names/n92100202"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14009510k",
+        "id": "28f52f3d-7b85-43fc-8f3b-3135fd19d9a2"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "url": {
+        "id": "10b238fd-f5c0-4245-81d9-22b71932728b",
+        "resource": "https://d-nb.info/gnd/134348591"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "id": "d23d4cf8-39ef-4ef3-b28a-a6b40cb7bb0b",
+        "resource": "https://rateyourmusic.com/artist/linda_clifford"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "https://www.45cat.com/12single/artist/linda-clifford",
+        "id": "1a8302d3-f8a9-4eb1-8179-d82658a3be74"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9687372b-25d7-42c5-b2e9-3f69160e9423",
+        "resource": "https://www.45cat.com/artist/linda-clifford"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.45cat.com/cdalbum/artist/linda-clifford",
+        "id": "4d1ac965-5014-4e15-83da-a95e2f109009"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.45cat.com/tape/artist/linda-clifford",
+        "id": "513895fd-1a3c-4de5-8be8-5638ca782d4a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "https://www.45cat.com/vinyl/artist/linda-clifford",
+        "id": "5b1898dd-df79-49af-a554-460b002da13d"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n92100202",
+        "id": "75c82d4f-7d7c-47a0-b4cd-656845be5bf2"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/linda-clifford-bd6251a.html",
+        "id": "00d1e86a-d4b8-41be-b7ed-360535ae8c78"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "setlistfm",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "a4787501-2f12-4e0d-9a01-0e0b38c07adc",
+        "resource": "https://twitter.com/mslindaclifford"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/people/Linda-Clifford/100063471739417",
+        "id": "e80a5fcb-8816-4712-b19d-30aa797df73b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {},
+      "target-type": "url",
+      "url": {
+        "id": "70c8284b-f0ce-47a3-ad0e-d70052e3b6f3",
+        "resource": "https://www.songkick.com/artists/506980"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "VIAF",
+      "url": {
+        "resource": "http://viaf.org/viaf/27263688",
+        "id": "7c8ad749-6633-495a-8ed4-5e9ed8611038"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "f3e7405b-aa16-47d5-a675-22ab6902d676",
+        "resource": "https://www.wikidata.org/wiki/Q457811"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCM-ZiVZ8OKLd0xuFCqdOIpA",
+        "id": "d42a9588-24b1-49d1-a0b2-b2018e62e945"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    }
+  ],
+  "gender": "Female",
+  "country": "US",
+  "life-span": {
+    "begin": "1948-06-14",
+    "ended": false,
+    "end": null
+  },
+  "type": "Person",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "disambiguation": "",
+    "name": "United States",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type-id": null
+  },
+  "isnis": [
+    "0000000055167917"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

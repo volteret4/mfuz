@@ -1,0 +1,328 @@
+{
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "77803ef6-1029-4901-adb9-29697fb97dad",
+  "name": "Sarah Davachi",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type-id": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "type": null
+  },
+  "isnis": [],
+  "begin-area": {
+    "name": "Calgary",
+    "type-id": null,
+    "id": "f88bfae6-8a35-4bed-bd37-8ea16ba2b9c6",
+    "sort-name": "Calgary",
+    "type": null,
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "end-area": null,
+  "type": "Person",
+  "life-span": {
+    "end": null,
+    "begin": "1987",
+    "ended": false
+  },
+  "disambiguation": "",
+  "sort-name": "Davachi, Sarah",
+  "gender": "Female",
+  "relations": [
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003242321",
+        "id": "57031cb7-8acb-4114-9426-55ccde96ae50"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "allmusic",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "6386ee76-1ccb-4d27-b369-39853b6eb753",
+        "resource": "https://sarahdavachi.bandcamp.com/"
+      },
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "bandcamp",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/3567634",
+        "id": "ffe5d869-8dc8-483c-8daa-fe450bf35a28"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "discogs",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "f244984c-5996-4bbc-8de5-58ca1a0c0d88",
+        "resource": "https://open.spotify.com/artist/2Swn6We5XXpyDz1YxRkprA"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/5015442",
+        "id": "6ae5a5fa-b58c-4f98-b71f-96670e33bc5b"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Sarah+Davachi",
+        "id": "92b16a96-93e5-4473-ae2d-2a00e41d6089"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "last.fm",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "1a40eff3-a3ec-4429-a2db-3bb51b9727b4",
+        "resource": "http://www.sarahdavachi.com/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage"
+    },
+    {
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/sarah-davachi",
+        "id": "78389ac3-41c0-44fd-be7a-18562f5ddcf8"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2015161931/",
+        "id": "3e305c70-60f7-4c53-973a-34ae9096732d"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/676870963",
+        "id": "8e547ee9-a26d-413d-82be-538b74409e65"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "8856f4cd-24c6-42bd-9e3f-762357838c68",
+        "resource": "https://www.facebook.com/sarahdavachimusic"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "soundcloud",
+      "begin": null,
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "url": {
+        "resource": "https://soundcloud.com/sarahdavachi",
+        "id": "59cb5afb-148a-4139-886b-319d7b256bc8"
+      },
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "8e547ee9-a26d-413d-82be-538b74409e65",
+        "resource": "https://music.apple.com/us/artist/676870963"
+      },
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "474f16b8-abe6-4e86-8615-271f46c9fd45",
+        "resource": "https://tidal.com/artist/5711585"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "d8a2df2c-243b-44d0-98b0-1f61ebbe939b",
+        "resource": "https://www.wikidata.org/wiki/Q56191981"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCW82MHaOiwL6Njf8uYbbQiw/about",
+        "id": "23977cd9-dfa3-4890-a5fe-ecdd13ed7ffb"
+      },
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "youtube",
+      "source-credit": ""
+    }
+  ],
+  "country": "US"
+}

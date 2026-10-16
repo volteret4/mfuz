@@ -1,0 +1,148 @@
+{
+  "ipis": [],
+  "end-area": null,
+  "type": "Person",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "0efa36ff-b0ed-4580-9abd-bccd40ab14ab",
+  "name": "Mike Parker",
+  "isnis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "Buffalo",
+    "type-id": null,
+    "id": "7e5e7fd7-c1eb-4cb8-87e2-fb1c0eda9e48",
+    "sort-name": "Buffalo"
+  },
+  "area": {
+    "sort-name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "sort-name": "Parker, Mike",
+  "gender": "Male",
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000895528",
+        "id": "4e4118bf-fe73-4f59-b4a4-4d2e1af09a0d"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "6e9dd039-771b-4e34-ada0-7427e43e21a9",
+        "resource": "https://www.discogs.com/artist/7771"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "471b0500-fd05-4a6b-9dda-169c297b8b16",
+        "resource": "https://www.deezer.com/artist/111305"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "22bac855-9d70-48ad-a380-34a5dc9fe72e",
+        "resource": "https://myspace.com/inversions"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "end": null,
+      "type": "myspace",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "d2fd7fe2-0967-4a43-bb24-9acff9ea2bd4",
+        "resource": "http://www.mike-parker.net/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "end": null,
+      "type": "official homepage",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "8500224c-b4b9-4529-9d84-60bb4587a2a6",
+        "resource": "https://rateyourmusic.com/artist/mike_parker"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    }
+  ],
+  "country": "US",
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  },
+  "disambiguation": "US minimal techno producer"
+}

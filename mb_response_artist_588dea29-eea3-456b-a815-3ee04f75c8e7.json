@@ -1,0 +1,852 @@
+{
+  "gender": null,
+  "type": "Group",
+  "name": "The Doobie Brothers",
+  "begin-area": {
+    "id": "f95f42b0-59a6-410d-a08e-3db77f4aea8a",
+    "sort-name": "San Jose",
+    "type-id": null,
+    "disambiguation": "",
+    "name": "San Jose",
+    "type": null
+  },
+  "country": "US",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "type": null,
+    "name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "end-area": null,
+  "id": "588dea29-eea3-456b-a815-3ee04f75c8e7",
+  "relations": [
+    {
+      "url": {
+        "id": "ce147335-200a-4912-a0b0-ce57d223106a",
+        "resource": "https://www.allmusic.com/artist/mn0000136871"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "bandsintown",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "id": "4b10fb8b-fd17-4990-90be-e5b7c25cf79d",
+        "resource": "https://www.bandsintown.com/a/37982"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "86978b66-82c3-4722-ab34-e245d9760c83",
+        "resource": "https://www.bbc.co.uk/music/artists/588dea29-eea3-456b-a815-3ee04f75c8e7"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "biography",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://www.classicbands.com/doobies.html",
+        "id": "db26ef4e-a283-4b18-9e4e-c64bb40c945c"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/37223",
+        "id": "6663a60b-0de8-45de-aeca-7a19afbe7b1e"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "fanpage",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://www.doobfan.com/",
+        "id": "71a78234-95d7-4be7-baba-01c1bc4c42db"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "878b7f4e-021c-43a0-a32c-85fcb7118677",
+        "resource": "http://www.thedoobiebrothers.com/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attribute-values": {},
+      "type": "fanpage",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/39T6qqI0jDtSWWioX8eGJz",
+        "id": "a20b1ef6-a366-4ac7-93b5-fd25735c7e9a"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "cc0b42c1-264d-4901-9272-60c1d65d7b3c",
+        "resource": "https://www.deezer.com/artist/1144"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Doobie_Brothers_1977.JPG",
+        "id": "fa741657-13da-44eb-95ca-25422534bf69"
+      },
+      "type": "image",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1665121/",
+        "id": "7354b687-5831-4857-93c4-86cd76863c99"
+      },
+      "attribute-values": {},
+      "type": "IMDb",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "9bd3e161-54b9-4581-8fd4-19f5eccb7da4",
+        "resource": "https://www.last.fm/music/The%20Doobie%20Brothers"
+      },
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "bc92b008-7430-43c9-81f4-4245d40ab855",
+        "resource": "http://muzikum.eu/en/122-4635/the-doobie-brothers/lyrics.html"
+      },
+      "attribute-values": {},
+      "type": "lyrics",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "4eb11904-4e9c-4dc9-910d-5904d1ff878d",
+        "resource": "https://genius.com/artists/The-doobie-brothers"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "myspace",
+      "attribute-values": {},
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "414a900c-64ea-4952-9b09-1dd6414f5977",
+        "resource": "https://myspace.com/doobiebrothers"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "url": {
+        "resource": "https://thedoobiebrothers.com/",
+        "id": "571bbcf2-6638-48bf-adf6-6ff73e2618c0"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "8bbd80a5-a9ba-4261-a146-6ca294a35f6b",
+        "resource": "http://id.loc.gov/authorities/names/n91069448"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "838ef549-05c5-401e-9294-ac27d3242e44",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13903024v"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "cd6c4b28-6316-4cca-82dd-e3388e4fa9bb",
+        "resource": "https://d-nb.info/gnd/10275999-6"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://nla.gov.au/anbd.aut-an35213151",
+        "id": "b03d8113-29e4-4896-abe9-3ea29c8666c6"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_doobie_brothers",
+        "id": "61598cbf-0d36-4c13-8bc5-bbf244a79def"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.45cat.com/artist/the-doobie-brothers",
+        "id": "624b1ab1-4b22-4bf1-a935-ac024de43ccc"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/the-doobie-brothers/",
+        "id": "5f6b5093-ead0-4d45-8d07-b7535fb149af"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "dd035610-9d4a-45b5-9f6a-a6bf6b9f1365",
+        "resource": "https://www.spirit-of-rock.com/en/band/The_Doobie_Brothers"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.whosampled.com/The-Doobie-Brothers/",
+        "id": "bdb622fd-c289-4633-a633-1ccc8028df63"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d6b09831-021a-4b6d-bd0e-6671676eeafb",
+        "resource": "https://www.worldcat.org/identities/lccn-n91-069448"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": "2019-05-19",
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "6555b615-8cd8-42ca-8cfe-642b3779d8cc",
+        "resource": "https://itunes.apple.com/us/artist/id117992093"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Aeyfppcl27lhmddzqtljrgs2vcy",
+        "id": "ecce4642-5982-4a93-ac12-93f50ec2a4ac"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "end": "2020-10-12",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/117992093",
+        "id": "071139ec-5183-45cc-8e68-f73d3c555e8c"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "6c9bab3c-d4d6-44f8-bb07-e3396293b6d1",
+        "resource": "https://uk.7digital.com/artist/the-doobie-brothers"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.junodownload.com/artists/The+Doobie+Brothers/releases/",
+        "id": "bc6367d2-8a5a-4ced-9e90-68511a475521"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "1c0b620b-1a9e-4d47-a061-a45c5656299e",
+        "resource": "https://www.amazon.com/-/e/B000APXHZA"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "07589353-56e1-48e9-9fc7-46d964e0d870",
+        "resource": "https://secondhandsongs.com/artist/5185"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/the-doobie-brothers-63d6be43.html",
+        "id": "7f6dfb13-1710-4bad-9df0-10434aecbe91"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "setlistfm"
+    },
+    {
+      "url": {
+        "id": "162fe500-a6f3-4dd5-aa2c-8f899af9751a",
+        "resource": "https://twitter.com/TheDoobieBros"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/thedoobiebrothers",
+        "id": "551b78af-3c04-44f4-bed6-1f361971275a"
+      },
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/doobiebrothersofficial/",
+        "id": "ea8e6975-7350-4d6b-aab5-76fc57cbb414"
+      },
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/94887",
+        "id": "500e7afe-cbec-4f33-a18d-62fb43b73f32"
+      },
+      "attribute-values": {},
+      "type": "songkick",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "3f69dbc8-6f5e-495b-808f-13df9da6cb15",
+        "resource": "https://soundcloud.com/thedoobiebrothers"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "soundcloud",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B00G7G4MHI",
+        "id": "5da47479-13d1-4316-937e-16dec8a8d7ae"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "071139ec-5183-45cc-8e68-f73d3c555e8c",
+        "resource": "https://music.apple.com/us/artist/117992093"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "1e1f8041-0ff5-40e6-bbba-7544fa807ebf",
+        "resource": "https://tidal.com/artist/107"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "f0fd8e5f-e496-4fef-9e91-a0eb37b977b8",
+        "resource": "http://viaf.org/viaf/135002584"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "140a04f9-abb7-4114-a901-6f48ca0da107",
+        "resource": "https://www.wikidata.org/wiki/Q506670"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "7d45111e-7033-47d0-a0e4-f32a82806b9c",
+        "resource": "https://www.youtube.com/user/DoobiesOfficial"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "attribute-values": {},
+      "type": "youtube",
+      "target-credit": "",
+      "begin": null
+    }
+  ],
+  "isnis": [
+    "000000009211980X"
+  ],
+  "ipis": [],
+  "disambiguation": "",
+  "sort-name": "Doobie Brothers, The",
+  "life-span": {
+    "begin": "1970",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null
+}

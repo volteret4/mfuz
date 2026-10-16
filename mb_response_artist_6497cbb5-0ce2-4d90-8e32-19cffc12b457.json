@@ -1,0 +1,321 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "sort-name": "Human Is Alive",
+  "disambiguation": "Georgian organic ambient music artist",
+  "id": "6497cbb5-0ce2-4d90-8e32-19cffc12b457",
+  "area": {
+    "iso-3166-1-codes": [
+      "GE"
+    ],
+    "name": "Georgia",
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "Georgia",
+    "id": "7e081aa0-817b-3ae0-9fe2-4bb4e3b3cc95"
+  },
+  "end-area": null,
+  "relations": [
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "bandcamp",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://humanisalive.bandcamp.com/",
+        "id": "8e039e39-24ad-4d78-9366-08d1df88464d"
+      }
+    },
+    {
+      "type": "biography",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "a67b6b33-4ae9-4056-b318-3581f8c1d0fb",
+        "resource": "https://signalalchemy.com/team/human-is-alive/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "51e90621-6b3c-4185-890c-b0606f076c79",
+        "resource": "https://www.discogs.com/artist/13010220"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/13736344",
+        "id": "b68e730b-69fd-4adb-b1ed-9dee66afb383"
+      },
+      "ended": false,
+      "source-credit": "Pavel Lipatov",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/7dTbMBySbElMEZs1RfUYO7",
+        "id": "f79dc698-5be6-4ecd-b181-01966c669935"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.deezer.com/artist/62773982",
+        "id": "3d683131-cc12-409d-8a48-4382cb782b66"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "last.fm",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "88ba6de0-283f-4653-9015-49bf28fc143c",
+        "resource": "https://www.last.fm/music/Human+Is+Alive"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.beatport.com/artist/human-is-alive/761037",
+        "id": "25750f4f-0598-4bd3-bc97-dadcc6d5c548"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "b929957e-81b6-4f64-89f7-e4ec2615928a",
+        "resource": "https://twitter.com/thehumanisalive"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "7e930c0c-4712-4efd-b668-7d6d08ed17a8",
+        "resource": "https://vk.com/humanisalive"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/thehumanisalive",
+        "id": "299105bf-3ef7-401d-a0b3-9ec2a5f8d111"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/itshumanisalive/",
+        "id": "1e6df957-0102-470f-92c6-00e9361a968c"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "soundcloud",
+      "attributes": [],
+      "url": {
+        "id": "173ea1f4-b33a-47f5-b8d9-184aafdc78d7",
+        "resource": "https://soundcloud.com/humanisalive"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "6cc29459-d41d-4b19-afff-11cbd1630cf2",
+        "resource": "https://music.amazon.com/artists/B07Q5XD9DV"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1458411340",
+        "id": "c6fb8bc1-0477-4075-99e8-5c8bb04bb4c1"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "1e4b97df-51fb-4595-a235-26158e3e53a0",
+        "resource": "https://tidal.com/artist/15422265"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "name": "Human Is Alive",
+  "country": "GE",
+  "type": "Person",
+  "begin-area": null,
+  "ipis": [],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "isnis": []
+}

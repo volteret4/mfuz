@@ -1,0 +1,890 @@
+{
+  "type": "Person",
+  "isnis": [
+    "000000011476603X"
+  ],
+  "begin-area": {
+    "sort-name": "Burnaby",
+    "disambiguation": "",
+    "id": "702e46f0-6ffb-4890-987e-e9533523bb72",
+    "type-id": null,
+    "type": null,
+    "name": "Burnaby"
+  },
+  "ipis": [
+    "00285320077"
+  ],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Bubl\u00e9, Michael",
+  "disambiguation": "",
+  "id": "611700cf-27f0-4dc9-ae80-c513a767853e",
+  "area": {
+    "name": "Canada",
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "disambiguation": "",
+    "sort-name": "Canada",
+    "type": null,
+    "type-id": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "life-span": {
+    "begin": "1975-09-09",
+    "ended": false,
+    "end": null
+  },
+  "name": "Michael Bubl\u00e9",
+  "country": "CA",
+  "end-area": null,
+  "relations": [
+    {
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "allmusic",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000885569",
+        "id": "5d9a005c-1f33-4bde-a221-40ec493a0640"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "71e6424c-915b-44d2-a6e3-11a11f33a868",
+        "resource": "https://www.bandsintown.com/a/412"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "bandsintown",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "begin": null,
+      "target-type": "url",
+      "end": "2020-11-19",
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "BBC Music page",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/611700cf-27f0-4dc9-ae80-c513a767853e",
+        "id": "0bd7c693-300b-433b-b478-801e7136aa85"
+      },
+      "direction": "forward",
+      "ended": true
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "discogs",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "67fbd760-078b-47d6-a754-3094b3c952b2",
+        "resource": "https://www.discogs.com/artist/257663"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "fe5ec7b3-1334-4367-a6de-72b7ad289728",
+        "resource": "https://open.spotify.com/artist/1GxkXlMwML1oSg5eLPiAz3"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "Micheal Buble\u2019",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1prDHbfTUDIXsR1yOFYADp",
+        "id": "58ee65f4-f8a6-4726-9c0d-6ab0d3030c39"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1478",
+        "id": "4a0538da-e9a4-447a-bee0-cf0dc1321905"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "type": "image",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "5f37d1c4-96db-43f9-83ba-46618748adc4",
+        "resource": "https://commons.wikimedia.org/wiki/File:MichaelBubleSmileeb2011.jpg"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "IMDb",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0117826/",
+        "id": "2df986ff-5578-4113-9e54-a0d840778e7d"
+      }
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "daf521a1-2e0a-411a-9c56-f39b8d3d530d",
+        "resource": "https://www.last.fm/music/Michael+Bubl%C3%A9"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "url": {
+        "id": "d9973b4e-bab4-4ae6-8c50-158e0a4e6d1f",
+        "resource": "http://muzikum.eu/en/122-4965/michael-bubl%C3%83%C2%A9/lyrics.html"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "3a657747-7b42-42e1-9dd8-7e3d778e9454",
+        "resource": "https://genius.com/artists/Michael-buble"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "myspace",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/michaelbuble",
+        "id": "8bf1898e-cacf-4bff-9340-797f32df5308"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "47e7ad8b-f863-4183-8812-a33224c129b4",
+        "resource": "http://www.michaelbuble.com/"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": "2025-12-17",
+      "source-credit": "",
+      "ended": true,
+      "url": {
+        "id": "3982ae70-8ee7-4ce7-9a85-e551703387d0",
+        "resource": "https://jaxsta.com/profile/12c84fdd-3ff9-4930-b4f7-b41d0f3ded98"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "de7301da-721f-4bc4-a5f5-dec5c28f79f1",
+        "resource": "http://id.loc.gov/authorities/names/no2003037212"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "113f0fdb-ced6-40f0-aff8-780fd94823e7",
+        "resource": "https://castalbums.org/people/Michael-Buble/65202"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14600580m",
+        "id": "bd69e582-7ad6-45a6-b666-6241ac68fcbd"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "faa3549d-d18a-4b05-8288-2524b57d23d6",
+        "resource": "https://d-nb.info/gnd/135388716"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://imvdb.com/n/michael-buble",
+        "id": "2b7008f4-c178-4a3a-868d-3f362550adcc"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "bf992eff-a7e6-4d9b-bc30-9dfce30c97ac",
+        "resource": "https://rateyourmusic.com/artist/michael_buble"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.livefans.jp/artists/52912",
+        "id": "d9810f3b-c06a-485b-a4bd-246c0c94fb2c"
+      }
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/michael-buble/",
+        "id": "41239129-c9bb-4f4e-9c74-4be47eb8ed4b"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000184998/POPULAR/",
+        "id": "1ce6bdbf-5ee3-41fe-a3b2-36cd1ac003d4"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "b8ae2baf-3bca-4e7f-a9f3-fdf9b00985cb",
+        "resource": "https://www.whosampled.com/Michael-Bubl%C3%A9/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2003037212",
+        "id": "c58d9e2f-0396-41df-9094-9cbdb3969f98"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "ended": true,
+      "url": {
+        "id": "3b862874-796f-449c-bc52-b43b2c8b81bd",
+        "resource": "https://play.google.com/store/music/artist?id=Aagvx6qc2bcdfhdkzn4crelraby"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": "2020-10-12",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "cd56791e-2b5c-4c08-8a66-0c0b033458b8",
+        "resource": "https://ca.7digital.com/artist/michael-bubl%C3%A9"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/ca/artist/799597",
+        "id": "09edf21f-d157-4162-bee4-853953bc5a18"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "url": {
+        "resource": "https://ototoy.jp/_/default/a/229179",
+        "id": "06213b73-983b-4fbe-a7f1-321d13741cca"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "19915cb8-af66-42dd-91aa-ac0adc8b8846",
+        "resource": "https://www.beatport.com/artist/michael-buble/476540"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "0b455ab1-7bb0-41fc-886f-b794fe66b523",
+        "resource": "https://www.cdjapan.co.jp/person/700282669"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for mail-order"
+    },
+    {
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "70d39d44-a0de-4f01-8604-3363e75285ab",
+        "resource": "https://secondhandsongs.com/artist/10676"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "setlistfm",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/michael-buble-6bd6ca8e.html",
+        "id": "e8526a5a-57a0-46c8-9e88-2cec71e28b15"
+      },
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "ended": true,
+      "url": {
+        "resource": "https://plus.google.com/+michaelbuble",
+        "id": "9fd86531-87df-4501-b376-ddce8841fa75"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": "2019-04",
+      "source-credit": "",
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "id": "0b85485c-b542-4860-9e45-a1b7135358f8",
+        "resource": "https://twitter.com/michaelbuble"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/MichaelBuble",
+        "id": "c20dcd29-4e20-4cca-aa9b-2097cfc7d806"
+      },
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "388328b9-2491-4929-acd5-d1bbb814505b",
+        "resource": "https://www.instagram.com/michaelbuble/"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/117102",
+        "id": "b86be6c2-7d46-4fee-99cd-85f544938de6"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://us.napster.com/artist/michael-buble",
+        "id": "2a0dfad7-0d86-4e04-8fff-6f018f795031"
+      },
+      "direction": "forward",
+      "ended": true,
+      "end": "2022-06-08",
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "d3f85754-33f2-4dd2-b614-3e209e1b0d7a",
+        "resource": "https://music.amazon.com/artists/B001E103WO"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "09edf21f-d157-4162-bee4-853953bc5a18",
+        "resource": "https://music.apple.com/ca/artist/799597"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "a864abc5-f923-4999-82f3-cf0ef7581186",
+        "resource": "https://tidal.com/artist/12263"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "dfc6894d-6bae-41dd-96e4-3783d96c2c8c",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/michael-buble/download-streaming-albums"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "type": "VIAF",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/85525797",
+        "id": "baedceda-35e9-4bbc-919f-a643e6aca4c2"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "wikidata",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q153694",
+        "id": "38e2ee5a-6954-426c-9258-7af1053630a2"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "54225226-1012-4643-aa2c-c525b623854b",
+        "resource": "https://www.youtube.com/channel/UCHqQruhGENdmWy_oeH1f8QA"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "youtube"
+    }
+  ]
+}

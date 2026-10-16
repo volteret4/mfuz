@@ -11,6 +11,10 @@
 # python music_db_corrector.py --db tu_base_de_datos.db list-artists --pattern "Beat"
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import argparse
 from datetime import datetime
 
@@ -18,6 +22,7 @@ def connect_to_database(db_path):
     """Conecta a la base de datos SQLite."""
     try:
         conn = sqlite3.connect(db_path)
+        apply_pragmas(conn)
         return conn
     except sqlite3.Error as e:
         print(f"Error al conectar a la base de datos: {e}")

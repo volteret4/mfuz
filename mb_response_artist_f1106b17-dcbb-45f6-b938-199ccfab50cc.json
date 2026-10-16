@@ -1,0 +1,1086 @@
+{
+  "begin-area": {
+    "name": "Salford",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "f61848ab-0ba0-4534-8b71-d9c7c03e854c",
+    "sort-name": "Salford",
+    "type": null
+  },
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "f93b3bc0-5c43-4661-b049-09e24704ff0d",
+        "resource": "https://www.allmusic.com/artist/mn0000334193"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9a329782-53d8-4d18-af18-ae8c230f78a2",
+        "resource": "https://neworder.bandcamp.com/"
+      },
+      "attributes": [],
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.bandsintown.com/a/1057",
+        "id": "e1d6d1e4-b198-4bec-93ec-78300425e1f1"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/f1106b17-dcbb-45f6-b938-199ccfab50cc",
+        "id": "3f37d4aa-d903-49cc-a434-4c3cb30eca48"
+      },
+      "begin": null,
+      "end": "2020-11-19",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "ended": true,
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "discography page",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "b08b3505-c0d5-4b7a-878c-971e481aa747",
+        "resource": "http://www.neworderonline.com/Music/Discography.aspx"
+      },
+      "attributes": []
+    },
+    {
+      "type": "discography page",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "eb62c251-b69d-4ada-a4e3-826810785d40",
+        "resource": "http://www.niagara.edu/neworder/"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/3909",
+        "id": "01ac4d11-64e9-4977-87f9-9b9a1a5b14cc"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "9a3d9261-8bed-4735-9a3e-be5ce0aaab09",
+        "resource": "https://web.archive.org/web/19961227090839/http://www.io.org/~jshum/neworder.html"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "fanpage",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "ended": false,
+      "type": "fanpage",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "47d98f5a-6628-446e-b645-ea8b27641aa7",
+        "resource": "https://web.archive.org/web/19970504085636/http://slashmc.rice.edu/ceremony/neworder/neworder.html"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "fanpage",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "e6f03dc9-6e46-4236-a5c1-ddf071015a55",
+        "resource": "https://web.archive.org/web/19971017062359/http://www.chocobo.org/~DarkWind/vanish/neworder.htm"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://web.archive.org/web/19981201075635/http://dnausers.d-n-a.net/dnetZPMY/neworder/index.htm",
+        "id": "e876bbb0-49eb-4706-92fc-4a93c267209d"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "d26847bb-5574-450b-8eb5-ec644b8b9d31",
+        "resource": "https://web.archive.org/web/19981202134225/http://home.bc.rogers.wave.ca/alau/neworder/main.html"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://web.archive.org/web/19981203062156/http://www.mindspring.com/~jcabarcos/neworder.html",
+        "id": "652af5b0-a85b-4aa4-8982-72f02cc0e58d"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "fanpage",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://web.archive.org/web/19981207052001/http://home.bc.rogers.wave.ca/alau/neworder/",
+        "id": "b9539bf6-ee1d-40f0-8d2a-d0b3e0562bc8"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "type": "fanpage",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "fanpage",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "dbec11f7-8ea0-4521-a88f-4e0a264644dd",
+        "resource": "https://web.archive.org/web/19990117011519/http://www.waterrat.com/neworder.htm"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "fanpage",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://web.archive.org/web/19990224193855/http://www.interlog.com/~james/NewOrder/",
+        "id": "f0c92596-4e03-44f9-a09a-a49b26fa310c"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "d3b6af75-4ef9-450f-9b91-dcbbdc1e3de6",
+        "resource": "https://web.archive.org/web/19991005205032/http://members.xoom.com/_XOOM/bernard5/index.htm"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "18359e18-f660-4390-a9a7-b77b33cb68b0",
+        "resource": "https://web.archive.org/web/20000520100908/http://www.geocities.com/Paris/Arc/2263/neworder.html"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "fanpage",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "7f3a122b-f3de-4dd8-8aba-d112542f3d11",
+        "resource": "https://web.archive.org/web/20010515223237/http://www.geocities.com/SouthBeach/Palms/7580/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "fanpage",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "1ea7c201-cad2-4453-b487-5ff416c5ab42",
+        "resource": "http://www.new-order.net/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "44f5927e-fb0b-40a1-99ba-c73b316f8700",
+        "resource": "http://www.neworderonline.com/Default.aspx"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://www.worldinmotion.net/",
+        "id": "5bb77e17-69dc-452f-b3a7-806d7243f94a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "7f642f02-3bbb-4dc3-b2c2-642a6e1a8caa",
+        "resource": "https://open.spotify.com/artist/0yNLKJebCb8Aueb54LYya3"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/2016",
+        "id": "55c45cb0-9c0b-437f-a36e-7c5a32b43248"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "ended": false,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0627563/",
+        "id": "d180d507-18aa-42db-9f06-1c885cc87bc6"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.last.fm/music/New+Order",
+        "id": "bab6a331-16cc-4b8e-b330-1abfc6099a4d"
+      },
+      "attributes": [],
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "f2cff80f-3a72-4423-89d3-f78ecb08b077",
+        "resource": "http://muzikum.eu/en/122-5474/new-order/lyrics.html"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://genius.com/artists/New-order",
+        "id": "8924aa51-1f63-45f6-8705-ca0f0aedbbb9"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics"
+    },
+    {
+      "type": "myspace",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://myspace.com/neworder",
+        "id": "c88b7b7e-44be-4419-92cc-d19838ec082b"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "attributes": [],
+      "url": {
+        "id": "2dcb4fa7-73c4-4aca-8f45-674e7f1cb732",
+        "resource": "http://www.neworder.com/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "3aea6575-7cf0-494a-a7fc-9911a9dce89b",
+        "resource": "http://id.loc.gov/authorities/names/n92021278"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/N/New_Order/",
+        "id": "d246c97a-08b9-4b6d-9c6c-0972d1358f97"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "ac3e5651-5cb3-41c0-887f-fd817e214488",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13905268h"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/10038484-5",
+        "id": "e348dfa2-1ab1-4252-85f8-bf243ebdd1ea"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "76e3fb17-2f69-48aa-89e8-f1f3d7bec8aa",
+        "resource": "https://imvdb.com/n/new-order"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/new_order",
+        "id": "9db2c20a-71cc-47c7-a11b-950f1c18ae44"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.45cat.com/artist/new-order/all",
+        "id": "1dfccfa3-de0d-4421-9081-b5eb1f5f8e6f"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "d993754b-7fe0-42b5-b02d-4eaac80ca3b4",
+        "resource": "https://www.livefans.jp/artists/2178"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.whosampled.com/New-Order/",
+        "id": "a8e93ed4-a774-4acd-a0fd-b4f6af0c18fc"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "http://www.worldcat.org/identities/lccn-n92021278/",
+        "id": "8d13c8ac-5824-476d-8ec6-c3db09ef2931"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Abaq3zyhvrmpvs62htmzlv6bdna",
+        "id": "096c6325-dc0c-4a37-88e9-7cf439b862ea"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": true,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": "2020-10-12",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "c3ad441e-85ac-4f70-a16e-944edb5b01ca",
+        "resource": "https://itunes.apple.com/gb/artist/id176722"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "39411599-df37-4fa6-8562-e9643e29cdf8",
+        "resource": "https://www.amazon.co.uk/-/e/B000ARA11G"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.beatport.com/artist/new-order/104572",
+        "id": "6966de18-b29d-465d-8e00-f42b75a9ed85"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/new-order/53262",
+        "id": "d35e1ba8-2439-4e1d-ada6-fdffd94850aa"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "e71f6f08-4990-4f80-9a52-d39b498ef19e",
+        "resource": "https://secondhandsongs.com/artist/1391"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "setlistfm",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/new-order-63d6b237.html",
+        "id": "c9b27344-bf7e-426a-8b45-9e871ecebc94"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://twitter.com/neworder",
+        "id": "eb6c8e11-7ad7-4fb0-8b31-410b9311c6a7"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/NewOrderOfficial",
+        "id": "71214e3a-93b1-40a7-a42f-8fdf8251cbdf"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.instagram.com/neworderofficial/",
+        "id": "25ca9720-5b52-4aa5-92ed-135a31d7a7ca"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/434538",
+        "id": "97272475-f2fa-4eb7-835f-810fe5b34ebc"
+      },
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://soundcloud.com/neworderofficial",
+        "id": "cf8f80d0-3632-47e9-b183-825e4dbeca42"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/176722",
+        "id": "8f3b8a3f-b3a1-480d-8adf-a5fba39c5b8f"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/11950",
+        "id": "ecaa43c3-b4e2-44f0-b838-9c646d861fe9"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "d35e1ba8-2439-4e1d-ada6-fdffd94850aa",
+        "resource": "https://www.qobuz.com/us-en/interpreter/new-order/53262"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "57556570-a753-4b74-ae99-d89b22b46a86",
+        "resource": "http://viaf.org/viaf/132303308"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "2dbedd8e-6a43-45ef-81b7-b43417c95680",
+        "resource": "https://www.wikidata.org/wiki/Q214990"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "b7e74793-dc4d-4ff6-81b3-04b0fafcaa86",
+        "resource": "https://www.youtube.com/channel/UCeROFwqsf3ADf02l5JzVKJg"
+      }
+    }
+  ],
+  "isnis": [
+    "0000000122861862"
+  ],
+  "country": "GB",
+  "gender": null,
+  "type": "Group",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1980"
+  },
+  "end-area": null,
+  "name": "New Order",
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "type": null,
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom"
+  },
+  "gender-id": null,
+  "sort-name": "New Order",
+  "id": "f1106b17-dcbb-45f6-b938-199ccfab50cc",
+  "disambiguation": "UK synth pop band"
+}

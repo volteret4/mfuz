@@ -1,0 +1,438 @@
+{
+  "country": "US",
+  "gender": "Male",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000412552",
+        "id": "66e034b1-2432-42d4-ae6d-77b70051ea10"
+      },
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "discogs",
+      "end": null,
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "url": {
+        "id": "139106ab-a671-4725-81d6-76134c134068",
+        "resource": "https://www.discogs.com/artist/101883"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "33b4bc96-6eb1-4015-88aa-80c6a683dc2d",
+        "resource": "https://open.spotify.com/artist/5icYAASSHVcZox1Ayb2uBo"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "resource": "https://open.spotify.com/artist/5TAipisjquAkq2o7lzMJyc",
+        "id": "598cd52d-c4a9-4b18-8433-7c6eed76563f"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "863fbf89-ad0b-4ee0-87fe-a232e0d08eb1",
+        "resource": "https://www.deezer.com/artist/399139"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm2161888/",
+        "id": "048d24f0-a99d-4105-8fe8-1432a24c2467"
+      },
+      "source-credit": "",
+      "ended": false,
+      "type": "IMDb",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "cbb3002b-c76e-438a-b6e7-7fc27dc9d98e",
+        "resource": "http://www.deanslist.net/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "end": null,
+      "begin": null,
+      "type": "official homepage",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b9c1acfb-9ac7-4aaf-8345-e07409528dd5",
+        "resource": "http://id.loc.gov/authorities/names/no2019063005"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "7b835d63-f10c-48cb-a9ae-fefe4581c53a",
+        "resource": "https://rateyourmusic.com/artist/mike_dean_f1"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "d2e0c8f3-e506-4b9c-b6b0-212eb948c195",
+        "resource": "https://www.worldcat.org/identities/lccn-no2019063005/"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "1ce50062-2562-4d24-9f78-fc582fce781c",
+        "resource": "https://itunes.apple.com/us/artist/id22109189"
+      },
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "end": null,
+      "type": "purchase for download",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "secondhandsongs",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/16653",
+        "id": "94e95c19-e5a1-46b9-b750-bed1e94b1eff"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3"
+    },
+    {
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-type": "url",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/55416",
+        "id": "5cee6dbf-6239-406f-bfa5-80900ab2a576"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "secondhandsongs",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "bd654e24-9d66-4624-a78a-edbca4a5e8dc",
+        "resource": "https://twitter.com/therealmikedean"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.facebook.com/therealmikedean",
+        "id": "de6b4879-5fa8-4845-9fee-1e74ce67ff87"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "4d684c92-b63a-4c33-8674-177d4e54730b",
+        "resource": "https://www.instagram.com/therealmikedean/"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type": "soundcloud",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://soundcloud.com/therealmikedean",
+        "id": "d330fdf4-2ee3-4b6e-a37b-5affa2f2d590"
+      },
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/22109189",
+        "id": "95909a3f-db0b-48cb-8b60-056cd602b290"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "a40f4f91-49d0-47cd-847f-2a230b056165",
+        "resource": "https://tidal.com/artist/19193847"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "43f1fa0a-2bad-40c9-a393-bd63f58ebc11",
+        "resource": "https://tidal.com/artist/4630232"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/8200155708726622580009",
+        "id": "4d273686-5dbb-4a0a-b590-e3fea8ccdb2f"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "VIAF",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "0c9fa5f2-4e0e-4acf-89ec-ba9fd006a3ea",
+        "resource": "https://www.wikidata.org/wiki/Q6846533"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    }
+  ],
+  "sort-name": "Dean, Mike",
+  "disambiguation": "US \u201cdirty south\u201d hip\u2010hop producer & mix engineer",
+  "life-span": {
+    "ended": false,
+    "begin": "1965-03-01",
+    "end": null
+  },
+  "type": "Person",
+  "ipis": [
+    "00216477564",
+    "00230071229",
+    "00230071327",
+    "00546903534"
+  ],
+  "end-area": null,
+  "name": "Mike Dean",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [],
+  "begin-area": {
+    "name": "Houston",
+    "type-id": null,
+    "id": "c920948b-83e3-40b7-8fe9-9ab5abaac55b",
+    "sort-name": "Houston",
+    "type": null,
+    "disambiguation": ""
+  },
+  "area": {
+    "id": "c920948b-83e3-40b7-8fe9-9ab5abaac55b",
+    "sort-name": "Houston",
+    "name": "Houston",
+    "type-id": null,
+    "disambiguation": "",
+    "type": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "73e36439-1e9a-4925-bf2c-1d7f7885fbb0"
+}

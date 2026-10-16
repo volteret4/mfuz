@@ -1,0 +1,22 @@
+{
+  "begin-area": null,
+  "country": null,
+  "type": null,
+  "name": "Andert Tysma",
+  "gender": null,
+  "end-area": null,
+  "area": null,
+  "type-id": null,
+  "disambiguation": "",
+  "ipis": [],
+  "id": "be0161bb-5b2b-4253-a782-02ae7da8d2b2",
+  "relations": [],
+  "isnis": [],
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "sort-name": "Andert Tysma"
+}

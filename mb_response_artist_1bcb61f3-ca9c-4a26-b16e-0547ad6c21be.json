@@ -1,0 +1,798 @@
+{
+  "life-span": {
+    "ended": false,
+    "begin": "1988",
+    "end": null
+  },
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "name": "Spin Doctors",
+  "gender-id": null,
+  "sort-name": "Spin Doctors",
+  "disambiguation": "",
+  "id": "1bcb61f3-ca9c-4a26-b16e-0547ad6c21be",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "name": "New York",
+    "type-id": null,
+    "sort-name": "New York",
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "disambiguation": "",
+    "type": null
+  },
+  "ipis": [],
+  "country": "US",
+  "isnis": [
+    "0000000123248808"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000010412",
+        "id": "732e934a-86bd-431a-b2e8-0c101d2ce007"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "e1c13632-8351-4dae-ace1-2190901d6f74",
+        "resource": "https://www.bandsintown.com/a/1940"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/1bcb61f3-ca9c-4a26-b16e-0547ad6c21be",
+        "id": "79a3de8a-4450-4e85-8230-73d40ef953ba"
+      },
+      "end": "2020-11-19",
+      "begin": null,
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "1181aee6-4277-4d1e-8f06-f378140ecaf3",
+        "resource": "https://www.discogs.com/artist/141900"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "download for free",
+      "ended": false,
+      "type-id": "34ae77fe-defb-43ea-95d4-63c7540bac78",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://archive.org/details/SpinDoctors",
+        "id": "a1b70cb9-b571-43cb-8f2e-49e24268a767"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/2PSiyldxmJze7xiqbz658m",
+        "id": "f4f59fd4-fb88-4415-bc18-9a51c8badf36"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "25053ffd-302c-4ccd-8cf6-9ae66234e7f3",
+        "resource": "https://www.deezer.com/artist/1950"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "8f284b11-25d8-4c67-ae53-35fb56d8372b",
+        "resource": "https://www.imdb.com/name/nm1488404/"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "5236b044-3e23-4a5a-a0c3-c1ff33c10da2",
+        "resource": "https://www.last.fm/music/Spin+Doctors"
+      },
+      "attributes": []
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "869e8cf6-3ebe-4228-90c7-bdd6942cf194",
+        "resource": "http://muzikum.eu/en/122-5364/spin-doctors/lyrics.html"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "37de970e-da94-4951-b151-ca3bb1d93dd7",
+        "resource": "https://genius.com/artists/Spin-doctors"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.spindoctors.com/",
+        "id": "636131c9-3b9e-40cc-8fae-ca64d7c3fc48"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n94086747",
+        "id": "a1cd6b91-7e21-4875-82f7-2570e178c105"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/S/Spin_Doctors/",
+        "id": "d85a25a8-b18c-431f-84aa-a23f0ee73ec1"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/5521389-3",
+        "id": "458f9195-3666-44ce-bc68-83d3ddcb8b58"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "ce623536-2130-4af4-ba5c-b7a9f250b4e7",
+        "resource": "https://id.oclc.org/worldcat/entity/E39QH7JmqRJRyKyXV7qq4pybtg"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://imvdb.com/n/spin-doctors",
+        "id": "78dcfe27-1ec9-4020-8e59-7d965d4a27ae"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "cfeec128-206e-4b8e-8ffc-3e11a79332fb",
+        "resource": "https://rateyourmusic.com/artist/spin_doctors"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "275ca1a9-21bd-4ae0-b907-fd60dd083721",
+        "resource": "https://www.45cat.com/artist/spin-doctors"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/spin-doctors/",
+        "id": "566df9ad-f706-440a-b0af-fb98421b61fe"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.spirit-of-rock.com/en/band/Spin_Doctors",
+        "id": "e012b854-b8dc-4096-bd50-12e3b349ae28"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "e6978422-ca54-477b-be41-fefbd49a5f24",
+        "resource": "https://www.whosampled.com/Spin-Doctors/"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n94086747",
+        "id": "6990009a-36a3-45ae-9096-c08c06d7b9f4"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2020-10-12",
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "82bb30f6-16b1-4d32-a01f-c1719af49f8b",
+        "resource": "https://play.google.com/store/music/artist?id=Apdise2edzdqzpjfv427o2ecwui"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "75623146-4c56-4338-ae56-d02fdc4fff7f",
+        "resource": "https://itunes.apple.com/us/artist/id358709"
+      }
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.7digital.com/artist/spin-doctors",
+        "id": "ce1f3603-86ab-42a8-b809-3049dc78f646"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000AQ176K",
+        "id": "17e84a21-27a0-4b0d-a4be-5190d5168d4b"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/3066",
+        "id": "aae395d0-71dc-4786-a0ef-7838ae13fc7f"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "ended": false,
+      "type": "setlistfm",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "d798ecd0-8a90-46dd-bd92-f06e91d9b9e8",
+        "resource": "https://www.setlist.fm/setlists/spin-doctors-73d6b6d1.html"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "7d857fbd-4bad-4dba-9c02-dd5a3b0f6835",
+        "resource": "https://twitter.com/SpinDoctorsBand"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/spindoctorsband",
+        "id": "5849a09e-9d62-4b7a-85c2-7f3045816358"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/spindoctorsband/",
+        "id": "1825df07-3eae-492d-a5b9-170a350dc68d"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "a6807774-cb25-4e11-98fc-eb1ae47766d0",
+        "resource": "https://www.songkick.com/artists/578"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "10cc6581-b1cf-49aa-bad1-a9e970c06f45",
+        "resource": "https://soundcloud.com/spin-doctors"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud"
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "0e7e4a68-78ca-49e2-bc98-f67004990620",
+        "resource": "https://music.apple.com/gb/artist/358709"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "65f7607d-7cfc-4628-8a2c-4e3411216978",
+        "resource": "https://music.apple.com/us/artist/358709"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "71948ae3-b231-4a4d-aa27-0a0c4fb37e9e",
+        "resource": "https://tidal.com/artist/2528"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "f25d327f-5f90-4628-a294-35182ed2ad1f",
+        "resource": "http://viaf.org/viaf/32145970328332252532"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q909483",
+        "id": "d46153c9-f8bb-4f55-9c44-1339ba400455"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCBher5_IvSnvgbTpAKo7Iyg",
+        "id": "96fe8691-442a-4511-b07f-c77f1e6de192"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/user/SpinDoctorsVEVO",
+        "id": "73e12322-3591-4869-8989-dd47dc821308"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "youtube music",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCBher5_IvSnvgbTpAKo7Iyg",
+        "id": "2d944a7f-d3f5-406d-9e90-efef2a9571f4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "gender": null,
+  "type": "Group"
+}

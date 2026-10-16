@@ -1,0 +1,220 @@
+{
+  "disambiguation": "1986\u20131992 UK band",
+  "ipis": [],
+  "id": "e9a9d23f-febe-4499-a6ec-d040b046a35b",
+  "isnis": [],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {},
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "38f4d0e6-1bf8-469a-977c-a4cf7044e077",
+        "resource": "https://www.allmusic.com/artist/mn0000629341"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/81613",
+        "id": "20dbe3ce-f818-4612-a26e-c49f75050772"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "id": "744756e0-038b-4a77-96cd-abafb8c89a96",
+        "resource": "https://open.spotify.com/artist/2LKrAJVB1842xPDvx4uuwU"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "6650af87-5ff0-47df-94dd-8b2f6262be4f",
+        "resource": "https://www.deezer.com/artist/118354112"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/15917",
+        "id": "45bcd4d8-05bc-4b02-bfc3-8d340c404691"
+      }
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-8507/bros/lyrics.html",
+        "id": "a67de099-76e5-439c-bf16-b2a2d3770078"
+      },
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/17628751",
+        "id": "a689ac80-8b96-434e-a388-f84fe2178f66"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick",
+      "url": {
+        "resource": "https://www.songkick.com/artists/533464",
+        "id": "88725938-8081-4c68-93f9-3b27c102e73e"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "id": "a689ac80-8b96-434e-a388-f84fe2178f66",
+        "resource": "https://music.apple.com/gb/artist/17628751"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "url": {
+        "id": "8755677e-6225-4bd4-bc25-7f1864de4026",
+        "resource": "https://www.wikidata.org/wiki/Q990686"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    }
+  ],
+  "gender-id": null,
+  "life-span": {
+    "begin": "1988",
+    "ended": true,
+    "end": "1991"
+  },
+  "sort-name": "Bros",
+  "begin-area": {
+    "name": "Peckham",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Peckham",
+    "id": "1b86fabd-75ac-4b38-b1cd-820609b6be46"
+  },
+  "country": "GB",
+  "type": "Group",
+  "name": "Bros",
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "United Kingdom"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b"
+}

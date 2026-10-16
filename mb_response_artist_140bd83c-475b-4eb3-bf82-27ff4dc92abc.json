@@ -1,0 +1,159 @@
+{
+  "type": null,
+  "name": "Arc De Soleil",
+  "country": "SE",
+  "begin-area": null,
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "name": "Sweden",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "SE"
+    ],
+    "id": "23d10872-f5ae-3f0c-bf55-332788a16ecb",
+    "sort-name": "Sweden",
+    "type-id": null
+  },
+  "type-id": null,
+  "ipis": [],
+  "disambiguation": "",
+  "id": "140bd83c-475b-4eb3-bf82-27ff4dc92abc",
+  "isnis": [],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/12092893",
+        "id": "b1a6c80a-4f30-4da2-b074-7cd6251695c8"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "5fa9d2f1-fa9c-4b21-8bd9-75fb19900baa",
+        "resource": "https://open.spotify.com/artist/2iLMJdaqsQ44X7MPRD7rR5"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/62882222",
+        "id": "2cfe6c54-fb18-4a61-906d-a0b504c7f811"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "url": {
+        "id": "eae08978-b51c-4517-a4a5-a77c40b67ad4",
+        "resource": "https://www.instagram.com/arcdesoleil/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "17d4c50c-db3d-4820-bc74-a8a545a4bb70",
+        "resource": "https://www.instagram.com/danielkadawatha/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://music.apple.com/mx/artist/1462310228",
+        "id": "e1b154da-cde8-4473-98bb-f3704055766f"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/15429759",
+        "id": "9ee36850-71e8-4416-aeb4-de913e36a344"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    }
+  ],
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  },
+  "gender-id": null,
+  "sort-name": "Arc De Soleil"
+}

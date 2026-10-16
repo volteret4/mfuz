@@ -1,0 +1,41 @@
+{
+  "ipis": [],
+  "end-area": null,
+  "type": "Group",
+  "name": "DOVS",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": null,
+  "isnis": [],
+  "area": null,
+  "gender-id": null,
+  "id": "7c3ae97a-b1ac-44f4-a2f3-2f10ee2de8ea",
+  "relations": [
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/6561191",
+        "id": "deec6c9f-42a6-4a1d-821c-aa7037226aec"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    }
+  ],
+  "gender": null,
+  "sort-name": "DOVS",
+  "country": null,
+  "disambiguation": "",
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  }
+}

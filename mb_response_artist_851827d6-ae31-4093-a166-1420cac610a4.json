@@ -1,0 +1,438 @@
+{
+  "life-span": {
+    "begin": "1965",
+    "end": null,
+    "ended": false
+  },
+  "end-area": null,
+  "name": "The Meters",
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States"
+  },
+  "gender-id": null,
+  "sort-name": "Meters, The",
+  "disambiguation": "",
+  "id": "851827d6-ae31-4093-a166-1420cac610a4",
+  "begin-area": {
+    "type": null,
+    "id": "3c5a0506-d852-4e96-8d1e-d8126328f3be",
+    "disambiguation": "",
+    "sort-name": "New Orleans",
+    "type-id": null,
+    "name": "New Orleans"
+  },
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "29d720ea-9225-4d50-8d2b-1c2d5ca56860",
+        "resource": "https://www.allmusic.com/artist/mn0000158686"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "Funky Meters",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000402872",
+        "id": "bc890e5b-f86d-4141-a99e-a928c8a23c38"
+      },
+      "attributes": [],
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/851827d6-ae31-4093-a166-1420cac610a4",
+        "id": "75611159-5ea7-4c8f-81e3-c9bdfdf6d48a"
+      },
+      "begin": null,
+      "end": "2020-11-19",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "ended": true,
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "Funky Meters",
+      "attribute-values": {},
+      "type": "biography",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "a0ab6d3d-fb7d-4cf2-a0ce-dfa75aabb3ae",
+        "resource": "http://www.funkymeters.com/bio.html"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "id": "b618b6bb-f39e-41e9-990d-f75c60a8dc8e",
+        "resource": "https://www.discogs.com/artist/86616"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/2JRvXPGWiINrnJljNJhG5s",
+        "id": "0318c030-466d-4c93-bf1b-565b4ed8a850"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/899",
+        "id": "12cc8ade-741a-40c6-997a-4b40f697d4e9"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "attributes": [],
+      "url": {
+        "id": "2de83ba7-a998-4b60-9d50-2f3118b6fc01",
+        "resource": "https://www.imdb.com/name/nm1927598/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "Funky Meters",
+      "attribute-values": {},
+      "type": "last.fm",
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "4512434a-8866-4703-bc5e-3c53447a9dd9",
+        "resource": "https://www.last.fm/music/Funky%20Meters"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "url": {
+        "id": "ff537fc3-b5b8-44d0-92bc-3db89314615d",
+        "resource": "http://muzikum.eu/en/122-12067/the-meters/lyrics.html"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "Funky Meters",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "f472bab6-821e-4a09-8fc9-c0469d02fd2e",
+        "resource": "http://www.funkymeters.com/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9ad8afe1-3afc-4797-839e-69e14825475d",
+        "resource": "http://id.loc.gov/authorities/names/n93018648"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "12e963c1-9804-4938-bf52-e0ea8c12cc05",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139049686"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/10301898-0",
+        "id": "4de5cfb0-cbc8-4149-a9b4-8078bac4f97e"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_meters",
+        "id": "d0f1e80d-26ea-48f8-b3e3-259fe4d1cda8"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n93018648",
+        "id": "e53af2be-667a-4398-b730-fbf30e60ceac"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "b90cd036-e4cf-46c3-a27c-e3e6d622dea3",
+        "resource": "https://www.facebook.com/funkymeters"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "b9281858-5cab-49b0-9f9d-fecf94650c0e",
+        "resource": "https://www.songkick.com/artists/283926"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "a62a36a9-1306-4aca-9eee-cad1b38e3daf",
+        "resource": "https://tidal.com/artist/13372"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "attributes": [],
+      "url": {
+        "resource": "http://viaf.org/viaf/145032367",
+        "id": "2070dbe9-c8be-4b56-a0f6-1d619fa3c98a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1887369",
+        "id": "3e53b018-f2c0-4aa0-bb74-bae5a2cc87d3"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "youtube music",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCwye34yhtCbWGQsrFS4oMNw",
+        "id": "c6879a70-be1b-4f78-8db8-eeb3a5fe9f9d"
+      }
+    }
+  ],
+  "country": "US",
+  "isnis": [
+    "000000011091156X"
+  ],
+  "gender": null,
+  "type": "Group"
+}

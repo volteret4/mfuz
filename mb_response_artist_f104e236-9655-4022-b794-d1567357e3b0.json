@@ -1,0 +1,366 @@
+{
+  "name": "Evelyn \u201cChampagne\u201d King",
+  "sort-name": "King, Evelyn \"Champagne\"",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "disambiguation": "",
+  "relations": [
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000788937",
+        "id": "93c88e2d-114b-4ae1-8dd8-50e61659f68e"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "url": {
+        "resource": "https://web.archive.org/web/20080401040034/http://www.discomuseum.com/EvelynKing.html",
+        "id": "303c6f14-b1c6-4553-9e6c-8c17c33271fb"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "biography"
+    },
+    {
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "df080485-bafd-4247-a900-d26863436dd6",
+        "resource": "https://www.discogs.com/artist/73202"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "abdfa949-4f76-4cd4-a7a4-2bc87562c36f",
+        "resource": "https://open.spotify.com/artist/4JCt4xrbbBB9blkKwNlcJ7"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1176455",
+        "id": "d575d671-cb19-47b2-ad72-19fd3714c7fc"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/266135802",
+        "id": "0bfccf99-f6e5-4863-b835-13bfff063ddd"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/9985",
+        "id": "cc73baeb-f6db-4837-acda-b0c1157ba760"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "last.fm",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Evelyn+%22Champagne%22+King",
+        "id": "dd205688-587a-4811-814e-cea221e359fd"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.evelynchampagneking.com/",
+        "id": "5df8c2e6-4185-4ff3-9333-0518c22002e8"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "bd551fb9-b25e-44f7-befe-05e557d5610a",
+        "resource": "http://id.loc.gov/authorities/names/n91119653"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "e197447e-565a-4bcd-9361-5b62f1bf2d59",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13937400j"
+      },
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b8fbaa27-ed1e-4573-ad12-2c3eff2f2bba",
+        "resource": "https://d-nb.info/gnd/134426568"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "436356cb-12e1-4ce7-9d16-6e731aabd779",
+        "resource": "https://www.worldcat.org/identities/lccn-n91119653"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type": "songkick",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/154723",
+        "id": "024506d1-6126-4adb-b7cd-458eabceb540"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "8d1167d3-fc67-4d34-876f-26fc54425539",
+        "resource": "https://music.apple.com/us/artist/1255443"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/4602",
+        "id": "e225d968-012f-4557-a17f-4da3f9071b7f"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/46950307",
+        "id": "267f54f4-a80f-40ba-a300-06de8461e73c"
+      },
+      "attribute-values": {},
+      "type": "VIAF",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "wikidata",
+      "target-type": "url",
+      "url": {
+        "id": "32a30ae6-4bfc-4083-bc3a-25b342f4451d",
+        "resource": "https://www.wikidata.org/wiki/Q290468"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    }
+  ],
+  "country": "US",
+  "gender": "Female",
+  "id": "f104e236-9655-4022-b794-d1567357e3b0",
+  "end-area": null,
+  "begin-area": {
+    "id": "eb4a386e-1178-4e3a-a371-30418dd6fd2e",
+    "sort-name": "The Bronx",
+    "name": "The Bronx",
+    "disambiguation": "",
+    "type": null,
+    "type-id": null
+  },
+  "ipis": [],
+  "type": "Person",
+  "life-span": {
+    "ended": false,
+    "begin": "1960-07-01",
+    "end": null
+  },
+  "isnis": [
+    "0000000055178827"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "name": "United States",
+    "disambiguation": "",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States"
+  }
+}

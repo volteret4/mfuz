@@ -1,0 +1,548 @@
+{
+  "sort-name": "Louise, Emma",
+  "disambiguation": "",
+  "area": {
+    "type": null,
+    "type-id": null,
+    "id": "106e0bec-b638-3b37-b731-f53d507dc00e",
+    "disambiguation": "",
+    "sort-name": "Australia",
+    "iso-3166-1-codes": [
+      "AU"
+    ],
+    "name": "Australia"
+  },
+  "id": "b15e1c57-8cb3-4563-8ffe-349b74b5ced3",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Female",
+  "life-span": {
+    "begin": "1991-07-16",
+    "ended": false,
+    "end": null
+  },
+  "name": "Emma Louise",
+  "country": "AU",
+  "end-area": null,
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002458915",
+        "id": "19f1ae3d-4b43-456f-b82b-4925f474758e"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "1eb0fe85-5d23-4619-a3a2-f643940899f0",
+        "resource": "https://emmalouise.bandcamp.com/"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "bandcamp",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "7aeee968-83de-49fa-89a4-5cd8f0fca42a",
+        "resource": "https://www.discogs.com/artist/2704385"
+      },
+      "ended": false
+    },
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "f9ecefd0-9f34-41e0-83e5-d946db1ca969",
+        "resource": "https://open.spotify.com/artist/1A96iePIMNFBjLrjXEl718"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "2ac11146-d494-41c8-9f4c-05a93b3a4ffa",
+        "resource": "https://www.deezer.com/artist/1533050"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming"
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.last.fm/music/Emma%20Louise",
+        "id": "9a22818f-c82c-41bf-82ee-d17bbfb66ecd"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "http://muzikum.eu/en/122-12973/emma-louise/lyrics.html",
+        "id": "6894b1a0-76d4-4dc4-b0e1-bb97927af93c"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Emma-louise",
+        "id": "9e2e4740-ecfc-422b-a6f4-fa7fee84818d"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "3a85e1dc-c1f7-42b6-8d79-bc4b018e28ab",
+        "resource": "http://www.emmalouise.net/"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2013066868",
+        "id": "b3cf426c-2252-48b7-992c-bdb922bd4cdd"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "c1491ab4-53db-4d42-93d5-f78800a9f645",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16962462x"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/emma_louise",
+        "id": "909609a1-52e5-4325-a4f3-f44d177447e9"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "a47d8a28-cab7-41fe-82a8-56721f0abb54",
+        "resource": "https://www.muziekweb.nl/Link/M00000395043/POPULAR/"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.whosampled.com/Emma-Louise/",
+        "id": "de8f5b69-3a91-420f-a456-ac24a00ab88e"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "3c01976d-c170-4785-a6ac-7be325928779",
+        "resource": "https://www.worldcat.org/identities/lccn-no2013066868/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "cef73058-d90d-4f04-b680-b8b8212a5378",
+        "resource": "https://itunes.apple.com/gb/artist/id431785952"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.beatport.com/artist/emma-louise/307462",
+        "id": "21a7adcd-9f20-4b37-ab3e-f4d6b33e643a"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.traxsource.com/artist/121976",
+        "id": "fb324d94-dcf0-4e70-8ef5-12a30183998f"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "b4b0fc9d-a056-4bef-a782-47981760c1d2",
+        "resource": "https://twitter.com/EmmaLouiseHere"
+      },
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/musicemmalouise",
+        "id": "47b9c642-507d-4c9c-bdd5-4479df503959"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/emmalouisemusic/",
+        "id": "1037d212-e3b8-4425-9726-a6831c6158c5"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.songkick.com/artists/921572",
+        "id": "d339f051-6473-4984-87fa-b234983ce470"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "songkick",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "type": "soundcloud",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "00adcc6d-45e0-434f-a43b-a59ed19ce15b",
+        "resource": "https://soundcloud.com/musicemmalouise"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://music.apple.com/au/artist/431785952",
+        "id": "ac91f999-d4c3-4720-ae8b-0e5b723a1add"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "5527e5e1-0522-4645-9a17-eed16578c0d3",
+        "resource": "https://tidal.com/artist/4501788"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "ed38fb9f-c64f-4444-aef6-7156124a9524",
+        "resource": "http://viaf.org/viaf/304748638"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "VIAF"
+    },
+    {
+      "url": {
+        "id": "971f8bab-fdd7-4ec6-9b5d-00f6b5f1fee7",
+        "resource": "https://www.wikidata.org/wiki/Q16235583"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "wikidata",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "youtube",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCK3_hb1jzRdkRVJzElWQouA",
+        "id": "e0e60ef8-8c46-4c24-8ed8-2019f7f3488a"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    }
+  ],
+  "type": "Person",
+  "isnis": [
+    "000000041025037X"
+  ],
+  "begin-area": {
+    "name": "Cairns",
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "Cairns",
+    "id": "9a34c5d4-f5d7-4f77-a769-0c735b0b0119"
+  },
+  "ipis": [
+    "00522329086"
+  ],
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2"
+}

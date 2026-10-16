@@ -1,0 +1,546 @@
+{
+  "gender": null,
+  "country": "US",
+  "begin-area": {
+    "name": "Dayton",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Dayton",
+    "id": "a55188f6-e976-499b-97b2-735985458216"
+  },
+  "name": "Guided by Voices",
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "end-area": null,
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000545726",
+        "id": "614e4dc1-3c8a-48d2-8eef-5ca4d69f073b"
+      }
+    },
+    {
+      "type": "bandcamp",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "ede7a23d-2bbc-4daa-a1b2-3aa58b5074c4",
+        "resource": "https://guidedbyvoices.bandcamp.com/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "resource": "http://gbvdb.com/",
+        "id": "132b0b54-c12e-45be-9805-3d1f2da11aca"
+      },
+      "type": "discography page",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "1ff05aff-69e7-41cb-880a-8f5665d9fd29",
+        "resource": "https://www.discogs.com/artist/83529"
+      }
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/4oV5EVJ0XFWsJKoOvdRPvl",
+        "id": "cfd02a43-cbb8-4a75-ad05-550b9f65f22d"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/5053",
+        "id": "6d50b402-a97e-4850-ba21-1813e99d9f9c"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm",
+      "url": {
+        "resource": "https://www.last.fm/music/Guided+by+Voices",
+        "id": "e5ee4d2d-b7f7-40ca-87b9-2edab6671a6c"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Guided-by-voices",
+        "id": "b7ef4c49-b05f-4b95-8feb-abc62a6b244a"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "myspace",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/guidedbyvoices",
+        "id": "df1cbcfa-df36-469d-a235-904758fd34e7"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "445c9d10-dfec-496d-8da0-f43b7f08bf1a",
+        "resource": "http://www.gbv.com/"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "5fc6de42-9138-417b-ad72-5b374b0a3d31",
+        "resource": "http://id.loc.gov/authorities/names/no98028957"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/G/Guided_by_Voices/",
+        "id": "a7d991ce-e794-41fa-b959-67a73ebebd30"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f79dc3cc-a2a6-4e1e-811f-4df34c4622a0",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14251903v"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "9993e638-7c3d-45dd-b7ef-ead76911021f",
+        "resource": "https://d-nb.info/gnd/10309466-0"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "d7c2097a-348b-4e5c-9ddc-bf66780989e8",
+        "resource": "https://imvdb.com/n/guided-by-voices"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "cf05cd9e-5bc2-4497-b63b-b5bcd7ea7192",
+        "resource": "https://rateyourmusic.com/artist/guided_by_voices"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "94c4f318-94d4-43b2-95b7-16338882024f",
+        "resource": "https://www.musik-sammler.de/artist/guided-by-voices/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no98028957",
+        "id": "bc7f1fbd-36eb-406b-926f-22af32bfb173"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id2960844",
+        "id": "f45ca1ef-68d6-477e-b4f1-e6cec50b1add"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/6857",
+        "id": "00eb79bb-b6a6-4962-8020-3625296a8ea8"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "secondhandsongs"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://twitter.com/gbvtweets",
+        "id": "d88b664f-6543-41c4-bbda-53c55d4dd109"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/GuidedByVoicesOfficial",
+        "id": "269d8aef-372f-45d9-849b-2ea45e15a6e7"
+      },
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/202006",
+        "id": "8c041bc3-6b7d-4381-ac67-5abc444696f9"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/2960844",
+        "id": "4b16e8a9-2729-4389-b7f3-e66bd90a3746"
+      },
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "2bdff6f0-6f4e-43cf-8e4a-05abaec0f785",
+        "resource": "https://music.apple.com/us/artist/2960844"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "bf294016-6d17-48aa-96f1-9a5ee67bfad2",
+        "resource": "https://tidal.com/artist/3518014"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "bc1b2841-503f-4e47-8702-dc88436525ec",
+        "resource": "http://viaf.org/viaf/106630853"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1472033",
+        "id": "d8e1a8fc-6d8c-4aef-9b10-b6b1f71a9868"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    }
+  ],
+  "isnis": [
+    "0000000081720587"
+  ],
+  "id": "6c85f4c3-026c-4c16-9a7c-f546f42ed0fb",
+  "disambiguation": "",
+  "ipis": [],
+  "sort-name": "Guided by Voices",
+  "gender-id": null,
+  "life-span": {
+    "begin": "1983",
+    "ended": false,
+    "end": null
+  }
+}

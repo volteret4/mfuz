@@ -1,0 +1,188 @@
+{
+  "sort-name": "Parker, Andrea",
+  "life-span": {
+    "begin": "1972-04-07",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "bff0b8e6-5c70-43a5-b01e-0d825eb67821",
+  "relations": [
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "57f1b52f-848b-4448-865f-0f51890cfe75",
+        "resource": "https://www.allmusic.com/artist/mn0000027266"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/3295",
+        "id": "83133178-4420-4637-8a8c-b752a2386df6"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://www.andreaparker.info/",
+        "id": "6ed75c7c-2b03-478f-9574-834739fb4718"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "637265da-592a-4aee-ae9b-11808049fb49",
+        "resource": "https://rateyourmusic.com/artist/andrea_parker"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.facebook.com/pages/Andrea-Parker-Official-Page/208930866928",
+        "id": "1297437b-2340-4fa8-b0e4-a8e6fe3de996"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "url": {
+        "id": "c507a1d7-726c-447c-879f-90bb078b0b72",
+        "resource": "https://soundcloud.com/andrea-parker"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/80042526",
+        "id": "d6338a60-e55c-4c85-8fc2-e2aac539cfad"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q494650",
+        "id": "c3829ad0-bd3a-409a-bf80-670b60c471ce"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    }
+  ],
+  "isnis": [
+    "0000000114494927"
+  ],
+  "disambiguation": "British producer and DJ",
+  "ipis": [
+    "00791620725"
+  ],
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "name": "United Kingdom",
+    "type": null,
+    "type-id": null,
+    "sort-name": "United Kingdom"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null,
+  "gender": "Female",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Yalding",
+    "id": "7e1a6d21-2090-464f-b7c8-aabcb2b0d581",
+    "name": "Yalding",
+    "type": null,
+    "disambiguation": ""
+  },
+  "country": "GB",
+  "name": "Andrea Parker",
+  "type": "Person"
+}

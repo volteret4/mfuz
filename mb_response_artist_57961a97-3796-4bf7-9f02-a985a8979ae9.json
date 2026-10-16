@@ -1,0 +1,1176 @@
+{
+  "type": "Group",
+  "gender": null,
+  "relations": [
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "663621ed-6e85-4211-8adb-b9ea3ec85feb",
+        "resource": "https://www.allmusic.com/artist/mn0000501407"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://cleopatrarecordsmotrhead.bandcamp.com/",
+        "id": "9f0f0665-b053-4216-b93e-85a0c12faec0"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "ended": false,
+      "type": "bandsintown",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/50321",
+        "id": "ca4eeb86-9af5-4fc3-b9fa-5cf0d61f1cb5"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/57961a97-3796-4bf7-9f02-a985a8979ae9",
+        "id": "ca17ba73-7b47-460b-b5d1-dd5599d61308"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discography page",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "62b6cdaf-c5c3-4d9a-bf9e-5384b4c287dd",
+        "resource": "http://www.motorheadoverkill.se/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/233658",
+        "id": "f0b7f841-79f9-42b4-92c1-6834d57bcc7b"
+      }
+    },
+    {
+      "type": "fanpage",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.imotorhead.com/",
+        "id": "3a069ad1-5024-4ad1-98f7-acf2b724051e"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "attributes": [],
+      "url": {
+        "id": "afa1a92a-f224-4a56-bf68-bb00408c98e9",
+        "resource": "http://www.mf-b.ru/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://www.motorhead.ru/",
+        "id": "b579d3f8-6d89-4933-bb06-149f36a967d7"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "fanpage",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "889f0300-c1d4-4fca-85f4-33818378b20a",
+        "resource": "https://music.migu.cn/v3/music/artist/302356"
+      }
+    },
+    {
+      "url": {
+        "id": "150dda5f-20af-464b-815c-6a4c5f941d78",
+        "resource": "https://open.spotify.com/artist/1DFr97A9HnbV3SKTJFu62M"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/3gw1fogA8YSHWC6JiycMOQ",
+        "id": "01fc6a4e-1968-4d5f-9d03-cffa607ddaa6"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "The Wacken Family Choir Mix",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/15036761",
+        "id": "26214d26-0e61-4822-af92-e51846ae3352"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "The Wacken Family Choir Mix",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "7195c7d4-7653-4143-be94-20f31d271a89",
+        "resource": "https://www.deezer.com/artist/2996"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "type": "image",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Motorhead-03.jpg",
+        "id": "3834873b-9101-44b3-934d-7d39e5f70c67"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "b9d21688-fd14-47c8-9816-5da2fedbcecd",
+        "resource": "https://www.imdb.com/name/nm4196666/"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "2e1064f9-000b-455d-8b2c-e5e34fc4bda5",
+        "resource": "https://www.last.fm/music/Mot%C3%B6rhead"
+      },
+      "attributes": [],
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "url": {
+        "resource": "https://genius.com/artists/Motorhead",
+        "id": "f9342a3f-76d1-459b-bdc0-a563a914ebc3"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Moto-5",
+        "id": "d8c4b243-a32b-4a44-8734-b1cfb5b9d9ee"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4b42e37e-b250-44b8-87f9-a5e84ea1692c",
+        "resource": "http://imotorhead.com/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n92011130",
+        "id": "95b1e5fc-a2b3-4657-8cfa-521ab07f9284"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13905101z",
+        "id": "a711c232-bcf8-4441-82b5-c90eef8f3e71"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://d-nb.info/gnd/5283786-5",
+        "id": "099cc6c4-1138-4276-8330-0b97a9c6396d"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "07e169b3-b2b3-46c2-b270-b0791261ce4d",
+        "resource": "https://imvdb.com/n/mot%C3%B6rhead"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/motorhead",
+        "id": "4bd300a8-0d9a-496e-a2f1-e3d84badfe16"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.45cat.com/artist/motorhead",
+        "id": "03229bc9-929f-429e-a070-45337d8f526d"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "c5ae9aa9-dc4b-43cb-aa1c-c97505e692e8",
+        "resource": "https://www.livefans.jp/artists/2609"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Mot%C3%B6rhead/203",
+        "id": "8687db7f-d24a-42b0-b172-21c35d610249"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "9f7af284-cbcc-4bae-8a48-ff2fdf00dc29",
+        "resource": "https://www.metalmusicarchives.com/artist/motorhead"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "a73b4bb7-5d59-4f93-a3a1-6e226941ae00",
+        "resource": "https://www.muziekweb.nl/Link/M00000079421/POPULAR/"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.spirit-of-rock.com/en/band/Motorhead",
+        "id": "28654f7b-502b-4bfb-8fc6-d951ca68dde8"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.whosampled.com/Mot%C3%B6rhead/",
+        "id": "8f76ecd7-cdab-4367-8e48-58dfcbc373e6"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "7d3b4647-a4f8-44e2-b2df-0eb077390151",
+        "resource": "https://www.worldcat.org/identities/lccn-n92011130"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://www.musik-sammler.de/artist/27",
+        "id": "0111766d-3035-48e5-b390-de8de9a7f728"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.spirit-of-metal.com/groupe-groupe-Motorhead-l-.html",
+        "id": "1c317300-a834-49d2-a75c-b0fbe8be777a"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id539605",
+        "id": "01c8a163-97b7-4b2c-bfe4-105f397f5919"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://mora.jp/artist/357746/all",
+        "id": "932b2338-3756-4407-93db-dd09ddda8328"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "ddb5bce9-17e5-477f-ac22-64d8b594c3ad",
+        "resource": "https://uk.7digital.com/artist/mot%C3%B6rhead"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "6ed81c06-5348-4943-b338-583f237880f1",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/motorhead/54389"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "20540dc5-29c4-4fd3-ab34-7779e7359d53",
+        "resource": "https://www.cdjapan.co.jp/person/700143620"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "61aadc01-4c4c-4fe7-bf44-6cd80f49db6f",
+        "resource": "https://secondhandsongs.com/artist/306"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "setlistfm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "74a5e677-1f69-4851-a960-c0130649196a",
+        "resource": "https://www.setlist.fm/setlists/motorhead-33d68059.html"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://twitter.com/myMotorhead",
+        "id": "800abb55-6561-4360-858c-4327c415a344"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "bf93654b-7211-40dc-a1ce-bda3263b0d76",
+        "resource": "https://www.facebook.com/OfficialMotorhead"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "655fc837-22ee-4444-ae15-90cc3a8ba5c3",
+        "resource": "https://www.instagram.com/officialmotorhead/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "874dd9db-28cf-4a46-b94b-62ccaf5f21c1",
+        "resource": "https://www.reverbnation.com/motorheadofficial"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "22ff449e-06d4-4d53-803f-747065fb05ca",
+        "resource": "https://www.tiktok.com/@motorhead_official"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "fc87faf6-94b3-45ab-ba68-3f24b00cd34b",
+        "resource": "https://www.songkick.com/artists/174854"
+      },
+      "attributes": [],
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "9c6daa3d-e627-45e3-9703-afae7f0e9a29",
+        "resource": "https://soundcloud.com/motorhead-official"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://us.napster.com/artist/motorhead",
+        "id": "0e17102e-7abc-4152-8175-a891fd18e6b8"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": "2022-06-08",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "3df4ac96-80da-49fc-9dd8-6d0a8a4e1f4b",
+        "resource": "https://music.amazon.co.uk/artists/B000QJI8I6"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/ca/artist/539605",
+        "id": "9d4336b6-af8c-4048-acfd-278881b54754"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "a5d2743c-f245-4347-bf3e-accde3bef99d",
+        "resource": "https://music.apple.com/gb/artist/539605"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "d4d31b3d-ede9-4371-b6c1-101770452ca5",
+        "resource": "https://music.apple.com/us/artist/539605"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://tidal.com/artist/87",
+        "id": "a0fd732d-1d38-4559-a707-5767f875d608"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/motorhead/54389",
+        "id": "6ed81c06-5348-4943-b338-583f237880f1"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/fr/artist/539605",
+        "id": "d1ebf209-2062-4c65-b661-3003c3f6c5fd"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "855221bb-f19b-4207-911f-924daa6ad8dc",
+        "resource": "http://viaf.org/viaf/125626559"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "fca6c201-b3aa-4533-9c61-f6727b9e24e1",
+        "resource": "https://www.wikidata.org/wiki/Q19697"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.youtube.com/motorhead",
+        "id": "4d341b71-1ea2-48fd-8cd1-5448642da038"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "6e6aac82-d3cd-494c-a345-220f460722bc",
+        "resource": "https://www.youtube.com/channel/UCbPCDmtTU-W4SdA8abZtWpA"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": true,
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": true,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "eb54d5bb-9d50-4249-a39d-e9074cdf834f",
+        "resource": "https://www.youtube.com/user/L0D666"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "37ba9d37-2312-48c6-8657-6ebd8994668c",
+        "resource": "https://music.youtube.com/channel/UC29TwdZt2GUC-AqbhFs_uSA"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "type": "youtube music",
+      "attribute-values": {},
+      "source-credit": ""
+    }
+  ],
+  "country": "GB",
+  "isnis": [
+    "0000000109410653"
+  ],
+  "begin-area": {
+    "type-id": null,
+    "name": "London",
+    "type": null,
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "disambiguation": "Greater London",
+    "sort-name": "London"
+  },
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender-id": null,
+  "sort-name": "Mot\u00f6rhead",
+  "disambiguation": "",
+  "id": "57961a97-3796-4bf7-9f02-a985a8979ae9",
+  "end-area": null,
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom",
+    "type": null,
+    "name": "United Kingdom",
+    "type-id": null
+  },
+  "name": "Mot\u00f6rhead",
+  "life-span": {
+    "ended": true,
+    "begin": "1975-06",
+    "end": "2015-12-28"
+  }
+}

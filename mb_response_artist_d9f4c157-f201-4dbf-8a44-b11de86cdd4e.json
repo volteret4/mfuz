@@ -1,0 +1,285 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [],
+  "area": {
+    "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+    "sort-name": "Japan",
+    "disambiguation": "",
+    "name": "Japan",
+    "type": null,
+    "iso-3166-1-codes": [
+      "JP"
+    ],
+    "type-id": null
+  },
+  "type": "Person",
+  "life-span": {
+    "begin": "1971",
+    "ended": false,
+    "end": null
+  },
+  "country": "JP",
+  "relations": [
+    {
+      "url": {
+        "id": "5f1d2f23-eb19-4930-99cd-80e554decbe1",
+        "resource": "https://hiroshiwatanabe.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "bandcamp",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/18641",
+        "id": "5282d5ea-ba57-459d-a462-7b79d32f3101"
+      }
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://open.spotify.com/artist/3YMGEE2v8JFucik7FvSndd",
+        "id": "08849db5-b6c0-469f-9420-779aa47f19db"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/189712",
+        "id": "3a1002c2-915b-44ee-8384-a68750fb4b42"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "myspace",
+      "url": {
+        "resource": "https://myspace.com/hiroshiwatanabemusic",
+        "id": "3b79eb76-7756-47cf-bf51-813e0143f36b"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.hiroshiwatana.be/",
+        "id": "9a46d7b9-c17d-4d52-a1ea-88b8e72739ab"
+      },
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": true,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "bdc985ac-6310-436f-9d47-7dfa57e507ca",
+        "resource": "https://twitter.com/hw_aka_kaito"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/hiroshiwatanabeofficial",
+        "id": "ddb371e3-0d47-4cdf-b6e6-8c8dbbeadee4"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/hw_aka_kaito/",
+        "id": "0bab7390-8761-455a-831f-b28c46901d80"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "resource": "https://soundcloud.com/kaito",
+        "id": "807ae255-55f8-48b6-b35c-7c4f0c19e873"
+      },
+      "attribute-values": {},
+      "type": "soundcloud",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/110696740",
+        "id": "3b9cb23d-fbb2-4610-9e46-3f84fa3fb9c0"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "3141ee25-064d-4e9e-9799-5b16cbe3fd2e",
+        "resource": "https://tidal.com/artist/3532583"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "type": "vgmdb",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "url": {
+        "id": "e909feb6-c87e-4d6b-a1de-fc72a998bc71",
+        "resource": "https://vgmdb.net/artist/2836"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "a613b942-ee2d-435e-bed9-9c3b1f4510e8",
+        "resource": "https://www.wikidata.org/wiki/Q1620289"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    }
+  ],
+  "disambiguation": "a.k.a. KAITO, QUADRA, DJ FX & nite system",
+  "gender": "Male",
+  "end-area": null,
+  "id": "d9f4c157-f201-4dbf-8a44-b11de86cdd4e",
+  "ipis": [],
+  "begin-area": null,
+  "name": "HIROSHI WATANABE",
+  "sort-name": "Watanabe, Hiroshi",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9"
+}

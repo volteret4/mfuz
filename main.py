@@ -5,7 +5,7 @@ import yaml
 from pathlib import Path
 import importlib.util
 from PyQt6 import uic
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, 
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget,
                             QVBoxLayout, QTabWidget, QScrollArea,
                             QLabel, QSizePolicy)
 from PyQt6.QtCore import Qt, QThread, QCoreApplication
@@ -35,12 +35,12 @@ def check_qt_dependencies_from_tools():
         # Importar el módulo de verificación
         tools_path = PROJECT_ROOT / "tools"
         sys.path.insert(0, str(tools_path))
-        
+
         import qt_dependencies
-        
+
         # Ejecutar la verificación
         return qt_dependencies.check_system_dependencies()
-        
+
     except ImportError as e:
         print(f"ADVERTENCIA: No se pudo importar qt_dependencies.py: {e}")
         print("Continuando sin verificación de dependencias...")
@@ -56,10 +56,10 @@ def check_qt_dependencies_from_tools():
 def load_config_file(file_path):
     """Carga un archivo de configuración en formato JSON o YAML."""
     file_path = Path(file_path)
-    
+
     if not file_path.exists():
         raise FileNotFoundError(f"ERROR: Archivo de configuración no encontrado: {file_path}")
-        
+
     file_extension = file_path.suffix.lower()
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -108,12 +108,12 @@ class ConditionalPyQtFilter(logging.Filter):
     def __init__(self, show_ui_logs=False):
         super().__init__()
         self.show_ui_logs = show_ui_logs
-    
+
     def filter(self, record):
         # Si UI está habilitado, mostrar todos los logs
         if self.show_ui_logs:
             return True
-        
+
         # Si UI no está habilitado, filtrar logs de PyQt y uic
         if record.name.startswith('PyQt6') or 'uic' in record.name.lower():
             return False
@@ -132,25 +132,25 @@ COLORS = {
 
 class ColoredFormatter(logging.Formatter):
     """Formateador que añade colores a los logs en terminal"""
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.last_module = None
-    
+
     def format(self, record):
         levelname = record.levelname
         # Obtener el color o usar RESET si no está definido
         color = COLORS.get(levelname, COLORS['RESET'])
         # Formatear con color
         record.levelname = f"{color}{levelname}{COLORS['RESET']}"
-        
+
         # Añadir separador si cambiamos de módulo
         result = super().format(record)
         current_module = record.name.split('.')[0]
-        
+
         if self.last_module and self.last_module != current_module:
             result = f"\n{result}"
-        
+
         self.last_module = current_module
         return result
 
@@ -199,7 +199,7 @@ class TabManager(QMainWindow):
         self.font_size = font_size
         self.config_path = config_path
         self.tabs: Dict[str, QWidget] = {}
-        
+
         # Cargar la configuración, NUNCA crear si no existe
         try:
             self.config = load_config_file(config_path)
@@ -214,22 +214,22 @@ class TabManager(QMainWindow):
         # Load initial theme from config
         try:
             config = load_config_file(config_path)
-        
+
             #self.available_themes = config.get('temas', ['Tokyo Night', 'Solarized Dark', 'Monokai'])
             #self.current_theme = config.get('tema_seleccionado', 'Tokyo Night')
-            
+
 
 
             # Cargar el sistema de temas centralizado
             try:
                 from themes.themes import THEMES, init_theme_system
                 self.available_themes = list(THEMES.keys())
-                
+
                 # Obtener tema seleccionado de la configuración
                 self.current_theme = self.config.get('tema_seleccionado', 'Tokyo Night')
                 if self.current_theme not in self.available_themes:
                     self.current_theme = self.available_themes[0]  # Usar el primer tema si no es válido
-                    
+
             except ImportError:
                 # Fallback a los temas definidos en base_module
                 from base_module import THEMES
@@ -255,56 +255,56 @@ class TabManager(QMainWindow):
             logging_level = logging.INFO
             config = {}
             print(f"Error al cargar la configuración: {e}")
-        
+
         # Obtener los tipos de log habilitados
         log_types = config.get('log_types', ['ERROR', 'INFO', 'WARNING'])
         show_ui_logs = 'UI' in log_types
-        
+
         # Registrar nivel UI personalizado si no existe
         if not hasattr(logging, 'UI'):
             logging.addLevelName(15, 'UI')  # 15 es un valor entre DEBUG (10) e INFO (20)
-            
+
             def ui_log(self, message, *args, **kwargs):
                 self.log(15, message, *args, **kwargs)
-            
+
             logging.Logger.ui = ui_log
-        
+
         # Configurar los handlers
         console_handler = logging.StreamHandler()
-        console_handler.setFormatter(ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s'))        
-        
+        console_handler.setFormatter(ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s'))
+
         # Establecemos path para el log_file
         log_file = PROJECT_ROOT / ".content" / "logs" / "multi_module_manager.log"
-        
+
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-        
+
         # Configurar root logger
         root_logger = logging.getLogger()
         root_logger.setLevel(logging_level)
         root_logger.handlers = []  # Eliminar handlers existentes
         root_logger.addHandler(console_handler)
         root_logger.addHandler(file_handler)
-        
+
         # Aplicar filtro condicional
         pyqt_filter = ConditionalPyQtFilter(show_ui_logs)
         root_logger.addFilter(pyqt_filter)
-        
+
         self.init_ui()
-        self.load_modules()     
+        self.load_modules()
 
         # Cargar el sistema de temas centralizado
         try:
             from themes.themes import THEMES as CENTRALIZED_THEMES, init_theme_system
             self.available_themes = list(CENTRALIZED_THEMES.keys())
-            
+
             # Obtener tema seleccionado de la configuración
             self.current_theme = self.config.get('tema_seleccionado', 'Tokyo Night')
             if self.current_theme not in self.available_themes:
                 self.current_theme = self.available_themes[0]  # Usar el primer tema si no es válido
-                
+
             print(f"Sistema de temas centralizado cargado con {len(self.available_themes)} temas")
-                
+
         except ImportError as e:
             print(f"No se pudo cargar el sistema centralizado de temas: {e}")
             # Fallback a los temas definidos en base_module
@@ -322,22 +322,22 @@ class TabManager(QMainWindow):
                 # Cargar el archivo UI
                 from PyQt6 import uic
                 uic.loadUi(ui_file_path, self)
-                
+
                 # SOLUCIÓN SIMPLE: Hacer el QTabWidget existente arrastrables
                 if hasattr(self, 'tab_widget'):
                     # Hacer las pestañas movibles
                     self.tab_widget.setMovable(True)
                     self.tab_widget.setTabsClosable(False)
-                    
+
                     # Conectar señal de movimiento nativa de Qt
                     self.tab_widget.tabBar().tabMoved.connect(self.on_tab_moved)
-                    
+
                     print("QTabWidget configurado como arrastrables")
                 else:
                     print("No se encontró tab_widget, usando fallback")
                     self._fallback_init_ui()
                     return
-                
+
                 print(f"UI cargada desde {ui_file_path}")
             except Exception as e:
                 print(f"Error cargando UI desde archivo: {e}")
@@ -357,18 +357,18 @@ class TabManager(QMainWindow):
         try:
             # Cargar configuración actual
             config = load_config_file(self.config_path)
-            
+
             if 'modules' in config and len(config['modules']) > max(from_index, to_index):
                 # Mover el módulo en la configuración
                 modules = config['modules']
                 moved_module = modules.pop(from_index)
                 modules.insert(to_index, moved_module)
-                
+
                 # Guardar configuración actualizada
                 save_config_file(self.config_path, config)
-                
+
                 print(f"Tab moved from {from_index} to {to_index} - Configuration updated")
-                
+
         except Exception as e:
             print(f"Error updating configuration after tab move: {e}")
 
@@ -387,144 +387,146 @@ class TabManager(QMainWindow):
 
         # Crear el widget de pestañas NORMAL
         self.tab_widget = QTabWidget()
-        
+
         # Hacer las pestañas movibles
         self.tab_widget.setMovable(True)
         self.tab_widget.setTabsClosable(False)
-        
+
         # Conectar señal de movimiento
         self.tab_widget.tabBar().tabMoved.connect(self.on_tab_moved)
-        
+
         layout.addWidget(self.tab_widget)
 
     def add_simple_animations(self):
         """Añade animaciones simples al tab widget existente"""
         if not hasattr(self, 'tab_widget'):
             return
-            
+
         try:
             # Animación simple al cambiar de pestaña
             original_setCurrentIndex = self.tab_widget.setCurrentIndex
-            
+
             def animated_tab_change(index):
                 # Cambio normal sin animaciones complejas por ahora
                 original_setCurrentIndex(index)
-                
+
                 # Efecto visual simple
                 current_widget = self.tab_widget.currentWidget()
                 if current_widget:
                     # Aplicar efecto de opacidad muy sutil
                     current_widget.setStyleSheet(
-                        current_widget.styleSheet() + 
+                        current_widget.styleSheet() +
                         "QWidget { background-color: rgba(0,0,0,0); }"
                     )
-            
+
             self.tab_widget.setCurrentIndex = animated_tab_change
-            
+
             print("Animaciones simples aplicadas al tab widget")
         except Exception as e:
             print(f"Error aplicando animaciones: {e}")
 
 
     def load_modules(self):
-        """Loads modules from configuration."""
+        """Loads modules from configuration with lazy loading optimization."""
         try:
             config = load_config_file(self.config_path)
-                
-            # Get global settings that modules might need
             global_config = config.get('global_theme_config', {})
-            
+
+            # Mostrar la ventana principal primero
+            self.show()
+            # Procesar eventos pendientes para que la ventana aparezca
+            QApplication.processEvents()
+
             for module_config in config['modules']:
                 parent_dir = Path(__file__).parent
                 relative_path = Path(module_config['path'])
                 module_path = str(parent_dir / relative_path)
                 module_name = module_config.get('name', Path(module_path).stem)
                 module_args = module_config.get('args', {})
-                
-                # Add ALL global config to module_args
+
+                # Add global config to module_args
                 for key, value in global_config.items():
-                    # Only add if not already defined in module-specific args
                     if key not in module_args:
                         module_args[key] = value
-                
-                # Also pass complete lastfm section if available
+
                 if 'lastfm' in config and 'lastfm' not in module_args:
                     module_args['lastfm'] = config.get('lastfm', {})
-                
-                # Add global_theme_config itself for modules that need access to all global settings
+
                 module_args['global_theme_config'] = global_config
-                
+
                 try:
+                    print(f"Cargando módulo: {module_name}")
+
                     # Dynamically load the module
-                    print(f"Intentando cargar módulo desde {module_path}")
                     spec = importlib.util.spec_from_file_location(module_name, module_path)
                     if spec and spec.loader:
                         module = importlib.util.module_from_spec(spec)
                         spec.loader.exec_module(module)
-                        
-                        # Find the main class of the module
+
+                        # Find the main class
                         main_class = None
                         for attr_name in dir(module):
                             attr = getattr(module, attr_name)
                             if isinstance(attr, type) and issubclass(attr, BaseModule) and attr != BaseModule:
                                 main_class = attr
                                 break
-                                
+
                         if main_class:
                             try:
                                 # Instantiate the module
                                 module_instance = main_class(**module_args)
-                            
+
                                 # Pass reference to TabManager
                                 if hasattr(module_instance, 'set_tab_manager'):
-                                    module_instance.set_tab_manager(self)                           
+                                    module_instance.set_tab_manager(self)
 
-                                # If it's the config editor, connect the signals
+                                # Connect signals for config editor
                                 if module_name == "Config Editor":
                                     if hasattr(module_instance, 'config_updated'):
                                         module_instance.config_updated.connect(self.reload_application)
-                                    
-                                    # Connect the module theme changed signal
                                     if hasattr(module_instance, 'module_theme_changed'):
                                         module_instance.module_theme_changed.connect(self.change_module_theme)
-                                
+
                                 # Add to tab manager
                                 self.tab_widget.addTab(module_instance, module_name)
                                 self.tabs[module_name] = module_instance
-                                
-                                # NUEVO: Aplicar efectos de tema al módulo recién cargado
+
+                                # Apply theme effects
                                 try:
                                     from themes.themes import apply_effects_to_widget, setup_objectnames_for_theme
-                                    
-                                    # Configurar objectNames automáticamente si no están configurados
                                     setup_objectnames_for_theme(module_instance)
-                                    
-                                    # Aplicar efectos
                                     apply_effects_to_widget(module_instance)
-                                    
                                 except ImportError:
-                                    pass  # Si no está disponible, continuar sin efectos
-                                
+                                    pass
+
                                 print(f"Módulo {module_name} cargado correctamente")
+
+                                # Procesar eventos después de cada módulo para mantener responsividad
+                                QApplication.processEvents()
+
                             except Exception as e:
                                 print(f"Error instanciando el módulo {module_name}: {e}")
+                                import traceback
                                 traceback.print_exc()
                         else:
                             print(f"No se encontró una clase válida en el módulo {module_name}")
-                            
+
                 except Exception as e:
                     print(f"Error cargando módulo {module_name}: {e}")
+                    import traceback
                     traceback.print_exc()
-                    
+
         except Exception as e:
             print(f"Error cargando configuración: {e}")
+            import traceback
             traceback.print_exc()
+
 
 
     def change_module_theme(self, module_name, new_theme):
         """
         Change theme for a specific module or global theme
-        
+
         Args:
             module_name (str): Name of the module to change theme for, or 'global'
             new_theme (str): New theme name
@@ -544,7 +546,7 @@ class TabManager(QMainWindow):
         """
         Aplica el tema especificado usando ÚNICAMENTE el sistema centralizado.
         NO aplica CSS adicional, solo usa themes.py
-        
+
         Args:
             theme_name (str, optional): Nombre del tema a aplicar.
                                     Si es None, usa self.current_theme.
@@ -552,28 +554,28 @@ class TabManager(QMainWindow):
         # Actualizar el tema actual si se proporciona uno nuevo
         if theme_name is not None:
             self.current_theme = theme_name
-        
+
         # Asegurar que el tema existe, usar el primero por defecto si no
         if self.current_theme not in self.available_themes:
             self.current_theme = self.available_themes[0]
-        
+
         # Usar ÚNICAMENTE el sistema centralizado de temas
         try:
             from themes.themes import init_theme_system, apply_effects_to_widget
-            
+
             # Establecer el objectName de la ventana principal
             if not self.objectName():
                 self.setObjectName("main_window")
-            
+
             # Aplicar el tema a nivel de aplicación usando SOLO themes.py
             init_theme_system(QApplication.instance(), self.current_theme)
-            
+
             # Aplicar efectos a la ventana principal
             apply_effects_to_widget(self)
-            
+
             print(f"Tema '{self.current_theme}' aplicado correctamente via sistema centralizado")
             return
-            
+
         except (ImportError, AttributeError) as e:
             print(f"Error: Sistema centralizado de temas no disponible: {e}")
             print("ADVERTENCIA: No se aplicará ningún tema. Usando estilos por defecto de Qt.")
@@ -585,17 +587,17 @@ class TabManager(QMainWindow):
         """Recarga todos los módulos después de un cambio en la configuración"""
         # Guardar el índice de la pestaña actual
         current_index = self.tab_widget.currentIndex()
-        
+
         # Eliminar todas las pestañas existentes
         while self.tab_widget.count() > 0:
             self.tab_widget.removeTab(0)
-        
+
         # Limpiar el diccionario de pestañas
         self.tabs.clear()
-        
+
         # Recargar los módulos
         self.load_modules()
-        
+
         # Restaurar el índice de la pestaña si es posible
         if current_index < self.tab_widget.count():
             self.tab_widget.setCurrentIndex(current_index)
@@ -619,22 +621,22 @@ class TabManager(QMainWindow):
         """Cambia el tema de toda la aplicación."""
         if new_theme in self.available_themes:
             self.current_theme = new_theme
-            
+
             # Reapply theme to TabManager
             self.apply_theme()
-            
+
             # Check global theme configuration
             try:
                 config = load_config_file(self.config_path)
-            
+
                 # Determine if individual themes are enabled
                 enable_individual_themes = config.get('global_theme_config', {}).get('enable_individual_themes', True)
-                
+
                 # Reapply theme to modules
                 for module_name, module in self.tabs.items():
                     # If individual themes are disabled, or the module doesn't have a specific theme set
                     module_config = next((m for m in config['modules'] if m['name'] == module_name), None)
-                    
+
                     if not enable_individual_themes or (module_config and 'tema_seleccionado' not in module_config.get('args', {})):
                         # NUEVO: Usar la función corregida
                         try:
@@ -650,13 +652,13 @@ class TabManager(QMainWindow):
                             apply_theme_to_widget(module, specific_theme)
                         except ImportError:
                             module.apply_theme(specific_theme)  # Fallback
-                
+
                 # Update config file
                 config['tema_seleccionado'] = new_theme
-                
+
                 # Save configuration
                 save_config_file(self.config_path, config)
-                
+
             except Exception as e:
                 print(f"Error al aplicar cambio de tema: {e}")
                 traceback.print_exc()
@@ -670,43 +672,43 @@ class TabManager(QMainWindow):
                 print("Error: info_scroll no existe")
                 self._fallback_setup_info_widget()
                 return
-                
+
             # 1. Cargar el panel de información principal (enlaces, wikipedia, lastfm, etc.)
             info_ui_path = Path(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
             if os.path.exists(info_ui_path):
                 try:
                     self.info_widget = QWidget()
                     uic.loadUi(info_ui_path, self.info_widget)
-                    
+
                     # Obtener referencias a los labels
                     self.links_label = self.info_widget.findChild(QLabel, "links_label")
                     self.wikipedia_artist_label = self.info_widget.findChild(QLabel, "wikipedia_artist_label")
                     self.lastfm_label = self.info_widget.findChild(QLabel, "lastfm_label")
                     self.wikipedia_album_label = self.info_widget.findChild(QLabel, "wikipedia_album_label")
-                    
+
                     # Importante: Configurar el ancho mínimo para los labels
                     # Esto es crucial para que el contenido se expanda horizontalmente
                     if self.info_scroll and self.info_scroll.width() > 0:
                         scroll_width = self.info_scroll.width() - 30  # Restar un poco para scrollbar y margen
                     else:
                         scroll_width = 800  # Un valor razonable por defecto
-                    
+
                     # Configurar el ancho mínimo para todos los labels
-                    for label in [self.links_label, self.wikipedia_artist_label, 
+                    for label in [self.links_label, self.wikipedia_artist_label,
                                 self.lastfm_label, self.wikipedia_album_label]:
                         if label:
                             label.setMinimumWidth(scroll_width)
-                    
+
                     # El ajuste crítico: Configurar el tamaño del widget
                     # Esto fuerza al QScrollArea a mostrar contenido con el ancho adecuado
                     self.info_widget.setMinimumWidth(scroll_width)
-                    
+
                     # Establecer el widget en el ScrollArea
                     self.info_scroll.setWidget(self.info_widget)
-                    
+
                     # IMPORTANTE: Eliminar cualquier restricción de scroll horizontal
                     self.info_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-                    
+
                     print("Panel de información cargado desde UI")
                 except Exception as e:
                     print(f"Error al cargar el panel de información: {e}")
@@ -717,13 +719,13 @@ class TabManager(QMainWindow):
                 print(f"Archivo UI del panel de información no encontrado: {info_ui_path}")
                 self._fallback_setup_info_widget()
                 return
-                
+
             # Resto de tu código actual...
-            
+
             # IMPORTANTE: Añadir un evento de redimensionamiento para actualizar anchos
             # cuando la ventana cambie de tamaño
             self.info_scroll.resizeEvent = self._on_info_scroll_resize
-            
+
             self.ui_components_loaded['info'] = True
             print("Widgets de información configurados correctamente")
         except Exception as e:
@@ -737,16 +739,16 @@ class TabManager(QMainWindow):
         if hasattr(self, 'info_widget') and self.info_widget:
             # Calcular el nuevo ancho óptimo
             scroll_width = event.size().width() - 30  # Restar para scrollbar y margen
-            
+
             # Actualizar el ancho mínimo del widget contenedor
             self.info_widget.setMinimumWidth(scroll_width)
-            
+
             # Actualizar el ancho mínimo de todos los labels
-            for label in [self.links_label, self.wikipedia_artist_label, 
+            for label in [self.links_label, self.wikipedia_artist_label,
                         self.lastfm_label, self.wikipedia_album_label]:
                 if label:
                     label.setMinimumWidth(scroll_width)
-        
+
         # Llamar al evento original si está disponible
         original_resize = getattr(QScrollArea, "resizeEvent", None)
         if original_resize:
@@ -773,7 +775,7 @@ class TabManager(QMainWindow):
             if self.tab_widget.tabText(i) == tab_name:
                 # Cambiar a esa pestaña
                 self.tab_widget.setCurrentIndex(i)
-                
+
                 # Si hay un método que llamar
                 if method_to_call and tab_name in self.tabs:
                     tab_module = self.tabs[tab_name]
@@ -787,17 +789,17 @@ class TabManager(QMainWindow):
                     else:
                         print(f"El módulo '{tab_name}' no tiene un método llamado '{method_to_call}'")
                 return True
-        
+
         print(f"No se encontró la pestaña '{tab_name}'")
         return False
 
 def main():
     # NUEVO: Verificar dependencias Qt antes de crear QApplication
-    print("Verificando dependencias del sistema...")
-    if not check_qt_dependencies_from_tools():
-        print("ERROR: Dependencias faltantes. Instala los paquetes requeridos.")
-        sys.exit(1)
-    
+    # print("Verificando dependencias del sistema...")
+    # if not check_qt_dependencies_from_tools():
+    #     print("ERROR: Dependencias faltantes. Instala los paquetes requeridos.")
+    #     sys.exit(1)
+
     parser = argparse.ArgumentParser(description='Multi-Module Manager')
     parser.add_argument('config_path', help='Ruta al archivo de configuración (JSON o YAML)')
     parser.add_argument('--font', default='Inter', help='Fuente a usar en la interfaz')
@@ -806,9 +808,9 @@ def main():
                         choices=['true', 'false'],
                         default=None,
                         help='Habilitar logging detallado (true/false)')
-    parser.add_argument('--skip-deps', action='store_true', 
+    parser.add_argument('--skip-deps', action='store_true',
                         help='Omitir verificación de dependencias')
-    
+
     args = parser.parse_args()
 
     # Permitir omitir verificación con --skip-deps
@@ -825,7 +827,7 @@ def main():
         sys.exit(1)
 
     app = QApplication(sys.argv)
-    
+
     try:
         manager = TabManager(args.config_path, font_family=args.font, font_size=args.font_size)
         manager.show()

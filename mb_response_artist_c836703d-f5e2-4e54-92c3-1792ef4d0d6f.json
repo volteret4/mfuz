@@ -1,0 +1,105 @@
+{
+  "end-area": null,
+  "ipis": [],
+  "type": "Person",
+  "isnis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "sort-name": "United States"
+  },
+  "begin-area": null,
+  "name": "Geologist",
+  "id": "c836703d-f5e2-4e54-92c3-1792ef4d0d6f",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "gender": "Male",
+  "relations": [
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://geologist.bandcamp.com/",
+        "id": "ed503179-8d88-426f-99eb-b025848c83fb"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "bandcamp",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "d25a15f1-c85a-4af5-82eb-05dcadf90b26",
+        "resource": "https://www.discogs.com/artist/340829"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "2681353e-1962-4ca3-bda3-974e07ca96c3",
+        "resource": "https://music.apple.com/au/artist/1771082362"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q3293065",
+        "id": "cb330245-144d-4512-b44d-a5f0bf395f75"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "sort-name": "Geologist",
+  "country": "US",
+  "disambiguation": "founding member of Animal Collective",
+  "life-span": {
+    "begin": "1979-03-26",
+    "end": null,
+    "ended": false
+  }
+}

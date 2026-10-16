@@ -1,0 +1,582 @@
+{
+  "sort-name": "Avett Brothers, The",
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Concord",
+    "id": "a26f2355-2bcf-4e57-8d16-7653d53f01bf",
+    "type": null,
+    "name": "Concord"
+  },
+  "disambiguation": "",
+  "end-area": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "2000"
+  },
+  "gender-id": null,
+  "id": "0a176d0a-ef46-4e7f-b018-9f4d65614668",
+  "isnis": [
+    "0000000107076890"
+  ],
+  "name": "The Avett Brothers",
+  "gender": null,
+  "relations": [
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "1f2f092b-fac7-4b3c-bd97-5995ea47a6d3",
+        "resource": "https://www.allmusic.com/artist/mn0000755152"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://theavettbrothers.bandcamp.com/",
+        "id": "f950a759-86ec-4059-aafb-fe43f56b094a"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/824244",
+        "id": "6824c24c-0998-480a-8b5d-feab55c0f203"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "631c498e-f421-4146-abac-677041e74981",
+        "resource": "https://www.discogs.com/release/10956000"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/196lKsA13K3keVXMDFK66q",
+        "id": "de2bf5c7-4433-4c91-a9c3-d36f1ebdb2b1"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/255818",
+        "id": "b1acb71e-9f14-4e47-91d9-e394944fb8e6"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "55ca1f40-241c-4bcd-9f23-97cc71070aa9",
+        "resource": "https://commons.wikimedia.org/wiki/File:Flickr_-_moses_namkung_-_Avett_Brothers_5.jpg"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "image",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c"
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "type": "IMDb",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm2652674/",
+        "id": "ace30654-59e8-4289-88f2-5456a8bfcaf7"
+      }
+    },
+    {
+      "url": {
+        "id": "12bb78a1-90bb-47a3-9347-692b3149bbef",
+        "resource": "https://www.last.fm/music/The+Avett+Brothers"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "url": {
+        "id": "aeb263b5-f383-4619-bd65-d33e44b645e6",
+        "resource": "http://muzikum.eu/en/122-14026/the-avett-brothers/lyrics.html"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "lyrics",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "type": "myspace",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://myspace.com/theavettbrothers",
+        "id": "bf1e4c24-40a8-4ae2-bacc-7021173b4905"
+      }
+    },
+    {
+      "url": {
+        "id": "0228171f-a8b8-405e-989e-a059509466ff",
+        "resource": "http://www.theavettbrothers.com/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "target-type": "url",
+      "source-credit": "",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "9da444ff-3c64-4c0a-90aa-56af2ccf263a",
+        "resource": "http://id.loc.gov/authorities/names/no2007056843"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb169327713",
+        "id": "5c1b1742-bff4-437d-908f-5abc737399bd"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://d-nb.info/gnd/16026181-8",
+        "id": "92f1cb11-379f-4343-8865-2e822d6c5ed1"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://imvdb.com/n/the-avett-brothers",
+        "id": "49a0c461-cec0-45ac-9ca7-2c73a3d9dcdc"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_avett_brothers",
+        "id": "8fe88df4-74ac-4203-94d1-eb43befea290"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type": "purchase for download",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": true,
+      "end": null,
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id62487918",
+        "id": "9b87ee3e-7017-4305-a581-51fd274a431f"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/the-avett-brothers-33d66809.html",
+        "id": "ccfd1400-e278-4040-907a-41ae0490d84b"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "setlistfm",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "85e31dc4-96ce-493a-b652-cd055d8b4d63",
+        "resource": "https://twitter.com/theavettbros"
+      }
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "2391221a-156f-42c2-9123-e623a192caa5",
+        "resource": "https://www.facebook.com/theavettbrothers"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/theavettbrothers/",
+        "id": "0189b611-fcb3-4e9d-a60e-043991521e35"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://www.songkick.com/artists/348455",
+        "id": "eca6cce7-c6b4-438f-94db-dfc65c5ba59d"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "songkick",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "url": {
+        "resource": "https://soundcloud.com/theavettbrothers",
+        "id": "1bec96b5-b1e1-481a-99d6-6b57fe6318c5"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "soundcloud",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "e2fc94d8-060c-4dce-b46c-e81a01dad49b",
+        "resource": "https://music.apple.com/us/artist/62487918"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/3661505",
+        "id": "ff9903f6-2b1c-449b-870c-308bec04ae8d"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/154107948",
+        "id": "1edf2620-aaca-4214-abb5-e6445ed18d3d"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "VIAF"
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q123320",
+        "id": "b86d0830-7888-466b-852f-52b118769eaf"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCeOe4HJCRZrJEtb2gPd6gmQ",
+        "id": "14c79fc5-09fd-497b-baee-30040547018d"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "type": "youtube",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "a9b7e959-e316-40a8-a5df-d079e4013a59",
+        "resource": "https://www.youtube.com/channel/UCJlAF3BOWRidnBHehwPS7mA"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "type": "youtube",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    }
+  ],
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "type-id": null,
+    "sort-name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "ipis": [],
+  "type": "Group",
+  "country": "US",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b"
+}

@@ -21,6 +21,10 @@
 # python music_search.py --db mi_musica.db --limit 5 "rock"
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import argparse
 import os
 import textwrap
@@ -38,6 +42,7 @@ class MusicDatabaseSearcher:
         """Establece conexión con la base de datos"""
         try:
             self.conn = sqlite3.connect(self.db_path)
+            apply_pragmas(self.conn)
             self.cursor = self.conn.cursor()
             return True
         except sqlite3.Error as e:

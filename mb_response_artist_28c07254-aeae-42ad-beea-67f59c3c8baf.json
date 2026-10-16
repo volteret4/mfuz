@@ -1,0 +1,287 @@
+{
+  "disambiguation": "New Jersey post punk/rock band",
+  "life-span": {
+    "ended": false,
+    "begin": "1976",
+    "end": null
+  },
+  "sort-name": "Feelies, The",
+  "gender": null,
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000762177",
+        "id": "382187e2-fe1d-49ff-8469-e6f0b063b7fa"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "bandcamp",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "60599cc1-c3ae-49dc-839c-908b14cf28bb",
+        "resource": "https://thefeelies.bandcamp.com/"
+      },
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/152428",
+        "id": "6c540e7a-16cf-44d9-a528-f53f0d35184f"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "46ed398b-28e8-44c9-a1fc-f90dc5eb34f8",
+        "resource": "https://open.spotify.com/artist/4UETUdF77BfyJ7fEFVztr3"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "9e91d337-14a6-410b-aacf-a3b2f8bebedf",
+        "resource": "https://www.deezer.com/artist/13645"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "end": null,
+      "type": "free streaming",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "IMDb",
+      "ended": false,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1209689/",
+        "id": "7ccc2a21-ef60-40fc-ae37-e98cc5d6fd7f"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "myspace",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "17b2535d-31ce-4d67-84e0-70e72c988d89",
+        "resource": "https://myspace.com/thefeelies"
+      },
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "http://www.thefeeliesweb.com/",
+        "id": "42327ab9-7128-49be-ae33-83a872a5f5de"
+      },
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "04c8519a-1dfa-48c8-aa7e-ea2381b7e253",
+        "resource": "https://d-nb.info/gnd/10275230-8"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_feelies",
+        "id": "04ccb4cf-735a-4ff9-bbed-397e5d12a3f0"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/The.Feelies",
+        "id": "512e7708-deeb-4e22-9171-5331e11c0911"
+      },
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "songkick",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "3cc88437-97c6-43ef-a575-74af07f066b7",
+        "resource": "https://www.songkick.com/artists/219514"
+      },
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/3639757",
+        "id": "311fb8cf-0bb8-4984-843f-3168aa25f08b"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "03a9f8d3-ccf4-4159-9473-ecc9f8b66115",
+        "resource": "https://www.wikidata.org/wiki/Q1544817"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "type": "wikidata",
+      "ended": false,
+      "source-credit": ""
+    }
+  ],
+  "country": "US",
+  "gender-id": null,
+  "id": "28c07254-aeae-42ad-beea-67f59c3c8baf",
+  "name": "The Feelies",
+  "area": {
+    "type": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000110166395"
+  ],
+  "begin-area": null,
+  "ipis": [],
+  "end-area": null,
+  "type": "Group"
+}

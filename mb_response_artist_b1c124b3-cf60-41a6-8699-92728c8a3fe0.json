@@ -1,0 +1,593 @@
+{
+  "disambiguation": "",
+  "ipis": [
+    "00125212421",
+    "00262292766",
+    "00623847241",
+    "00638379998",
+    "00746971597"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "url": {
+        "id": "95ca05a6-1255-46ee-8afe-731d3633a76b",
+        "resource": "https://www.allmusic.com/artist/mn0000161920"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": "2020-11-19",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/b1c124b3-cf60-41a6-8699-92728c8a3fe0",
+        "id": "b98fad25-d39e-46a4-9973-91ffa13c6ef8"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "biography",
+      "attribute-values": {},
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "url": {
+        "resource": "https://web.archive.org/web/20080513082745/http://www.discomuseum.com/GraceJones.html",
+        "id": "dbf6ef6f-1a18-4a1e-95d2-e7d0fe31c4e4"
+      }
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "9c15fba9-e692-499e-8e22-5733cb4d83a9",
+        "resource": "https://www.discogs.com/artist/13932"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "d04f46a8-b152-4da7-91cb-3cacfc695ad5",
+        "resource": "https://open.spotify.com/artist/2f9ZiYA2ic1r1voObUimdd"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "e7b5d301-ebd1-4255-8917-005c56770bc0",
+        "resource": "https://www.deezer.com/artist/6167"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Gracejones.jpg",
+        "id": "89d5b8a2-3c77-45f9-9373-318e5731ff86"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c"
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0005063/",
+        "id": "55e5f4b6-e61f-4633-ab98-3e72dca69aad"
+      },
+      "attribute-values": {},
+      "type": "IMDb",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Grace+Jones",
+        "id": "d294640f-5030-4ec2-becf-5643de9cdb07"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Grace-jones",
+        "id": "7c14f8ca-e486-4464-97f3-62ae4a8ae4aa"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "f4cd7ad6-16c8-46dc-9085-346f8859541f",
+        "resource": "https://myspace.com/gracejonesofficial"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "type": "myspace",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.gracejones.com/",
+        "id": "a9c90791-378f-4e7a-bada-1cde43e4bd15"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "online community",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "2cd4fd00-9ba4-4175-a464-0096e1e848b5",
+        "resource": "http://www.spock.com/Grace-Jones"
+      },
+      "type-id": "35b3a50f-bf0e-4309-a3b4-58eeed8cee6a",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "31fb21f4-b719-4554-ab2c-497e0963fed7",
+        "resource": "http://id.loc.gov/authorities/names/n91070818"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb138957228",
+        "id": "2e8cbe4e-32ae-4bf8-9c75-f9deaef8e036"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "8e4a43e7-2c55-4d86-93cb-649e81a8bfd5",
+        "resource": "https://d-nb.info/gnd/133276570"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "bf97f858-b358-435f-888d-c6c4638cf6cb",
+        "resource": "http://snaccooperative.org/ark:/99166/w6tx4b7c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/grace_jones",
+        "id": "dd9ee77e-a06a-4e56-84d6-f35fe3d8849b"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "0c5d3b39-fc40-4887-a521-66aee93addb5",
+        "resource": "https://www.whosampled.com/Grace-Jones/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "72002220-f34c-4df2-bdee-b0d3903d4443",
+        "resource": "https://www.worldcat.org/identities/lccn-n91070818/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "url": {
+        "id": "96b924f1-9c20-4442-9a36-968f87980ecc",
+        "resource": "https://itunes.apple.com/artist/id32200"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "588e94ee-7b69-42fb-ba4d-efcabe2d6829",
+        "resource": "https://secondhandsongs.com/artist/172"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://twitter.com/GraceJones",
+        "id": "752f2f0e-cc6a-428b-92cd-c8720e1dbeee"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/GraceJonesOfficial",
+        "id": "108567ec-e1d1-4ac8-b263-0d6230856d3c"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/gracejonesofficial/",
+        "id": "6c4100eb-9f4a-437f-84ef-33ffffbdb09a"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/370226",
+        "id": "04071013-3960-46ea-9cc5-d2e983acd1b5"
+      },
+      "attribute-values": {},
+      "type": "songkick",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "78741fda-35e5-4ed5-8fbf-f87d6c31255e",
+        "resource": "https://tidal.com/artist/31917"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "73843073-ae60-4a9e-b8a8-fead138b4c16",
+        "resource": "http://viaf.org/viaf/168232254"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "626b855b-a930-4c65-85dc-9425390046e9",
+        "resource": "https://www.wikidata.org/wiki/Q450429"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "url": {
+        "id": "0215428d-cf1c-4065-a2ea-bcd07afa93b3",
+        "resource": "https://www.youtube.com/channel/UClG7eupJZC6QFiT7743DMQg"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    }
+  ],
+  "isnis": [
+    "0000000106665546",
+    "0000000115300688",
+    "0000000115310915"
+  ],
+  "id": "b1c124b3-cf60-41a6-8699-92728c8a3fe0",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1948-05-19"
+  },
+  "sort-name": "Jones, Grace",
+  "begin-area": {
+    "id": "8a086d15-0735-4b7e-b3f7-5c02e4723c2a",
+    "disambiguation": "",
+    "name": "Saint Catherine",
+    "type": null,
+    "type-id": null,
+    "sort-name": "Saint Catherine",
+    "iso-3166-2-codes": [
+      "JM-14"
+    ]
+  },
+  "country": "US",
+  "type": "Person",
+  "name": "Grace Jones",
+  "gender": "Female",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  }
+}

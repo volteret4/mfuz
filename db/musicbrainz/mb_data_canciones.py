@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import time
 import json
@@ -130,6 +134,7 @@ def main(config=None):
     
     # Connect to the SQLite database
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Check if mb_data_songs table exists, create if not

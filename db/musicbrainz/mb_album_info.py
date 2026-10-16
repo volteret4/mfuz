@@ -11,6 +11,8 @@ import sys
 import time
 import json
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import logging
 import requests
 from datetime import datetime
@@ -34,6 +36,7 @@ def _connect_db(db_path, timeout=30):
     """Connect to the SQLite database with improved error handling."""
     try:
         conn = sqlite3.connect(db_path, timeout=timeout)
+        apply_pragmas(conn)
         conn.row_factory = sqlite3.Row
         # Enable foreign keys
         conn.execute("PRAGMA foreign_keys = ON")

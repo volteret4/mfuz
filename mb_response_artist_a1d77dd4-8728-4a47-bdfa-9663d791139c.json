@@ -1,0 +1,585 @@
+{
+  "disambiguation": "",
+  "life-span": {
+    "begin": "1988",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Future Sound of London, The",
+  "relations": [
+    {
+      "end": null,
+      "begin": null,
+      "type": "allmusic",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "85941a60-c74d-43f0-a748-aa9ebbf9aab6",
+        "resource": "https://www.allmusic.com/artist/mn0000799348"
+      },
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "d64d4853-f5d5-41c7-b8cd-ee978c2dda9e",
+        "resource": "https://fsol.bandcamp.com/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "bandcamp",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "BBC Music page",
+      "end": "2020-11-19",
+      "begin": null,
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "url": {
+        "id": "b8585a27-2a29-4453-9016-309e14d1a065",
+        "resource": "https://www.bbc.co.uk/music/artists/a1d77dd4-8728-4a47-bdfa-9663d791139c"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "e7e8e0fd-a9ee-479e-a06b-c8fb318b0431",
+        "resource": "https://www.discogs.com/artist/2549"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "82723281-367d-4ca0-bdbe-219d995d29ad",
+        "resource": "https://music.youtube.com/channel/UCq6Im_cLuw3VM1MGbS3I7_Q"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "id": "cddbf262-8729-45a0-ac2e-b3ea89f71793",
+        "resource": "https://open.spotify.com/artist/2qhmNI4ZHPpeDutdg473Z3"
+      },
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/9022",
+        "id": "92799be9-42b7-499b-961d-f24d3bfe22c3"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "interview",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "http://www.muzines.co.uk/articles/future-talk/7686",
+        "id": "d720db66-ab02-4036-958e-39a025d66da4"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "target-credit": "",
+      "url": {
+        "resource": "http://www.muzines.co.uk/articles/future-talk/7730",
+        "id": "62aaea35-8d76-472f-9c84-0685d1e4bc4e"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "interview"
+    },
+    {
+      "ended": false,
+      "type": "interview",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "resource": "http://www.muzines.co.uk/articles/past-present-and-future/2343",
+        "id": "6cbd2322-826a-4ceb-8eab-8ac295fca327"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "url": {
+        "id": "7131c26e-af8c-4f27-af8b-211c338a7fc1",
+        "resource": "https://www.last.fm/music/The+Future+Sound+of+London"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "last.fm",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "myspace",
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "url": {
+        "id": "e2f25015-b577-4080-8a6c-fe6a7c8d88b2",
+        "resource": "https://myspace.com/fsolfsolfsol"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "5fdb143f-788f-426f-8d65-f21ca8848782",
+        "resource": "https://myspace.com/thefuturesoundoflondon"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "f97f2968-3c54-4725-b59e-003e9d1f2361",
+        "resource": "http://www.futuresoundoflondon.com/"
+      },
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no98079009",
+        "id": "983eb9e6-7b42-41f6-b102-006c7889470f"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139673675",
+        "id": "e1d02fbd-42f1-4b8a-bddb-852ce83206a0"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_future_sound_of_london",
+        "id": "0f73ee34-8b7e-462b-ad66-fc2ef361daad"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no98079009",
+        "id": "b11edf10-8512-4ed4-b908-042249b59f0f"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "url": {
+        "id": "aa6f411e-4d2b-4885-b5a9-f59fbbf6976a",
+        "resource": "https://music.apple.com/gb/artist/6851631"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "url": {
+        "id": "fd20f556-3b6b-4419-8cfc-8aae0d872c3f",
+        "resource": "https://www.qobuz.com/us-en/interpreter/the-future-sound-of-london/428739"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "id": "4b9e8c95-7eed-4841-af5e-da10381d3a31",
+        "resource": "https://www.facebook.com/Future-Sound-of-London-FSOL-34897435627"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "id": "3443ef83-c46b-430c-bc8c-8fff550f816a",
+        "resource": "https://www.songkick.com/artists/467447"
+      },
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "aa6f411e-4d2b-4885-b5a9-f59fbbf6976a",
+        "resource": "https://music.apple.com/gb/artist/6851631"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/6851631",
+        "id": "a25facf3-ee4c-459c-843d-cf5807babf12"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/3518818",
+        "id": "1af252d0-976a-40d3-9230-c25abadff173"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/the-future-sound-of-london/428739",
+        "id": "fd20f556-3b6b-4419-8cfc-8aae0d872c3f"
+      },
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "type": "vgmdb",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "e174bc3b-7912-43ce-a6e1-db7cabbc3219",
+        "resource": "https://vgmdb.net/artist/13394"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://viaf.org/viaf/128029717",
+        "id": "4a8d7cd4-087d-4955-8fa8-876d7af63d5f"
+      }
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "12153f0f-7581-4e9b-83c2-bc9da24d0820",
+        "resource": "https://www.wikidata.org/wiki/Q168031"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCq6Im_cLuw3VM1MGbS3I7_Q",
+        "id": "4b439a4f-fce6-4c66-9bd8-03926eaa6c49"
+      },
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "youtube",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    }
+  ],
+  "gender": null,
+  "country": "GB",
+  "id": "a1d77dd4-8728-4a47-bdfa-9663d791139c",
+  "gender-id": null,
+  "isnis": [
+    "0000000121551141"
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "id": "852531bf-3410-401f-b432-9c3157a386b9",
+    "sort-name": "Manchester",
+    "type-id": null,
+    "name": "Manchester",
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-MAN"
+    ],
+    "type": null
+  },
+  "area": {
+    "sort-name": "United Kingdom",
+    "type": null,
+    "name": "United Kingdom",
+    "type-id": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": ""
+  },
+  "name": "The Future Sound of London",
+  "end-area": null,
+  "ipis": [],
+  "type": "Group"
+}

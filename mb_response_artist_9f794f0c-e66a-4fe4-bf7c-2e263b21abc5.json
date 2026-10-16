@@ -1,0 +1,339 @@
+{
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000664093",
+        "id": "82b3e932-9ebc-44cd-8709-db8c19f827d0"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "ended": false,
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "109c7abd-857f-4f44-90fc-b7666717ec09",
+        "resource": "https://web.archive.org/web/20080427084049/http://www.discomuseum.com/HamiltonBohannon.html"
+      }
+    },
+    {
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "id": "c6de7a4b-079a-4eef-a332-a83cb6210967",
+        "resource": "https://www.discogs.com/artist/154434"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "29c89cdb-8bff-42a6-b971-cabbdf902dcb",
+        "resource": "https://www.discogs.com/artist/17045"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/3opvWF0Koer2VPIJVOqnU6",
+        "id": "15f0c371-3140-4407-b5f5-67eb1364d2bc"
+      },
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "84b73feb-7e3f-4a98-a0eb-f4379970746d",
+        "resource": "https://www.imdb.com/name/nm8859479/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "6644b8ca-5620-4de5-b63c-7371cd20ef3e",
+        "resource": "https://www.last.fm/music/Bohannon"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n94108042",
+        "id": "c9cdc39c-8a47-4dc0-87da-10d0fc95dd00"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14044562f",
+        "id": "c462b069-9faa-4cd4-a3e8-1df207bc9128"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "ddfa324e-b215-47d9-ad6e-7b98a20549fd",
+        "resource": "https://d-nb.info/gnd/134332679"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/bohannon",
+        "id": "596fbe9b-7d1a-49bb-95ad-f3301147a557"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "333159d7-74c0-4659-b7af-5bdcdd025cbe",
+        "resource": "https://www.45cat.com/artist/hamilton-bohannon"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "setlistfm",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/bohannon-13d625f5.html",
+        "id": "cb2acbdc-a0e8-4e6b-b2f3-054c9501e0a5"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "id": "abdac500-f21e-4dd4-83fb-642e4ecd0a5f",
+        "resource": "https://tidal.com/artist/3681875"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "http://viaf.org/viaf/7589519",
+        "id": "971a12da-f004-4538-99a9-00e0e9742239"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "305ed415-6a5d-47f0-8264-91eab392ea30",
+        "resource": "https://www.wikidata.org/wiki/Q369517"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null
+    }
+  ],
+  "country": "US",
+  "isnis": [
+    "0000000055157153"
+  ],
+  "ipis": [
+    "00066198549"
+  ],
+  "begin-area": {
+    "type": null,
+    "id": "a642c853-a86e-4297-830d-c726fde62f63",
+    "disambiguation": "",
+    "sort-name": "Newnan",
+    "type-id": null,
+    "name": "Newnan"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "gender": "Male",
+  "life-span": {
+    "ended": true,
+    "begin": "1942-03-07",
+    "end": "2020-04-24"
+  },
+  "disambiguation": "US disco musician, songwriter and producer",
+  "id": "9f794f0c-e66a-4fe4-bf7c-2e263b21abc5",
+  "sort-name": "Bohannon",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "name": "Bohannon",
+  "area": {
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United States"
+  },
+  "end-area": {
+    "id": "26e0e534-19ea-4645-bfb3-1aa4e83a4046",
+    "disambiguation": "",
+    "sort-name": "Atlanta",
+    "type": null,
+    "name": "Atlanta",
+    "type-id": null
+  }
+}

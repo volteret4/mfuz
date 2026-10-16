@@ -1,0 +1,94 @@
+{
+  "id": "dfa621b5-18be-4d5e-bf02-008be1819d6d",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "8fbfa313-fd7f-43e3-84ca-49d7fbc59620",
+        "resource": "https://open.spotify.com/artist/4E1RSsrjfViRShEG4r0ofW"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "48240945-6963-4144-85bc-ab1053580cf1",
+        "resource": "https://www.deezer.com/artist/84231602"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/21902283",
+        "id": "18660ad2-931e-4fa3-a4aa-74170802a458"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "isnis": [],
+  "ipis": [],
+  "disambiguation": "",
+  "sort-name": "Toledano, \u00c1ngeles",
+  "life-span": {
+    "begin": "1995-06-10",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "gender": "Female",
+  "type": "Person",
+  "name": "\u00c1ngeles Toledano",
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Villanueva de la Reina",
+    "type-id": null,
+    "id": "727b8e50-a71f-4c1e-994c-3adbcaa44732",
+    "sort-name": "Villanueva de la Reina"
+  },
+  "country": "ES",
+  "area": {
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "ES"
+    ],
+    "name": "Spain",
+    "type": null,
+    "id": "471c46a7-afc5-31c4-923c-d0444f5053a4",
+    "sort-name": "Spain",
+    "type-id": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null
+}

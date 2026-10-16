@@ -1,0 +1,654 @@
+{
+  "ipis": [],
+  "disambiguation": "UK glam rock band",
+  "isnis": [
+    "0000000115301664"
+  ],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000536275",
+        "id": "bf21e044-3c15-4892-98ed-81907d1c61b3"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "end": "2020-11-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "8c91b83a-656f-4017-8c73-56c97bd464e4",
+        "resource": "https://www.bbc.co.uk/music/artists/dc73bb40-b697-4df9-a2ec-0555bebdba75"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54"
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/253929",
+        "id": "37ba708d-1c8b-416b-9abd-72d5d62e8f01"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "http://thesweet.com/hsh",
+        "id": "19d2c661-ab4d-4b9d-a633-769f6e250ce5"
+      },
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "fanpage",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://www.thesweetweb.com/",
+        "id": "3685d49e-c883-4186-bcf1-ac78b69e5508"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "source-credit": "Sweet",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "c96e80ed-b224-451b-bfc2-c288366cc21b",
+        "resource": "https://open.spotify.com/artist/3JaAGmSTpJK35DqWrDUzBz"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "source-credit": "The Sweet",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "dc85661b-2103-466b-be18-977b0bc12e5a",
+        "resource": "https://open.spotify.com/artist/64JgVJdkSDXU6AEJUOnspK"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "05c6ffb3-0367-455d-9562-b25e62483c59",
+        "resource": "https://www.deezer.com/artist/3524"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "Sweet"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/71304",
+        "id": "73cdfd96-f159-4eff-8ed5-8e3b1d354760"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "The Sweet",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "IMDb",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm2191181/",
+        "id": "2e54eee7-0a84-47dc-b0d7-279385b1fd56"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "d6cacead-d9ae-48bc-baf5-1bf72ae1bcf0",
+        "resource": "https://www.last.fm/music/Sweet"
+      },
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://genius.com/artists/Sweet",
+        "id": "73b2ea63-0950-4c4e-a1b6-ffe0389ea95c"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://www.thesweet.com/",
+        "id": "93776d80-ce7f-4a22-812e-b2c0f79a6e6e"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n92085494",
+        "id": "712dfcce-8a5b-4819-a1d6-2e564d9dd002"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb155409559",
+        "id": "fe9477de-7927-4feb-aaa4-6c6c35f41298"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d62b4745-afa4-448c-a5c9-8a99611fdf94",
+        "resource": "https://d-nb.info/gnd/5513386-1"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "f4509a5b-199d-447e-89da-19e07a438f3c",
+        "resource": "https://rateyourmusic.com/artist/sweet"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.45cat.com/artist/the-sweet",
+        "id": "fdc1724c-3362-4048-a5ce-cad993433466"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "id": "dcaeb3c6-7799-4369-8649-fd2dfc7b0533",
+        "resource": "https://www.musik-sammler.de/artist/the-sweet/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/Sweet/",
+        "id": "122aaf9c-6d61-479f-914b-4299330b35dc"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "46c02a54-23fa-484f-a3ea-0a20891f1eaa",
+        "resource": "https://www.worldcat.org/identities/lccn-n92085494"
+      }
+    },
+    {
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": "2020-10-12",
+      "attributes": [],
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=All23q462u3jtbw6n4kbctjofgm",
+        "id": "b9eac9f3-f7f5-4d7e-a9eb-f091a771a3d6"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://mora.jp/artist/302695/",
+        "id": "52e5b9be-5c0e-4207-8f71-afb56affc292"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/492548",
+        "id": "ab9eab9f-5cb1-4def-b3e9-55f9e4668e50"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id492548",
+        "id": "30833ef9-d0c5-4f1d-9a70-bb7557ba71d4"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/634",
+        "id": "3a2e2f7d-bdea-45c6-b569-b45d11435b7e"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://twitter.com/SweetOfficial",
+        "id": "e334da81-b449-495d-a85d-56c4c89ebade"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/TheSweetOfficial",
+        "id": "4b4eecf2-f870-4e78-b6d2-019a982fbac3"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/414991",
+        "id": "eb1b4ee3-530c-4b98-8f5b-432efac78bc3"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/492548",
+        "id": "ab9eab9f-5cb1-4def-b3e9-55f9e4668e50"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://tidal.com/artist/1607",
+        "id": "b4f639d8-8893-4a1d-9cf3-b7b498a29585"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "url": {
+        "id": "5a41473b-1177-42ed-b20e-b1b061b7d4ed",
+        "resource": "http://viaf.org/viaf/141369018"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/169398124",
+        "id": "0d98f68f-8d87-42b2-b027-c28132ee73ea"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q487919",
+        "id": "a3a8bc8c-ba4b-4b61-802b-c4158248e396"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "id": "dc73bb40-b697-4df9-a2ec-0555bebdba75",
+  "gender-id": null,
+  "life-span": {
+    "begin": "1968",
+    "end": "1982",
+    "ended": true
+  },
+  "sort-name": "Sweet",
+  "type": "Group",
+  "name": "Sweet",
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Harefield",
+    "type-id": null,
+    "id": "df4adf19-774a-4884-97b6-3aa558a0d7ba",
+    "sort-name": "Harefield"
+  },
+  "country": "GB",
+  "gender": null,
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "name": "United Kingdom",
+    "type": null,
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "type-id": null
+  }
+}

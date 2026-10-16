@@ -6,6 +6,10 @@ Compatible con db_creator.py
 
 import requests
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import time
 import re
 import urllib.parse
@@ -56,6 +60,7 @@ class RateYourMusicSearcher:
 
     def create_rym_artists_table(self):
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         # Eliminar la tabla si existe y crearla de nuevo
@@ -82,6 +87,7 @@ class RateYourMusicSearcher:
     def get_artists_without_rym_url(self, limit=None):
         """Obtiene artistas que no tienen URL de RateYourMusic"""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         query = """
@@ -106,6 +112,7 @@ class RateYourMusicSearcher:
     def get_artists_with_rym_url_missing_entry(self):
         """Obtiene artistas que tienen URL de RateYourMusic pero no entrada en rym_artists"""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         query = """
@@ -128,6 +135,7 @@ class RateYourMusicSearcher:
         """Crea entrada en rym_artists para un artista que ya tiene URL"""
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             # Insertar en rym_artists
@@ -448,6 +456,7 @@ class RateYourMusicSearcher:
         """Actualiza la URL de RateYourMusic en la base de datos"""
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             # Actualizar tabla artists
@@ -483,6 +492,7 @@ class RateYourMusicSearcher:
     def get_statistics(self):
         """Obtiene estadísticas del proceso"""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         cursor.execute("SELECT COUNT(*) FROM artists")

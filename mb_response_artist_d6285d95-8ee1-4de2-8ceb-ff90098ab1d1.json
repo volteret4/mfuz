@@ -1,0 +1,638 @@
+{
+  "disambiguation": "",
+  "life-span": {
+    "end": null,
+    "begin": "1977-06-03",
+    "ended": false
+  },
+  "gender": "Male",
+  "relations": [
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000640117",
+        "id": "dcffa3b8-2c40-4ee0-bd81-29fcffd6e36e"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "end": null,
+      "type": "allmusic",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://yuksek.bandcamp.com/",
+        "id": "e4aec4a9-a5f8-4505-9afa-5f6560b6733b"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "id": "3ba012b9-785e-4b64-b4e6-81b183c1dafc",
+        "resource": "https://www.bandsintown.com/a/12638"
+      },
+      "target-type": "url",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "ended": false,
+      "type": "bandsintown",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "1ab0ef4d-de6c-4c22-9ac2-6cdea1345350",
+        "resource": "http://yuksekmusic.tumblr.com/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f",
+      "ended": false,
+      "end": null,
+      "type": "blog",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "blog",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://yuksek-onmyway.over-blog.com/",
+        "id": "42105656-1a0e-4b27-8e7a-bc897c9a6fda"
+      },
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": null,
+      "type": "blog",
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f",
+      "target-credit": "",
+      "url": {
+        "id": "b603ab5a-90f0-42d2-a9f0-c5327eee3651",
+        "resource": "http://yuksek-onmyway.tumblr.com/"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "76170702-5e8c-47ff-8f97-f38832166c0f",
+        "resource": "https://www.discogs.com/artist/119518"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/2ePIzx9NjxplS724QMZtsf",
+        "id": "75f52353-2fc5-42e6-8d0f-a69ff4b42f98"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "url": {
+        "id": "25647629-79d9-4ff4-9ebe-885ae5e1446f",
+        "resource": "https://www.deezer.com/artist/72041"
+      },
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "IMDb",
+      "ended": false,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "url": {
+        "id": "5b2d37cf-f1c6-4288-a8e0-b08965ffebcf",
+        "resource": "https://www.imdb.com/name/nm3411424/"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "type": "last.fm",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/Yuksek",
+        "id": "4846ffc4-1447-40ca-b99e-d1931a6daae5"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "type": "lyrics",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://genius.com/artists/Yuksek",
+        "id": "61b1836b-e4bb-4416-81e2-ad60ea406898"
+      },
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "url": {
+        "resource": "https://myspace.com/yuksek",
+        "id": "723fa8ea-e000-485d-8fa6-66ed99a8c2e7"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "myspace",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "b7f1af61-3abc-4c8c-abc9-c2c5a2ddde78",
+        "resource": "http://yuksek.artiste.universalmusic.fr/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "50a8912e-ea7f-4165-8466-503ae82f9258",
+        "resource": "http://id.loc.gov/authorities/names/n2011074589"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "c91af3b1-722c-4011-920e-7579b9d87e2c",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb15879513k"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "https://d-nb.info/gnd/140663207",
+        "id": "110ee1aa-06fb-49a2-837f-f67e4d1544a5"
+      },
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "id": "67c4b0b3-26b7-4f98-958b-16a23d5b4fdd",
+        "resource": "https://rateyourmusic.com/artist/yuksek"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f9400270-f872-4107-81ce-72eaccd2b47f",
+        "resource": "https://www.muziekweb.nl/Link/M00000293162/POPULAR/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/Yuksek/",
+        "id": "58ed5b47-bc12-4a13-bfc4-1d2d7c6659f8"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n2011074589",
+        "id": "acef7678-7350-4f56-9412-49e4e9c0fb2c"
+      },
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "c92f0889-3537-44a0-b6c4-73fb0551bf3b",
+        "resource": "http://www.maniadb.com/artist/200634"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id160546637",
+        "id": "8a4b88cd-6071-49ce-8f0a-6a1e1bfbdba7"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "02045bdc-30d6-42dd-8bb5-361a572e8c54",
+        "resource": "https://twitter.com/YUKSEK_music"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/yuksek",
+        "id": "c7b6bac4-fbe6-49d2-aab2-d8e749af6a14"
+      },
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "id": "1d0ca023-9f0b-4837-b08a-13eb0d8031e2",
+        "resource": "https://www.instagram.com/yuksek_partyfine/"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "songkick",
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "a91e9f8f-5261-46e8-8266-52b13068b8fe",
+        "resource": "https://www.songkick.com/artists/575251"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://soundcloud.com/yuksek",
+        "id": "2e30cb1f-e42e-4844-a1cd-08d54d759d43"
+      },
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "type": "soundcloud",
+      "end": null,
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "2f8ffe05-ae29-4593-9457-8e1a76186d90",
+        "resource": "https://music.apple.com/us/artist/160546637"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/3518440",
+        "id": "69b118c8-0fda-4680-acec-f8f96453f0b6"
+      },
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "id": "cb3cbf00-9f72-4171-8460-560e03372e4b",
+        "resource": "http://viaf.org/viaf/226088579"
+      },
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "type": "VIAF",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "url": {
+        "id": "a0e532f5-5e45-4abf-a9e5-96c4884c9a8c",
+        "resource": "https://www.wikidata.org/wiki/Q2735379"
+      },
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "type": "youtube",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "0a435cac-1bd2-4d3e-8179-c7abb4aeb22d",
+        "resource": "https://www.youtube.com/channel/UC3GFWDT8IJidfxfFGCDH6MA"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    }
+  ],
+  "sort-name": "Yuksek",
+  "country": "FR",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000363876280"
+  ],
+  "area": {
+    "id": "08310658-51eb-3801-80de-5a0739207115",
+    "type-id": null,
+    "name": "France",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "FR"
+    ],
+    "sort-name": "France",
+    "type": null
+  },
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "Reims",
+    "type-id": null,
+    "sort-name": "Reims",
+    "id": "a2008f1c-7110-4251-a5e2-15b5ac116ef1"
+  },
+  "name": "Yuksek",
+  "id": "d6285d95-8ee1-4de2-8ceb-ff90098ab1d1",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "end-area": null,
+  "ipis": [
+    "00862533430"
+  ],
+  "type": "Person"
+}

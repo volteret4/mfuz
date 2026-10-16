@@ -1,0 +1,249 @@
+{
+  "begin-area": null,
+  "country": "US",
+  "name": "CunninLynguists",
+  "type": "Group",
+  "gender": null,
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "disambiguation": "Kentucky hip hop group",
+  "ipis": [],
+  "id": "69c4cc43-8163-41c5-ac81-30946d27bb69",
+  "isnis": [],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "a7fa8bda-5414-419b-ba2b-0092ff4b10fe",
+        "resource": "https://www.allmusic.com/artist/mn0000784121"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://cunninlynguists.bandcamp.com/",
+        "id": "656729ca-006b-4b20-85cc-842b3226f7e1"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "63079c16-a110-4764-9a4f-923adab615b0",
+        "resource": "https://www.discogs.com/artist/66806"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "url": {
+        "resource": "http://qn5.com/html/media.htm",
+        "id": "c033a308-103a-4038-9445-1e7d0e25d393"
+      },
+      "type-id": "34ae77fe-defb-43ea-95d4-63c7540bac78",
+      "type": "download for free",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "f9dea086-2b59-436d-9e08-9c585e4f0c7e",
+        "resource": "https://www.deezer.com/artist/231"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.cunninlynguists.com/",
+        "id": "bab217d9-f9e8-41c1-b2f1-67c7d626b779"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "e9ec7d33-b6f0-4d65-aa17-7ce213f10c67",
+        "resource": "https://rateyourmusic.com/artist/cunninlynguists"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/CunninLynguists",
+        "id": "d28fc5f1-9e6d-43c7-ad5b-a3f2cb02e84e"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "id": "2c1fb13e-2b5a-4ef3-ade8-ea13cfeb84e8",
+        "resource": "https://tidal.com/artist/3517769"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "734842bc-fb69-4181-90f3-bd1ffc98a3d9",
+        "resource": "http://viaf.org/viaf/127072881"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/487149294314380521747",
+        "id": "3174b3ec-8960-4100-a393-b3c89ef49e4a"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "begin": null,
+      "type": "VIAF",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1144020",
+        "id": "196f6a7d-a1a4-42c6-bf5e-7679902034bb"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    }
+  ],
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "2000-03"
+  },
+  "gender-id": null,
+  "sort-name": "CunninLynguists"
+}

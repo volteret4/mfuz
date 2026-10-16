@@ -1,0 +1,1140 @@
+{
+  "relations": [
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003052738",
+        "id": "8bd7798b-89fa-4417-873a-9768a96bf661"
+      },
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "bandcamp",
+      "attribute-values": {},
+      "url": {
+        "id": "9c9d6119-120a-4a71-b893-896974c68c4b",
+        "resource": "https://testwolfalice.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/1927776",
+        "id": "412cac53-1d11-491f-af6e-c6f0924dfba6"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/3547f34a-db02-4ab7-b4a0-380e1ef951a9",
+        "id": "f3bc7f39-5c82-48e6-bfe4-120e688194b1"
+      },
+      "end": "2020-11-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "id": "2cec1273-2a83-4233-802c-8ffc56a0bcc3",
+        "resource": "https://www.albumoftheyear.org/artist/6840-wolf-alice/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "discography page",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.sonymusic.co.jp/artist/WolfAlice/discography/",
+        "id": "a84f0a95-b5f9-4c95-a5a0-fcb61eb7b4b5"
+      },
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discography page"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "c47c1861-0f6d-4c12-bc27-9098f27b7357",
+        "resource": "https://www.discogs.com/artist/3153581"
+      },
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "8b56003c-e5ea-4645-a0de-7a516ccf4039",
+        "resource": "https://open.spotify.com/artist/3btzEQD6sugImIHPMRgkwV"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/4710481",
+        "id": "7b2caa60-5e6e-4c54-b8aa-2c203ebc9001"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.imdb.com/name/nm7429221/",
+        "id": "bf90eba5-861e-4e17-9bcd-b11463aa9727"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "aed4277f-d386-4ead-a848-26ab7df93783",
+        "resource": "https://www.last.fm/music/Wolf+Alice"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "6d080ec9-4e5b-443b-99cf-c76a4e9c92fe",
+        "resource": "https://genius.com/artists/Wolf-alice"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://muzikum.eu/en/wolf-alice/lyrics",
+        "id": "2f09482d-1350-4c20-8e5a-df91dfd172b3"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "url": {
+        "id": "daa61523-4e96-4241-b462-7f8f8e6b63c9",
+        "resource": "https://www.musixmatch.com/artist/Wolf-Alice"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "myspace",
+      "attribute-values": {},
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/wolfalicemusic",
+        "id": "b7248181-158f-4ffd-a9dd-601b6116dfcc"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "0c3b9041-3606-42b7-937f-95eaf5c3e51b",
+        "resource": "https://www.sonymusic.co.uk/artist/wolf-alice/"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "a4464bfe-0b47-4400-9938-0b4635bd5885",
+        "resource": "http://wolfalice.co.uk/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "aa38c0c3-55be-42ef-a2ba-e8d81db25139",
+        "resource": "https://imvdb.com/n/wolf-alice"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c169b5a1-bcb2-4b1a-a2c9-447134c9bfba",
+        "resource": "https://rateyourmusic.com/artist/wolf-alice"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.45cat.com/artist/wolf-alice",
+        "id": "39529c76-4f26-4037-8f3f-d0ef128533f2"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "eb05d1fc-38e3-436f-bf15-b6c3445fdf0a",
+        "resource": "https://www.livefans.jp/artists/58250"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "cdcb64a6-6eae-4f1f-a712-43ddb1d3d336",
+        "resource": "https://www.musik-sammler.de/artist/wolf-alice/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.themoviedb.org/person/3101011",
+        "id": "62a66d85-af67-4951-a546-694eb586e325"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "30b3d099-ce52-4739-b4b6-8fe002837402",
+        "resource": "https://www.whosampled.com/Wolf-Alice/"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "b1fc2dbb-648e-4c61-95f8-7aa5792c1907",
+        "resource": "http://www.spirit-of-rock.com/groupe-groupe-Wolf_Alice-l-en.html"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "e061cf04-a205-4db7-8bfe-d81d643f067b",
+        "resource": "http://www.worldcat.org/identities/lccn-no2015109287/"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": "2020-10-12",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "39f570a3-abf5-4835-9010-25231211112c",
+        "resource": "https://play.google.com/store/music/artist?id=Atzrvpjkhaa5rqnkad45enrsbua"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id589384117",
+        "id": "56daa234-3897-4298-ae8a-dbbeffabaf17"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "c43b3dbe-8436-49db-93fc-b4e5fdb6f80c",
+        "resource": "https://mora.jp/artist/702981/"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "2a96f4a6-8cd6-45ea-9461-c5f0a2b1f44e",
+        "resource": "https://music.apple.com/au/artist/589384117"
+      }
+    },
+    {
+      "url": {
+        "id": "687055ef-852f-42b4-b939-4e3bcae191a8",
+        "resource": "https://music.apple.com/gb/artist/589384117"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/589384117",
+        "id": "61fec032-89f5-40eb-9fdd-e5d90edf28a9"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.bugs.co.kr/artist/80155616",
+        "id": "01b203c4-168d-4b31-9aee-f6e0701f5f4d"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "463fa3d5-9808-41bb-89a0-9a7e11a47d60",
+        "resource": "https://uk.7digital.com/artist/wolf-alice"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.beatport.com/artist/wolf-alice/558522",
+        "id": "ce79cff7-f234-4035-b8af-96a4a8c5bfae"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.hdtracks.com/#/artist/Wolf%20Alice",
+        "id": "41f87ec0-5c66-42ab-b3b2-1cd9953ac595"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "6ebc0aa7-5d20-4754-87ee-9ec01ea7334e",
+        "resource": "https://www.junodownload.com/artists/Wolf+Alice/"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "id": "a5b8e094-6333-474d-a995-85d1fc7369fa",
+        "resource": "https://www.qobuz.com/au-en/interpreter/wolf-alice/1743913"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "url": {
+        "id": "5c635fed-a5c4-4806-9726-b8d59737165a",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/wolf-alice/1743913"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "ee81ff47-a037-4229-9451-766c40ff9b6d",
+        "resource": "https://www.qobuz.com/us-en/interpreter/wolf-alice/1743913"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700716996",
+        "id": "97c7bb3a-39ff-4495-9917-aadb26742031"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "a265443c-46da-406b-abe7-8a915d46e47a",
+        "resource": "https://www.setlist.fm/setlists/wolf-alice-bdcd1c2.html"
+      },
+      "attribute-values": {},
+      "type": "setlistfm",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/wolfalicemusic",
+        "id": "93eb9989-6b9d-4933-8f3c-730cf14a48a0"
+      },
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "21de05f1-65b8-4dc0-b895-deef13547a1a",
+        "resource": "https://www.facebook.com/wolfalicemusic"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "1157223b-9135-4a6f-a5f0-86fb275eed44",
+        "resource": "https://www.instagram.com/wolfaliceband/"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "songkick",
+      "attribute-values": {},
+      "url": {
+        "id": "2adac5bd-d8e1-42dd-9533-ae9e0c7ba218",
+        "resource": "https://www.songkick.com/artists/4126816"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "4dc0ed13-9dcc-4824-8576-132da0eeff60",
+        "resource": "https://soundcloud.com/wolfalice"
+      },
+      "attribute-values": {},
+      "type": "soundcloud",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2022-06-08",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "a4a33cc6-fb2e-4781-846f-42ffba759537",
+        "resource": "https://us.napster.com/artist/wolf-alice"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "url": {
+        "resource": "https://music.amazon.com/artists/B00CJW1LIC",
+        "id": "3016c06f-8ab2-4e7f-8f26-c03a8d8a1aad"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "2a96f4a6-8cd6-45ea-9461-c5f0a2b1f44e",
+        "resource": "https://music.apple.com/au/artist/589384117"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/589384117",
+        "id": "687055ef-852f-42b4-b939-4e3bcae191a8"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/589384117",
+        "id": "61fec032-89f5-40eb-9fdd-e5d90edf28a9"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://music.bugs.co.kr/artist/80155616",
+        "id": "01b203c4-168d-4b31-9aee-f6e0701f5f4d"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "5491fa51-f3c3-4779-bef1-e4ba22d78aac",
+        "resource": "https://tidal.com/artist/4915442"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "a5b8e094-6333-474d-a995-85d1fc7369fa",
+        "resource": "https://www.qobuz.com/au-en/interpreter/wolf-alice/1743913"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "5c635fed-a5c4-4806-9726-b8d59737165a",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/wolf-alice/1743913"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/wolf-alice/1743913",
+        "id": "ee81ff47-a037-4229-9451-766c40ff9b6d"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "e7e7c3fb-bc97-46e7-94e1-acd71d89c701",
+        "resource": "http://viaf.org/viaf/316875999"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q8029799",
+        "id": "a9d97f1e-90bc-40b1-9715-2fb0fecf36ff"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "25adc935-6d30-4958-93bf-7826936b4c14",
+        "resource": "https://www.youtube.com/user/wolfalicevideos"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube music",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCE3uvMO3ERiFphvVX_ct3GA",
+        "id": "ce0fdacf-1f2f-4e46-a312-42bd3b6b4fcb"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    }
+  ],
+  "isnis": [
+    "000000047119595X"
+  ],
+  "id": "3547f34a-db02-4ab7-b4a0-380e1ef951a9",
+  "disambiguation": "British indie/rock band",
+  "ipis": [],
+  "sort-name": "Wolf Alice",
+  "gender-id": null,
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "2010"
+  },
+  "gender": null,
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "name": "London",
+    "type": null,
+    "disambiguation": "Greater London"
+  },
+  "country": "GB",
+  "type": "Group",
+  "name": "Wolf Alice",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type": null,
+    "name": "United Kingdom",
+    "sort-name": "United Kingdom",
+    "type-id": null
+  },
+  "end-area": null
+}

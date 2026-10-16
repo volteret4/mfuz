@@ -1,0 +1,41 @@
+{
+  "gender": null,
+  "type": "Group",
+  "ipis": [],
+  "begin-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "url": {
+        "id": "e2d0535b-d62e-4ae2-a6c8-9976b3a9fec4",
+        "resource": "https://www.discogs.com/artist/2320492"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    }
+  ],
+  "country": null,
+  "isnis": [],
+  "name": "Bitch Prefect",
+  "area": null,
+  "end-area": null,
+  "disambiguation": "",
+  "id": "5ca2ca84-d3ff-48fe-8cab-699237b141cc",
+  "gender-id": null,
+  "sort-name": "Bitch Prefect",
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  }
+}

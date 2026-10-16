@@ -1,0 +1,77 @@
+{
+  "gender-id": null,
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "sort-name": "Demolition Squad",
+  "ipis": [],
+  "disambiguation": "1990s breakbeat/hardcore trio",
+  "id": "8a4da0d2-fe55-4bc3-a673-c6239b97a9b6",
+  "relations": [
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "url": {
+        "resource": "https://www.discogs.com/artist/268226",
+        "id": "9f6a07ad-28a1-4dd0-bd96-78c3e770d8d4"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "32f5c892-3e54-4fa3-b87f-82d6e8702f6a",
+        "resource": "https://open.spotify.com/artist/16pv6fC8xIRAVsGdVtDkv5"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/5564735",
+        "id": "7643236c-b0c1-49a5-b19b-92bffe3389cb"
+      }
+    }
+  ],
+  "isnis": [],
+  "end-area": null,
+  "area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "name": "Demolition Squad",
+  "country": null,
+  "begin-area": null,
+  "gender": null
+}

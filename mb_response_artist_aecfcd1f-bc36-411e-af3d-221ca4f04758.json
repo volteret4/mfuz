@@ -1,0 +1,113 @@
+{
+  "gender": null,
+  "relations": [
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/1799314",
+        "id": "5d65be9f-60ef-407c-b588-48d0a226a5c1"
+      },
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6WHCgS2g18qWw45K66DdRZ",
+        "id": "4612684a-37ff-44ea-a6db-5ab6405dab00"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1445527",
+        "id": "15db43b8-07af-42e5-9eed-1c0b6cb0d4b7"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "type": "free streaming",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "url": {
+        "id": "8b8b9172-6e13-4659-ba7e-6f6f63ed7e89",
+        "resource": "https://music.apple.com/gb/artist/399600007"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "fdf8b215-8097-46ff-85c6-a26082b5937a",
+        "resource": "https://tidal.com/artist/4118896"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    }
+  ],
+  "sort-name": "Seahawks",
+  "country": null,
+  "life-span": {
+    "ended": false,
+    "begin": null,
+    "end": null
+  },
+  "disambiguation": "",
+  "end-area": null,
+  "ipis": [],
+  "type": null,
+  "type-id": null,
+  "isnis": [],
+  "begin-area": null,
+  "area": null,
+  "name": "Seahawks",
+  "id": "aecfcd1f-bc36-411e-af3d-221ca4f04758",
+  "gender-id": null
+}

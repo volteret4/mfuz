@@ -1,0 +1,87 @@
+{
+  "life-span": {
+    "end": "1989",
+    "begin": "1985",
+    "ended": true
+  },
+  "disambiguation": "",
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "url": {
+        "id": "463739ab-0d43-41df-a016-801a8a0d6dc8",
+        "resource": "https://www.allmusic.com/artist/mn0001747641"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "type": "allmusic",
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/64806",
+        "id": "24c25bf5-3e85-433f-a781-81bb7224e09a"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q4043845",
+        "id": "cf99f7e4-d867-498d-941e-c24e3d156edc"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "end": null,
+      "type": "wikidata",
+      "ended": false,
+      "source-credit": ""
+    }
+  ],
+  "gender": null,
+  "sort-name": "Mazarati",
+  "country": "US",
+  "name": "Mazarati",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "sort-name": "United States"
+  },
+  "isnis": [],
+  "begin-area": null,
+  "gender-id": null,
+  "id": "73369dff-6059-4654-a7b5-efdf369cffa5",
+  "ipis": [],
+  "end-area": null,
+  "type": "Group"
+}

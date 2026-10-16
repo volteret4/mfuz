@@ -1,0 +1,834 @@
+{
+  "type": "Group",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1972"
+  },
+  "isnis": [
+    "0000000123535743"
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "name": "United States",
+    "disambiguation": "",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type-id": null
+  },
+  "name": "Twisted Sister",
+  "sort-name": "Twisted Sister",
+  "gender-id": null,
+  "country": "US",
+  "relations": [
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000165663",
+        "id": "cb848d3e-a539-4e97-a794-b54a0200e39c"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "id": "2fd5d099-376e-4894-9ddd-7d1589d66d8f",
+        "resource": "https://www.bandsintown.com/a/1222"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "bandsintown",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "biography",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "url": {
+        "resource": "http://rockfaces.ru/t/twistedsister.htm",
+        "id": "7c4dfaed-d9a2-4770-8fb4-3936cd82f54c"
+      }
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.melodicrock.com/artist/twisted-sister",
+        "id": "466f29d5-29cb-42d0-9874-4e5c7f1b5b14"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "biography",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/253057",
+        "id": "4b135b47-d601-469e-a153-2b8145b58723"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "http://twisted-sister.ru/",
+        "id": "98234990-66ff-4b63-9dda-5c8ce06c3676"
+      },
+      "begin": null,
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/7b85ve82Sh36a3UAx74wut",
+        "id": "2fa24122-4c0b-4315-84db-ecc1c9489c25"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/3004",
+        "id": "1ef931ea-a599-4910-9629-8c80bd0f2f96"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "begin": null,
+      "type": "IMDb",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "398ef9a4-a14b-4436-b564-46334570e28a",
+        "resource": "https://www.imdb.com/name/nm2430822/"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Twisted+Sister",
+        "id": "fe845c7d-00d2-422c-973d-3437ea8d2da1"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-6961/twisted-sister/lyrics.html",
+        "id": "eb3ea421-f9c4-42c5-a342-3526084a839d"
+      },
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Twisted-sister",
+        "id": "49af352b-a6e5-47d8-a25d-c837c01a1292"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "myspace",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/twistedsister",
+        "id": "83823d91-a5b8-4cce-aa50-b557121f7cbe"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "a67b6a05-d87f-4fc9-b709-fb9aef6bec56",
+        "resource": "http://www.twistedsister.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "e15b91cd-bb8f-4978-8059-386e84a331e1",
+        "resource": "http://id.loc.gov/authorities/names/n86124581"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/T/Twisted_Sister/",
+        "id": "af719a55-e5d6-4cce-b68f-0f9d89188d01"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "d2c0e96d-4bf3-4516-a96a-61e217771773",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139072084"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/10153533-8",
+        "id": "e9477fe9-a835-499e-9fc0-09210470f410"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "fd1d0acd-25d6-4d79-b299-5f8566fbbe4a",
+        "resource": "https://imvdb.com/n/twisted-sister"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/twisted-sister",
+        "id": "8df3ca54-41d7-46d2-aac0-45b4069f3737"
+      },
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Twisted_Sister/4975",
+        "id": "be48c5b2-03c0-4fe1-bffc-2938a6b6a296"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "c8f0c6a9-df4a-4f64-a95e-210de047ad91",
+        "resource": "https://www.metalmusicarchives.com/artist/twisted-sister"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/twisted-sister/",
+        "id": "6f2f5480-5ea6-437a-ace2-952fe4ea2e47"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Twisted_Sister",
+        "id": "2a965d26-6186-4b75-a26b-09b5089f12a9"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b8dfb229-f13b-452d-b71f-d4fe959fe7fb",
+        "resource": "https://www.spirit-of-rock.com/en/band/Twisted_Sister"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "0578e5fe-5394-4d76-8463-6499699c5f81",
+        "resource": "https://www.worldcat.org/identities/lccn-n86124581"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id149786",
+        "id": "e65a6d8a-93d6-47f3-bb33-c33e4ef634f4"
+      },
+      "ended": true,
+      "attributes": [],
+      "source-credit": "",
+      "end": "2020-04-14",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/149786",
+        "id": "3c897d17-4111-4a51-b211-4d92b23ba880"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "2c34023e-ba3c-4cba-a1e7-034696fc2e18",
+        "resource": "https://www.setlist.fm/setlists/twisted-sister-63d69ec7.html"
+      },
+      "attribute-values": {},
+      "type": "setlistfm",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "6163a7e2-f95b-425e-9f31-72bf099518fa",
+        "resource": "https://twitter.com/TwistedSisterNY"
+      },
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/pages/Twisted-Sister/138018010313",
+        "id": "69f5c08a-1775-410b-960e-f5cd65f73e66"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "378cc58f-cc8d-45ea-86fb-4d41f7f47ebc",
+        "resource": "https://www.instagram.com/twistedsisterofficial/"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.tiktok.com/@officialtwistedsister",
+        "id": "33b1e519-39a1-471c-b800-3ca3c42eb229"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/238544",
+        "id": "21f394c9-54cf-489b-942b-b2830a5c04a6"
+      }
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "soundcloud",
+      "attribute-values": {},
+      "target-type": "url",
+      "url": {
+        "id": "d8385434-8a0e-440e-8dbe-ac0aa4ffe329",
+        "resource": "https://soundcloud.com/twistedsister"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": true,
+      "source-credit": "",
+      "target-credit": "",
+      "end": "2022-06-08",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://us.napster.com/artist/twisted-sister",
+        "id": "cd1a22fe-1275-4b5a-891b-2adb16745fe0"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "e187ca31-5c17-4167-956a-fbb56f9cc180",
+        "resource": "https://music.amazon.com/artists/B001RJ8CM6"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "3c897d17-4111-4a51-b211-4d92b23ba880",
+        "resource": "https://music.apple.com/us/artist/149786"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/14800",
+        "id": "055e71e2-aa3d-4690-aaf3-65e4a686ddd4"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/151434199",
+        "id": "73472e56-7dc4-4094-8f52-cca2c1ab9737"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q272239",
+        "id": "42bee731-f620-4d16-be0e-1e2034a24dff"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/TwistedSister",
+        "id": "dac3dd28-7115-42fb-b85d-0f76ebc7eefe"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "dc9e7e4f-32bb-41ba-8ec3-44b46b09ad69",
+        "resource": "https://www.youtube.com/user/twistedsstrVEVO"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "youtube music",
+      "url": {
+        "id": "abdd2dba-619f-4b8e-85d0-bd71f38fb060",
+        "resource": "https://music.youtube.com/channel/UC8-GQfF2Xod92t8kiUe2ajA"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    }
+  ],
+  "gender": null,
+  "disambiguation": "",
+  "id": "c6122fee-089f-41c4-a34f-e5f7e5607b05",
+  "end-area": null,
+  "ipis": [],
+  "begin-area": {
+    "name": "Ho-Ho-Kus",
+    "disambiguation": "",
+    "type": null,
+    "type-id": null,
+    "id": "50f1d01c-f2c0-49ce-9440-45ade8b9173a",
+    "sort-name": "Ho-Ho-Kus"
+  }
+}

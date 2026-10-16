@@ -5,6 +5,8 @@ import os
 import sys
 import logging
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import time
 import json
 import re
@@ -129,6 +131,7 @@ class RedesSocialesArtistas:
         """
         try:
             self.conn = sqlite3.connect(self.db_path)
+            apply_pragmas(self.conn)
             self.conn.row_factory = sqlite3.Row
             self.cursor = self.conn.cursor()
             return True

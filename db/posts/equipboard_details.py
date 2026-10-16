@@ -4,6 +4,10 @@ Script para extraer información detallada de instrumentos desde equipboard.com
 """
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import time
 import re
 import json
@@ -784,6 +788,7 @@ def process_instruments_details(database_path, force_update=False, limit=None, h
 
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
 
         # Crear tabla y añadir columnas faltantes
@@ -874,6 +879,7 @@ def get_details_stats(database_path):
     """Muestra estadísticas de detalles extraídos"""
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
 
         # Estadísticas básicas
@@ -957,6 +963,7 @@ def search_instrument_details(database_path, search_term):
     """Busca detalles de instrumentos por término"""
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -1022,6 +1029,7 @@ def export_details_to_json(database_path, output_file):
     """Exporta detalles a archivo JSON"""
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
 
         cursor.execute("""

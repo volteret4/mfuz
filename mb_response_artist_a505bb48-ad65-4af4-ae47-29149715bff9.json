@@ -1,0 +1,621 @@
+{
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "end-area": null,
+  "gender": null,
+  "type": "Group",
+  "name": "Thievery Corporation",
+  "begin-area": {
+    "name": "Washington, D.C.",
+    "type": null,
+    "disambiguation": "",
+    "id": "af59135f-38b5-4ea4-b4e2-dd28c5f0bad7",
+    "iso-3166-2-codes": [
+      "US-DC"
+    ],
+    "sort-name": "Washington, D.C.",
+    "type-id": null
+  },
+  "country": "US",
+  "sort-name": "Thievery Corporation",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1995"
+  },
+  "gender-id": null,
+  "id": "a505bb48-ad65-4af4-ae47-29149715bff9",
+  "relations": [
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "23c9a3b7-540f-4ffc-83a8-f7902c3aed10",
+        "resource": "https://www.allmusic.com/artist/mn0000586798"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://thieverycorporation.bandcamp.com/",
+        "id": "d3863bce-7fc6-4caa-8a8c-475ebe70130f"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "bandcamp",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "id": "28ea2c9a-1ece-4d7d-ab78-5da51060bfd5",
+        "resource": "https://www.bandsintown.com/a/1381"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown"
+    },
+    {
+      "attributes": [],
+      "end": "2020-11-19",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": true,
+      "target-credit": "",
+      "begin": null,
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "url": {
+        "id": "4bd30e28-e932-43c6-a1fe-6da09afee409",
+        "resource": "https://www.bbc.co.uk/music/artists/a505bb48-ad65-4af4-ae47-29149715bff9"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "3ab955d4-f5de-4cc9-a5ba-fcceb8a2aa5c",
+        "resource": "https://www.discogs.com/artist/1035"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "c180c58c-ee1b-4355-a44f-4e4c0c1ae1ba",
+        "resource": "https://open.spotify.com/artist/25KNo5GDS6ZpLkjasaecA3"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/366",
+        "id": "1b417353-6c35-4eba-adce-edc9e64a4b68"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "IMDb",
+      "attribute-values": {},
+      "url": {
+        "id": "cc7b1990-4dda-4038-b799-11d145cf9f19",
+        "resource": "https://www.imdb.com/name/nm1744407/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "cd7cde01-b88a-4b7a-9fbb-8447411d6d21",
+        "resource": "https://www.last.fm/music/Thievery+Corporation"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "last.fm",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Thievery-corporation",
+        "id": "2fd686a2-750e-4b79-b68b-58c47e9ac50d"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://myspace.com/thieverycorporation",
+        "id": "25b97c12-210c-4a38-879c-6567bd3c41ac"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace"
+    },
+    {
+      "attribute-values": {},
+      "type": "official homepage",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "http://thieverycorporation.com/",
+        "id": "264a2d1f-04f2-4db5-8922-a9f05b2e7b6e"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "87a8c849-a31d-4b33-ab7e-61908d741ab5",
+        "resource": "http://id.loc.gov/authorities/names/n2006096970"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/T/Thievery_Corporation/",
+        "id": "fbfd770d-429d-42df-877f-8c9cbaffbe98"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14011934z",
+        "id": "e5eb1a45-3429-4b0d-aa2f-2701edc00aaf"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/6066711-4",
+        "id": "f4d67d51-48a0-42e2-8f18-a23c5347cc7c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "ac5d8b3d-3919-4f44-8551-e46edeb0b551",
+        "resource": "https://rateyourmusic.com/artist/thievery_corporation"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "2d7c87cf-3d3a-4a76-b522-43088abf7db2",
+        "resource": "https://www.whosampled.com/Thievery-Corporation/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "96adc46a-e00b-4be1-98ea-a522665a37d3",
+        "resource": "http://www.worldcat.org/identities/lccn-n2006096970/"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://music.apple.com/us/artist/2726532",
+        "id": "2dcde79f-3068-4fa7-9f28-262cf9d23e5c"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attribute-values": {},
+      "type": "purevolume",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://www.purevolume.com/thieverycorporation",
+        "id": "f349ac2f-919c-4aca-91ad-d6da3488456c"
+      },
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "end": "2018-06-30",
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "9bcd07b5-e192-4633-9286-bf1a50031919",
+        "resource": "https://twitter.com/ThieveryCorpDC"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "f847f8ef-5354-429b-b06c-e9bb702d4560",
+        "resource": "https://www.facebook.com/thieverycorporation"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "f6020a12-664f-4aa4-9e4c-889900e7c9c6",
+        "resource": "https://www.instagram.com/thieverycorporation/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "songkick",
+      "attribute-values": {},
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/114197",
+        "id": "f14e2dd8-0a71-4a0b-8d46-ccad3844cfc0"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://soundcloud.com/thieverycorporation",
+        "id": "19ae43dc-9ab9-4f2a-961d-6263f2c1b6ca"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "2dcde79f-3068-4fa7-9f28-262cf9d23e5c",
+        "resource": "https://music.apple.com/us/artist/2726532"
+      },
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/3518232",
+        "id": "9d15f428-2465-4cce-9501-23e6622fde2c"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://us.napster.com/artist/thievery-corporation",
+        "id": "6f62ae62-f0fd-4c2f-ada6-fda4c71cdfbe"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/136248805",
+        "id": "2e161912-1076-4b94-8201-931f01d796d3"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "a1bc796e-c01a-4c6a-a477-63b4f8a718e2",
+        "resource": "https://www.wikidata.org/wiki/Q546930"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "a047c63b-bb6e-4705-bfdb-a3a87db94393",
+        "resource": "https://www.youtube.com/channel/UCzFpkcvn4ulINJsS5SpLaJQ"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {}
+    }
+  ],
+  "isnis": [
+    "000000009284258X"
+  ],
+  "ipis": [],
+  "disambiguation": ""
+}

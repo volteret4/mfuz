@@ -1,0 +1,59 @@
+{
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "end-area": null,
+  "name": "DJ Metatron",
+  "area": null,
+  "sort-name": "Metatron, DJ",
+  "gender-id": null,
+  "disambiguation": "",
+  "id": "e5bf0684-91ff-45c3-bbd2-4f489cb04ad6",
+  "type-id": null,
+  "begin-area": null,
+  "ipis": [],
+  "isnis": [],
+  "country": null,
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/4123107",
+        "id": "d4730fc4-8ac8-43da-8669-a7f33727a365"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "74374cfe-1f0c-4291-8208-1d306c9e71f0",
+        "resource": "https://www.deezer.com/artist/290102"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    }
+  ],
+  "gender": null,
+  "type": null
+}

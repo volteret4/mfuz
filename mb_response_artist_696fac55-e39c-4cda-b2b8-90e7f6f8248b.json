@@ -1,0 +1,105 @@
+{
+  "sort-name": "STL",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "isnis": [],
+  "relations": [
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "cc6e79d3-7bfa-4637-bb97-8b9dc29c8688",
+        "resource": "https://www.discogs.com/artist/153541"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/3Aa3AP52gyOW8I2PlnxaIg",
+        "id": "12be02fc-1b73-4377-bf34-124d827c50c8"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1187446",
+        "id": "94beed64-2b30-4b65-bcc1-5c502d2e599a"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/19102792",
+        "id": "cfdb7e87-7c6a-4376-8763-15d71d23f814"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    }
+  ],
+  "id": "696fac55-e39c-4cda-b2b8-90e7f6f8248b",
+  "disambiguation": "Stephan Laubner",
+  "ipis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type-id": null,
+    "sort-name": "Germany",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "disambiguation": "",
+    "name": "Germany",
+    "type": null,
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad"
+  },
+  "end-area": null,
+  "gender": "Male",
+  "begin-area": null,
+  "country": "DE",
+  "type": "Person",
+  "name": "STL"
+}

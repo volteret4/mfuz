@@ -1,0 +1,762 @@
+{
+  "life-span": {
+    "begin": "1992",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Built to Spill",
+  "gender-id": null,
+  "id": "3ac482b8-1494-4071-a0e9-f192f9d2c2b0",
+  "disambiguation": "",
+  "end-area": null,
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null
+  },
+  "name": "Built to Spill",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "4156cf2a-49d0-49fa-86e6-074bca34bbb5",
+        "resource": "https://www.allmusic.com/artist/mn0000527267"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://built-to-spill.bandcamp.com/",
+        "id": "684447d7-06f6-442e-af6f-fdddd664d261"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://builttospill.bandcamp.com/",
+        "id": "698dd41b-f086-496a-87a5-03b2014b52b6"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/1287",
+        "id": "ae186d7e-7531-413e-9b34-9b0f9c6b4b27"
+      },
+      "attributes": [],
+      "type": "bandsintown",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/260124",
+        "id": "50956b15-93f1-4582-ad34-0bd50fb984bd"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "http://bts.23.com/",
+        "id": "57237c8e-4680-4fa5-8a83-baadc73506e4"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "b9328c59-e9c0-4a2e-9fe2-954e93afdcbb",
+        "resource": "https://open.spotify.com/artist/3kbBWco9PZ5eSQsNScwG6U"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/11003",
+        "id": "d7c8d35a-b0b5-457c-b4e8-962139e9e3ef"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "33cf5407-59d2-4a48-a6ed-2afc85c089a9",
+        "resource": "https://www.imdb.com/name/nm3163714/"
+      }
+    },
+    {
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "attributes": [],
+      "url": {
+        "id": "85d95c73-efb0-4346-b50f-3bb5c5ec4b00",
+        "resource": "https://www.last.fm/music/Built+to+Spill"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "802a0afe-5cf5-446f-8de5-8567a0b9e609",
+        "resource": "https://genius.com/artists/Built-to-spill"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Built-to-Spill",
+        "id": "60f70049-7a11-4dc3-9a65-023563c22100"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "be787383-3785-4196-831d-fd3442855fd4",
+        "resource": "https://myspace.com/builttospill"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.builttospill.com/",
+        "id": "897b0f5e-c567-45f4-8ab6-056fbfc6ef19"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no98083610",
+        "id": "99f29c25-eefe-4db7-a33e-dc0487398b4d"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "49461f61-d91c-4a1a-8dbd-55c9ed0b0593",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13993581x"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4d6203de-3453-4b5e-9853-983180625e8d",
+        "resource": "https://d-nb.info/gnd/10310163-9"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "98f949c7-7e59-4983-8be2-1f92c60db3f2",
+        "resource": "https://id.oclc.org/worldcat/entity/E39QQPVp7WfPH78RfQ8vQ3Vrkt"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "60d33b6d-4433-4380-af5d-f8c9fcf25a40",
+        "resource": "https://imvdb.com/n/built-to-spill"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "b4f300b2-276e-4faf-9b7c-57d94e242158",
+        "resource": "https://rateyourmusic.com/artist/built-to-spill"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.45cat.com/artist/built-to-spill",
+        "id": "55f8fd5d-d81d-43fc-b523-07f47a9d689c"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "f0980d85-f3ca-430a-ab0b-1c83dbc21dce",
+        "resource": "https://www.45cat.com/cdalbum/artist/built-to-spill"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "2a253e20-a146-422c-8bd8-ea227afe5caa",
+        "resource": "https://www.45cat.com/cdsingle/artist/built-to-spill"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "8d16911b-bbd0-4ff1-a40b-81f6dc3f6c58",
+        "resource": "https://www.45cat.com/vinyl/artist/built-to-spill"
+      }
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "d2bcd092-a730-4e37-bab7-869fb5e1d0a3",
+        "resource": "https://www.musik-sammler.de/artist/built-to-spill/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "5db9b78d-7b3a-4e83-bae9-4bb51acb0cd2",
+        "resource": "https://itunes.apple.com/us/artist/id161731"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/us/artist/161731",
+        "id": "476cd58f-5386-4a1d-86a9-d1fea28f8bc7"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "3b65fb30-51f1-4a27-9145-fc3d2b135a45",
+        "resource": "http://www.purevolume.com/builttospill"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purevolume",
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2018-06-30"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/39051",
+        "id": "94a9bb2b-c3f9-4883-8761-a32646bf2c89"
+      }
+    },
+    {
+      "url": {
+        "id": "8e22ecf2-f92c-4121-acb1-50b3751486b8",
+        "resource": "https://www.setlist.fm/setlists/built-to-spill-73d6ae4d.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "ended": false,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "cee333ac-bdaf-4cd5-b7e4-11ab37e0c209",
+        "resource": "https://twitter.com/built_2_spill"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/builttospill",
+        "id": "91094800-a1fc-41bf-8f5e-e578ba460243"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.instagram.com/builttospill/",
+        "id": "e0c555c2-3959-4bff-83da-aefb2d253886"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "8f107a89-3e1c-4e9e-8e38-74fa79c2315d",
+        "resource": "https://www.songkick.com/artists/67100"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://soundcloud.com/builttospill",
+        "id": "5dbfa329-a424-40e1-8927-a423582f42c3"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "476cd58f-5386-4a1d-86a9-d1fea28f8bc7",
+        "resource": "https://music.apple.com/us/artist/161731"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/14106",
+        "id": "1ac688f9-ad58-49e8-9794-5b84432647c2"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "url": {
+        "id": "e4a16c4c-f508-40a9-9b5d-7fc24002517f",
+        "resource": "http://viaf.org/viaf/139757534"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "attributes": [],
+      "url": {
+        "id": "aeb20a02-4847-4ee4-a6f1-b4bcdd238929",
+        "resource": "https://www.wikidata.org/wiki/Q1003115"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "a9842439-ce1c-41bd-8f9a-165097605d39",
+        "resource": "https://www.youtube.com/channel/UCHx9idqEfLZjA2jxaXojccg"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null
+    }
+  ],
+  "country": "US",
+  "isnis": [
+    "0000000094874294"
+  ],
+  "begin-area": {
+    "disambiguation": "",
+    "id": "0975b71a-995a-4f7b-a1c3-41e302ba4dc6",
+    "sort-name": "Boise",
+    "type": null,
+    "name": "Boise",
+    "type-id": null
+  },
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "gender": null
+}

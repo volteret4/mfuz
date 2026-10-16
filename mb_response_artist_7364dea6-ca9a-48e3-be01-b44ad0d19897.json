@@ -1,0 +1,801 @@
+{
+  "area": {
+    "type-id": null,
+    "type": null,
+    "name": "Norway",
+    "id": "6743d351-6f37-3049-9724-5041161fff4d",
+    "iso-3166-1-codes": [
+      "NO"
+    ],
+    "disambiguation": "",
+    "sort-name": "Norway"
+  },
+  "relations": [
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000480108",
+        "id": "4698fb87-685c-469a-a458-60807dca1ac8"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type": "bandsintown",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/2054",
+        "id": "2c959a87-0ead-4186-90c0-a812e8678bf3"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": "2020-11-19",
+      "ended": true,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "type": "BBC Music page",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/7364dea6-ca9a-48e3-be01-b44ad0d19897",
+        "id": "49a51b61-7711-4725-a3ff-6709178851b9"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://officialaha.tumblr.com/",
+        "id": "5db3ae40-204d-468b-b39f-af27deba232a"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "blog",
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/37757",
+        "id": "2b027012-e745-4a3d-8349-ab5d8bf1f6fb"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/2jzc5TC5TVFLXQlBNiIUzE",
+        "id": "04774208-f55f-4ad3-bd9b-1c984b4bbf64"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming"
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "66312e00-a13c-48f5-9831-9c7d18f8b121",
+        "resource": "https://www.deezer.com/artist/3106"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "IMDb",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "56679c97-29bd-456a-9211-129289c54c02",
+        "resource": "https://www.imdb.com/name/nm2165250/"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/a-ha",
+        "id": "2c48bf71-7b1b-4903-95ac-eaedb8386739"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "last.fm"
+    },
+    {
+      "url": {
+        "id": "b3eeaaa9-d582-48ee-bdb5-cb5b9e88fcf8",
+        "resource": "http://muzikum.eu/en/122-3371/a-ha/lyrics.html"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "lyrics",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "url": {
+        "id": "38629650-a64f-4fd9-8fdb-fe0a28aabf60",
+        "resource": "https://genius.com/artists/A-ha"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/aha",
+        "id": "26f34579-1d73-4009-9e62-caa4ef23feb9"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "type": "myspace",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "official homepage",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "8ae7e39e-00d5-4897-addd-44d16106d98b",
+        "resource": "http://a-ha.com/"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://aha.livejournal.com/",
+        "id": "b02e699d-0fc3-4569-9f08-c014ae6e1bbe"
+      },
+      "type-id": "35b3a50f-bf0e-4309-a3b4-58eeed8cee6a",
+      "type": "online community",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "32f11e95-5910-4d97-8ddb-86ac41bbc606",
+        "resource": "http://mvdbase.com/person.php?id=A264"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "5b324a59-8a9c-48af-83d7-aae34e08c897",
+        "resource": "https://imvdb.com/n/a-ha"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://musicmoz.org/Bands_and_Artists/A/A-Ha/",
+        "id": "cda068a6-5f6c-4dae-8084-6aeac80278e6"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "5e0e2d9c-aced-426e-a46b-403c5490636d",
+        "resource": "https://rateyourmusic.com/artist/a_ha"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "ae11fa88-e145-4b40-9c8f-1993797f981e",
+        "resource": "https://www.45cat.com/artist/aha"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "083cab66-1262-4be6-ad31-f304dd252e6f",
+        "resource": "https://www.rockipedia.no/artister/a-ha-15645/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "845d436f-dc16-47ec-8c0c-9c5c53ee1bf6",
+        "resource": "https://www.whosampled.com/A-ha"
+      }
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": true,
+      "end": "2020-10-12",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Aphxkt3kppzfdioijnlbunm33li",
+        "id": "04f5fa36-7363-4757-be48-ecfea47f59d4"
+      }
+    },
+    {
+      "url": {
+        "id": "6afc9c4d-48cd-4fd4-a5dd-abade064170b",
+        "resource": "http://7digital.com/artist/a-ha"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "purchase for download",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "9058bc90-8484-4292-97b8-e8119de5848f",
+        "resource": "https://music.apple.com/no/artist/166566"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/a-ha/53675",
+        "id": "cc14b3da-2cfc-43ad-bb83-df826289692e"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "0e07fe8e-de08-4bbc-bb1d-ddbc72ffdf39",
+        "resource": "https://secondhandsongs.com/artist/24"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "dc03627a-54b3-4639-820c-16135a8a4e0b",
+        "resource": "https://www.setlist.fm/setlists/aha-5bd6af8c.html"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "setlistfm"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://twitter.com/aha_com",
+        "id": "cf212b80-dc33-44c5-9c60-49b11ba195d8"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://vk.com/aha",
+        "id": "4c38acc5-f855-475a-819d-b84a3507b9ae"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/officialaha",
+        "id": "59cdb39c-4d82-45af-9fcc-7a742c832e83"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "57675d69-3cdb-4ca2-8984-a1339c2b7674",
+        "resource": "https://www.flickr.com/a-ha_com/"
+      }
+    },
+    {
+      "url": {
+        "id": "0f73ff3d-5d17-4496-99af-d47870f25474",
+        "resource": "https://www.instagram.com/officialaha/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "url": {
+        "id": "5e31e3a6-d13a-4c45-9e4e-5732340beead",
+        "resource": "https://www.songkick.com/artists/89797"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "songkick",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "type": "soundcloud",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "b174cc11-a825-46b4-8018-99b9da311a29",
+        "resource": "https://soundcloud.com/a-ha"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "7b2844b0-d830-4782-9738-b135a9058c6e",
+        "resource": "https://music.amazon.com/artists/B000SZHPFA"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/no/artist/166566",
+        "id": "9058bc90-8484-4292-97b8-e8119de5848f"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/166566",
+        "id": "a155316b-e4fa-4ab5-96d6-df237d00420c"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/12009",
+        "id": "d2f86c03-8ac1-4086-9382-21bca4b9cfca"
+      }
+    },
+    {
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "cc14b3da-2cfc-43ad-bb83-df826289692e",
+        "resource": "https://www.qobuz.com/us-en/interpreter/a-ha/53675"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "4739a0b6-e5a7-4ecc-b2cc-64089c8c0e81",
+        "resource": "http://viaf.org/viaf/124960419"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "b9d3d2e6-da42-4e24-a8fb-0590d73c418f",
+        "resource": "https://www.wikidata.org/wiki/Q156305"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "82efe649-d479-4a18-93eb-8e3788024c06",
+        "resource": "https://www.youtube.com/channel/UCeEi1My3KTXHT0SG1JkR9gA"
+      },
+      "begin": null,
+      "direction": "forward"
+    }
+  ],
+  "gender": null,
+  "ipis": [],
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": "NO",
+  "end-area": null,
+  "begin-area": {
+    "type-id": null,
+    "name": "Oslo",
+    "type": null,
+    "id": "f80d529e-f242-46ef-a090-d193ed23075f",
+    "iso-3166-2-codes": [
+      "NO-03"
+    ],
+    "disambiguation": "",
+    "sort-name": "Oslo"
+  },
+  "disambiguation": "Norwegian synth\u2010pop band",
+  "sort-name": "a\u2010ha",
+  "life-span": {
+    "ended": false,
+    "begin": "1983",
+    "end": null
+  },
+  "gender-id": null,
+  "id": "7364dea6-ca9a-48e3-be01-b44ad0d19897",
+  "isnis": [
+    "000000012264530X"
+  ],
+  "name": "a\u2010ha"
+}

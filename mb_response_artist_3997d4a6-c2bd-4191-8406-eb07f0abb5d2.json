@@ -1,0 +1,603 @@
+{
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1990"
+  },
+  "type": "Group",
+  "area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "United Kingdom",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "isnis": [
+    "0000000114991077"
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "sort-name": "Saint Etienne",
+  "gender-id": null,
+  "name": "Saint Etienne",
+  "id": "3997d4a6-c2bd-4191-8406-eb07f0abb5d2",
+  "end-area": null,
+  "begin-area": {
+    "id": "77bd9218-74c6-4881-9495-457be4ba62e7",
+    "sort-name": "Croydon",
+    "type-id": null,
+    "iso-3166-2-codes": [
+      "GB-CRY"
+    ],
+    "name": "Croydon",
+    "disambiguation": "",
+    "type": null
+  },
+  "ipis": [],
+  "relations": [
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "d8a32fc0-42c4-490c-9962-2dc93772f477",
+        "resource": "https://www.allmusic.com/artist/mn0000831215"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "ended": true,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "481d0cc0-da8d-4f76-bf83-8f91f5747c02",
+        "resource": "https://www.bbc.co.uk/music/artists/3997d4a6-c2bd-4191-8406-eb07f0abb5d2"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "discography page",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.saintetiennedisco.com/",
+        "id": "4c226f5e-824e-434b-831b-0b38b70c8c5b"
+      },
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.saint.etienne.net/saint/etienne?http://saint.etienne.net/ec/discography.html",
+        "id": "c3c1f770-be77-40dc-aa3f-04b322884b04"
+      },
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "begin": null,
+      "type": "discography page",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "bb5087d6-672e-4f01-8806-38315e4eac2f",
+        "resource": "https://www.discogs.com/artist/2807"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "https://web.archive.org/web/19961220052804/http://www.islandnet.com/~cross/etienne/main.html",
+        "id": "3c2cdca3-19b0-45c8-8a6c-9d1976229cc6"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "https://web.archive.org/web/19980222040726/http://saint.etienne.net/",
+        "id": "d84d330a-efd3-4fde-89d8-0106ebda95ce"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "fanpage",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1N2FgBLehaq77UEdJhCt7f",
+        "id": "c3ef09e2-4f1a-46f9-b31c-100c70a8410b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "70089788-973f-477f-975f-b08c2d896d5f",
+        "resource": "https://www.deezer.com/artist/2822"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Saint+Etienne",
+        "id": "d97624e9-f45f-415d-b8bf-f643e156b75d"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "9802338a-b343-43c4-b070-ad479cdde621",
+        "resource": "http://muzikum.eu/en/122-11294/saint-etienne/lyrics.html"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "1bc7fcdd-750b-47cd-8dca-8ae91511421e",
+        "resource": "https://myspace.com/saintetienne"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "myspace",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "5e5e762c-9635-4a1f-a11d-4ae6f628ad0d",
+        "resource": "https://web.archive.org/web/19970416091752/http://www.creation.co.uk/etienne/index.html"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "dfadb656-b35a-4a2b-841b-76594619add6",
+        "resource": "http://www.saintetienne.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "5d3ca88b-7026-407c-9f72-7d3237e21733",
+        "resource": "http://id.loc.gov/authorities/names/n92074501"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/S/Saint_Etienne/",
+        "id": "07483cc1-70d6-4117-9d10-f3498d7ea9ee"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13947463n",
+        "id": "8ac1da14-f4e4-4bed-8b05-a321356c55c0"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/10195022-6",
+        "id": "4318f9b6-b4f0-44dd-af0e-3e8f5b2afa4b"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "63ded9b0-c75e-4fe6-8812-e175cdf48407",
+        "resource": "https://rateyourmusic.com/artist/saint_etienne"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.45cat.com/artist/saint-etienne",
+        "id": "719a3faa-2775-4cca-ba91-c129751eb9c7"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "7dc15649-1142-497b-9694-83e98043b823",
+        "resource": "https://www.45cat.com/vinyl/artist/saint-etienne"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/saint-etienne/",
+        "id": "c6c5f2a6-10cd-4aa8-a554-e372add5fa06"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "1139d449-b7c6-4676-90e1-2080bd913d0b",
+        "resource": "https://www.worldcat.org/identities/lccn-n92074501"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "58cc2b66-330d-491b-8bfd-43b955320ba8",
+        "resource": "https://www.setlist.fm/setlists/saint-etienne-4bd6b7e2.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "begin": null,
+      "type": "setlistfm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "resource": "https://twitter.com/bobpetesarah",
+        "id": "91d2fb23-9682-4d96-bc75-ef1b630c1e31"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/SaintEtienneOfficial",
+        "id": "59427655-5b9d-42b0-9e21-b3802dc0c384"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "songkick",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/5199608",
+        "id": "2ec67338-6b56-4a85-bc09-c2dad3985654"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "url": {
+        "id": "8af55040-75c8-4d90-abbf-a5f1f0681c8f",
+        "resource": "https://tidal.com/artist/1335"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-type": "url",
+      "url": {
+        "resource": "http://viaf.org/viaf/183854884",
+        "id": "a4d12c0a-04cf-4090-87b5-10855a54dc3c"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "68455a6f-24c4-47d7-a7a8-c4347faf1fe8",
+        "resource": "https://www.wikidata.org/wiki/Q1430158"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "b837b4c6-53ac-4f85-b683-49104aa966a8",
+        "resource": "https://www.youtube.com/user/SaintEtienneOfficial"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url"
+    }
+  ],
+  "disambiguation": "",
+  "gender": null,
+  "country": "GB"
+}

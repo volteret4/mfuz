@@ -1,0 +1,834 @@
+{
+  "type": "Group",
+  "country": "US",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "relations": [
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000856785",
+        "id": "331b085a-f347-443f-bb63-55adf27793d9"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic"
+    },
+    {
+      "url": {
+        "id": "09c7da48-d570-42f0-91cd-6cf0ff3f3771",
+        "resource": "https://publicenemy.bandcamp.com/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "bandsintown",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/1905",
+        "id": "519b8f0b-68b9-4f61-a79d-91ffcffd170c"
+      }
+    },
+    {
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "ended": true,
+      "end": "2020-11-19",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "939ac834-0218-4eb2-a1f0-131db9af5ab3",
+        "resource": "https://www.bbc.co.uk/music/artists/bf2e15d0-4b77-469e-bfb4-f8414415baca"
+      }
+    },
+    {
+      "url": {
+        "id": "00cfe005-0d21-49f4-af50-51cf69c4d84a",
+        "resource": "https://www.discogs.com/artist/28209"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/6Mo9PoU6svvhgEum7wh2Nd",
+        "id": "41b4a4d5-52bf-42d6-a865-0a19fc2034a5"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "2dc7cc93-8e11-4e21-acd6-87a25e16eaa5",
+        "resource": "https://tidal.com/artist/30307"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/3233",
+        "id": "cbe783b9-cb22-4c74-86da-743b481f11f3"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "url": {
+        "id": "5a8277f5-6d62-4b73-9991-304a757df166",
+        "resource": "https://www.imdb.com/name/nm2162228/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.last.fm/music/Public+Enemy",
+        "id": "856f9df3-78bf-4e50-bc08-3f489b425b5b"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "last.fm",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "type": "lyrics",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://genius.com/artists/Public-enemy",
+        "id": "9790c3e2-2cdf-42ff-b8f6-bda82d4013e2"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "fdd45a7b-3056-4828-a30a-04bfda23c05f",
+        "resource": "https://muzikum.eu/en/122-13147/public-enemy/lyrics.html"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "myspace",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/publicenemyofficial",
+        "id": "00afe3d4-bba1-49d5-a709-3855de37179f"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "6b6c03cb-8f0f-44c8-8449-87fab257cdd1",
+        "resource": "http://www.publicenemy.com/"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n91116988",
+        "id": "159721c5-c54d-48d8-a4c7-0f040c0185ad"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "837e353c-383d-4c43-8555-12fa5e37b0da",
+        "resource": "http://musicmoz.org/Bands_and_Artists/P/Public_Enemy/"
+      }
+    },
+    {
+      "url": {
+        "id": "c0fb25b2-d8ae-4923-9008-f49c70d0ff25",
+        "resource": "http://mvdbase.com/person.php?&id=A446"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "id": "4bdb8b6d-78e0-4026-a7cc-984fae48fec7",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139307778"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1217815-9",
+        "id": "8adaecfc-8cd9-4a0a-869b-bab9fd2a1f1f"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://imvdb.com/n/public-enemy",
+        "id": "696d7d01-195f-4794-b6df-0d7c849e8e89"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "121de26d-acd7-4bb9-bd5a-d4c1e8797050",
+        "resource": "http://soundtrackcollector.com/composer/4095/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "e74d3acd-233c-4cca-bb2f-42329037f9b0",
+        "resource": "https://rateyourmusic.com/artist/public_enemy"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "276b8a2e-9410-4647-a3ff-f416ea8c63c4",
+        "resource": "https://www.45cat.com/artist/public-enemy"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "fddd27d7-6bec-4a3d-8e39-2f42baf4fc22",
+        "resource": "https://www.whosampled.com/Public-Enemy/"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n91116988",
+        "id": "a4b16f89-90d7-4758-b329-40b9b2a2f0ab"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.musik-sammler.de/artist/6861",
+        "id": "e9c3dfbb-e606-46d0-bf13-0233540f9997"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Az3r53f4tfze76bygghaxtsm4wy",
+        "id": "41c6c0f7-3b5e-4a63-86ee-327094254b61"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": true,
+      "attribute-values": {},
+      "end": "2020-10-12"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "fc513aae-b7f1-4587-b565-0e1d8b96f262",
+        "resource": "https://itunes.apple.com/us/artist/id36954"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "a2c7d6d3-3256-43eb-97c4-4568b78feadb",
+        "resource": "https://www.7digital.com/artist/public-enemy"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/public-enemy/35173",
+        "id": "7dd1dac1-f79d-4cc7-a2da-e0434f45bea8"
+      }
+    },
+    {
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "type": "purchase for mail-order",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000APZO1A",
+        "id": "38f9e946-4d42-4b69-bd30-0a382607f67f"
+      }
+    },
+    {
+      "url": {
+        "id": "05d76d78-0b20-468b-8d69-0a1d36424bd1",
+        "resource": "https://secondhandsongs.com/artist/596"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "setlistfm",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "dc96da30-7a8d-4eeb-8220-be4726165867",
+        "resource": "https://www.setlist.fm/setlists/public-enemy-63d686a3.html"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": true,
+      "url": {
+        "id": "2056d0fa-3ea4-4758-b1b1-09c6f38927e2",
+        "resource": "https://www.facebook.com/pages/Public-Enemy-PE/33737936216"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/publicenemyftp/",
+        "id": "abcc5ed1-7884-4ec2-9211-ba98bc70cd73"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": true,
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/488285",
+        "id": "64d68224-5b75-4562-89fb-52181ca64c91"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "soundcloud",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "1ef81d57-e15c-404d-9674-cb8314e04a35",
+        "resource": "https://soundcloud.com/public-enemy-music"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "4f0bb250-4019-4541-935f-1d43e1417a2f",
+        "resource": "https://music.apple.com/ae/artist/36954"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/36954",
+        "id": "c51062ac-e9d4-43bc-80f7-016cb38b8bf4"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "7fa81c9e-dab5-448d-a33f-cfa92a32a68a",
+        "resource": "https://music.apple.com/us/artist/36954"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/public-enemy/35173",
+        "id": "7dd1dac1-f79d-4cc7-a2da-e0434f45bea8"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "4f9716d2-eec9-439e-891a-453f52ddd029",
+        "resource": "http://viaf.org/viaf/157264770"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q209182",
+        "id": "2b43ca54-00ee-4be6-8117-e6bb3c8375c8"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCM3jnzSbwV8mHsZB6DySbyw",
+        "id": "6959b2d9-6a96-41c0-b093-3630fdb5e30c"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    }
+  ],
+  "area": {
+    "sort-name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null
+  },
+  "ipis": [],
+  "id": "bf2e15d0-4b77-469e-bfb4-f8414415baca",
+  "name": "Public Enemy",
+  "isnis": [
+    "0000000123699764"
+  ],
+  "sort-name": "Public Enemy",
+  "disambiguation": "US rap group",
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "name": "Nassau County",
+    "id": "3d1aad97-ab44-4494-a0d5-2a2a66ffdc0b",
+    "sort-name": "Nassau County",
+    "disambiguation": ""
+  },
+  "end-area": null,
+  "gender-id": null,
+  "life-span": {
+    "begin": "1985",
+    "end": null,
+    "ended": false
+  }
+}

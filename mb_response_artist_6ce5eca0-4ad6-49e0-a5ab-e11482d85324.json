@@ -1,0 +1,417 @@
+{
+  "type": "Person",
+  "gender": "Female",
+  "country": "US",
+  "isnis": [
+    "0000000465714450"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003641170",
+        "id": "971d32b5-4626-4e7a-bd30-9480c588edf2"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "a8c61c5e-a181-42bc-bb23-afd2cc2f6bb0",
+        "resource": "https://sudanarchives.bandcamp.com/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "61da96da-86b4-4470-bf1d-a99c9462c1fb",
+        "resource": "https://www.discogs.com/artist/6078930"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/2MPHBxznH1fj59jbOWY38u",
+        "id": "eb7709fc-101d-422b-8d5f-f03fb63b31ee"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/12638213",
+        "id": "1e4092d1-31de-437c-8a39-8bf62959dc7e"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.nytimes.com/2017/07/12/arts/music/sudan-archives-interview.html",
+        "id": "814f1354-c11f-4b35-b42a-dd79a216525f"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "interview",
+      "ended": false,
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "3e329970-992e-4ae1-95a3-4cf847b2bf9d",
+        "resource": "https://www.last.fm/music/Sudan+Archives"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "6af9df1d-c1e2-4782-aeba-4ea37cab8b86",
+        "resource": "https://genius.com/artists/Sudan-archives"
+      },
+      "attributes": [],
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://stonesthrow.com/sudanarchives",
+        "id": "1f1a2843-bdcc-495c-9fef-38d71491072e"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "http://sudanarchives.com/",
+        "id": "77ff85ea-fde3-44f5-9311-1b41f6007224"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/sudan-archives-1",
+        "id": "9609b23f-7e6a-4a48-a002-a87426139705"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://itunes.apple.com/mx/artist/id1246459969",
+        "id": "65583c42-40cd-49b2-979f-1e364fa94711"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "13c8af93-67a1-4d68-a1dd-afe8dd015471",
+        "resource": "https://twitter.com/sudanarchives"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/thesudanarchives",
+        "id": "22fa809b-8dda-426a-ac81-2044ca7c8559"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/sudanarchives/",
+        "id": "92a28df7-074d-4c3b-bdd4-041a826f7ffe"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "89fd48ff-8578-409b-825d-f169eb1c1b8b",
+        "resource": "https://www.songkick.com/artists/9000579"
+      }
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "2561fd4c-ba06-4007-961b-e9b7a4901f2b",
+        "resource": "https://soundcloud.com/sudanarchives"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "b3392246-d1c4-4f7f-ada6-dff8b61380b8",
+        "resource": "https://music.apple.com/au/artist/1246459969"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "98571e2b-5984-4717-a9be-20b575a52cbd",
+        "resource": "https://music.apple.com/gb/artist/1246459969"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/8839052",
+        "id": "f429d0a4-c13f-47b7-a662-3ffc0139d714"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q55634161",
+        "id": "868451e9-9107-4d26-b9d0-7bd5bb1f1b4f"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "sort-name": "Cincinnati",
+    "disambiguation": "",
+    "id": "b2cf490f-a8a7-4875-a1b7-addede3b327f",
+    "type": null,
+    "name": "Cincinnati",
+    "type-id": null
+  },
+  "ipis": [],
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "sort-name": "Sudan Archives",
+  "disambiguation": "",
+  "id": "6ce5eca0-4ad6-49e0-a5ab-e11482d85324",
+  "end-area": null,
+  "name": "Sudan Archives",
+  "area": {
+    "sort-name": "Los Angeles",
+    "disambiguation": "",
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "type": null,
+    "name": "Los Angeles",
+    "type-id": null
+  },
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  }
+}

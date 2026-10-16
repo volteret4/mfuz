@@ -1,0 +1,141 @@
+{
+  "begin-area": {
+    "iso-3166-2-codes": [
+      "IS-0"
+    ],
+    "sort-name": "Reykjav\u00edk",
+    "disambiguation": "",
+    "type-id": null,
+    "id": "e498a3ef-704c-462e-b144-6e6fc108a6f2",
+    "name": "Reykjav\u00edk",
+    "type": null
+  },
+  "end-area": null,
+  "disambiguation": "Icelandic",
+  "sort-name": "Bloodgroup",
+  "life-span": {
+    "begin": "2007",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "id": "cdb470c1-9dcc-4297-ad32-b6271872b8c1",
+  "isnis": [],
+  "name": "Bloodgroup",
+  "area": null,
+  "relations": [
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "9553635e-e202-46e2-9e6f-90fd475052f8",
+        "resource": "https://www.discogs.com/artist/688475"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "b38430f8-9a4a-4c9c-bf81-e1156c94ba50",
+        "resource": "https://www.last.fm/music/Bloodgroup"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "myspace",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "3182688b-d4e7-4619-b2f7-53402dff7587",
+        "resource": "https://myspace.com/bloodgroup"
+      }
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://twitter.com/bloodgroup",
+        "id": "4a4c11a4-11c7-41e9-be7e-200af1f3483b"
+      }
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "c08fbc68-18c5-4801-a38b-e32ec6d06fdd",
+        "resource": "https://www.facebook.com/bloodgroupmusic"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "soundcloud",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://soundcloud.com/bloodgroup",
+        "id": "2487850b-4255-43b9-92bd-9912e0d6c4e5"
+      }
+    }
+  ],
+  "gender": null,
+  "ipis": [],
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": null
+}

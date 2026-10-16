@@ -1,0 +1,423 @@
+{
+  "id": "4c9f194e-6235-475a-bf7b-2fd54a0879ec",
+  "gender-id": null,
+  "isnis": [
+    "0000000089454607"
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "iso-3166-2-codes": [
+      "GB-BST"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "sort-name": "Bristol",
+    "id": "40d758a4-b7c2-40f3-b439-5efbd2a3b038",
+    "type-id": null,
+    "name": "Bristol"
+  },
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "type": null
+  },
+  "name": "The Pop Group",
+  "type": "Group",
+  "end-area": null,
+  "ipis": [],
+  "life-span": {
+    "end": null,
+    "begin": "1977",
+    "ended": false
+  },
+  "disambiguation": "",
+  "country": "GB",
+  "sort-name": "Pop Group, The",
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "allmusic",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "46122043-0b67-4696-8df8-acb51e1e0d19",
+        "resource": "https://www.allmusic.com/artist/mn0000487663"
+      },
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/4c9f194e-6235-475a-bf7b-2fd54a0879ec",
+        "id": "ad1081fc-55aa-44d2-9d5a-b6a872b9545d"
+      },
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/33932",
+        "id": "6e4a4dd5-7a8c-425d-9e15-f22242ae4157"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "fanpage",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "5b5d5fcd-a501-42a2-8923-6b02054e8317",
+        "resource": "http://www.wedigdixon.com/pop_group/index.php"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "free streaming",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "bc2efc9f-74d3-4d71-963c-c9dd4de9b0fb",
+        "resource": "https://open.spotify.com/artist/3fBmq4xVcd346QvErp6fko"
+      },
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "a305ee26-13c5-4520-a0d0-a0474dd99ad7",
+        "resource": "http://www.deezer.com/artist/64588"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "c14ac7ee-99c2-4ea7-8546-587950f02ce3",
+        "resource": "https://www.imdb.com/name/nm7358066/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "last.fm",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "c828997d-8577-4281-9a31-57954ee192f2",
+        "resource": "https://www.last.fm/music/The+Pop+Group"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "url": {
+        "id": "cd3b1653-1168-412b-a719-5bc48597ebc7",
+        "resource": "http://www.thepopgroup.net/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n95046617",
+        "id": "988298ef-965f-47cd-8964-3b3f911ff623"
+      },
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_pop_group",
+        "id": "95e65b83-4deb-429b-9156-4142b8be47b9"
+      },
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "1e5ec080-95d0-4d16-857f-31c1454efe9b",
+        "resource": "https://www.worldcat.org/identities/lccn-n95046617"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "secondhandsongs",
+      "end": null,
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "bc9d0c48-5817-4b97-b9a0-b599dccd6081",
+        "resource": "https://secondhandsongs.com/artist/64203"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "c2e841aa-dc76-4a36-badf-bb059fc72bc3",
+        "resource": "https://twitter.com/ThePopGroup"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.facebook.com/ThePopGroupOfficial",
+        "id": "9eaa9980-2fe5-418a-a5ef-e80dec8ae81d"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "songkick",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.songkick.com/artists/173013",
+        "id": "de51721d-cc4d-4dca-8346-704fce74de0d"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "soundcloud",
+      "begin": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://soundcloud.com/thepopgroup",
+        "id": "01eba130-7922-4c44-bd5e-4526e2064785"
+      }
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/130395632",
+        "id": "e159faf0-7429-4ff9-9753-efab5a1c57ee"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q2166634",
+        "id": "e5443c0b-c0c3-4746-9f90-fbd6ebfac172"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "type": "wikidata",
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/user/thepopgroupofficial",
+        "id": "69afda30-dcab-43f5-b40b-ba532597495d"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "end": null,
+      "type": "youtube",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UC9A_URBe9_ijxYM__zE7O_g",
+        "id": "440ef677-2233-4ed0-9b82-17b315fe1456"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "youtube music",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "gender": null
+}

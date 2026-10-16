@@ -1,0 +1,1482 @@
+{
+  "name": "Linkin Park",
+  "sort-name": "Linkin Park",
+  "gender-id": null,
+  "relations": [
+    {
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000289599",
+        "id": "22369b05-7705-4a21-be65-e3aa725c34d2"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/32",
+        "id": "fdef25a3-53c0-4a70-a4e9-962469ed828a"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "bandsintown",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/f59c5520-5f46-4d2c-b2c4-822eabf53419",
+        "id": "34be75ff-2ea5-4c60-a499-ee7b5bc2b19b"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "direction": "forward",
+      "attributes": [],
+      "ended": true,
+      "source-credit": "",
+      "end": "2020-11-19",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type": "blog",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://linkinpark.tumblr.com/",
+        "id": "04b6ec43-1a45-4be4-8672-4a6c23fbd6ff"
+      },
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "id": "674c0582-b894-4c33-bf61-fed04a210d0d",
+        "resource": "https://wmg.jp/linkin_park/discography/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discography page",
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "url": {
+        "id": "bc60e163-3d91-4881-be04-44fb0edd13a9",
+        "resource": "https://www.discogs.com/artist/40029"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "034014bb-8385-4054-ade6-62edafce5650",
+        "resource": "https://www.discogs.com/artist/901845"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "Hybrid Theory",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "fanpage",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "http://linkinpedia.com/index.php?title=Main_Page",
+        "id": "a7d97fee-28b0-4e76-ba09-5ad5d691ae18"
+      },
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://lpcatalog.com/",
+        "id": "0e11833b-08b9-4926-9b31-9a67278060a4"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "fanpage",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "f5992ebf-5a76-4d7d-9c06-1724491bb72e",
+        "resource": "https://lplive.net/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "url": {
+        "id": "4b7f8606-909f-4424-9155-6e00e6811ac6",
+        "resource": "https://music.migu.cn/v3/music/artist/1495"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6XyY86QOPPrYVGvF9ch6wz",
+        "id": "feb70509-32a4-4114-b5b1-e84eee7d4aa5"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://play.qobuz.com/artist/308709",
+        "id": "eaf8aa75-56de-465d-b257-bcd4d1184cb7"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "5236485c-a9ec-4c37-8a26-0787db019876",
+        "resource": "https://www.deezer.com/artist/14788305"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/92",
+        "id": "c2d181f6-07d1-4018-9c9e-0d4f75ab9f2d"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:LinkinParkBerlin2010.jpg",
+        "id": "1a52ada1-dcc4-4ffe-a455-018cf78c8008"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "image",
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1245493/",
+        "id": "6a12c1b8-4852-4d27-badd-5bc4e632aa63"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "IMDb",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/Linkin+Park",
+        "id": "33f75508-5950-41b6-9706-7b12ac3aad2f"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "last.fm",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "id": "cc4dff05-d236-453c-a232-db4b486149a0",
+        "resource": "http://muzikum.eu/en/122-3742/linkin-park/lyrics.html"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Linkin-park",
+        "id": "d1a68faf-0bdd-4b66-aefa-8efc3e222443"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/LINKIN-PARK",
+        "id": "26f2169b-22cc-4889-bd87-6481417375e0"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "direction": "forward"
+    },
+    {
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "76872769-cee5-44b5-8063-1f39c2d539df",
+        "resource": "https://myspace.com/linkinpark"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "myspace",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://www.linkinpark.com/",
+        "id": "d33272e2-2421-474a-9703-eb795f3e3480"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2001005165",
+        "id": "e265c75c-c6aa-4943-bce0-b0750e0612fa"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "4554d964-6e77-450b-9583-c46aa49b48ab",
+        "resource": "http://musicmoz.org/Bands_and_Artists/L/Linkin_Park/"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "http://mvdbase.com/person.php?&id=A5545",
+        "id": "4d9fb52f-4a39-463f-83f9-fd2bd745b412"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb140522494",
+        "id": "44bd3d7a-7c44-472a-90b1-db584f579ebf"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/10081730-0",
+        "id": "573163f0-d35d-4e8c-8177-4d3102c06ccb"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://imvdb.com/n/linkin-park",
+        "id": "19676f06-cb4e-4772-b2fb-1932ddcbcc52"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "2520c715-d2d7-4781-8631-d648c9f9ca46",
+        "resource": "http://soundtrackcollector.com/composer/9565/"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c0718a8c-b73d-4230-ac02-e45eb90b3459",
+        "resource": "https://rateyourmusic.com/artist/linkin_park"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "7fab8395-8052-4633-9552-b33c560897b7",
+        "resource": "https://www.45cat.com/artist/linkin-park"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "5972e493-ca06-4521-94b2-d61fc3c05a51",
+        "resource": "https://www.animenewsnetwork.com/encyclopedia/people.php?id=65946"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.livefans.jp/artists/2595",
+        "id": "903526a7-467b-49be-8cb2-7c8edeff80b3"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "cf31f668-0907-4f7d-9eaa-4af2572c3338",
+        "resource": "https://www.musik-sammler.de/artist/1288/"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000130618/POPULAR/",
+        "id": "20190ed2-bf1c-48e5-921f-50f04594c57f"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.whosampled.com/Linkin-Park/",
+        "id": "71a40103-8a44-4933-9042-98db34847c3f"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2001005165/",
+        "id": "ded05137-0a9c-4dfb-b67d-6cb675f05f4e"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://www.maniadb.com/artist/125683",
+        "id": "fa637c3f-704e-4247-90c4-227ce5261cd9"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "52c80a72-2a67-4be1-9333-72aca0402655",
+        "resource": "http://www.rolldabeats.com/artist/linkin_park"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "dacc8966-1caf-4476-8cba-b784cf381c3f",
+        "resource": "http://www.spirit-of-metal.com/groupe-groupe-Linkin_Park-l-en.html"
+      },
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "bf1916a9-015c-4878-a85d-a45b713e0af0",
+        "resource": "https://itunes.apple.com/de/artist/id148662"
+      },
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": "2019-05-19"
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "45973004-87ea-4c62-a63b-f30bfa772d38",
+        "resource": "https://itunes.apple.com/us/artist/id148662"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "target-credit": "",
+      "end": "2019-05-19"
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Ac524cs4icx4xnekce4qkegkrce",
+        "id": "8e9bf1dd-21c1-42a8-8f73-f18c971a938f"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "end": "2020-10-12",
+      "target-credit": "",
+      "attributes": [],
+      "ended": true,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "Jay-Z / Linkin Park",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://mora.jp/artist/246592/",
+        "id": "0713adc5-5c6c-422a-96bf-d7f56dc85015"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "LINKIN PARK",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "fb522a71-c0f9-439a-b220-c99e5e69733d",
+        "resource": "https://mora.jp/artist/361876/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://mora.jp/artist/69726/",
+        "id": "593dbd31-db51-45f0-b401-a070f3b31321"
+      },
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "c606a2e2-92ed-4701-97b3-7b1f5f7b2bce",
+        "resource": "https://music.apple.com/us/artist/148662"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "61be4960-814f-4cb3-92aa-b115d339b0f9",
+        "resource": "https://uk.7digital.com/artist/linkin-park"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.hdtracks.com/#/artist/Linkin%20Park",
+        "id": "b6e61760-e488-460e-9766-e1694bf9534e"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "060dcf67-48a5-4383-ad36-da2fc5d54886",
+        "resource": "https://www.junodownload.com/artists/Linkin+Park/"
+      },
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/linkin-park/308709",
+        "id": "d940c1ee-0064-4f22-a9c9-d04046af4f65"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "aefb3a1b-3ac0-4b40-b464-2de5ac5ea268",
+        "resource": "https://www.cdjapan.co.jp/person/700242531"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "id": "b2586030-cabe-4dc8-be0a-3ea5919a294e",
+        "resource": "https://www.yesasia.com/0-aid851012-0-bpt.47-en/list.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "url": {
+        "resource": "http://www.purevolume.com/linkinparkofficial",
+        "id": "9be1f37a-fbdd-47b3-9e82-21a04938b12f"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purevolume",
+      "end": "2018-06-30",
+      "target-credit": "",
+      "attributes": [],
+      "ended": true,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/11821",
+        "id": "5b4b18db-2a4d-49dc-beaa-3e7e95d149cb"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "setlistfm",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "0869188e-b6de-4ca9-845f-a44435d253c4",
+        "resource": "https://www.setlist.fm/setlists/linkin-park-bd6bdae.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "direction": "forward"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "dd7fff80-fe44-4254-bdc5-1040351bf804",
+        "resource": "https://twitter.com/linkinpark"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "895bcbf6-8f49-458a-b2af-ceb73bc006ef",
+        "resource": "https://vk.com/linkinpark"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "resource": "https://vk.com/public52599708",
+        "id": "967f7bdf-eee6-4033-95ef-ccf57e984569"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/linkinpark",
+        "id": "5905adf9-0518-4fe8-a79d-3059b033bd90"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/linkinpark/",
+        "id": "3e019db0-83d2-4b6f-9d1a-63fbbd9c521b"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.threads.com/@linkinpark",
+        "id": "c5ecf58e-3bef-4eaf-aa7f-eaae26b81a48"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.tiktok.com/@linkinpark",
+        "id": "68f806e1-d442-4c08-b973-d965b2070908"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "ba6d0958-6675-4ea2-8d78-282d722d64fc",
+        "resource": "https://www.weibo.com/linkinparkofficial"
+      },
+      "target-type": "url",
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/96404",
+        "id": "f1ba5022-ab72-44f9-8dcb-14b0fc3ce146"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "songkick",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "7d8da894-f148-4eca-b6db-0cdef33c734a",
+        "resource": "https://soundcloud.com/linkinpark"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "target-type": "url",
+      "url": {
+        "id": "d78eddf8-cbe3-466e-aa45-08f7286a1963",
+        "resource": "https://us.napster.com/artist/linkin-park"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "attributes": [],
+      "ended": true,
+      "source-credit": "",
+      "end": "2022-06-08",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "bca06219-7402-43fb-b467-558a872ae673",
+        "resource": "https://music.amazon.com/artists/B000VK762Y"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "url": {
+        "id": "afc4424e-c022-4435-903f-f26dded01b3b",
+        "resource": "https://music.apple.com/de/artist/148662"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/148662",
+        "id": "e5fb489e-3fe0-4290-819b-edac23a0a986"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/ru/artist/148662",
+        "id": "0b8fe32c-b1d7-4030-b015-28f9e8902091"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/148662",
+        "id": "c606a2e2-92ed-4701-97b3-7b1f5f7b2bce"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "ae67cc6e-6974-455b-b538-2f8ec451685c",
+        "resource": "https://tidal.com/artist/14123"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "d940c1ee-0064-4f22-a9c9-d04046af4f65",
+        "resource": "https://www.qobuz.com/us-en/interpreter/linkin-park/308709"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.ticketmaster.com/artist/703831",
+        "id": "c4fab14a-5609-4cb3-8c56-9ce4bd073bcd"
+      },
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "target-type": "url",
+      "type": "ticketing",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://viaf.org/viaf/149159156",
+        "id": "16f23ffc-fbc8-4c50-a566-a441547bf828"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-values": {},
+      "type": "VIAF",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "id": "9ba5caa4-d7cd-40f4-ac5f-aa306e90e172",
+        "resource": "https://www.wikidata.org/wiki/Q261"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f29a58e0-757d-42fb-a548-1dd3b2b94a3c",
+        "resource": "https://www.youtube.com/channel/UCZU9T1ceaOgwfLRq7OKFU4Q"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "youtube music",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCxgN32UVVztKAQd2HkXzBtw",
+        "id": "e08eef5e-2330-44cb-89b5-f61c8d210e57"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    }
+  ],
+  "disambiguation": "American rock band",
+  "country": "US",
+  "gender": null,
+  "end-area": null,
+  "id": "f59c5520-5f46-4d2c-b2c4-822eabf53419",
+  "begin-area": {
+    "sort-name": "Agoura Hills",
+    "id": "ab42be96-8579-4952-b29a-5cbdf7227e7e",
+    "type-id": null,
+    "type": null,
+    "name": "Agoura Hills",
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "type": "Group",
+  "life-span": {
+    "begin": "1996",
+    "ended": false,
+    "end": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000123251302"
+  ],
+  "area": {
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "disambiguation": "",
+    "name": "United States",
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  }
+}

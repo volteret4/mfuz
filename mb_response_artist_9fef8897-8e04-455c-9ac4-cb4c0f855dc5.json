@@ -1,0 +1,309 @@
+{
+  "country": "GB",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "ipis": [],
+  "area": {
+    "name": "London",
+    "type": null,
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "sort-name": "London",
+    "disambiguation": "Greater London",
+    "type-id": null
+  },
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "bandcamp",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://obongjayar.bandcamp.com/",
+        "id": "efdc1a1d-39e5-49fd-99b7-1d2121c09c6e"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "3bbfd706-6f54-45c2-8ef1-57ad049c08cc",
+        "resource": "https://www.discogs.com/artist/5612026"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6l7R1jntPahGxwJt7Tky8h",
+        "id": "603ce60b-2901-4fe2-bc48-8240c232c305"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/11131272",
+        "id": "b89bc7b8-7442-43f0-8599-c9648f3f3449"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.obongjay.ar/",
+        "id": "2e4d80ca-1606-416c-986a-04a79b0da184"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "purchase for download",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/artist/id1161415863",
+        "id": "af8d0eda-96ce-49c0-a0a3-62a7dd804261"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.beatport.com/artist/obongjayar/619064",
+        "id": "bf0baff2-33a7-4d17-b0c6-8e419c9fe541"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "6fb6df57-3cb9-4407-93ff-0bf294dce838",
+        "resource": "https://www.facebook.com/obongjayar"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/obongjayar/",
+        "id": "149a1dc1-86e4-4c69-a367-f18c8907d10f"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "55a2522b-6d1d-40ed-a0c7-878a7bed6401",
+        "resource": "https://www.songkick.com/artists/9162404"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/au/artist/1161415863",
+        "id": "2ff222d6-f6ea-4627-af83-2f56a6f65d2e"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/1161415863",
+        "id": "e23d6d8a-cd6c-45d6-8cef-ecbcc9e42b04"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "56e2f44f-4d25-44d5-a774-1b91be17cc8b",
+        "resource": "https://music.apple.com/us/artist/1161415863"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://tidal.com/artist/8171802",
+        "id": "27da98e6-b81e-4a9c-83a6-2f4c38639adb"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "feaea39c-bde3-45ce-81f0-74590cd91920",
+        "resource": "https://www.wikidata.org/wiki/Q59660249"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "wikidata",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    }
+  ],
+  "gender": "Male",
+  "name": "Obongjayar",
+  "isnis": [
+    "0000000507949953"
+  ],
+  "id": "9fef8897-8e04-455c-9ac4-cb4c0f855dc5",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1989-10-16"
+  },
+  "sort-name": "Obongjayar",
+  "disambiguation": "",
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Calabar",
+    "id": "c2699413-4dcc-4b08-a970-2ee9d21aa539",
+    "type": null,
+    "name": "Calabar"
+  },
+  "end-area": null
+}

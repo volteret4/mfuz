@@ -1,0 +1,1016 @@
+{
+  "gender": "Female",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00441836850"
+  ],
+  "begin-area": {
+    "id": "ae96202a-e993-45de-adfe-a8c6b66a781d",
+    "disambiguation": "",
+    "sort-name": "Fort Worth",
+    "type": null,
+    "name": "Fort Worth",
+    "type-id": null
+  },
+  "isnis": [
+    "0000000114370895"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000086927",
+        "id": "5d8a5048-904b-4d12-b7e5-c380cd619b8c"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "attributes": [],
+      "url": {
+        "id": "5755b890-50a7-46b2-b65c-51c9afc0982e",
+        "resource": "https://www.bandsintown.com/a/154"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/d339efbb-77b9-4147-ba9e-59f2f24550b2",
+        "id": "8f4605f4-cabb-4a55-858d-6c5b5490293a"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "d0230af4-0fb3-4b11-95d6-26f36230df02",
+        "resource": "https://www.discogs.com/artist/201543"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/3BmGtnKgCSGYIUhmivXKWX",
+        "id": "de6692a2-473c-4d81-8e79-dc1924829981"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/68",
+        "id": "e2abec57-27b7-4d97-b064-52472d7de060"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.pandora.com/artist/kelly-clarkson/ARz9f2rcqqXXqq2",
+        "id": "2656965c-ad79-4fc4-b338-b82d26429abf"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attributes": [],
+      "url": {
+        "id": "39bcc784-927d-429b-a9ad-7d3e25ec594b",
+        "resource": "http://www.deezer.com/en/artist/68"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "8101dbe5-224e-4efa-9ce6-e14a03243236",
+        "resource": "https://commons.wikimedia.org/wiki/File:Kelly_Clarkson_57th_Presidential_Inauguration-cropped.jpg"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "image",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "4801d333-076f-4594-a8a4-e24be7c0e53f",
+        "resource": "https://www.imdb.com/name/nm1225628/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "65c0372c-d1f4-4787-94c8-3dfd7c321efd",
+        "resource": "https://www.last.fm/music/Kelly+Clarkson"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "http://muzikum.eu/en/122-5532/kelly-clarkson/lyrics.html",
+        "id": "d4ef83c8-9c4b-4c02-90f8-efd3918bb46c"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "a65773dc-030c-42ef-b5b2-e01247048486",
+        "resource": "https://genius.com/artists/Kelly-clarkson"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Kelly-Clarkson",
+        "id": "170b4a1c-9a05-43be-be72-40761ea61edf"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://myspace.com/kellyclarkson",
+        "id": "13e31ef1-fa77-4596-9e44-a08bad7189bc"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "myspace",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "72c274fb-3fa8-4fa9-b463-2ad0c4c146db",
+        "resource": "http://www.kellyclarkson.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "e978d1a9-fea3-472e-97e8-ed727c8ad66a",
+        "resource": "http://id.loc.gov/authorities/names/n2002041300"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14642113p",
+        "id": "a555000c-d572-4978-bbac-3731ef564132"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://d-nb.info/gnd/135327601",
+        "id": "d6b0aace-9dd8-4848-a5bf-4dd37400706a"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://imvdb.com/n/kelly-clarkson",
+        "id": "4269262d-5f9d-474e-903b-1c75a696f640"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "b556c23f-c1ef-43ae-b25b-931ca2091838",
+        "resource": "https://nla.gov.au/nla.party-811242"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "f7c76b97-3673-40ee-8003-d648b5526104",
+        "resource": "https://rateyourmusic.com/artist/kelly_clarkson"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.45cat.com/artist/kelly-clarkson",
+        "id": "c9f31ed4-7822-4bf9-bc31-97a536637ca9"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "d20a5f6c-a1b7-4495-a1db-51253b2bf02a",
+        "resource": "https://www.muziekweb.nl/Link/M00000174594/POPULAR/"
+      }
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.whosampled.com/Kelly-Clarkson/",
+        "id": "29f24d75-0594-47df-b8ca-3004736edefa"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n2002041300",
+        "id": "305db498-09f5-46f0-a11d-78ea9e2ed469"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.musik-sammler.de/artist/22318",
+        "id": "76fbca6c-ddd0-4c94-a7d1-a73fd55f6405"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Avtojbdztswnq47uy7dctzkrg6q",
+        "id": "410db416-9513-4f4b-97ae-209b365d08ca"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": "2020-10-12",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": true
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "2580d19d-d2ad-4444-935c-a23c069a1087",
+        "resource": "https://mora.jp/artist/114234/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://mora.jp/artist/376698/",
+        "id": "a305e632-9e5e-4137-846e-a516037eb678"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://mora.jp/artist/376698/all",
+        "id": "c8f93032-2547-4614-9d4c-bfe7b1c5eb13"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://music.apple.com/us/artist/316265",
+        "id": "130fa84b-4e61-463b-8050-10cf60bf7d3b"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://ototoy.jp/_/default/a/854298",
+        "id": "b903e015-0b31-4bb4-9750-d6ea25a2c4ce"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "7b45e44d-f4b8-4492-b01c-ec45ce2d8a4f",
+        "resource": "https://www.7digital.com/artist/kelly-clarkson"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/kelly-clarkson/148524",
+        "id": "fcc12087-d1df-4107-ac4b-bf3a07609f98"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "dd7640b2-5702-481b-a0ea-05d211b716ca",
+        "resource": "https://itunes.apple.com/us/artist/id316265"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": true,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "33d2ff6d-a585-4dc2-b25a-3b6d9eab7f3a",
+        "resource": "https://www.cdjapan.co.jp/person/700168769"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "409b9214-0c25-4432-8908-474c84dceb5b",
+        "resource": "https://secondhandsongs.com/artist/5797"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "bc1e8eea-27d5-4310-b387-776f38324cbf",
+        "resource": "https://www.setlist.fm/setlists/kelly-clarkson-5bd6bfd0.html"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "ended": false,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://twitter.com/kellyclarkson",
+        "id": "9b272e16-089e-4fb6-996a-7f3dda4f3150"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "bf486097-ae90-49a2-8cb6-8ba6fa5ff7ad",
+        "resource": "https://vk.com/kellyclarkson"
+      }
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "2b3640d7-a622-428f-bf86-1dd23a787481",
+        "resource": "https://www.facebook.com/kellyclarkson"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.instagram.com/kellyclarkson/",
+        "id": "8a0ce0e7-6ed2-4894-8639-8dfcaacc5b24"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "be064468-c32c-42c5-bdc7-004cd33e9b7a",
+        "resource": "https://www.songkick.com/artists/366307"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://soundcloud.com/kellyclarksonofficial",
+        "id": "18bc1ce4-bdf0-45bd-9205-44c966b9f3af"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B001E6QIUU",
+        "id": "a457ae5c-0d2c-4f69-9522-1a9d362cf9b5"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "130fa84b-4e61-463b-8050-10cf60bf7d3b",
+        "resource": "https://music.apple.com/us/artist/316265"
+      }
+    },
+    {
+      "url": {
+        "id": "6824c75a-76a8-4136-95c9-3bf4f5ca83bc",
+        "resource": "https://tidal.com/artist/1772"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "fcc12087-d1df-4107-ac4b-bf3a07609f98",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/kelly-clarkson/148524"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "attributes": [],
+      "url": {
+        "resource": "http://viaf.org/viaf/5188462",
+        "id": "4d28b33f-dfc5-4e61-9721-b27807e8a2da"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "26626410-7de5-4c86-9441-275759350c20",
+        "resource": "https://www.wikidata.org/wiki/Q483507"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC6QdZ-5j9t_836_xJPAaRSw",
+        "id": "f70b62ca-28d7-4974-844c-176927273919"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "40ccb973-0c47-4a7a-b688-1731aa7f5d98",
+        "resource": "https://www.youtube.com/channel/UCoRUmyNL8KEYftmxRA2n3SQ"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "youtube music",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCpXP9-cHlJCMapSYCSZThbw",
+        "id": "c42ba045-a6f2-4c4b-b1c0-a5189f2d63bc"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    }
+  ],
+  "name": "Kelly Clarkson",
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "end-area": null,
+  "disambiguation": "",
+  "id": "d339efbb-77b9-4147-ba9e-59f2f24550b2",
+  "sort-name": "Clarkson, Kelly",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "begin": "1982-04-24",
+    "end": null,
+    "ended": false
+  }
+}

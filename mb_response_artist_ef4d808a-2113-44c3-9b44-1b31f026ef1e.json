@@ -1,0 +1,544 @@
+{
+  "isnis": [],
+  "ipis": [],
+  "gender-id": null,
+  "begin-area": {
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "sort-name": "New York",
+    "disambiguation": "",
+    "type": null,
+    "type-id": null,
+    "name": "New York"
+  },
+  "type": "Group",
+  "country": "US",
+  "life-span": {
+    "end": null,
+    "begin": "1974",
+    "ended": false
+  },
+  "name": "Cameo",
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000944349",
+        "id": "d7180f3e-a51e-42f2-9c53-1564533685d2"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/ef4d808a-2113-44c3-9b44-1b31f026ef1e",
+        "id": "7ad899fb-a4cb-4629-95b3-3cda28a827af"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "a8e1241d-a8af-47e5-81e0-523a02c229a5",
+        "resource": "http://www.soulwalking.co.uk/Cameo.html"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "biography"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "0b5b0fdd-875f-46ae-bcb8-c6e7096b336c",
+        "resource": "https://www.discogs.com/artist/1835"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "fdd638ef-1687-45ac-aa5a-ea76bea761d5",
+        "resource": "https://open.spotify.com/artist/545idYhdloaSlLGBY8E9u2"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "ba7ff0c3-7a80-4362-b3d6-69138735bf9b",
+        "resource": "https://www.deezer.com/artist/3533"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "IMDb",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm3046400/",
+        "id": "30107dad-bdb0-4667-951d-6596c6c3d633"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/Cameo",
+        "id": "9b98a6a9-457c-43d9-add4-31197daee158"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "type": "lyrics",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "1f614c6a-41a9-44ae-90af-6f3b973ece54",
+        "resource": "http://muzikum.eu/en/122-9884/cameo/lyrics.html"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.cameonation.com/",
+        "id": "7fd0758c-9d5c-433b-9a5d-d58340170246"
+      },
+      "attributes": [],
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n91039238",
+        "id": "9c2caedc-f973-4ab7-a6cd-6899aec4c60b"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/C/Cameo/",
+        "id": "53abcdc4-f870-4d5a-88df-8ad61bf48475"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13902243f",
+        "id": "12961894-e647-435b-9aeb-959d97ae4e44"
+      },
+      "ended": false
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "0c3a3822-926d-45a5-a4f7-6aa895b0605f",
+        "resource": "https://d-nb.info/gnd/5128913-1"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "11b1915a-fc4d-4c60-8d19-c9e7be3bbf15",
+        "resource": "https://imvdb.com/n/cameo-3"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/cameo",
+        "id": "5349ff81-db5a-47d5-9c3f-e9b2db09449a"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "902e9ea8-2e17-4a42-87d6-e3f72c175e7d",
+        "resource": "https://www.whosampled.com/Cameo/"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n91039238",
+        "id": "bfdd9ef7-9e48-4f86-b1aa-3bbffb6075b4"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/629",
+        "id": "aef78a9a-cd1e-4716-b1ae-41ac12d81744"
+      },
+      "attributes": [],
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "c2ea2ae7-49b6-4865-96bd-4ac2e0d631e2",
+        "resource": "https://twitter.com/CameoNation"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "15e0ca37-4aa8-40de-bb47-9f7824b6ac0f",
+        "resource": "https://www.facebook.com/CameoNation"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/cameonation/",
+        "id": "9d850e04-b1ca-4639-8124-3f4af887f02c"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/189085",
+        "id": "d4add92f-fb3c-4d8e-8444-9c9b8b9d209e"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/81160",
+        "id": "10718de3-6d87-4eb5-a134-6d8501415b80"
+      }
+    },
+    {
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/30243",
+        "id": "bd50eee3-d1a9-431f-9050-9fc11fe76fcb"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "bf7ee2f6-4178-4a24-be4c-40e9cebf74cf",
+        "resource": "http://viaf.org/viaf/130320327"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "VIAF",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q922528",
+        "id": "0ac3f478-cac3-4220-a4ac-0d9ac74a7192"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "youtube music",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "5d2d1bf5-8abf-47ed-8785-93b3bbaf8baf",
+        "resource": "https://music.youtube.com/channel/UCWOWuP1wrpPtdpX72l8jl5w"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "begin": null,
+      "target-type": "url"
+    }
+  ],
+  "end-area": null,
+  "area": {
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "id": "ef4d808a-2113-44c3-9b44-1b31f026ef1e",
+  "sort-name": "Cameo",
+  "disambiguation": "American soul-influenced funk group",
+  "gender": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b"
+}

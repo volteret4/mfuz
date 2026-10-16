@@ -1,0 +1,156 @@
+{
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Nashville",
+    "id": "e68879f9-bd95-41ff-96ba-c082ff37cc74",
+    "sort-name": "Nashville",
+    "type-id": null
+  },
+  "name": "Luke Schneider",
+  "type": "Person",
+  "country": "US",
+  "begin-area": null,
+  "gender": "Male",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "sort-name": "Schneider, Luke",
+  "ipis": [],
+  "disambiguation": "",
+  "isnis": [],
+  "relations": [
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://lukeschneider.bandcamp.com/",
+        "id": "708add25-1e1d-4bd6-baa7-44263dc62bec"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/594421",
+        "id": "ba140984-033d-4a35-8f37-6f7a73c81459"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0lT5edBQPui5NiGQLLG2Gb",
+        "id": "1fca3d09-6105-48af-b719-eca132edba4e"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "c480a9fe-685c-467b-9831-019e32c9995e",
+        "resource": "https://www.deezer.com/artist/9191974"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/au/artist/1055588729",
+        "id": "56c46b2b-662d-4aab-bc50-107c881115ed"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "a63d8088-00e1-4c55-aafe-90d1da46fd77",
+        "resource": "https://music.apple.com/gb/artist/1055588729"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "e26ac6a1-8485-4d40-aa80-7403fc6d0049",
+        "resource": "https://tidal.com/artist/9938555"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    }
+  ],
+  "id": "053cf059-df79-4917-88a1-c687f40a74c6"
+}

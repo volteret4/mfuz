@@ -1,0 +1,277 @@
+{
+  "isnis": [],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0004134763",
+        "id": "a7a56c0a-9981-42b1-8240-a38980f0c300"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://mandyindiana.bandcamp.com/",
+        "id": "d8690ec5-d72f-4c70-a452-84780ce63cfe"
+      },
+      "type": "bandcamp",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "url": {
+        "id": "ed076860-9235-4d43-aaef-e5d5f4ead2bf",
+        "resource": "https://www.discogs.com/artist/10409722"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "0490f039-43da-4d68-880a-f519e1ed7950",
+        "resource": "https://open.spotify.com/artist/2nDJxXJ7PtW7eLpFXcGH3u"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/137228152",
+        "id": "43f70e89-8ec5-460f-adfc-56634c28fc67"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "62673028-f6c6-4bfa-99a6-9c110642a0fd",
+        "resource": "https://www.last.fm/music/Mandy,+Indiana"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "type": "last.fm",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "url": {
+        "id": "fc2a44cb-c205-446a-94ce-02b89c82e989",
+        "resource": "https://genius.com/artists/Mandy-indiana"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "53ca7afe-c623-4baa-a5a2-5333d09f2c3e",
+        "resource": "https://rateyourmusic.com/artist/mandy-indiana"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "3e6684e4-7e3b-421a-b1fc-49b2e3e03e31",
+        "resource": "https://itunes.apple.com/us/artist/id1537876279"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/MandyIndiana",
+        "id": "24d837c5-150a-4662-9ada-20f7a8464ec6"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "4c789718-fa9d-402f-bb06-3493c91531c2",
+        "resource": "https://music.apple.com/gb/artist/1537876279"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "c184e1ec-8de9-48f6-a775-389a1f18d067",
+        "resource": "https://tidal.com/artist/26395083"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q119036137",
+        "id": "562db6eb-b1fc-4c94-bd8c-497cace304d4"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "id": "9ed67b68-9fa7-471a-99eb-483139293274",
+  "ipis": [],
+  "disambiguation": "English-French noise rock band",
+  "sort-name": "Mandy, Indiana",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "2016"
+  },
+  "gender-id": null,
+  "gender": null,
+  "name": "Mandy, Indiana",
+  "type": "Group",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Manchester",
+    "iso-3166-2-codes": [
+      "GB-MAN"
+    ],
+    "id": "852531bf-3410-401f-b432-9c3157a386b9",
+    "type": null,
+    "name": "Manchester",
+    "disambiguation": ""
+  },
+  "country": "GB",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "disambiguation": "",
+    "name": "Manchester",
+    "type": null,
+    "id": "852531bf-3410-401f-b432-9c3157a386b9",
+    "iso-3166-2-codes": [
+      "GB-MAN"
+    ],
+    "sort-name": "Manchester",
+    "type-id": null
+  },
+  "end-area": null
+}

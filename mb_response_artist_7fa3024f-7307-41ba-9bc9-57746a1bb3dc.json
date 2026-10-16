@@ -1,0 +1,267 @@
+{
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  },
+  "sort-name": "Party Dozen",
+  "disambiguation": "",
+  "ipis": [],
+  "id": "7fa3024f-7307-41ba-9bc9-57746a1bb3dc",
+  "relations": [
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0004213301",
+        "id": "f37ecf29-f0bc-45eb-87ed-0f78784bb097"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "89fa0123-c257-47be-96b1-973f53a5369a",
+        "resource": "https://party-dozen.bandcamp.com/"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/5851536",
+        "id": "f8312141-f378-43ef-b152-fa42d3798a13"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/5LeiYFiAx31mpoPKxdOLOm",
+        "id": "ed6a1762-7073-4d07-bc88-6f828c7674fb"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "acd8f8d7-0965-4793-a635-32a99e5dca44",
+        "resource": "https://www.deezer.com/artist/12536398"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/party-dozen",
+        "id": "b443b7b7-d956-46f9-aca5-9a7ee6ed99e6"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "e119541e-3476-4f7a-87ce-ea6cd0cf6885",
+        "resource": "https://itunes.apple.com/us/artist/id1241855561"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "url": {
+        "resource": "https://www.junodownload.com/artists/Party+Dozen/releases/",
+        "id": "b03d7968-cac5-4b3d-aec9-45a5217fc0ad"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.facebook.com/partydozen",
+        "id": "498db614-3d66-4e03-873f-579ab115af5a"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/partydozen/",
+        "id": "50d27172-d94e-4b8f-9808-1f94906dcaf7"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/8809834",
+        "id": "d52bb722-41a3-4056-a2a4-658d3cc0b6d1"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/8802451",
+        "id": "3a3a8244-ffe6-4f59-a187-e023e88e1871"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q137349642",
+        "id": "e1cf0d3d-452b-4f33-b9d7-5ddf25dc8d5c"
+      }
+    }
+  ],
+  "isnis": [],
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "Australia",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "AU"
+    ],
+    "name": "Australia",
+    "type": null,
+    "id": "106e0bec-b638-3b37-b731-f53d507dc00e"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": "AU",
+  "begin-area": null,
+  "name": "Party Dozen",
+  "type": "Group",
+  "gender": null
+}

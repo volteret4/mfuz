@@ -1035,7 +1035,7 @@ class MusicQuiz(BaseModule):
 
     def get_random_songs(self, count=4, max_retries=3):
         """Reemplaza el método existente con esta versión que incluye filtros avanzados."""
-        self.get_random_songs_with_advanced_filters(count, max_retries)
+        return self.get_random_songs_with_advanced_filters(count, max_retries)
         
 
     def load_album_art(self, album_art_path):

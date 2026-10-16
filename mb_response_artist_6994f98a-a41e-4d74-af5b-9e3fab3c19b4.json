@@ -1,0 +1,159 @@
+{
+  "life-span": {
+    "begin": "1980",
+    "end": "1998",
+    "ended": true
+  },
+  "disambiguation": "",
+  "country": "ES",
+  "gender": null,
+  "relations": [
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "f8148b90-70ae-45ec-b829-70c98dc1b6ed",
+        "resource": "https://www.discogs.com/artist/921837"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "1293aca4-b549-40f6-a654-071dd1e24437",
+        "resource": "https://open.spotify.com/artist/6arRVLZ3vn5AXkuvp9JxbS"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/64659",
+        "id": "323eff47-bce7-4d9d-a0f3-8e0c2f4120be"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "songkick",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "0fff15e6-a2c2-4621-af85-443d32a28ff2",
+        "resource": "https://www.songkick.com/artists/801"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/18213917",
+        "id": "0cf20859-423b-427f-9909-985bedf59692"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "source-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/12858",
+        "id": "68aaaa19-f547-4719-86e4-8ce9578a75f5"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "5d3ce5af-bf4c-4b41-b93b-6709e70d44ef",
+        "resource": "https://www.wikidata.org/wiki/Q3089555"
+      },
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "type": "wikidata",
+      "ended": false,
+      "source-credit": ""
+    }
+  ],
+  "sort-name": "Nikis, Los",
+  "begin-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [],
+  "area": {
+    "type": null,
+    "sort-name": "Spain",
+    "iso-3166-1-codes": [
+      "ES"
+    ],
+    "disambiguation": "",
+    "name": "Spain",
+    "type-id": null,
+    "id": "471c46a7-afc5-31c4-923c-d0444f5053a4"
+  },
+  "name": "Los Nikis",
+  "id": "6994f98a-a41e-4d74-af5b-9e3fab3c19b4",
+  "gender-id": null,
+  "type": "Group",
+  "end-area": null,
+  "ipis": []
+}

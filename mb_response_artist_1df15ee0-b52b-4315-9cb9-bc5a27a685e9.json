@@ -1,0 +1,566 @@
+{
+  "begin-area": {
+    "name": "London",
+    "sort-name": "London",
+    "disambiguation": "Greater London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type-id": null,
+    "type": null
+  },
+  "ipis": [
+    "00805000105"
+  ],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "isnis": [
+    "0000000459702664"
+  ],
+  "type": "Person",
+  "end-area": null,
+  "relations": [
+    {
+      "url": {
+        "id": "2ef809d7-bbb7-4d61-ad54-82490e6738bc",
+        "resource": "https://www.allmusic.com/artist/mn0003449375"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "allmusic",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://jacobcollier.bandcamp.com/",
+        "id": "5fcfbc68-c001-4766-be33-8fa0c8794737"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "bandcamp"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/4674871",
+        "id": "8a750e8d-cc4a-450f-abe5-a3424def6977"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "21598b8f-7f75-4ccc-ae71-23b7061036a6",
+        "resource": "https://open.spotify.com/artist/0QWrMNukfcVOmgEU0FEDyD"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "f638ca5e-efda-4eea-84f5-407524880d1c",
+        "resource": "https://www.deezer.com/artist/6563333"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "free streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "a3c9db50-3328-4884-bb0a-b2af54491db6",
+        "resource": "https://www.imdb.com/name/nm1775528/"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "IMDb",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/Jacob+Collier",
+        "id": "07210789-ea66-48a7-8d35-d2fae233bfa3"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "5ff50916-9727-4575-9634-a3996bc769d4",
+        "resource": "https://genius.com/artists/Jacob-collier"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "1a9e62c2-086c-4c4a-84f1-ae254abcc406",
+        "resource": "https://www.jacobcollier.com/"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "official homepage",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "7d2e57eb-f98e-417f-a5de-269b3dbd549e",
+        "resource": "http://id.loc.gov/authorities/names/no2016075457"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "45d3bd8b-58c8-43cd-8ca3-836cf9406e02",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb17067880r"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "68c82703-e340-483f-bc2e-851079e0b65c",
+        "resource": "https://d-nb.info/gnd/1112622284"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "9d8c408a-d087-40e4-8df8-472c84c8386e",
+        "resource": "https://rateyourmusic.com/artist/jacob-collier"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "5c9a453c-e27e-41ab-b85d-eb2de9af133e",
+        "resource": "https://www.worldcat.org/identities/lccn-no2016075457"
+      },
+      "attributes": []
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "f8df5049-956a-4987-8b05-bed5e68700b1",
+        "resource": "https://itunes.apple.com/us/artist/id730498854"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/730498854",
+        "id": "6b48dd62-5ba9-4370-b240-1a7202976587"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "35d28d82-786f-46d7-9944-6f92a1d0872a",
+        "resource": "https://twitter.com/jacobcollier"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "1e1e2f39-c7f9-4c74-9394-7d288623f4e2",
+        "resource": "https://www.facebook.com/JCollierMusic"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "51fa740c-f7dc-4841-a4fa-9c378ef2011c",
+        "resource": "https://www.instagram.com/jacobcollier/"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": true,
+      "url": {
+        "resource": "https://www.instagram.com/jcolliermusic/",
+        "id": "8f84c6e4-e4b6-4019-a4b8-29008517e8e9"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type": "songkick",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "b47444b2-8770-4518-a390-f9ccf9f4c098",
+        "resource": "https://www.songkick.com/artists/6775909"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "soundcloud",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://soundcloud.com/jacobcollier",
+        "id": "098bfbae-a3fe-4807-950a-3520398692cb"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "id": "73f6d7ec-4336-41b2-b707-3980e65ef08e",
+        "resource": "https://music.apple.com/gb/artist/730498854"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "0630684c-01a4-4a32-91ec-5d6dfd524493",
+        "resource": "https://music.apple.com/nz/artist/730498854"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "6b48dd62-5ba9-4370-b240-1a7202976587",
+        "resource": "https://music.apple.com/us/artist/730498854"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "f7a38160-dc67-4673-88e1-b0348ecf0440",
+        "resource": "https://tidal.com/artist/7553669"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "7fe274ee-77ed-44ab-9097-24ac40ed0458",
+        "resource": "http://viaf.org/viaf/48146634294441930684"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q24900882",
+        "id": "93ba2245-7053-4002-bd95-76fa78bcc31c"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "wikidata",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "youtube",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "bd62d484-658f-4617-afce-80bfb57ccfce",
+        "resource": "https://www.youtube.com/channel/UCtmY49Zn4l0RMJnTWfV7Wsg"
+      }
+    }
+  ],
+  "name": "Jacob Collier",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1994-08-02"
+  },
+  "country": "GB",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "sort-name": "Collier, Jacob",
+  "disambiguation": "",
+  "area": {
+    "type-id": null,
+    "type": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "sort-name": "United Kingdom",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "name": "United Kingdom"
+  },
+  "id": "1df15ee0-b52b-4315-9cb9-bc5a27a685e9"
+}

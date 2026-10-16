@@ -1,0 +1,102 @@
+{
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Sciahri",
+  "disambiguation": "Florence-based Italian dj/producer and Co-founder and part of UNKNOT",
+  "ipis": [],
+  "isnis": [],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "17c8bbe6-f931-47c2-9dab-d057eb2b92ef",
+        "resource": "https://www.discogs.com/artist/3839434"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://ra.co/dj/sciahri",
+        "id": "c864459c-93a7-4607-94ba-0b1b9b8a643b"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/sciahripage",
+        "id": "33cb174a-092f-4bd8-ad36-0e45953bcadf"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "url": {
+        "id": "af1f5e72-08be-4d80-8acc-c5944cc77c26",
+        "resource": "https://soundcloud.com/sciahri"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    }
+  ],
+  "id": "ee4e342b-ddb1-4f98-b548-16ea6306ddb2",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "disambiguation": "",
+    "name": "Firenze",
+    "type": null,
+    "type-id": null,
+    "id": "2b397313-0d04-4167-b9a8-914f16935d4a",
+    "sort-name": "Firenze"
+  },
+  "country": "IT",
+  "begin-area": null,
+  "type": "Person",
+  "name": "Sciahri",
+  "gender": "Male"
+}

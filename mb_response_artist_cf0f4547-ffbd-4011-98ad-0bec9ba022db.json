@@ -1,0 +1,399 @@
+{
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1999"
+  },
+  "gender-id": null,
+  "sort-name": "Kings of Convenience",
+  "disambiguation": "",
+  "ipis": [],
+  "relations": [
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000094861",
+        "id": "5e7e31b9-86e7-4dd5-aaf5-3698535421d1"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2020-11-19",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/cf0f4547-ffbd-4011-98ad-0bec9ba022db",
+        "id": "7a20af1c-ee46-48b8-bd51-29f1dbc2ef94"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.discogs.com/artist/12634",
+        "id": "f8993f10-77ea-4b82-b739-724a77cec1c4"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "http://www.kingsofconvenience.org/",
+        "id": "e1cd4a74-d257-4760-80f3-3870eb2d78fd"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "f7046520-5c15-4e0a-8aa0-4e7bbec9a154",
+        "resource": "https://open.spotify.com/artist/41AbNVba2ccpmcc9QtOJE7"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1336",
+        "id": "7fed60e5-dc6c-441d-a80e-495dc5a96309"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/Kings+of+Convenience",
+        "id": "ba874272-e827-4557-94bb-782921e1c5c6"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "ac0d6ec3-f74c-4abe-b8e3-1699b4e9d8ea",
+        "resource": "http://muzikum.eu/en/122-5471/kings-of-convenience/lyrics.html"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "532d7350-54ba-4320-9292-50f319c9fe75",
+        "resource": "https://myspace.com/kingsofconvenience"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "http://www.kingsofconvenience.eu/",
+        "id": "10afcc93-c24d-4f5e-be74-00bde19ed495"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f3779a0d-94c2-4fc0-b50e-1eba999358f3",
+        "resource": "http://musicmoz.org/Bands_and_Artists/K/Kings_of_Convenience/"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/kings_of_convenience",
+        "id": "c0fb24c0-72c1-47a3-af32-14c4fba1cd58"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/29547",
+        "id": "ca1a04c1-f251-48f1-9424-42fabc8fd48f"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "id": "196bb99d-de95-46d6-adc8-1c9933c40b35",
+        "resource": "https://twitter.com/Kings_of_C"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "92c9bf50-1b94-4f76-8f55-7c75b8c2d2a1",
+        "resource": "https://www.facebook.com/kingsofconvenience"
+      },
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "fb2127f7-f00f-4e56-be9c-1f758bcb4733",
+        "resource": "https://www.instagram.com/kingsofconvenience/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/14791619",
+        "id": "78eab7fe-be4a-4c13-8679-1b9f9a12b75f"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/11083",
+        "id": "b6eedfee-82fc-4859-8e1f-d517b9833267"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "02b55603-c667-4c3e-b542-fc05e886c26a",
+        "resource": "https://www.wikidata.org/wiki/Q849299"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "url": {
+        "id": "1a09049a-9601-4f04-b44a-ba6416443eb7",
+        "resource": "https://www.youtube.com/user/KingsOfConvenienVEVO"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    }
+  ],
+  "isnis": [
+    "000000009081223X"
+  ],
+  "id": "cf0f4547-ffbd-4011-98ad-0bec9ba022db",
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "Bergen",
+    "id": "34268a86-54ec-487d-afa3-1afe3266a382",
+    "type-id": null,
+    "name": "Bergen",
+    "type": null,
+    "disambiguation": ""
+  },
+  "country": "NO",
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Bergen",
+    "type-id": null,
+    "id": "34268a86-54ec-487d-afa3-1afe3266a382",
+    "sort-name": "Bergen"
+  },
+  "type": "Group",
+  "name": "Kings of Convenience",
+  "gender": null
+}

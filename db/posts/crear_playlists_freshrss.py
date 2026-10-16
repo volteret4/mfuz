@@ -23,12 +23,24 @@ import subprocess
 import sys
 import argparse
 import traceback
-import glob
+import json
+from concurrent.futures import ThreadPoolExecutor
 
 # Configuración de logging
 logging.basicConfig(level=logging.INFO, 
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+REQUEST_TIMEOUT = 30
+# Peticiones simultáneas a los blogs y procesos yt-dlp en paralelo
+FETCH_WORKERS = 8
+TITLE_WORKERS = 6
+# Fichero (en el directorio de salida) con los posts ya procesados
+PROCESSED_FILE = '.posts_procesados.json'
+
+# Sesión compartida para las páginas de los blogs (keep-alive)
+web_session = requests.Session()
+web_session.headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) FreshRSS-Script/1.0'
 
 def clean_youtube_url(url):
     """Limpia y normaliza URLs de YouTube"""
@@ -62,9 +74,11 @@ def extract_bandcamp_id(url):
 def extract_music_urls(url):
     """
     Extrae las URLs de música (Bandcamp, SoundCloud, YouTube) del contenido HTML de la URL dada.
+    Devuelve None si la página no se pudo descargar (para reintentarlo en la próxima ejecución).
     """
     try:
-        response = requests.get(url)
+        response = web_session.get(url, timeout=REQUEST_TIMEOUT)
+        response.raise_for_status()
         content = response.text
         music_urls = set()
         
@@ -100,11 +114,51 @@ def extract_music_urls(url):
                                      'bandcamp.com' in extracted_url or 'soundcloud.com' in extracted_url):
                     music_urls.add(extracted_url)
         
-        logger.info(f"Extraídas {len(music_urls)} URLs de música de {url}")
+        logger.debug(f"Extraídas {len(music_urls)} URLs de música de {url}")
         return list(music_urls)
     except Exception as e:
         logger.error(f"Error al extraer URLs de {url}: {e}")
+        return None
+
+
+def fetch_title(url):
+    """Obtiene el título de un vídeo/canción con yt-dlp, o None si falla"""
+    try:
+        result = subprocess.run(
+            ['yt-dlp', '--get-title', '--no-warnings', '--no-playlist', url],
+            capture_output=True,
+            text=True,
+            timeout=30  # Timeout para evitar cuelgues
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip().splitlines()[0]
+        logger.debug(f"yt-dlp no devolvió título para {url}: {result.stderr.strip()}")
+    except subprocess.TimeoutExpired:
+        logger.debug(f"Timeout al extraer título de {url}")
+    except Exception as e:
+        logger.debug(f"Error extrayendo título de {url}: {str(e)}")
+    return None
+
+
+def fetch_titles(urls):
+    """Obtiene los títulos de varias URLs en paralelo, manteniendo el orden"""
+    with ThreadPoolExecutor(max_workers=TITLE_WORKERS) as executor:
+        titles = list(executor.map(fetch_title, urls))
+    return [title or f"Sin título ({i+1})" for i, title in enumerate(titles)]
+
+
+def read_playlist(playlist_path: Path):
+    """Lee una playlist .m3u y su .txt de títulos; devuelve [(url, título)]"""
+    if not playlist_path.exists():
         return []
+    with open(playlist_path, 'r', encoding='utf-8') as f:
+        urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+    titles = []
+    txt_path = playlist_path.with_suffix('.txt')
+    if txt_path.exists():
+        with open(txt_path, 'r', encoding='utf-8', errors='ignore') as f:
+            titles = [line.rstrip('\n') for line in f]
+    return [(url, titles[i] if i < len(titles) else f"Sin título ({i+1})") for i, url in enumerate(urls)]
 
 class FreshRSSReader:
     def __init__(self, base_url: str, username: str, api_password: str):
@@ -113,6 +167,9 @@ class FreshRSSReader:
         self.api_password = api_password
         self.api_endpoint = f"{self.base_url}/api/greader.php"
         self.auth_token = None
+        # Sesión reutilizable (keep-alive, evita un handshake TLS por petición)
+        self.session = requests.Session()
+        self.session.headers['User-Agent'] = 'FreshRSS-Script/1.0'
         
     def login(self) -> bool:
         """Inicia sesión en la API de FreshRSS"""
@@ -123,12 +180,13 @@ class FreshRSSReader:
         }
         
         try:
-            response = requests.get(endpoint, params=params)
+            response = self.session.get(endpoint, params=params, timeout=REQUEST_TIMEOUT)
             response.raise_for_status()
             
             for line in response.text.splitlines():
                 if line.startswith('Auth='):
                     self.auth_token = line.replace('Auth=', '').strip()
+                    self.session.headers['Authorization'] = f'GoogleLogin auth={self.auth_token}'
                     logger.info(f"Token obtenido correctamente")
                     return True
             
@@ -137,101 +195,108 @@ class FreshRSSReader:
         except Exception as e:
             logger.error(f"Error en login: {str(e)}")
             return False
-            
-    def get_headers(self) -> Dict[str, str]:
-        """Obtiene los headers para las peticiones a la API"""
-        if not self.auth_token:
-            raise ValueError("No se ha realizado el login")
-            
-        return {
-            'Authorization': f'GoogleLogin auth={self.auth_token}',
-            'User-Agent': 'FreshRSS-Script/1.0'
-        }
 
-    def get_feed_subscriptions(self) -> List[Dict]:
-        """Obtiene los feeds subscritos"""
-        endpoint = f"{self.api_endpoint}/reader/api/0/subscription/list"
-        params = {'output': 'json'}
-        
-        try:
-            response = requests.get(endpoint, headers=self.get_headers(), params=params)
-            response.raise_for_status()
-            return response.json().get('subscriptions', [])
-        except Exception as e:
-            logger.error(f"Error obteniendo subscripciones: {str(e)}")
-            return []
-
-    def get_blog_feeds(self) -> List[Dict]:
-        """Obtiene los feeds de la categoría 'Blogs'"""
-        subscriptions = self.get_feed_subscriptions()
-        blog_feeds = []
-        
-        for feed in subscriptions:
-            for category in feed.get('categories', []):
-                if category['label'] == 'Blogs':
-                    blog_feeds.append(feed)
-                    break
-                    
-        return blog_feeds
-
-    def get_unread_posts(self, feed_id: str) -> List[Dict[str, str]]:
-        """Obtiene los posts no leídos de un feed"""
-        endpoint = f"{self.api_endpoint}/reader/api/0/stream/contents/{quote(feed_id)}"
+    def get_unread_posts(self, stream_id: str = 'user/-/label/Blogs') -> List[Dict[str, str]]:
+        """Obtiene los posts no leídos de un stream (por defecto toda la categoría 'Blogs')
+        con una sola consulta paginada, en lugar de una petición por feed"""
+        endpoint = f"{self.api_endpoint}/reader/api/0/stream/contents/{quote(stream_id)}"
         params = {
             'output': 'json',
             'n': 1000,
             'xt': 'user/-/state/com.google/read'
         }
         
+        posts = []
         try:
-            response = requests.get(endpoint, headers=self.get_headers(), params=params)
-            response.raise_for_status()
-            data = response.json()
-            
-            posts = []
-            for item in data.get('items', []):
-                url = None
-                if 'canonical' in item and item['canonical']:
-                    url = item['canonical'][0]['href']
-                elif 'alternate' in item and item['alternate']:
-                    url = item['alternate'][0]['href']
+            while True:
+                response = self.session.get(endpoint, params=params, timeout=REQUEST_TIMEOUT)
+                response.raise_for_status()
+                data = response.json()
                 
-                if url:
-                    published_date = datetime.fromtimestamp(item.get('published', 0))
-                    posts.append({
-                        'url': url,
-                        'date': published_date,
-                        'title': item.get('title', 'Sin título'),
-                        'month_key': published_date.strftime('%Y-%m'),
-                        'feed_title': item.get('origin', {}).get('title', 'Unknown Feed')
-                    })
+                for item in data.get('items', []):
+                    url = None
+                    if 'canonical' in item and item['canonical']:
+                        url = item['canonical'][0]['href']
+                    elif 'alternate' in item and item['alternate']:
+                        url = item['alternate'][0]['href']
+                    
+                    if url:
+                        published_date = datetime.fromtimestamp(item.get('published', 0))
+                        posts.append({
+                            'url': url,
+                            'date': published_date,
+                            'title': item.get('title', 'Sin título'),
+                            'month_key': published_date.strftime('%Y-%m'),
+                            'feed_title': item.get('origin', {}).get('title', 'Unknown Feed')
+                        })
+                
+                # Paginar solo si el servidor indica que hay más resultados
+                continuation = data.get('continuation')
+                if not continuation:
+                    break
+                params['c'] = continuation
                     
             return posts
         except Exception as e:
-            logger.error(f"Error obteniendo posts de {feed_id}: {str(e)}")
-            return []
+            logger.error(f"Error obteniendo posts de {stream_id}: {str(e)}")
+            raise
 
 class PlaylistManagerRSS:
     def __init__(self, output_dir: str):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.processed_path = self.output_dir / PROCESSED_FILE
+        self.processed_posts = self._load_processed()
+        
+    def _load_processed(self) -> set:
+        """Carga las URLs de posts ya procesados en ejecuciones anteriores"""
+        try:
+            with open(self.processed_path, 'r', encoding='utf-8') as f:
+                return set(json.load(f))
+        except FileNotFoundError:
+            return set()
+        except Exception as e:
+            logger.error(f"Error cargando {self.processed_path}: {e}")
+            return set()
+    
+    def _save_processed(self):
+        """Guarda las URLs de posts procesados"""
+        tmp_path = self.processed_path.with_suffix('.tmp')
+        with open(tmp_path, 'w', encoding='utf-8') as f:
+            json.dump(sorted(self.processed_posts), f, indent=0)
+        tmp_path.replace(self.processed_path)
+    
+    def filter_new_posts(self, posts: List[Dict[str, str]]) -> List[Dict[str, str]]:
+        """Descarta los posts cuyas páginas ya se analizaron en ejecuciones anteriores"""
+        return [post for post in posts if post['url'] not in self.processed_posts]
         
     def create_m3u_playlist(self, urls: List[str], feed_dir: Path, filename: str):
-        """Crea un archivo .m3u con las URLs proporcionadas"""
+        """Crea (o amplía) un archivo .m3u con las URLs proporcionadas y su .txt de títulos"""
         # Asegurarse de que existe el directorio del feed
         feed_dir.mkdir(parents=True, exist_ok=True)
         
         playlist_path = feed_dir / f"{filename}.m3u"
         
+        # Conservar las entradas existentes y sus títulos ya extraídos
+        entries = read_playlist(playlist_path)
+        known = {url for url, _ in entries}
+        new_urls = [url for url in urls if url not in known]
+        if not new_urls:
+            logger.debug(f"Sin URLs nuevas para {playlist_path}")
+            return None
+        
+        logger.info(f"Extrayendo {len(new_urls)} títulos para: {playlist_path}")
+        entries += zip(new_urls, fetch_titles(new_urls))
+        
         with open(playlist_path, 'w', encoding='utf-8') as f:
             f.write("#EXTM3U\n")
-            for url in urls:
+            for url, _ in entries:
                 f.write(f"{url}\n")
+        with open(playlist_path.with_suffix('.txt'), 'w', encoding='utf-8') as f:
+            for _, title in entries:
+                f.write(f"{title}\n")
                 
         logger.info(f"Playlist creada: {playlist_path}")
-        
-        # Extract titles asynchronously
-        self.extract_titles_for_playlist(playlist_path)
         return playlist_path
     
     def extract_titles_for_playlist(self, playlist_path: Path):
@@ -243,37 +308,7 @@ class PlaylistManagerRSS:
             with open(playlist_path, 'r', encoding='utf-8') as f:
                 urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
-            titles = []
-            for i, url in enumerate(urls):
-                logger.info(f"Extrayendo título de: {url}")
-                try:
-                    # Usar yt-dlp para obtener el título con mejor manejo de errores
-                    result = subprocess.run(
-                        ['yt-dlp', '--get-title', url],
-                        capture_output=True,
-                        text=True,
-                        timeout=30  # Timeout para evitar cuelgues
-                    )
-                    
-                    # Verificar el código de salida manualmente
-                    if result.returncode == 0:
-                        title = result.stdout.strip()
-                        if title:
-                            titles.append(title)
-                            logger.info(f"Título encontrado: {title}")
-                        else:
-                            titles.append(f"Sin título ({i+1})")
-                            logger.warning(f"No se pudo extraer el título para {url} (stdout vacío)")
-                    else:
-                        titles.append(f"Sin título ({i+1})")
-                        logger.error(f"Error de yt-dlp para {url}: {result.stderr.strip()}")
-                        
-                except subprocess.TimeoutExpired:
-                    titles.append(f"Sin título ({i+1})")
-                    logger.error(f"Timeout al extraer título de {url}")
-                except Exception as e:
-                    titles.append(f"Sin título ({i+1})")
-                    logger.error(f"Error extrayendo título de {url}: {str(e)}")
+            titles = fetch_titles(urls)
 
             # Escribir títulos en un archivo .txt
             txt_path = playlist_path.with_suffix('.txt')
@@ -281,63 +316,44 @@ class PlaylistManagerRSS:
                 for title in titles:
                     f.write(f"{title}\n")
 
-            # Asegurarse de que haya un título para cada URL
-            if len(titles) < len(urls):
-                logger.warning(f"Faltan títulos: {len(titles)} títulos para {len(urls)} URLs")
-                with open(txt_path, 'a', encoding='utf-8') as f:
-                    for i in range(len(titles), len(urls)):
-                        f.write(f"Sin título ({i+1})\n")
-
             logger.info(f"Archivo de títulos creado: {txt_path}")
             
         except Exception as e:
             logger.error(f"Error durante la extracción de títulos: {str(e)}")
-            # Crear un archivo de títulos con valores por defecto en caso de error total
-            try:
-                txt_path = playlist_path.with_suffix('.txt')
-                with open(playlist_path, 'r', encoding='utf-8') as f:
-                    urls_count = sum(1 for line in f if line.strip() and not line.startswith('#'))
-                
-                with open(txt_path, 'w', encoding='utf-8') as f:
-                    for i in range(urls_count):
-                        f.write(f"Sin título ({i+1})\n")
-                
-                logger.info(f"Archivo de títulos de respaldo creado: {txt_path}")
-            except Exception as backup_error:
-                logger.error(f"Error al crear archivo de títulos de respaldo: {str(backup_error)}")
         
     def process_posts(self, posts: List[Dict[str, str]]):
         """Procesa los posts y crea playlists organizadas por feed y mes"""
-        # Organizar posts por feed y luego por mes
-        posts_by_feed_and_month = defaultdict(lambda: defaultdict(list))
+        # Descargar las páginas de los posts en paralelo
+        with ThreadPoolExecutor(max_workers=FETCH_WORKERS) as executor:
+            results = list(executor.map(extract_music_urls, [post['url'] for post in posts]))
         
-        for post in posts:
-            feed_title = post['feed_title']
-            month_key = post['month_key']
-            posts_by_feed_and_month[feed_title][month_key].append(post)
+        # Organizar URLs de música por feed y luego por mes
+        urls_by_feed_and_month = defaultdict(lambda: defaultdict(list))
+        
+        for post, music_urls in zip(posts, results):
+            if music_urls is None:
+                continue  # Error de descarga: se reintentará en la próxima ejecución
+            month_urls = urls_by_feed_and_month[post['feed_title']][post['month_key']]
+            month_urls.extend(url for url in music_urls if url not in month_urls)
         
         created_playlists = []
         
         # Procesar cada feed
-        for feed_title, months in posts_by_feed_and_month.items():
+        for feed_title, months in urls_by_feed_and_month.items():
             # Crear un nombre seguro para el directorio del feed
             safe_feed_name = re.sub(r'[^\w\-_]', '_', feed_title)
             feed_dir = self.output_dir / safe_feed_name
             
             # Procesar cada mes del feed
-            for month_key, month_posts in months.items():
-                all_music_urls = set()
-                for post in month_posts:
-                    music_urls = extract_music_urls(post['url'])
-                    all_music_urls.update(music_urls)
-                
-                if all_music_urls:
-                    playlist_path = self.create_m3u_playlist(
-                        list(all_music_urls),
-                        feed_dir,
-                        month_key
-                    )
-                    created_playlists.append(str(playlist_path))
+            for month_key, month_urls in months.items():
+                if month_urls:
+                    playlist_path = self.create_m3u_playlist(month_urls, feed_dir, month_key)
+                    if playlist_path:
+                        created_playlists.append(str(playlist_path))
+        
+        # Marcar como procesados los posts descargados correctamente
+        self.processed_posts.update(post['url'] for post, music_urls in zip(posts, results) if music_urls is not None)
+        self._save_processed()
         
         return created_playlists
 
@@ -398,26 +414,22 @@ def main():
             print("Error en la autenticación")
             return 1
             
-        # Obtener feeds
-        print("Obteniendo feeds de blogs...")
-        blog_feeds = reader.get_blog_feeds()
-        print(f"Encontrados {len(blog_feeds)} feeds en la categoría Blogs")
+        # Obtener posts no leídos de la categoría Blogs (una sola consulta paginada)
+        print("Obteniendo posts de blogs...")
+        all_posts = reader.get_unread_posts()
+        new_posts = playlist_manager_rss.filter_new_posts(all_posts)
+        print(f"Encontrados {len(all_posts)} posts no leídos, {len(new_posts)} sin procesar")
         
-        # Procesar posts
-        all_posts = []
-        for feed in blog_feeds:
-            print(f"Procesando feed: {feed['title']}")
-            try:
-                posts = reader.get_unread_posts(feed['id'])
-                all_posts.extend(posts)
-                print(f"  Obtenidos {len(posts)} posts nuevos")
-            except Exception as e:
-                print(f"Error procesando feed {feed['title']}: {str(e)}")
-                continue
+        posts_by_feed = defaultdict(int)
+        for post in new_posts:
+            posts_by_feed[post['feed_title']] += 1
+        for feed_title, count in posts_by_feed.items():
+            print(f"Procesando feed: {feed_title}")
+            print(f"  Obtenidos {count} posts nuevos")
                 
         # Crear playlists
         print("Creando playlists...")
-        created_playlists = playlist_manager_rss.process_posts(all_posts)
+        created_playlists = playlist_manager_rss.process_posts(new_posts)
         
         # Procesar playlists locales si se proporcionó un directorio
         if args.playlists_locales:
@@ -426,7 +438,7 @@ def main():
             print(f"Playlists locales procesadas: {len(processed_local)}")
         
         # Mostrar resultados
-        print(f"Proceso completado. Posts totales procesados: {len(all_posts)}")
+        print(f"Proceso completado. Posts totales procesados: {len(new_posts)}")
         print(f"Playlists creadas: {len(created_playlists)}")
         for playlist in created_playlists:
             print(f"  - {playlist}")

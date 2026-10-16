@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import os
 import re
 from base_module import BaseModule, PROJECT_ROOT
@@ -112,6 +116,7 @@ class ArtistMentions:
     def execute_query(self, sql, params=None, fetch=False, many=False):
         """Ejecuta una consulta SQL"""
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         try:

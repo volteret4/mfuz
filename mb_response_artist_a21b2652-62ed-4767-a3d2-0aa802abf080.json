@@ -1,0 +1,476 @@
+{
+  "life-span": {
+    "begin": "1988-06-23",
+    "ended": false,
+    "end": null
+  },
+  "type": "Person",
+  "area": {
+    "id": "106e0bec-b638-3b37-b731-f53d507dc00e",
+    "sort-name": "Australia",
+    "iso-3166-1-codes": [
+      "AU"
+    ],
+    "type-id": null,
+    "name": "Australia",
+    "disambiguation": "",
+    "type": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "000000043480148X"
+  ],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Faker, Chet",
+  "name": "Chet Faker",
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "name": "Melbourne",
+    "type": null,
+    "id": "b4e9352c-8edf-4911-8fa3-e852afa30501",
+    "sort-name": "Melbourne"
+  },
+  "ipis": [
+    "00730593937"
+  ],
+  "end-area": null,
+  "id": "a21b2652-62ed-4767-a3d2-0aa802abf080",
+  "relations": [
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002925310",
+        "id": "05380c3a-9cac-4e74-b99b-51570d22e65f"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "08de65a5-932e-4bdd-a7aa-63f6714c2ff8",
+        "resource": "https://www.discogs.com/artist/2716985"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6UcJxoeHWWWyT5HZP064om",
+        "id": "3b45b461-e10c-47f9-8850-8450b30c5814"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "1c252577-7eb5-4a63-8327-abd86445f43d",
+        "resource": "https://www.deezer.com/artist/1635714"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Chet+Faker",
+        "id": "9ef79d40-615f-4008-9159-907363bba341"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "c02e7e8f-2955-49f8-afc9-61bbb34c191b",
+        "resource": "http://muzikum.eu/en/122-15282/chet-faker/lyrics.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "f40b93aa-328c-4edb-b89f-7c66b209ee3c",
+        "resource": "https://genius.com/artists/Chet-faker"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "begin": null
+    },
+    {
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "99890193-3903-4c22-a90a-641f6936a0c3",
+        "resource": "http://www.chetfaker.com/"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n2016069641",
+        "id": "cdc30a2e-2174-4f75-af31-5766d3c442e6"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1136966439",
+        "id": "dadde598-e7d5-49c0-a2e0-61300cde93c5"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://imvdb.com/n/chet-faker",
+        "id": "98ba56cb-bd2a-4b5f-b972-a5168e524992"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "5280eae3-d279-44d8-94bf-c33c8154f807",
+        "resource": "https://ra.co/dj/chetfaker"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n2016069641/",
+        "id": "cb2815bc-3b7a-42ab-8a0c-0c09697b09d8"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://twitter.com/chetfaker",
+        "id": "7d4bfa66-edba-4563-8df0-cbab9c3e98aa"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/chetfaker",
+        "id": "13f7af60-abc7-4aff-b77e-dcd7f325791e"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/chetfaker/",
+        "id": "7735ccda-c0cf-495a-8f46-679d9bc8bbc9"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "songkick",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/8890244",
+        "id": "7b50ed9a-a163-4970-93b6-e65c4c7f3cf7"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type": "soundcloud",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "bf8831a0-fdcc-402a-b288-12b4af60b868",
+        "resource": "https://soundcloud.com/chetfaker"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/439036555",
+        "id": "daa8bd0f-22b9-4986-8ffd-bf2efca0e989"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/439036555",
+        "id": "53f651f5-b283-4c54-af8c-b538a35663ef"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "6d0efdad-2acc-47a1-a2c7-3db2140064d4",
+        "resource": "https://tidal.com/artist/22259363"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/308797620",
+        "id": "3fdae752-2296-41a0-873b-de260dc9f10b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q5094088",
+        "id": "0526b1e2-e190-4275-9340-ea26445e01ba"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCLcSym6gRtQqhxLZHvAwuDg",
+        "id": "3f3cfefb-476f-47f6-bfcb-712f60219ef6"
+      },
+      "target-type": "url"
+    }
+  ],
+  "disambiguation": "",
+  "country": "AU",
+  "gender": "Male"
+}

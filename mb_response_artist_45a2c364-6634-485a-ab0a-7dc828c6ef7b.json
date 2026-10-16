@@ -1,0 +1,184 @@
+{
+  "area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom",
+    "type-id": null,
+    "name": "United Kingdom"
+  },
+  "name": "The Flying Lizards",
+  "end-area": null,
+  "disambiguation": "",
+  "id": "45a2c364-6634-485a-ab0a-7dc828c6ef7b",
+  "sort-name": "Flying Lizards, The",
+  "gender-id": null,
+  "life-span": {
+    "begin": "1976",
+    "end": "1995",
+    "ended": true
+  },
+  "gender": null,
+  "type": "Group",
+  "ipis": [],
+  "begin-area": {
+    "name": "London",
+    "type-id": null,
+    "disambiguation": "Greater London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "sort-name": "London",
+    "type": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "44415049-f1f0-4be0-8602-66f773fe96ef",
+        "resource": "https://www.discogs.com/artist/24165"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f60b7626-32eb-4c96-84eb-c4cf32cb0d4e",
+        "resource": "https://open.spotify.com/artist/2L9iHIK8h5HvZe6VXb0aOI"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/12262",
+        "id": "6a793dcd-af7b-4529-a22d-738b921771ca"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "2e6c0b2c-7456-4a82-acf2-e80fcf88c6e8",
+        "resource": "https://rateyourmusic.com/artist/the_flying_lizards"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.songkick.com/artists/56888",
+        "id": "dc07e375-3a18-4751-9279-f014f4ff8e4b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "8fe14388-e80d-47de-b177-e8792ebc5829",
+        "resource": "https://tidal.com/artist/3526469"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/138516609",
+        "id": "cdd3a707-dc4e-4c66-b8a3-6f686d3ac5c8"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1e392a63-bf2a-451d-bb7f-2861879f38c9",
+        "resource": "https://www.wikidata.org/wiki/Q1527282"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": ""
+    }
+  ],
+  "isnis": [],
+  "country": "GB"
+}

@@ -1,0 +1,169 @@
+{
+  "end-area": null,
+  "name": "Ryan Elliott",
+  "area": {
+    "type": null,
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "sort-name": "Germany",
+    "type-id": null,
+    "name": "Germany"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Elliott, Ryan",
+  "id": "4772e7d7-fcb1-4039-aa34-636df34c7374",
+  "disambiguation": "Detroit-raised, Berlin-based DJ, producer and remixer",
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  },
+  "gender": "Male",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "name": "United States",
+    "type-id": null
+  },
+  "ipis": [],
+  "isnis": [],
+  "country": "DE",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/331753",
+        "id": "746c4d30-53a5-49e8-b3fc-277bb11333f1"
+      },
+      "attributes": [],
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/3SZBUeVJfGLUpAPNEQbBKk",
+        "id": "784f9678-f209-4b7d-9f1a-4b91df2af0b6"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://ra.co/dj/ryanelliott",
+        "id": "900f6b6c-9257-4862-abc8-5fb2e765f6cd"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "2237b2a0-2519-4b23-aaaa-71ac662c014b",
+        "resource": "https://www.facebook.com/RyanElliottOfficial"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/ryan.r.elliott/",
+        "id": "7d103090-ac2b-412e-a65c-3be5f8aac4a4"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/1719550",
+        "id": "dded68af-76f9-4576-af9d-a100b55fae3e"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "9c906ceb-f573-41d1-aed1-73e98e4a85af",
+        "resource": "https://soundcloud.com/ryan-elliott"
+      },
+      "attributes": []
+    }
+  ]
+}

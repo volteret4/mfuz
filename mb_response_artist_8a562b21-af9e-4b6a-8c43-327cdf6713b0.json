@@ -1,0 +1,411 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "name": "United Kingdom",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "sort-name": "United Kingdom",
+    "type-id": null
+  },
+  "end-area": null,
+  "gender": "Male",
+  "begin-area": null,
+  "country": "GB",
+  "name": "Ross From Friends",
+  "type": "Person",
+  "sort-name": "Ross From Friends",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1993-06"
+  },
+  "isnis": [],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0003613139",
+        "id": "80d25831-b05e-43ac-8348-c53df93f8a09"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://rossfromfriends.bandcamp.com/",
+        "id": "383ee74e-501b-4c22-a269-331a1f2accd8"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": "2020-11-19",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "id": "9c3a239e-a3cf-4d32-9102-1c279834adba",
+        "resource": "https://www.bbc.co.uk/music/artists/8a562b21-af9e-4b6a-8c43-327cdf6713b0"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "url": {
+        "resource": "https://www.discogs.com/artist/4251618",
+        "id": "82934d17-6752-45ea-9f96-ba7fa32f6b9b"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1Ma3pJzPIrAyYPNRkp3SUF",
+        "id": "7ff1d883-261c-413f-be6e-b8cf47d2d451"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/8902830",
+        "id": "cd93e5cf-5567-431b-9319-a251487c0ebf"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "type": "official homepage",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.rossfromfriends.net/",
+        "id": "bf7ca808-bfb2-4df8-947d-a8d96af351a0"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://ra.co/dj/rossfromfriends-uk",
+        "id": "883be4b4-7a9e-4ea1-91de-1d5ee666b5bf"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "f730e761-1d48-480f-ad99-fe0478017f9a",
+        "resource": "https://rateyourmusic.com/artist/ross-from-friends"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "5ca4167e-0dc7-41ba-aeb7-07706e11502a",
+        "resource": "https://www.whosampled.com/Ross-From-Friends/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "3115dbc7-0743-4fcd-962e-a8cc442dcd4c",
+        "resource": "https://itunes.apple.com/gb/artist/id1039464285"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.beatport.com/artist/ross-from-friends/507298",
+        "id": "3130381b-e51c-42ba-859e-d43d07726039"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/russfrumfrunds",
+        "id": "cb25b3d4-3b26-4bb6-9ccc-2ab1f7315667"
+      }
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/RossFromFriendsMusic",
+        "id": "db54fff9-daa4-438e-88a9-d7f65e7f0a30"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.instagram.com/rossfromfrens/",
+        "id": "e48514f7-bf14-4c40-b9f6-008d40fb5d50"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/8855434",
+        "id": "708a90bc-0365-4496-8ed2-4171412470a0"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "75065586-92ef-45de-8b2c-36d7f48dadbe",
+        "resource": "https://soundcloud.com/rossfromfriends"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/1039464285",
+        "id": "ee4dbbf1-c23f-41d6-8a4b-9d6932f4ff03"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://tidal.com/artist/8082586",
+        "id": "6645a24a-1893-4ad3-8580-49aa8a3ea572"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q60763800",
+        "id": "c22d0647-d6e2-456d-97ce-78771506f423"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCQF0bMNU7G-F07QuLJEJ0GQ",
+        "id": "feda431c-61a2-42ad-b725-1e46b6f5875a"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    }
+  ],
+  "id": "8a562b21-af9e-4b6a-8c43-327cdf6713b0",
+  "disambiguation": "lo\u2010fi house",
+  "ipis": []
+}

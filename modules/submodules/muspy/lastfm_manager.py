@@ -758,7 +758,7 @@ class LastFMManager:
         # Connect signals
         self.auth_thread.started.connect(self.auth_worker.authenticate)
         self.auth_worker.finished.connect(self.auth_thread.quit)
-        self.auth_worker.finished.connect(self.musicbrainz_manager.handle_background_auth_result)
+        self.auth_worker.finished.connect(self._handle_background_auth_result)
         
         # Clean up connections
         self.auth_thread.finished.connect(self.auth_worker.deleteLater)
@@ -769,6 +769,13 @@ class LastFMManager:
 
 
 
+
+    def _handle_background_auth_result(self, success):
+        """Registra el resultado de la autenticación en segundo plano con LastFM"""
+        if success:
+            self.logger.info("Background LastFM authentication successful")
+        else:
+            self.logger.warning("Background LastFM authentication failed")
 
     def manage_lastfm_auth(self):
         """Manage LastFM authentication settings"""

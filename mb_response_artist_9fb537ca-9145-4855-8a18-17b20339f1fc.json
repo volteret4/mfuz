@@ -1,0 +1,436 @@
+{
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "life-span": {
+    "ended": false,
+    "begin": "1986-09-22",
+    "end": null
+  },
+  "disambiguation": "",
+  "begin-area": {
+    "disambiguation": "",
+    "sort-name": "Barranquilla",
+    "id": "c75b683f-3238-4fc8-b5ca-1883ab911561",
+    "name": "Barranquilla",
+    "type": null,
+    "type-id": null
+  },
+  "end-area": null,
+  "sort-name": "Pimienta, Lido",
+  "isnis": [],
+  "name": "Lido Pimienta",
+  "id": "9fb537ca-9145-4855-8a18-17b20339f1fc",
+  "ipis": [],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002828531",
+        "id": "cf5c4ec7-91e7-451a-96f2-2a3663b35795"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "b7b1898d-9ba5-4021-9eed-f62013d923da",
+        "resource": "https://lidopimienta.bandcamp.com/"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/1589532",
+        "id": "f7ba84ae-2ad9-4ad9-936a-0e9f3790f1f2"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/1IdkKQ9CM1i0wygfxYV4Z3",
+        "id": "cbbe2bb2-0e96-4f5a-9241-7bfd11e83299"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "b7836eeb-1686-4402-a37a-0b80ec94fc6d",
+        "resource": "https://www.deezer.com/artist/793439"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "63a3ffd4-77ec-4f97-abc8-637b3e693b61",
+        "resource": "https://www.last.fm/music/Lido+Pimienta"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "myspace",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://myspace.com/lidopimienta",
+        "id": "197cf624-ae38-4486-8ce3-7bce7bab1136"
+      }
+    },
+    {
+      "url": {
+        "id": "a9bf07b7-8a81-4d4c-8b3e-ef87b018695c",
+        "resource": "https://lidopimienta.com/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "end": "2025-12-17",
+      "ended": true,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "506379e4-f02b-4ad1-874d-00427ab962ed",
+        "resource": "https://jaxsta.com/profile/f6dcc43e-203b-46e6-8e18-50f43ab571d9"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/lido-pimienta",
+        "id": "b030ab0b-2889-45da-87f8-ac05e325d79b"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://music.apple.com/ca/artist/389475023",
+        "id": "8bded6a9-8e22-4992-9bed-32e0b05be711"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "purchase for download"
+    },
+    {
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id389475023",
+        "id": "637d46f4-9825-410b-8579-4022da16725e"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": true,
+      "end": null
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "b1a9563f-7bb4-4322-bb8e-00f1227b9f44",
+        "resource": "https://twitter.com/LidoPimienta"
+      }
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "8d7b355d-ea22-4d71-adad-530298affc99",
+        "resource": "https://www.facebook.com/Lido.Pimienta.Musica"
+      }
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.instagram.com/lidopimienta/",
+        "id": "498ddcb0-6588-4bbf-863d-9a9ae4aeaaba"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "f98a80d2-b792-4985-8e73-49e1ee2838c4",
+        "resource": "https://www.songkick.com/artists/4396843"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "songkick",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "soundcloud",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "a85a498d-a70b-44e9-9a2f-03d182e2da5d",
+        "resource": "https://soundcloud.com/lido-pimienta"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://music.apple.com/ca/artist/389475023",
+        "id": "8bded6a9-8e22-4992-9bed-32e0b05be711"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://tidal.com/artist/4756576",
+        "id": "d59e7e62-c25f-4b21-90be-a362b3f316bf"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/4211161514247370750001",
+        "id": "26ffbfa6-34b5-4057-b70f-860af4da51d6"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "VIAF",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "db75006d-19ec-40b8-b74a-b716567ab6b0",
+        "resource": "https://www.wikidata.org/wiki/Q33026662"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCPfz16ao-2v68HDN3weu9Jg",
+        "id": "c58b03a2-e3c0-40c1-8734-1fa22748b774"
+      },
+      "direction": "forward",
+      "begin": null
+    }
+  ],
+  "gender": "Female",
+  "area": {
+    "type": null,
+    "name": "Canada",
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Canada",
+    "iso-3166-1-codes": [
+      "CA"
+    ]
+  },
+  "country": "CA",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person"
+}

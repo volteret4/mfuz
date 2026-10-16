@@ -1,0 +1,554 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type": null,
+    "name": "United Kingdom",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom",
+    "type-id": null
+  },
+  "end-area": {
+    "name": "San Antonio",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "San Antonio",
+    "id": "a6f7157a-bfab-49e8-a22b-240ade4552ca"
+  },
+  "gender": null,
+  "begin-area": {
+    "iso-3166-2-codes": [
+      "GB-CRF"
+    ],
+    "type-id": null,
+    "sort-name": "Cardiff",
+    "name": "Cardiff",
+    "type": null,
+    "disambiguation": "",
+    "id": "f0b226db-8e22-40e6-9a53-d839cfec6228"
+  },
+  "country": "GB",
+  "type": "Group",
+  "name": "Budgie",
+  "sort-name": "Budgie",
+  "gender-id": null,
+  "life-span": {
+    "end": "2010",
+    "ended": true,
+    "begin": "1967"
+  },
+  "isnis": [],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000623985",
+        "id": "8770b82f-7bf0-4f3a-adc2-7f7429add26f"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": true,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": "2020-11-19",
+      "attributes": [],
+      "url": {
+        "id": "45da3dc4-38e6-40d7-b49f-6549b9f39b32",
+        "resource": "https://www.bbc.co.uk/music/artists/517566c5-3d43-4a81-8f78-9a78f3209e09"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "4ffd1692-d739-4a12-b77a-87c73b389094",
+        "resource": "https://www.discogs.com/artist/267214"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "fanpage",
+      "attribute-values": {},
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "resource": "http://budgiefanclub.tripod.com/",
+        "id": "e085b5a6-27d8-4c40-bf69-625d431eeb17"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "44bb1d71-593f-4021-825a-ff701d023473",
+        "resource": "https://open.spotify.com/artist/42RbQv212uOjyfIXECLKfR"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/10188",
+        "id": "87b15cab-c1e2-400b-ad31-96a3de14ba23"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "5f538839-c9e5-46ca-962a-5ef9b38108d2",
+        "resource": "https://www.last.fm/music/Budgie"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "00e23e7d-0244-4fe8-a73a-1050c48bbae1",
+        "resource": "https://genius.com/artists/Budgie"
+      },
+      "type": "lyrics",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.budgie.uk.com/",
+        "id": "4fca9fe8-2a8a-427a-b474-221a38bbb09b"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "ba5cd376-7992-4413-81d4-d9ebeb824daf",
+        "resource": "http://id.loc.gov/authorities/names/n91075438"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a858907a-98b6-45d7-8b7d-87c032285da4",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13902175s"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "0500dafc-f571-4f49-b8a0-1dd54ff45620",
+        "resource": "https://d-nb.info/gnd/10275112-2"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://musicmoz.org/Bands_and_Artists/B/Budgie/",
+        "id": "a55125fb-8acb-4134-a894-a6b70d507379"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "id": "d48b16a9-1869-4e42-a4ca-e63cea9ec9b5",
+        "resource": "https://rateyourmusic.com/artist/budgie"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Budgie/1039",
+        "id": "1f282139-e288-4d96-bfe4-2403580b7d8a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "ee73df3b-bb89-49c4-aed8-7c7894010ef9",
+        "resource": "https://www.spirit-of-metal.com/en/band/Budgie"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "667d33dc-9c40-4dc2-b770-1c7212817219",
+        "resource": "https://www.whosampled.com/Budgie-(Band)/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "2a094089-d1c0-491f-a9ef-160e9e042979",
+        "resource": "https://www.worldcat.org/identities/lccn-n91075438"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "http://www.musik-sammler.de/artist/3049",
+        "id": "7fc7fb84-ac9a-4441-9706-7833f571d14c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Arho3tg5r46v4ix4k2hoqtsvq3i",
+        "id": "46c07e2e-f8b1-4ae0-b944-b1477adb8471"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2020-10-12"
+    },
+    {
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id1216756389",
+        "id": "68855acb-98ef-4946-ac8b-37778573279a"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "7165f036-5f00-4b7c-9f9a-ff8c76e2930b",
+        "resource": "https://secondhandsongs.com/artist/53607"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "76d513a3-fc77-48d2-b4a2-81c7b1436a9f",
+        "resource": "https://www.setlist.fm/setlists/budgie-2bd6ac66.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null,
+      "target-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "cd8425ad-3328-49ec-9611-d15d761847f7",
+        "resource": "https://www.songkick.com/artists/333003"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "url": {
+        "id": "ccaf8800-9b10-44d1-b2fe-9eef6b1cc2fc",
+        "resource": "https://soundcloud.com/budgie-official"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "1393981d-06ad-4ef7-9ff7-3268b48ae348",
+        "resource": "https://tidal.com/artist/4224886"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "e87c7c58-b20a-4828-94d2-553c68fd85b8",
+        "resource": "http://viaf.org/viaf/130960776"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "url": {
+        "id": "490c9484-e3f3-4e85-87fa-b32fb71890eb",
+        "resource": "https://www.wikidata.org/wiki/Q508678"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "id": "517566c5-3d43-4a81-8f78-9a78f3209e09",
+  "disambiguation": "hard rock band from Cardiff, South Glamorgan, Wales",
+  "ipis": []
+}

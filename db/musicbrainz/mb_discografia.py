@@ -6,6 +6,10 @@ Compatible con db_creator.py
 """
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import time
 import json
@@ -23,6 +27,7 @@ RATE_LIMIT_DELAY = 1.0  # Segundos entre requests (MusicBrainz recomienda mínim
 def setup_database(db_path):
     """Crea la tabla musicbrainz_discography si no existe"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     cursor.execute("""
@@ -422,6 +427,7 @@ def main(config=None):
     
     # Conectar a la base de datos
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     
     try:
         # Limpiar duplicados existentes si se solicita

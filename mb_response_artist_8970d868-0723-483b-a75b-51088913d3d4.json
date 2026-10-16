@@ -1,0 +1,1074 @@
+{
+  "sort-name": "Moby",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "disambiguation": "electronic musician Richard Melville Hall",
+  "id": "8970d868-0723-483b-a75b-51088913d3d4",
+  "end-area": null,
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null
+  },
+  "name": "Moby",
+  "life-span": {
+    "end": null,
+    "begin": "1965-09-11",
+    "ended": false
+  },
+  "type": "Person",
+  "gender": "Male",
+  "country": "US",
+  "isnis": [
+    "0000000041815776",
+    "000000005705334X",
+    "0000000078243206"
+  ],
+  "relations": [
+    {
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000477116",
+        "id": "8eddfaf5-a37e-4fa8-b811-1652ec13ab19"
+      },
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://moby.bandcamp.com/",
+        "id": "7c50fe02-eade-425f-8fce-44e1f46180ad"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "31d0d4cc-162c-470b-b125-52d43515c44a",
+        "resource": "https://www.bandsintown.com/a/807"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/8970d868-0723-483b-a75b-51088913d3d4",
+        "id": "6e1f7b6c-5d3a-405f-a26c-c10da441b1e5"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "begin": null,
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/1031",
+        "id": "60d94c75-d6a2-4166-8f63-49467148483e"
+      }
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.migu.cn/v3/music/artist/31471",
+        "id": "7d46eb44-1c14-4f90-b067-98c157a51f87"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "cdf05b32-919d-4ace-a565-536287bb9fd7",
+        "resource": "https://open.spotify.com/artist/33lBD3LO109JfRCYElo5CZ"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/3OsRAKCvk37zwYcnzRf5XF",
+        "id": "d6a84891-d101-4851-9f86-9899228bc0e5"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "0b3ba346-471e-40b0-b914-8058af9d6104",
+        "resource": "https://www.deezer.com/artist/493"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "image",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "eeee12ad-9c87-4f98-8a27-c25f0a3ec968",
+        "resource": "https://commons.wikimedia.org/wiki/File:Moby_1.jpg"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "e7b126e0-cc16-4913-bb25-ccc9c93e4813",
+        "resource": "https://www.imdb.com/name/nm0005240/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "8b797038-50d8-439f-b262-8fbf6ce5759d",
+        "resource": "https://www.last.fm/music/Moby"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "f5d34a72-f137-4aa7-97c1-34b87988ba99",
+        "resource": "http://muzikum.eu/en/122-4226/moby/lyrics.html"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "8468f7fa-97b7-4587-b740-a5dabed43722",
+        "resource": "https://genius.com/artists/Moby"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Moby",
+        "id": "acd1f09e-10cd-44ef-9bd2-b606e33c395c"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://myspace.com/moby",
+        "id": "703ed136-842e-4474-9489-5b3c5157e467"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "myspace",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "091b6212-f7ec-48db-b4c7-83c8ae24e8bd",
+        "resource": "https://www.moby.com/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no96031399",
+        "id": "36293329-df7c-487c-9bd7-890de96ecded"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/M/Moby/",
+        "id": "6d346d14-b588-4019-bb77-b827e7f09da8"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13974306f",
+        "id": "469119d4-03f7-4071-8b49-caf8fb45e8a7"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "07fa7abc-04c1-4a81-8f94-44a091670511",
+        "resource": "https://d-nb.info/gnd/12456481X"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "1561640d-f73c-4381-a815-efe42d4b528c",
+        "resource": "https://imvdb.com/n/moby"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6w09snb",
+        "id": "c69716da-45da-4a2d-9774-78e3105117a6"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1587261",
+        "id": "9e6de0ec-0b02-419d-a403-8f1badc0bfd6"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://openlibrary.org/works/OL2660017A",
+        "id": "e9e30112-a274-457b-bf9d-732a243a3e15"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "e8f34544-ea47-4a68-8c8d-5f356d6b002b",
+        "resource": "http://soundtrackcollector.com/composer/7221/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://ra.co/dj/moby",
+        "id": "a044c237-94e0-455f-b90c-e2a9a22ad969"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "619dd499-0631-4758-9d79-e7e4162578d6",
+        "resource": "https://rateyourmusic.com/artist/moby"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.45cat.com/artist/moby",
+        "id": "12002d6f-7cd6-4f5e-a071-c95ecef2bea4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "3300141d-fda7-4473-90a1-267aec1617f4",
+        "resource": "https://www.muziekweb.nl/Link/M00000044091/POPULAR/"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "c7048793-9a83-4120-8be8-ff0487d8e15c",
+        "resource": "http://www.worldcat.org/identities/lccn-no96031399/"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "ended": true,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": "2020-10-12",
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Awicfxyznfpripufx34fiqlr6qa",
+        "id": "1a48da42-7016-4b83-b964-35b158b1164e"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "7858f79b-fd90-4734-9862-8c368bebf731",
+        "resource": "https://itunes.apple.com/us/artist/id789023"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://mora.jp/artist/199066/all",
+        "id": "f474fb62-1c84-478d-b8db-21d023c704da"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "f313e7f6-6b92-488a-90ab-6f01638ce2da",
+        "resource": "https://music.apple.com/us/artist/789023"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.beatport.com/artist/moby/22378",
+        "id": "aae73429-44e3-4edf-a209-e01ec5f1754b"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "575fed59-e8d3-4b14-bf7c-dc475f099b2e",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/moby/38372"
+      }
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700184081",
+        "id": "05f8b62b-42e7-458a-96e0-904c731970f0"
+      },
+      "attributes": [],
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.yesasia.com/0-aid1313751-0-bpt.47-en/list.html",
+        "id": "2714bfa3-b0d8-4cbb-98a0-9bb8165d2f0f"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/2970",
+        "id": "5be2eb6b-27d3-47e2-aaf1-fc6fa38623d2"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "4cac5a3f-39bd-4c8b-9a7e-0ac55a13f962",
+        "resource": "https://twitter.com/thelittleidiot"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": "2008-04-22",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2019-04",
+      "url": {
+        "id": "21d7b8f7-57e1-4ca4-8962-0d10ad4a473f",
+        "resource": "https://plus.google.com/+moby"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://mobylosangelesarchitecture.com/",
+        "id": "59b65409-b747-4925-996f-ecf9016b1370"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://tiktok.com/@moby",
+        "id": "3ceb0298-b5d4-40ff-b0d4-4631c63daa2a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "78953b58-5348-4741-a85b-579b2b064e14",
+        "resource": "https://www.facebook.com/mobymusic"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "cc638255-341f-4582-98ff-d1feb3d818d4",
+        "resource": "https://www.instagram.com/moby/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/109292",
+        "id": "947424b5-918f-4873-ab6f-082b7804bd0c"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "05b6af70-7530-4d59-bf67-dc0cd1da18c0",
+        "resource": "https://soundcloud.com/moby"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2022-06-08",
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://us.napster.com/artist/moby",
+        "id": "37b13aed-650c-4f56-84f1-1c1a67425d99"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f313e7f6-6b92-488a-90ab-6f01638ce2da",
+        "resource": "https://music.apple.com/us/artist/789023"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "0bbe005a-3f22-43db-8c88-0d00c1f89c42",
+        "resource": "https://tidal.com/artist/9045"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/moby/38372",
+        "id": "575fed59-e8d3-4b14-bf7c-dc475f099b2e"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "f59bb409-87cb-421f-891b-224746c0fc9c",
+        "resource": "http://viaf.org/viaf/6985133"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "7fd29d64-ab0c-4f47-be2d-9c94628d9511",
+        "resource": "https://vimeo.com/moby"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "video channel",
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "6cb9e6ac-e1a9-4aa6-a32b-188446bf5edc",
+        "resource": "https://www.wikidata.org/wiki/Q14045"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "ended": false,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "attributes": [],
+      "url": {
+        "id": "3803fee1-0cf4-4a42-b904-18a3c0e81972",
+        "resource": "https://www.youtube.com/channel/UCkkiTV-Lnt-m3DQp-ZeFdkA"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube music",
+      "attributes": [],
+      "url": {
+        "id": "3ede98a0-ac02-4302-b1e5-bc74097952f2",
+        "resource": "https://music.youtube.com/channel/UC35GdXKfexT9GAZv3SJq0uA"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "7e037c94-d999-4611-a8fd-56e8770f2e3c",
+    "sort-name": "Harlem",
+    "type-id": null,
+    "name": "Harlem"
+  },
+  "ipis": [
+    "00232910003",
+    "00232910101",
+    "00232910692"
+  ]
+}

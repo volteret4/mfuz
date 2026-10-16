@@ -1,0 +1,690 @@
+{
+  "life-span": {
+    "begin": "1973",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "sort-name": "Journey",
+  "disambiguation": "American rock band",
+  "id": "abd506e1-6f2b-4d6f-b937-92c267f6f88b",
+  "end-area": null,
+  "name": "Journey",
+  "area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "type-id": null,
+    "name": "United States"
+  },
+  "isnis": [
+    "0000000115511100"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000291043",
+        "id": "251d710a-3d9d-4d74-aa80-2bbc16ecbfa4"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "23f23340-a818-4c51-b22d-22f9501721d8",
+        "resource": "https://www.bandsintown.com/a/228"
+      },
+      "attributes": [],
+      "type": "bandsintown",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/abd506e1-6f2b-4d6f-b937-92c267f6f88b",
+        "id": "1f5866be-4ec8-4294-9d72-8319dca35a78"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "a078f857-0950-4a03-b80f-54be637a7e30",
+        "resource": "https://www.discogs.com/artist/128395"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0rvjqX7ttXeg3mTy8Xscbt",
+        "id": "c9a76d55-20b3-4e69-a55a-bacfcc85f788"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/3381",
+        "id": "201cd103-1200-4350-9fd5-ae7f99a4332c"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "ea0a4d28-04b0-4b07-8c1e-b4b8cd510601",
+        "resource": "http://www.pandora.com/journey"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Journey_publicity_photo_2013.jpg",
+        "id": "a780d169-9e77-47dc-9619-78d7533474da"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "1f5add4a-f767-4e9b-a021-889ab0571319",
+        "resource": "https://www.imdb.com/name/nm1880493/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/Journey",
+        "id": "3ca31b0a-fc88-4d3b-8503-abdd67db4882"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "9e91feb0-1ec9-4148-a406-158ebd9bc53d",
+        "resource": "http://muzikum.eu/en/122-6234/journey/lyrics.html"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "type": "myspace",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://myspace.com/journey",
+        "id": "d98d5e94-c76a-4793-a6cd-e2a039362e24"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "eb28e496-9ed8-49a9-a8fd-3f66b2127578",
+        "resource": "http://www.journeymusic.com/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "44199d96-1628-49d7-985e-399c17902129",
+        "resource": "http://id.loc.gov/authorities/names/n84123273"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139043091",
+        "id": "499ed3e4-92c3-4741-88bf-9927e9691a3e"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1217812-3",
+        "id": "6507ecc3-1130-4586-86c2-d7a81228e9c6"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://imvdb.com/n/journey",
+        "id": "0254299a-28b3-4e84-bd42-b1cc9019d6a7"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "cd9d546e-2194-4d7b-b65a-a87bcc3955ff",
+        "resource": "https://nla.gov.au/nla.party-913429"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "535def8b-103a-419b-9d31-5c92ad1fd461",
+        "resource": "https://rateyourmusic.com/artist/journey"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "3d8a0fe9-6b9b-4dbd-b78a-ccafe261a712",
+        "resource": "https://www.livefans.jp/artists/19292"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "a77b5e90-10b2-42dc-b720-c8b426c6dbeb",
+        "resource": "https://www.metalmusicarchives.com/artist/journey"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/journey/",
+        "id": "60c84849-7199-4ff2-ba9f-6de23b201771"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "65fd5245-84d4-4b66-96f1-0a102b77c24e",
+        "resource": "http://www.worldcat.org/wcidentities/lccn-n84-123273"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Ah5jzvq7k2w2ftcxhtb4liarobq",
+        "id": "8c60f996-7cbc-4e79-8f66-8f01c89da1c6"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": "2020-10-12",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "url": {
+        "id": "bd5322d4-5571-4629-93a8-eaf5bf563013",
+        "resource": "https://music.apple.com/us/artist/486597"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "setlistfm",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/journey-3d6b507.html",
+        "id": "24db05d9-4c2c-4f39-b3c9-0dc730b542d8"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "e0714d4f-411c-42dc-90ba-525e3e39b824",
+        "resource": "https://twitter.com/journeyofficial"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.facebook.com/journey",
+        "id": "516c5b0b-507d-4c4e-96d4-79ee77b1d1cd"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "21b3fbdf-cf6a-4daa-be70-25c5ea8e2a75",
+        "resource": "https://www.instagram.com/journeyofficial/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/129375",
+        "id": "3085d9fd-b541-4737-a20a-218a6ee718a4"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "a2748e1f-59e0-4643-9653-5e04b04d1560",
+        "resource": "https://music.apple.com/de/artist/486597"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "bd5322d4-5571-4629-93a8-eaf5bf563013",
+        "resource": "https://music.apple.com/us/artist/486597"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/81",
+        "id": "5a8a0c8b-919a-4a51-857e-e98edc85e599"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://viaf.org/viaf/146631603",
+        "id": "de6d36c8-4c08-4564-a0e6-6722170bfd64"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "13eaeba1-24fb-4761-8407-4015f21f2e4e",
+        "resource": "https://www.wikidata.org/wiki/Q464749"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "578c0fd9-e3f3-4796-9c79-cb2191601d7d",
+        "resource": "https://www.youtube.com/channel/UCCcn1f6IDJyXVNYoiYIGZFw"
+      },
+      "attributes": [],
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false
+    }
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "type": null,
+    "sort-name": "San Francisco",
+    "disambiguation": "",
+    "id": "83f22bb6-4631-443c-bace-9fae8540362a",
+    "type-id": null,
+    "name": "San Francisco"
+  },
+  "ipis": [],
+  "type": "Group",
+  "gender": null
+}

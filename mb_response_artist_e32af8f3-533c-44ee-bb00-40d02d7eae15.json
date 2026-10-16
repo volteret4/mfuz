@@ -1,0 +1,250 @@
+{
+  "area": {
+    "type-id": null,
+    "sort-name": "Australia",
+    "id": "106e0bec-b638-3b37-b731-f53d507dc00e",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "AU"
+    ],
+    "name": "Australia",
+    "type": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Melbourne",
+    "id": "b4e9352c-8edf-4911-8fa3-e852afa30501",
+    "sort-name": "Melbourne",
+    "type-id": null
+  },
+  "gender": "Female",
+  "begin-area": {
+    "name": "Melbourne",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Melbourne",
+    "id": "b4e9352c-8edf-4911-8fa3-e852afa30501"
+  },
+  "country": "AU",
+  "type": "Person",
+  "name": "Ren\u00e9e Geyer",
+  "sort-name": "Geyer, Ren\u00e9e",
+  "life-span": {
+    "begin": "1953-09-11",
+    "ended": true,
+    "end": "2023-01-17"
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "e32af8f3-533c-44ee-bb00-40d02d7eae15",
+  "isnis": [
+    "0000000063114268"
+  ],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "34973add-02d6-4150-be42-bab83849a372",
+        "resource": "https://www.discogs.com/artist/49819"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "myspace",
+      "attribute-values": {},
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/reneegeyer",
+        "id": "89576c3e-f87e-4806-aeeb-40a511c78a1c"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "url": {
+        "id": "cb624c92-4e4e-4f27-b6b2-0c242c1f456a",
+        "resource": "http://www.reneegeyer.com.au/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "712fc984-512f-49b9-807f-2fcf39fed227",
+        "resource": "http://id.loc.gov/authorities/names/n95016802"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "2d7c363c-18dd-4c25-a6c1-11568858ef4f",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb141811827"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n95016802",
+        "id": "320238b7-9959-4073-8145-3298733e865c"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/ReneeGeyerOfficial",
+        "id": "4039362e-37ea-4868-bbc1-dae6b62f559b"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "6cc09193-a9e5-47a1-923f-002041d5b65c",
+        "resource": "https://www.songkick.com/artists/266342"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/3667986",
+        "id": "38587ce2-22a4-49f6-9e83-328816c08ee1"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/14982990",
+        "id": "6a590b3d-4bf4-421b-a0aa-38f6b3012db7"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q7313840",
+        "id": "a573f242-b702-4af0-bb0c-837f2b815abc"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "disambiguation": "",
+  "ipis": [
+    "00129955242",
+    "00129955340"
+  ]
+}

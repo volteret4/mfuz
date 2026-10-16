@@ -1,0 +1,411 @@
+{
+  "sort-name": "Sylvester",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1947-09-06",
+    "ended": true,
+    "end": "1988-12-16"
+  },
+  "id": "4d3b710b-a5f0-4772-97db-f09e47fbc6d8",
+  "relations": [
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "e4607ddf-ed17-477c-bec3-1ddd75ca396a",
+        "resource": "https://www.allmusic.com/artist/mn0000756291"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0001031355",
+        "id": "2f71783d-b078-43ee-bbbc-cacdc9ca74e2"
+      },
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "98ae56bd-95ef-4389-a026-8e40f6b85d84",
+        "resource": "https://www.discogs.com/artist/16794"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "fa4f8faa-32a3-4372-8e9e-110a3df72403",
+        "resource": "https://www.discogs.com/artist/276995"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "Sylvester James",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "60d88517-ce43-4ca5-aca1-caa45eea705b",
+        "resource": "https://open.spotify.com/artist/5TGTpu4g8siFOIctZuQO7y"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "6980b518-d56d-43d1-811e-74e876334458",
+        "resource": "https://www.deezer.com/artist/7179"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0843209/",
+        "id": "724d038b-b6db-406a-ba3e-81f8b0d3f8d5"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.last.fm/music/Sylvester",
+        "id": "970eacc4-aaed-4806-88c2-b5172c577a86"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n94008656",
+        "id": "e5d08cb8-3251-47fb-8a0e-98aef3655a9b"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139330176",
+        "id": "9591ef34-ea7a-4505-bdc2-1d6a7ab21ad1"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "cb75ad77-98b8-4cc4-9481-3c21dd580548",
+        "resource": "https://d-nb.info/gnd/130205907"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "30688c00-720a-47e0-8d76-f94ee2202cc4",
+        "resource": "http://snaccooperative.org/ark:/99166/w63x9sv6"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/sylvester",
+        "id": "06aaf633-f914-4d72-bac2-db3fb20abb8d"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "40654870-16cc-4884-816a-c0bde68bec55",
+        "resource": "https://www.worldcat.org/identities/lccn-n94008656"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/sylvester-bd609ea.html",
+        "id": "97daaeb3-1b6f-4b45-aad5-a82398da427b"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "id": "014d4ede-c3bc-4c24-90f6-97078cb36be7",
+        "resource": "https://music.apple.com/us/artist/266221530"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "7c326c3b-1d55-4b13-ac64-2fa5f36c9d80",
+        "resource": "https://tidal.com/artist/47598348"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "d0dab8d4-0312-43ef-a0d4-c8aa01047fd4",
+        "resource": "https://tidal.com/artist/64382"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "580ec038-5615-40fc-9b10-bc62390b8f06",
+        "resource": "http://viaf.org/viaf/70030518"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "cc9ba088-4155-4181-9dd7-71fc1735d02e",
+        "resource": "https://www.wikidata.org/wiki/Q500683"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "isnis": [
+    "0000000059327113"
+  ],
+  "ipis": [
+    "00037865452"
+  ],
+  "disambiguation": "US disco and soul singer-songwriter",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "type-id": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": {
+    "name": "San Francisco",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "San Francisco",
+    "id": "83f22bb6-4631-443c-bace-9fae8540362a"
+  },
+  "gender": "Male",
+  "name": "Sylvester",
+  "type": "Person",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Watts, Los Angeles",
+    "id": "819f3250-ecae-48b3-a589-227715b0f6e6",
+    "type": null,
+    "name": "Watts, Los Angeles",
+    "disambiguation": ""
+  },
+  "country": "US"
+}

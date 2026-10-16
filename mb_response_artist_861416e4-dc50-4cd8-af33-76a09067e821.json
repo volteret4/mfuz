@@ -1,0 +1,292 @@
+{
+  "ipis": [],
+  "begin-area": {
+    "type": null,
+    "sort-name": "Tempe",
+    "disambiguation": "",
+    "id": "c1140389-8ef9-41c5-aa1c-f8d8d991bce1",
+    "type-id": null,
+    "name": "Tempe"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "af850807-39e5-4a34-ae03-fabcbd823fe8",
+        "resource": "https://lycia.bandcamp.com/"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/97667",
+        "id": "e5904537-c255-4e46-899f-3424c61f5287"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "d17837fc-e1ca-4597-87fa-2015ae50558b",
+        "resource": "https://open.spotify.com/artist/6D2FZCqwDafnI49jrFYROE"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/62931",
+        "id": "58e9be34-d59b-4b74-892b-7587970356d7"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "bcc3b13e-5a1a-4c8f-9497-7867c5858fcf",
+        "resource": "https://myspace.com/lycia"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "http://www.lyciummusic.com/",
+        "id": "573c587a-56fd-453d-b279-350762cc1714"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/lycia-5bd60f28.html",
+        "id": "a9f5dc04-27e0-4dc7-a06a-2b5a9b27339e"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://twitter.com/LyciaBand",
+        "id": "aaf63a4d-4509-427f-bff6-9675541b9573"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/OFFICIAL.LYCIA",
+        "id": "d735ad60-1569-4b74-baeb-ea3ae6df26aa"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "43a66c66-dce6-440c-839a-8229dd91a39b",
+        "resource": "https://www.reverbnation.com/lyciaband"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://soundcloud.com/lyciummusic-lycia",
+        "id": "190f3131-0103-4916-b8ae-1412c33d83d7"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/4370573",
+        "id": "2afef31f-ebec-4e02-8330-7d147df1cdbe"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1778165",
+        "id": "fc105b98-f15e-48f5-82b6-9b4a2943ce72"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "0574efa7-33ec-47db-b81f-ed253136c268",
+        "resource": "https://www.youtube.com/channel/UCKM4WWjSi8ztla0lz1w64Fw"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube"
+    }
+  ],
+  "country": "US",
+  "isnis": [],
+  "gender": null,
+  "type": "Group",
+  "life-span": {
+    "ended": false,
+    "begin": "1988-05",
+    "end": null
+  },
+  "name": "Lycia",
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "type": null
+  },
+  "end-area": null,
+  "disambiguation": "US darkwave band",
+  "id": "861416e4-dc50-4cd8-af33-76a09067e821",
+  "gender-id": null,
+  "sort-name": "Lycia"
+}

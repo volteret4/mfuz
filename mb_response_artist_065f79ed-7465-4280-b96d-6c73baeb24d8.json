@@ -1,0 +1,77 @@
+{
+  "sort-name": "Tantra",
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "gender-id": null,
+  "isnis": [],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/92578",
+        "id": "4f6d9aac-b0f2-48e6-8511-091f600e7a0f"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "b718298e-4f8a-4c6d-a019-f848d363c8e0",
+        "resource": "https://rateyourmusic.com/artist/tantra_f2"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "url": {
+        "id": "4ae79fd7-0c05-4201-af6e-07b2ab1eb008",
+        "resource": "https://www.wikidata.org/wiki/Q118215255"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "id": "065f79ed-7465-4280-b96d-6c73baeb24d8",
+  "ipis": [],
+  "disambiguation": "italo-disco outfit, \"Hills of Katmandu\"",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": null,
+  "end-area": null,
+  "gender": null,
+  "name": "Tantra",
+  "type": "Group",
+  "begin-area": null,
+  "country": null
+}

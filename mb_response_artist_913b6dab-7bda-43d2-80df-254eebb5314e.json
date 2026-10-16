@@ -1,0 +1,250 @@
+{
+  "gender": "Male",
+  "relations": [
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "allmusic",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "8e05d7ed-7c6b-4618-bf44-1303cd355b55",
+        "resource": "https://www.allmusic.com/artist/mn0000351842"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "f8fde81a-e1e2-4b68-97e4-17f03923331e",
+        "resource": "https://www.discogs.com/artist/100553"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/Jimmy%20Castor",
+        "id": "8377aabe-b749-4d70-8cc6-08bd7959f183"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://www.jimmycastor.com/",
+        "id": "b238aa20-0196-46a1-ba44-8234eb60dd0c"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "41ec503e-01f5-4500-9040-e60ce726daa9",
+        "resource": "http://id.loc.gov/authorities/names/n91050821"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "d508f233-f88f-4b68-a6bc-90d690150302",
+        "resource": "https://d-nb.info/gnd/134344987"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a8af0b42-6e8f-4950-8705-11b2138be329",
+        "resource": "https://rateyourmusic.com/artist/jimmy_castor"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n91050821",
+        "id": "1c23d815-4e9b-4ebb-8a39-00a6c0f026c2"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "type": "secondhandsongs",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/9597",
+        "id": "0f153f2b-1e3d-42bb-a79d-e22b67e206c9"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "VIAF",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "bada7c08-ccee-4d8f-a774-82445a9f40ae",
+        "resource": "http://viaf.org/viaf/58255869"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q979084",
+        "id": "c14dcaad-84b4-4054-b746-5a02163b2880"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    }
+  ],
+  "area": {
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "sort-name": "United States"
+  },
+  "ipis": [
+    "00005545113",
+    "00193910848"
+  ],
+  "type": "Person",
+  "country": "US",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "sort-name": "Castor, Jimmy",
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Manhattan",
+    "id": "261962ea-d8c2-4eaf-a80c-f14376ffadb0",
+    "type": null,
+    "name": "Manhattan"
+  },
+  "disambiguation": "",
+  "end-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "name": "Henderson",
+    "type": null,
+    "sort-name": "Henderson",
+    "id": "3762526b-3ccd-410f-a5a8-bd58986a56b1"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1940-01-23",
+    "end": "2012-01-16",
+    "ended": true
+  },
+  "name": "Jimmy Castor",
+  "isnis": [
+    "000000037817429X"
+  ],
+  "id": "913b6dab-7bda-43d2-80df-254eebb5314e"
+}

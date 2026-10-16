@@ -1,0 +1,531 @@
+{
+  "ipis": [],
+  "disambiguation": "musician & composer",
+  "isnis": [
+    "0000000059415033"
+  ],
+  "relations": [
+    {
+      "url": {
+        "id": "ac98b6b6-92cb-4307-8a0b-3243951f2cac",
+        "resource": "https://www.allmusic.com/artist/mn0000066687"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://susumuhirasawa.bandcamp.com/",
+        "id": "38907d2d-948e-4fda-b2a2-967554ddd3ba"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/31e7b30b-f960-408f-908b-c8e277308eab",
+        "id": "edcd6f1c-cacd-4167-969f-96e3d7d382d6"
+      },
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": true,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": "2020-11-19",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/267011",
+        "id": "3488b751-bb25-4eb3-bb72-043d4fedd135"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "34ae77fe-defb-43ea-95d4-63c7540bac78",
+      "url": {
+        "id": "7a0135b3-6847-485c-b8f6-897ebde59421",
+        "resource": "http://noroom.susumuhirasawa.com/modules/opus/index.php/category/7/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "download for free",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "2999c76b-d229-471a-be60-2b6432806bf2",
+        "resource": "https://open.spotify.com/artist/6kaueP97pX7WZoOwF8XsI2"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.deezer.com/artist/266024",
+        "id": "e1c0c628-1dfe-423a-aec2-6548e855bf5a"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "image",
+      "attribute-values": {},
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "id": "0025c382-3d8f-4700-9fdf-b490ab343ec1",
+        "resource": "https://commons.wikimedia.org/wiki/File:22c61df86e6e4af889bad7655f3f3d5b-2904046990.png"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0386279/",
+        "id": "1a6b63a0-a50f-41e9-a538-a351bd97a496"
+      }
+    },
+    {
+      "url": {
+        "id": "4891c0da-11b2-4d7f-90f9-36ff7881b05f",
+        "resource": "https://www.last.fm/music/%E5%B9%B3%E6%B2%A2%E9%80%B2"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Susumu-hirasawa",
+        "id": "e81f2d83-76cf-4132-90dd-3856a48e425b"
+      },
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "ea37836f-2078-4e99-9150-ddd688bed360",
+        "resource": "https://susumuhirasawa.com/"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "3d0b1b93-820f-4cfa-958c-6f3b1d269281",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14645280t"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1099857392",
+        "id": "5f5d0735-4329-4018-9072-bc14e0340e7e"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "d16270db-1d98-436d-bd1f-cd3738526b83",
+        "resource": "https://rateyourmusic.com/artist/%E5%B9%B3%E6%B2%A2%E9%80%B2"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.animenewsnetwork.com/encyclopedia/people.php?id=1164",
+        "id": "eb3425f6-a7ad-4fb7-9afb-316ab2c3c03c"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "c95814f0-3116-4ec8-9af8-4409944f3740",
+        "resource": "https://itunes.apple.com/jp/artist/id76056888"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "04fa034e-d300-47df-923c-1f951a5d2c88",
+        "resource": "https://twitter.com/hirasawa"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://twitter.com/Hirasawa_Info",
+        "id": "6fab75b3-12b2-4093-bff5-7ba6f8b505a3"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "url": {
+        "id": "41b3d4a7-0af7-454b-8aec-949b653fec32",
+        "resource": "https://www.instagram.com/susumuhirasawa/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "46a7808f-0651-428f-9b3e-76952b41785b",
+        "resource": "https://www.songkick.com/artists/2724271"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "55d654d1-9797-452c-90cd-5d517dedcef1",
+        "resource": "https://music.amazon.com/artists/B009S8NXLI"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "8e11444b-6abf-45da-9457-35296d89771a",
+        "resource": "https://tidal.com/artist/4334246"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "url": {
+        "id": "aee69434-ad2e-4ed6-82a5-b731601c0f86",
+        "resource": "https://vgmdb.net/artist/3676"
+      },
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "begin": null,
+      "target-credit": "",
+      "type": "vgmdb",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/15030796",
+        "id": "677e5fc6-979b-41f2-9c26-74838c44a33e"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q930143",
+        "id": "a49b9614-8529-4c2a-9134-7867d954fbff"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata"
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCVMc49AXwvxmOCiaUH5djRA",
+        "id": "14850590-f467-4ba6-80eb-da946f3dcb35"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "id": "31e7b30b-f960-408f-908b-c8e277308eab",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1954-04-02"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Hirasawa, Susumu",
+  "type": "Person",
+  "name": "\u5e73\u6ca2\u9032",
+  "begin-area": {
+    "name": "Tokyo",
+    "type": null,
+    "disambiguation": "",
+    "id": "8dc97297-ac95-4d33-82bc-e07fab26fb5f",
+    "iso-3166-2-codes": [
+      "JP-13"
+    ],
+    "sort-name": "Tokyo",
+    "type-id": null
+  },
+  "country": "JP",
+  "gender": "Male",
+  "end-area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type": null,
+    "name": "Japan",
+    "iso-3166-1-codes": [
+      "JP"
+    ],
+    "disambiguation": "",
+    "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+    "type-id": null,
+    "sort-name": "Japan"
+  }
+}

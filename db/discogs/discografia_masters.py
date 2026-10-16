@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import os
 import requests
 import time
@@ -20,6 +24,7 @@ class DiscogsDiscographyModule:
         Crea la tabla discogs_discography en la base de datos si no existe.
         """
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -97,6 +102,7 @@ class DiscogsDiscographyModule:
             list: Lista de tuplas (artist_id, discogs_id)
         """
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         # Primero buscar en artists_networks
@@ -302,6 +308,7 @@ class DiscogsDiscographyModule:
         should_close_conn = False
         if conn is None:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             should_close_conn = True
         
@@ -423,6 +430,7 @@ class DiscogsDiscographyModule:
         
         # Procesar todos los artistas
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         total_processed = 0

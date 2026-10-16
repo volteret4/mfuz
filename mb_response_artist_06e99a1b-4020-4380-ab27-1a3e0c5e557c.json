@@ -1,0 +1,548 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "disambiguation": "",
+  "sort-name": "Jaar, Nicolas",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "disambiguation": "",
+    "type-id": null,
+    "type": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "id": "06e99a1b-4020-4380-ab27-1a3e0c5e557c",
+  "end-area": null,
+  "relations": [
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002355957",
+        "id": "1af96225-5427-4cb7-a251-ad58b8041905"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "allmusic"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "bandcamp",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://nicolasjaar.bandcamp.com/",
+        "id": "5fb1e907-5cf2-4eb5-be2c-8ce449bd52d3"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "169e4dc5-8a8f-4eda-b122-3c499019cd47",
+        "resource": "https://www.discogs.com/artist/1096231"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null
+    },
+    {
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/5a0etAzO5V26gvlbmHzT9W",
+        "id": "95fb65d8-db36-4c1c-8dc8-a507ce5bfcd3"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "71260230-8969-43e1-b673-b352f580c21e",
+        "resource": "https://www.deezer.com/artist/294359"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm4111273/",
+        "id": "1367deeb-2788-4e1e-88cf-6674cc412de4"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "4c4dc1ed-849c-4040-a7f0-34d7d9413a7b",
+        "resource": "https://www.last.fm/music/Nicolas+Jaar"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "7fbf35a8-2a9b-48d7-b63b-bda4d188979f",
+        "resource": "https://genius.com/artists/Nicolas-jaar"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "lyrics",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "myspace",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/nicolasjaar",
+        "id": "d1e3ab1f-b8e3-4acb-bfa5-cb971bcd2b06"
+      },
+      "attributes": []
+    },
+    {
+      "type": "official homepage",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "http://www.nicolasjaar.net/",
+        "id": "a7d6adf9-7fd3-4ee4-aefa-34aa18628712"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "e66e48f8-484a-4021-b7c9-fc4715a1cca7",
+        "resource": "http://id.loc.gov/authorities/names/n2015001138"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16716537k",
+        "id": "9eda3077-0629-42a3-ba7d-1b1a472134aa"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/1105591506",
+        "id": "70f5da4c-cde6-4e1d-8209-9c8c27b9b1e7"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://ra.co/dj/nicolasjaar",
+        "id": "a3488619-9666-476a-9bce-9d9589e7b8fe"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "14bc63b4-d3dc-4b6d-b370-34b65f8fe7ac",
+        "resource": "https://rateyourmusic.com/artist/nicolas-jaar"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000348683/",
+        "id": "25de5508-a143-41d6-af62-78f4147cee35"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n2015001138/",
+        "id": "f901d166-c4db-4157-b5ab-87ec2889a71b"
+      },
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id301995668",
+        "id": "f75b0b0a-9728-4226-ad87-45ef90a2bc90"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "type": "secondhandsongs",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "d59d579d-beaa-46e9-a204-b5b742b4f334",
+        "resource": "https://secondhandsongs.com/artist/136988"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://twitter.com/nicolas___jaar",
+        "id": "52cf7803-4510-4a90-ae7d-4f307ab497da"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.facebook.com/pages/Nicolas-Jaar/15727540611",
+        "id": "aa91216e-a1a2-4a27-9cb0-a0d9c1632328"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.instagram.com/nicolasjaar/",
+        "id": "6fa43285-a26e-472c-89f6-7c4cef7fdf8b"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "songkick",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/3432201",
+        "id": "1856dbaf-4ff4-47d4-9b69-1308e947034e"
+      },
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "soundcloud",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://soundcloud.com/nicolas-jaar",
+        "id": "b23db1bf-81e4-47f2-a83b-3d4aa4aa430b"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/301995668",
+        "id": "dff98d4c-d21a-4bd0-ab94-8068f3188d4e"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "055fb653-ecbc-4b2e-9ca5-1161e87f649f",
+        "resource": "https://tidal.com/artist/3832155"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "VIAF",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "20cc9351-005e-4edb-8189-4c492eb39958",
+        "resource": "http://viaf.org/viaf/313409823"
+      }
+    },
+    {
+      "type": "wikidata",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q261566",
+        "id": "f72de1d4-9b3f-4375-b8ff-6c8ade752e80"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    }
+  ],
+  "name": "Nicolas Jaar",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1990-01-10"
+  },
+  "country": "US",
+  "type": "Person",
+  "begin-area": {
+    "sort-name": "New York",
+    "disambiguation": "",
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "type": null,
+    "type-id": null,
+    "name": "New York"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [
+    "00637486413"
+  ],
+  "isnis": [
+    "0000000372523313"
+  ]
+}

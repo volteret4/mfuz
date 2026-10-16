@@ -1,0 +1,484 @@
+{
+  "end-area": {
+    "sort-name": "Reston",
+    "disambiguation": "",
+    "id": "3d282ab1-c807-4298-b48d-c64654649f53",
+    "type": null,
+    "name": "Reston",
+    "type-id": null
+  },
+  "name": "Tennessee Ernie Ford",
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null
+  },
+  "sort-name": "Ford, Tennessee Ernie",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "947163f5-f306-4d78-a316-8c3fb317ae50",
+  "disambiguation": "",
+  "life-span": {
+    "ended": true,
+    "end": "1991-10-17",
+    "begin": "1919-02-13"
+  },
+  "gender": "Male",
+  "type": "Person",
+  "begin-area": {
+    "type-id": null,
+    "name": "Bristol",
+    "type": null,
+    "disambiguation": "",
+    "id": "c2b14df2-6000-469b-b435-6cf0a453683e",
+    "sort-name": "Bristol"
+  },
+  "ipis": [
+    "00010513742",
+    "00159598412"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000020403",
+        "id": "89f59c67-0ac1-48c9-9db6-16274ff9e34a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "biography",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "0546e978-f0dd-49bd-a616-b8b826b05eaf",
+        "resource": "https://tims.blackcat.nl/messages/tennessee_ernie_ford.htm"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "discography page",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "f0b1bdc6-e605-4ea5-8dfd-d10253bec803",
+        "resource": "http://rcs-discography.com/rcs/artist.php?key=ford5000"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type": "discography page",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "546c1cf1-d26b-4736-b043-1b71fb21cbd3",
+        "resource": "http://www.rocky-52.net/chanteursf/ford_te.htm"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "4f10fa1d-34d0-47c8-bc0f-b5aa8f3d716c",
+        "resource": "https://www.discogs.com/artist/295179"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "59c7c99d-b413-4f62-801d-78a70e8cdd8a",
+        "resource": "https://open.spotify.com/artist/7u6FSuqT3SWE2kO8rNVjfp"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "68d856db-9cb6-49c9-858e-c447482a122d",
+        "resource": "https://www.deezer.com/artist/2590"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "d8615a02-c915-4716-abb0-6d85e50a8f23",
+        "resource": "https://commons.wikimedia.org/wiki/File:Tennessee_Ernie_Ford_1957.JPG"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0285892/",
+        "id": "5737b1f0-3df2-4965-a38e-f624b34c9b5e"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://www.ernieford.com/",
+        "id": "b03e41e4-8fa8-4f72-8d9f-794df29abf03"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "a921eec7-d52d-4da8-abdd-13d0277281e1",
+        "resource": "http://id.loc.gov/authorities/names/n91072916"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "ab6e8a90-cc40-4e19-a44f-077ece6ae04f",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13894033r"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9a48c72a-27c5-4ca0-bec7-46f5ffb15eab",
+        "resource": "https://d-nb.info/gnd/134619455"
+      },
+      "attributes": []
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "926daea6-541f-4190-999f-404566b7f69e",
+        "resource": "http://snaccooperative.org/ark:/99166/w6w38wcn"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "48af7b98-3026-4008-9423-42c6d631667c",
+        "resource": "https://nla.gov.au/nla.party-1489187"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "b07c48ba-8b4e-4b2a-b91c-529ac459ad36",
+        "resource": "https://rateyourmusic.com/artist/tennessee_ernie_ford"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n91072916",
+        "id": "afd1baa8-a662-4d21-9485-d95abbcc1e7c"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": "2019-05-19",
+      "begin": null,
+      "ended": true,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "cc84399d-1da4-4993-82ba-ae0504a40d3f",
+        "resource": "https://itunes.apple.com/us/artist/id4261147"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "08b06b0b-f640-41e1-92b5-609d313e5f89",
+        "resource": "https://music.apple.com/us/artist/4261147"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/25759",
+        "id": "5fb37d75-febb-49ba-a22f-8a6ead546266"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/4261147",
+        "id": "08b06b0b-f640-41e1-92b5-609d313e5f89"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "e670d162-c346-47bf-91ac-31efbf388bb2",
+        "resource": "https://tidal.com/artist/3504598"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "67b97e0e-5b24-4f23-bc44-4d2f9c279c4a",
+        "resource": "http://viaf.org/viaf/37101685"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {}
+    },
+    {
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q963827",
+        "id": "1b12da22-236c-4082-a48f-5e851d761214"
+      },
+      "attributes": []
+    }
+  ],
+  "country": "US",
+  "isnis": [
+    "0000000073595747"
+  ]
+}

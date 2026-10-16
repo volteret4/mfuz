@@ -1,0 +1,719 @@
+{
+  "name": "Kiasmos",
+  "type": "Group",
+  "begin-area": null,
+  "country": "IS",
+  "gender": null,
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "type-id": null,
+    "sort-name": "Iceland",
+    "id": "48802a32-075a-3805-a183-277c66047693",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "IS"
+    ],
+    "name": "Iceland",
+    "type": null
+  },
+  "ipis": [],
+  "disambiguation": "",
+  "isnis": [
+    "0000000470973385"
+  ],
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0001060355",
+        "id": "bcc7714e-d863-4e58-af16-fdc06fa8eed7"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "bandcamp",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "82a72e4b-80f5-4609-a644-41de0872ead3",
+        "resource": "https://kiasmos.bandcamp.com/"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "417588a0-f74b-4a43-91ae-a70ca8472455",
+        "resource": "https://www.bandsintown.com/a/667867"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandsintown"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/1459655",
+        "id": "6c02cb0c-5f60-4adc-945b-51752604a101"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "0a94e320-b11b-4f2b-bdb7-dfbc8498cb8b",
+        "resource": "https://open.spotify.com/artist/6X8lhZ7YaRUBlOsOYimlyD"
+      }
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "cc739cef-26eb-4c5a-bf60-a4b2b9aad950",
+        "resource": "https://www.deezer.com/artist/252873"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.last.fm/music/Kiasmos",
+        "id": "3747eaf0-8e38-4c5a-b2ff-2cf21eadb1af"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://myspace.com/kiasmos",
+        "id": "4598a2bd-a647-4621-a209-de1e88667405"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "begin": null,
+      "type": "myspace",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "http://www.kiasmos.is/",
+        "id": "a210bf93-4c54-44a9-af7c-07b0a15bc106"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2015036915",
+        "id": "bcd6c4b3-f8e9-4d43-86c5-484be7bcc389"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/1185806318",
+        "id": "ef21c793-8008-46ab-95a8-7722d8e93601"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "fb2336fe-0e54-41b8-9c81-06a755edf849",
+        "resource": "https://imvdb.com/n/kiasmos"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://ra.co/dj/kiasmos",
+        "id": "71205d6d-545e-4942-80b7-92b88e3f611c"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://bleep.com/music/artist/12112",
+        "id": "099d5ca3-4ebe-4f3e-a644-b1ddcb4c9085"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://boomkat.com/artists/kiasmos",
+        "id": "81b503b0-eec1-4072-911f-94182a45da66"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "id": "b8f40df4-7376-414a-91d2-2b1402a5e631",
+        "resource": "https://itunes.apple.com/is/artist/id306629563"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "b3a36bbf-6491-4414-8c8d-7ace0cc40a00",
+        "resource": "https://uk.7digital.com/artist/kiasmos"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "9ff71009-cc90-4f08-9294-23b539732b9f",
+        "resource": "https://www.beatport.com/artist/-/105131"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "fcad4b59-6d51-4dab-a2e4-27cdb0f70ea6",
+        "resource": "https://www.junodownload.com/artists/Kiasmos/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.traxsource.com/artist/184936",
+        "id": "ba67241d-7cdf-4f06-8897-cb1981bb0517"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://bleep.com/music/artist/12112",
+        "id": "099d5ca3-4ebe-4f3e-a644-b1ddcb4c9085"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "id": "81b503b0-eec1-4072-911f-94182a45da66",
+        "resource": "https://boomkat.com/artists/kiasmos"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for mail-order",
+      "attribute-values": {}
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "3e7b16cd-cd1c-41f4-aa9c-5d8de769b11f",
+        "resource": "https://twitter.com/kiasmos_"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.facebook.com/kiasmos",
+        "id": "c77b48c7-d03b-4b59-a5f0-ac7bebc73332"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "id": "45145704-f2c9-446e-ad84-e8f047dc4342",
+        "resource": "https://www.instagram.com/kiasmos_/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.tiktok.com/@kiasmos_",
+        "id": "7a760e5e-2352-424d-80ef-d9eb9229d5ac"
+      },
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "15016d2f-6adc-4890-91c1-5d40fdd8b0d4",
+        "resource": "https://www.songkick.com/artists/5267823"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://soundcloud.com/kiasmos",
+        "id": "a247f269-05fa-4d9b-8f5b-2396048e4e2a"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "df41e6b5-b580-4dd7-ad84-22a34b0f2263",
+        "resource": "https://music.amazon.com/artists/B001UQM3GW"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "64a59783-1fda-4889-a8fc-7c660d501676",
+        "resource": "https://music.apple.com/gb/artist/306629563"
+      }
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/306629563",
+        "id": "1572fb30-6d2f-40ff-a686-d7e6f483e66e"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "resource": "https://tidal.com/artist/4582713",
+        "id": "f68b3a2e-9fe6-4ef1-be6f-a11de025bc55"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "aba5725d-4b56-4dd2-872b-35cbc2c353b6",
+        "resource": "https://www.qobuz.com/us-en/interpreter/kiasmos/776114"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/315187053",
+        "id": "7cf30248-53fd-4888-81e4-0bdf8b0074fb"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "VIAF"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q21583944",
+        "id": "1d987f90-3441-46d1-ba32-cba391c22a9e"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC_GtU7M9x3aL2zKbSzmxmIQ",
+        "id": "4aac556e-afc7-4dde-a494-9def37ab61e0"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {},
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "eb551c84-c4f3-4ec6-9d9e-d54c0203df95",
+        "resource": "https://www.youtube.com/channel/UCXWADwj6t4af0WJkP8LAIZw"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "id": "ac47d02e-e9fb-4056-afc2-4d619c223e89",
+        "resource": "https://music.youtube.com/channel/UCXWADwj6t4af0WJkP8LAIZw"
+      },
+      "type": "youtube music",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    }
+  ],
+  "id": "3252542b-98a7-48ba-9861-7a612b16c227",
+  "gender-id": null,
+  "life-span": {
+    "begin": "2009",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Kiasmos"
+}

@@ -1,0 +1,41 @@
+{
+  "area": null,
+  "name": "Cure",
+  "end-area": null,
+  "disambiguation": "not The Cure",
+  "id": "69db81ba-3dce-4273-b67f-c626d1c2c344",
+  "gender-id": null,
+  "sort-name": "Cure",
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  },
+  "gender": null,
+  "type": null,
+  "type-id": null,
+  "ipis": [],
+  "begin-area": null,
+  "isnis": [],
+  "country": null,
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "da0db1d8-e4d5-4c7f-bcb1-2173b2e01181",
+        "resource": "https://www.deezer.com/artist/1434363"
+      },
+      "attributes": []
+    }
+  ]
+}

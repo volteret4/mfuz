@@ -1,0 +1,1158 @@
+{
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type": null,
+    "name": "United Kingdom",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type-id": null,
+    "sort-name": "United Kingdom"
+  },
+  "begin-area": {
+    "disambiguation": "",
+    "name": "Hertford",
+    "type": null,
+    "type-id": null,
+    "id": "93e36643-acf7-4fb4-8760-de9d6bebfe4c",
+    "sort-name": "Hertford"
+  },
+  "country": "GB",
+  "type": "Group",
+  "name": "Deep Purple",
+  "gender": null,
+  "gender-id": null,
+  "life-span": {
+    "begin": "1968",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Deep Purple",
+  "disambiguation": "",
+  "ipis": [],
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000192382",
+        "id": "4d99b107-55d9-4bce-9511-d65ddcc020c0"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "bandsintown",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/31005",
+        "id": "42fe3544-d63a-4193-abe1-b15e370dd755"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/79491354-3d83-40e3-9d8e-7592d58d790a",
+        "id": "48d69cc7-66c5-475a-95d4-56599ad9197d"
+      },
+      "attributes": [],
+      "end": "2020-11-19",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": true
+    },
+    {
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "resource": "https://www.thehighwaystar.com/rosas/jouni/discoidx.html",
+        "id": "a003de6e-be27-49b0-9f93-ea33dd0867b6"
+      },
+      "type": "discography page",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "2112ef67-73ed-4089-9517-87b194e4cbc1",
+        "resource": "https://www.discogs.com/artist/170355"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/568ZhdwyaiCyOGJRtNYhWf",
+        "id": "f3386326-97c5-4b76-a11a-a22f0b6d989a"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "d86933f0-5da8-4d8f-b446-92d44d8b6ef3",
+        "resource": "https://www.deezer.com/artist/864"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "64bb7919-7c8a-458b-8b8d-9334da23291f",
+        "resource": "https://www.imdb.com/name/nm1472464/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/Deep+Purple",
+        "id": "389923ec-b25d-46e9-8557-a52f7201b237"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "http://muzikum.eu/en/122-3577/deep-purple/lyrics.html",
+        "id": "6fbf707d-cc1e-4e24-b06f-ef4563dc1e83"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://genius.com/artists/Deep-purple",
+        "id": "7994fa22-3693-4a77-b0c6-06907ab52abb"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Deep-Purple",
+        "id": "f4edf947-cecf-4666-807c-6a538a061f15"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "94684642-1dd3-4927-9577-95e68be28cc6",
+        "resource": "https://myspace.com/deeppurple"
+      },
+      "attribute-values": {},
+      "type": "myspace",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "b40ffad8-a2ea-43c1-b35e-2263cd9d8632",
+        "resource": "https://deeppurple.com/"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://www.deep-purple.com/",
+        "id": "882e55a9-11cc-4f4e-9112-e479cb97cbe8"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n88636925",
+        "id": "562cdc34-7344-4d91-a945-32710a26f28a"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "e47d6b75-577c-4225-8979-11324f7e8375",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13902886c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://d-nb.info/gnd/1215941-4",
+        "id": "5f26fb3f-9f25-4957-85b1-074117cc4608"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "57151eb0-ae2d-4968-8221-2303e91d0b7f",
+        "resource": "https://id.oclc.org/worldcat/entity/E39QQPVp7Mv3P3wbJqFQ3MGMJt"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "36490aeb-e899-49c5-8831-166baa460b44",
+        "resource": "https://imvdb.com/n/deep-purple"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "230ed2f2-47e2-4e38-9308-4fb23867c453",
+        "resource": "https://musicmoz.org/Bands_and_Artists/D/Deep_Purple/"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "dce27acd-ac3b-4f7d-8a03-23753c036599",
+        "resource": "https://nla.gov.au/anbd.aut-an35864717"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "f37f3577-c69c-4374-812f-fcab04ea790d",
+        "resource": "https://rateyourmusic.com/artist/deep-purple"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.45cat.com/artist/deep-purple",
+        "id": "83c8bc9d-d033-49aa-a35a-0a7c60c9943a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "654d0dab-fd86-4da7-889c-275a4ec15c4e",
+        "resource": "https://www.livefans.jp/artists/2572"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Deep_Purple/1178",
+        "id": "dc9581fa-f228-4070-8108-74bda38dec50"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "97211775-8cbb-4709-86b8-4689afd9e81e",
+        "resource": "https://www.metalmusicarchives.com/artist/deep-purple"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "1a1af841-e030-4c0d-8fe9-b60042ba9289",
+        "resource": "https://www.musik-sammler.de/artist/deep-purple/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.progarchives.com/artist.asp?id=1969",
+        "id": "ea383997-3bf0-4e1f-b98e-2e7ea3f1efed"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Deep_Purple",
+        "id": "bfd9ef66-aaac-4303-8c10-6094ab473581"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "fa6a5c84-fcdd-4462-bbd6-0119c1c48420",
+        "resource": "https://www.spirit-of-rock.com/en/band/deep_purple"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2020-10-12",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Afbqv2uk4sntsw5wjxjnwdh2xzy",
+        "id": "b624c670-f2dc-42e6-b3c7-0a6da0e47b65"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "c30d9612-b50d-430c-96aa-c39a2e50c293",
+        "resource": "https://itunes.apple.com/gb/artist/id135532"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://mora.jp/artist/347596/",
+        "id": "5764fc0d-1698-49b0-9a0e-2ed5c79accbe"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "155daa6d-b9ce-442b-86df-e4529f9f5270",
+        "resource": "https://music.apple.com/gb/artist/135532"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://ototoy.jp/_/default/a/244444",
+        "id": "6f5b7b49-bea3-4c8e-8615-100a543e00be"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://uk.7digital.com/artist/deep-purple",
+        "id": "431bec26-d7f2-4929-8c2d-f26a55013309"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.junodownload.com/artists/Deep+Purple/releases/",
+        "id": "0376db28-a3ff-4b60-aa81-78eb8f26e9b6"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "resource": "https://www.melon.com/artist/detail.htm?artistId=103794",
+        "id": "43b0943d-f82a-498b-8ea5-9b0dc60443f1"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/deep-purple-4/26742",
+        "id": "14c9325c-f2e9-4054-8e07-56d6d23e2cd5"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "7bd18294-bb11-4ed4-b3ea-d086789d57b4",
+        "resource": "https://www.cdjapan.co.jp/person/700278878"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "url": {
+        "id": "0778d3dc-46e3-4f90-8b6c-b65fd5e13831",
+        "resource": "https://secondhandsongs.com/artist/201"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3"
+    },
+    {
+      "type": "setlistfm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "d5d42bd5-1080-4225-9cbe-c10ca248f66a",
+        "resource": "https://www.setlist.fm/setlists/deep-purple-3bd6acc8.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/_DeepPurple",
+        "id": "d6872c50-6d0d-430b-bb1e-ddfce517fb56"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/officialdeeppurple",
+        "id": "47c18526-ae7a-4b76-9b80-b9c7e9b92963"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "resource": "https://www.instagram.com/deeppurple_official/",
+        "id": "980652d9-b257-439d-9c0f-4e7b14d1fdfb"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "e1ea70aa-3dd9-4c23-b223-0ad56a66e941",
+        "resource": "https://www.tiktok.com/@deeppurple_official"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/deeppurple6876",
+        "id": "f1f3f9ff-c5af-422a-b243-b939538ee67e"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "99e4acb7-a885-418d-8aca-45dcda532032",
+        "resource": "https://www.songkick.com/artists/99952"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "resource": "https://soundcloud.com/deeppurple",
+        "id": "2b972ff4-9d06-482a-a038-9f9965df50e4"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {}
+    },
+    {
+      "end": "2022-06-08",
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://us.napster.com/artist/deep-purple",
+        "id": "e3f7a64b-3455-426b-9a7a-266b7ae466ed"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "714bc9a6-c34e-46d4-beff-0ce8d193d1a3",
+        "resource": "https://music.amazon.co.uk/artists/B000QJNHU0"
+      },
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/135532",
+        "id": "155daa6d-b9ce-442b-86df-e4529f9f5270"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "df3436af-632f-4ff9-8d40-52aae415ee83",
+        "resource": "https://music.apple.com/to/artist/135532"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/3355",
+        "id": "00fb8032-0451-4fb2-ae33-992ec276039f"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "43b0943d-f82a-498b-8ea5-9b0dc60443f1",
+        "resource": "https://www.melon.com/artist/detail.htm?artistId=103794"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/deep-purple-4/26742",
+        "id": "14c9325c-f2e9-4054-8e07-56d6d23e2cd5"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/139699570",
+        "id": "d841a9ac-473a-4d98-9293-577c4b5a2ee6"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "b86c6b7d-2e80-4835-8f13-a0a5f321f566",
+        "resource": "https://www.wikidata.org/wiki/Q101505"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "url": {
+        "id": "712f9eec-8a75-4db4-b6c7-60baa3ca4140",
+        "resource": "https://www.youtube.com/channel/UC3SF_Sa_dVWQ09m88nvsXrg"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "93c054c1-08e3-4f51-aa6b-9bd7e27bf516",
+        "resource": "https://www.youtube.com/channel/UChFONkdHg3zrt3zaHmx1bKA"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "youtube music",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCoPZoa-KzZQRxspnRGZTx7A",
+        "id": "7b47be80-d3cd-4930-8c2a-57673ff20bf7"
+      }
+    }
+  ],
+  "isnis": [
+    "0000000109435287"
+  ],
+  "id": "79491354-3d83-40e3-9d8e-7592d58d790a"
+}

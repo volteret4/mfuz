@@ -1,0 +1,492 @@
+{
+  "sort-name": "Trammps, The",
+  "begin-area": {
+    "disambiguation": "",
+    "sort-name": "Philadelphia",
+    "id": "0eeb01c2-6e31-46ad-96b8-319749f731d2",
+    "name": "Philadelphia",
+    "type": null,
+    "type-id": null
+  },
+  "disambiguation": "US disco/soul band",
+  "end-area": null,
+  "life-span": {
+    "ended": true,
+    "end": "1980",
+    "begin": "1972"
+  },
+  "gender-id": null,
+  "id": "8799413d-7df8-4eb9-8542-af8cea6b0feb",
+  "name": "The Trammps",
+  "isnis": [
+    "000000010726965X"
+  ],
+  "relations": [
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "179cfa36-e440-47ee-8309-e94de20d9760",
+        "resource": "https://www.allmusic.com/artist/mn0000570067"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "23b54c1c-f516-4011-8f8e-2f394f1edcd6",
+        "resource": "https://www.bbc.co.uk/music/artists/8799413d-7df8-4eb9-8542-af8cea6b0feb"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "type": "BBC Music page",
+      "source-credit": "",
+      "target-type": "url",
+      "end": "2020-11-19",
+      "attribute-values": {},
+      "ended": true,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "biography",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://web.archive.org/web/20080113192252/http://www.discomuseum.com/Trammps.html",
+        "id": "3ff0254f-3669-4b0b-8dce-99ea20cd1057"
+      }
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "type": "biography",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "025cd58f-2e8e-4927-9472-9fd0764c7305",
+        "resource": "http://www.phillysoulclassics.com/artists/the-trammps"
+      }
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "5b92d4fb-6176-4f8a-bafe-205212a5f7fe",
+        "resource": "https://www.discogs.com/artist/14898"
+      }
+    },
+    {
+      "url": {
+        "id": "f6353545-9f43-4ed3-80eb-97b89a93c163",
+        "resource": "https://open.spotify.com/artist/1zgNpeHQe8GulzfVkYP2VK"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "30b435ab-4a6c-4705-a140-ecd4935b4f85",
+        "resource": "https://www.deezer.com/artist/1451"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "57f1bf76-45a4-4e26-9854-471db89d00ca",
+        "resource": "https://www.imdb.com/name/nm1719184/"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "IMDb"
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "last.fm",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "62aeda9d-5dc2-4d52-895e-d371a3c440e9",
+        "resource": "https://www.last.fm/music/The+Trammps"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "4053c555-7e35-4fbf-b64e-6c61259318c4",
+        "resource": "http://muzikum.eu/en/122-4751/the-trammps/lyrics.html"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://web.archive.org/web/20000816070120/http://www.aaeg.com/trammps.htm",
+        "id": "268c4cb5-876c-4d67-bdc4-d9ea1a179b99"
+      }
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://www.thetrammpswithearlyoung.com/",
+        "id": "33372caf-0487-423a-8800-aee519d573a5"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "http://www.thetrammps.net/",
+        "id": "30cdd0e7-60dd-422c-8e36-cf1b6f82448a"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d9865808-3d8c-436d-827a-89c2d8e8cab6",
+        "resource": "https://rateyourmusic.com/artist/the_trammps"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.45cat.com/12single/artist/the-trammps",
+        "id": "8b27dc10-a584-4671-897e-bcf264c64e94"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "b4fe65a4-b371-46ee-8715-508c3f8e61da",
+        "resource": "https://www.45cat.com/artist/the-trammps"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases"
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "38898127-a60e-4da8-a85a-17df6617bf07",
+        "resource": "https://www.45cat.com/cdalbum/artist/the-trammps"
+      }
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.45cat.com/live/artist/the-trammps",
+        "id": "e43f27eb-693d-47ec-81a1-bbe4dd388fe2"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "f4e79341-9277-496b-ad43-def41f522d3f",
+        "resource": "https://www.45cat.com/tape/artist/the-trammps"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.45cat.com/vinyl/artist/the-trammps",
+        "id": "44c1f479-df56-4670-a76d-12b9d1f6dfbf"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "9e3c6c41-2ec8-41a2-b56d-c508f94da392",
+        "resource": "https://www.setlist.fm/setlists/the-trammps-73d6be25.html"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "type": "setlistfm",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "a2ab67b1-c2c9-4063-82e7-659b87132407",
+        "resource": "https://www.facebook.com/earlyoungmusic"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "81bb782b-5474-472a-986e-f791d237a604",
+        "resource": "https://music.apple.com/us/artist/514142"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/6984",
+        "id": "b6c5c0d1-19e2-4e45-ab0c-225261b59c7b"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "cbffc6c7-3aef-4418-b48a-6d78efa1d6af",
+        "resource": "https://www.wikidata.org/wiki/Q1685123"
+      },
+      "direction": "forward",
+      "begin": null
+    }
+  ],
+  "gender": null,
+  "area": {
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "ipis": [],
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": "US"
+}

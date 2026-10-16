@@ -1,0 +1,166 @@
+{
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "name": "Poison Ru\u00efn",
+  "country": "US",
+  "end-area": null,
+  "relations": [
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "025344c9-5e9a-4661-b73f-a67f05f1df38",
+        "resource": "https://poisonruin.bandcamp.com/"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "bandcamp"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.discogs.com/artist/7940213",
+        "id": "22f98015-2626-4111-aafe-895318b899d9"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/0WHVA5E3ZEY5mxGkMYqPuB",
+        "id": "1943c73f-f1b4-4d1c-ba28-1c93086e1843"
+      }
+    },
+    {
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.poisonru.in/",
+        "id": "56f97b24-9d85-45d4-bb84-40b17df97394"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/poison-ruin",
+        "id": "e9b59ef4-49a4-4447-b7e0-a6fa833af1ca"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/poisonruin/",
+        "id": "1750ef04-24b9-4321-9c73-53ff265ff4d0"
+      },
+      "ended": false
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1620241232",
+        "id": "4fd532ca-3e5e-4bf1-a3ab-871dc5943826"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    }
+  ],
+  "disambiguation": "",
+  "sort-name": "Poison Ru\u00efn",
+  "id": "99e1a3c4-3f44-4c6d-9098-5380e3056fae",
+  "area": {
+    "type-id": null,
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "isnis": [],
+  "begin-area": {
+    "type": null,
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Philadelphia",
+    "id": "0eeb01c2-6e31-46ad-96b8-319749f731d2",
+    "name": "Philadelphia"
+  },
+  "gender-id": null,
+  "ipis": [],
+  "type": "Group"
+}

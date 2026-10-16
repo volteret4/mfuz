@@ -77,7 +77,12 @@ class OutputCaptureThread(QThread):
 
 class LastFMModule:
     """Módulo para gestionar la obtención de datos de Last.fm."""
-    
+
+    DESCRIPTION = (
+        "Importa tus escuchas (scrobbles) de Last.fm e información adicional de artistas "
+        "y álbumes desde la API de Last.fm. Requiere usuario y API key de Last.fm."
+    )
+
     def __init__(self, parent_module, config=None):
         """
         Inicializa el módulo de Last.fm.

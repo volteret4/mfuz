@@ -1,0 +1,1158 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "disambiguation": "Greater London",
+    "sort-name": "London",
+    "type": null,
+    "name": "London",
+    "type-id": null
+  },
+  "ipis": [],
+  "country": "GB",
+  "isnis": [
+    "0000000123755471"
+  ],
+  "relations": [
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c279a938-2f2d-41a3-b372-270264c08331",
+        "resource": "https://www.allmusic.com/artist/mn0000413524"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c325cd39-9469-49b6-bd43-d809153f2dd2",
+        "resource": "https://www.bandsintown.com/a/1027"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": "2020-11-19",
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true,
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/9e0e2b01-41db-4008-bd8b-988977d6019a",
+        "id": "f23bf9a6-adcb-4563-8397-541b753d74ad"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/7987",
+        "id": "959bb4e3-502b-4ab2-a72c-b5092b3605cf"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "fanpage",
+      "attributes": [],
+      "url": {
+        "resource": "http://followtheleaders.fr/",
+        "id": "47a6f2ce-be27-4226-925a-e351d4d2e173"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "ccc11fc4-abdf-47b8-b3be-46aa80a2adc6",
+        "resource": "https://open.spotify.com/artist/5NGO30tJxFlKixkPSgXcFE"
+      }
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "ecf9c3d5-50ce-449c-b736-7d22516b40ba",
+        "resource": "https://play.anghami.com/artist/29055"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "8104f4f6-5e1d-43df-9327-3d2088e5c1a3",
+        "resource": "https://www.deezer.com/artist/1981"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "379e7360-98f4-483c-8448-4f0a6d7b389a",
+        "resource": "https://www.iheart.com/artist/the-police-4688/"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "4d5cb8fc-503e-48c5-94de-a414c97800e7",
+        "resource": "https://www.pandora.com/artist/the-police/AR57vcgrcKZk4kX"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "20eb8b2e-2dcd-4e2b-8384-a4ca6bc0ce15",
+        "resource": "https://commons.wikimedia.org/wiki/File:ThePolice_2007.jpg"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "image",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1932067/",
+        "id": "7623b591-379c-4264-8208-1f358eceda85"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/The+Police",
+        "id": "7d973df5-8e1a-46e1-abbd-689be42c16dd"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "59b326bd-60b1-4f0e-9c96-2e3ccffb5407",
+        "resource": "https://www.last.fm/music/The+Police/+tracks"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "9075fec0-bc83-447a-aca1-920786e63631",
+        "resource": "https://genius.com/artists/The-police"
+      },
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1f77a931-a331-4be5-8423-df218bf36fed",
+        "resource": "https://muzikum.eu/en/the-police/lyrics"
+      },
+      "attributes": [],
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "c8c0b723-e6c9-4e8b-9145-43608b21dda1",
+        "resource": "https://www.musixmatch.com/artist/The-Police"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "type": "myspace",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://myspace.com/thepolice",
+        "id": "361df991-202d-49d4-ae5e-1594e6a3649c"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "965c51b0-b35c-4e4a-93c4-d4cb92865b4b",
+        "resource": "https://thepolice.com/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "1acbcd71-34b7-4d9e-bd62-596e558e2a41",
+        "resource": "http://id.loc.gov/authorities/names/n83196050"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "267bb6c3-f8bf-413f-a820-5116178a1b99",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13905846v"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "1acc3a53-5971-456e-9724-778e4fc7191d",
+        "resource": "https://d-nb.info/gnd/1217062-8"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "87210541-96f4-4eea-96a5-99acba05d7c8",
+        "resource": "https://imvdb.com/n/police-the"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "026b3669-9689-44b8-8134-9ce62416d11d",
+        "resource": "http://snaccooperative.org/ark:/99166/w6zh1pmd"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-898853",
+        "id": "f5cb6d7e-5c66-44c8-b314-24d5b427a658"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://openlibrary.org/authors/OL2741778A/",
+        "id": "6ec41d7c-96d8-4858-be18-671dc0a978d7"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://openlibrary.org/authors/OL2785916A/",
+        "id": "019bb8b6-2ca2-4860-9d12-31b4d4e2e412"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "aefd978a-d0a6-4da6-8db3-81c88577b943",
+        "resource": "https://rateyourmusic.com/artist/the-police"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "fe25e6bc-2e49-4543-aa8e-efa8c81c05b3",
+        "resource": "https://www.45cat.com/artist/the-police"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.livefans.jp/artists/21346",
+        "id": "c638ae87-6c3e-439c-80dc-611af03298ac"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/the-police/",
+        "id": "2993168d-27d5-4985-8a1e-f7c680ad1c6a"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "7650f09d-3f2c-43a3-9945-96a419351d7b",
+        "resource": "https://www.muziekweb.nl/Link/M00000046860/POPULAR/"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "df5ec477-b028-4644-9658-a0392c41407c",
+        "resource": "https://www.spirit-of-rock.com/en/band/The_Police"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.whosampled.com/The-Police/",
+        "id": "b9271f2e-8067-41b9-8837-bd52fbdc7f1f"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "e82b3ddd-196f-4f86-9463-f78d09971141",
+        "resource": "https://www.worldcat.org/identities/lccn-n83196050"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "end": "2020-10-12",
+      "begin": null,
+      "ended": true,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Atzmmasiha6i7hvgbfhjr2xyg4e",
+        "id": "fea651a9-c745-48fa-b3c4-3c83bd150ca3"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id93818",
+        "id": "5cdfb65c-3708-4ca7-b44b-15e3fa0d2e8b"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "8cc66d92-6009-4354-832e-dd88d13cc076",
+        "resource": "https://mora.jp/artist/152041/all"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/us/artist/93818",
+        "id": "936f3db3-9ab5-4169-ad03-bae247be55be"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://uk.7digital.com/artist/the-police",
+        "id": "412732cc-cf3c-49fe-95c3-90815fc7a3ad"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "3c07cd68-870c-453a-8288-c0cd05902e19",
+        "resource": "https://www.amazon.com/-/e/B000AQ1DU0"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.junodownload.com/artists/The+Police/releases/",
+        "id": "5cb477c9-73e7-498c-9ce6-b57810321c96"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "9957ecd8-9a30-47e3-841a-e3f468139394",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/the-police/53540"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700211533",
+        "id": "ef64e3c2-298a-44a9-bd8c-02a6b9505db8"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "ended": false,
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "23ed7188-39cd-4cc6-a615-a9ee0df62d51",
+        "resource": "https://secondhandsongs.com/artist/291"
+      }
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/the-police-2bd6b80a.html",
+        "id": "599f7540-b36a-41c7-a899-90ffc5e5925b"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://twitter.com/Official_Police",
+        "id": "56065fcf-01d1-4055-8776-2114c97d85a8"
+      }
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://twitter.com/ThePoliceBand",
+        "id": "c6018d91-d8aa-4f10-91ac-10e88b9ffd2e"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/thepolice",
+        "id": "5fb6d125-3d3c-4963-a3e5-3c19ad4b9441"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.instagram.com/thepolicebandofficial/",
+        "id": "028a4180-4f72-4c4b-ae5c-b6773b86c281"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.songkick.com/artists/17635",
+        "id": "e0bbe2c6-7680-44b6-b4de-cdcacc7c37ea"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "2b4c0f06-5acd-4188-ad0b-ee5c4e505031",
+        "resource": "https://soundcloud.com/the-police-official"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "id": "1d5e2c7e-c3c8-4cc4-8b09-d3faecf1fa25",
+        "resource": "https://music.amazon.com/artists/B000QJQZ2W"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "936f3db3-9ab5-4169-ad03-bae247be55be",
+        "resource": "https://music.apple.com/us/artist/93818"
+      }
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://tidal.com/artist/27426",
+        "id": "0918268e-3ece-4ec2-b4cf-fa7d1562384c"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/the-police/53540",
+        "id": "9957ecd8-9a30-47e3-841a-e3f468139394"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://viaf.org/viaf/158418428",
+        "id": "b7a80da4-eb66-41e6-9b4f-b17c75d678f6"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "a7a6a68a-30da-4a1e-a972-070b4c07557a",
+        "resource": "https://www.wikidata.org/wiki/Q178095"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "ThePoliceVEVO",
+      "type": "youtube",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC4CnFBpo6Zk8D6bmeXB0MTg",
+        "id": "16caef53-6280-4138-a62e-afbd939a68a5"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "The Police - Topic",
+      "attribute-values": {},
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCbsRGw640UF_F7AIwHW-zmg",
+        "id": "f2877381-33b8-4640-858c-8981cfcd6f9e"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "3973796d-c251-46c6-9578-43d9b73eb28d",
+        "resource": "https://www.youtube.com/channel/UCuCY8MR9LcAGIXetnKx5SnQ"
+      },
+      "attributes": [],
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "The Police",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube music",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "1a02f084-caf2-4f41-9607-f5c1e9d6916b",
+        "resource": "https://music.youtube.com/channel/UCbsRGw640UF_F7AIwHW-zmg"
+      },
+      "attributes": []
+    }
+  ],
+  "gender": null,
+  "type": "Group",
+  "life-span": {
+    "ended": true,
+    "end": "2008",
+    "begin": "1977"
+  },
+  "end-area": null,
+  "area": {
+    "type": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type-id": null,
+    "name": "United Kingdom"
+  },
+  "name": "The Police",
+  "gender-id": null,
+  "sort-name": "Police, The",
+  "disambiguation": "British rock band",
+  "id": "9e0e2b01-41db-4008-bd8b-988977d6019a"
+}

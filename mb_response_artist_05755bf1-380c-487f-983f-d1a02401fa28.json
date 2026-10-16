@@ -1,0 +1,691 @@
+{
+  "gender": "Female",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type-id": null,
+    "name": "Atlanta",
+    "type": null,
+    "id": "26e0e534-19ea-4645-bfb3-1aa4e83a4046",
+    "disambiguation": "",
+    "sort-name": "Atlanta"
+  },
+  "ipis": [],
+  "country": "US",
+  "isnis": [
+    "0000000114707988",
+    "0000000368591153"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "4384d777-1865-48f5-ac29-accc16670570",
+        "resource": "https://www.allmusic.com/artist/mn0000803009"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "504d86bb-fc59-492a-8bf6-a1f3aab2e24e",
+        "resource": "https://www.allmusic.com/artist/mn0000844398"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "Chan Marshall"
+    },
+    {
+      "url": {
+        "id": "2ac9254b-48a9-4e9e-ba4c-6e69f1789871",
+        "resource": "https://catpower.bandcamp.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "end": null,
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "6904e831-9186-4fc1-87ee-87c730781758",
+        "resource": "https://www.bbc.co.uk/music/artists/05755bf1-380c-487f-983f-d1a02401fa28"
+      },
+      "attributes": [],
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "184020bd-d73c-4446-b7eb-aeb12837e8e0",
+        "resource": "https://www.discogs.com/artist/103195"
+      },
+      "attributes": [],
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "36812ee7-71f1-49a6-a628-f85e510ab43d",
+        "resource": "https://www.discogs.com/artist/254210"
+      },
+      "attributes": [],
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "Chan Marshall",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false
+    },
+    {
+      "source-credit": "Chan Marshall",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "b8b47124-1614-4bf8-93b5-f91d7a3d5d06",
+        "resource": "https://open.spotify.com/artist/35qUXFIuUScihB4jOHW0Kk"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6G7OerKc3eBO9sVkRNopFC",
+        "id": "30aafc35-625f-4605-bfe2-bd77fbe66c9f"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "ee445804-b648-40b2-88f2-da755881608b",
+        "resource": "https://www.deezer.com/artist/1039"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "image",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "eaa648e0-cd0e-4bf0-861d-823163e5a6ae",
+        "resource": "https://commons.wikimedia.org/wiki/File:Cat_Power_2011_NYC_CROP.jpg"
+      },
+      "attributes": []
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1306217/",
+        "id": "0961a560-85d4-4ff8-9416-9cbdf6cc5c4b"
+      },
+      "attributes": []
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a15a7701-da90-4aff-a167-0048c209af42",
+        "resource": "https://www.last.fm/music/Cat+Power"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "8b8a9b24-49bf-4d4d-b4d7-6f3b59a4370c",
+        "resource": "http://muzikum.eu/en/122-9891/cat-power/lyrics.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://myspace.com/catpower",
+        "id": "9f8ee825-0f1e-480b-8a79-d886ea5975b5"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "myspace",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "9971cb4e-2896-48bb-b878-424483206a73",
+        "resource": "http://www.catpowermusic.com/"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "70172d14-beac-496b-8931-b4bfc99281e7",
+        "resource": "http://odetochan.forumgratuit.org/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "online community",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "35b3a50f-bf0e-4309-a3b4-58eeed8cee6a",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "831d0949-1440-495b-bf92-8caafc72c48b",
+        "resource": "http://id.loc.gov/authorities/names/no2002014955"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb140305988",
+        "id": "c30ab84d-b25c-466d-9a9c-097b2246a1dc"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "186f7c81-edf4-4b15-b270-471bc87fae86",
+        "resource": "https://d-nb.info/gnd/1026313155"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6500kxh",
+        "id": "8b0f6aa0-3b89-419e-b2d3-8603458934d4"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "id": "83c8f9e0-52f9-4094-a7d0-a65012160131",
+        "resource": "https://rateyourmusic.com/artist/cat_power"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "e5993d5e-ee41-4b45-b9ab-a63fd3140a05",
+        "resource": "https://www.45cat.com/artist/cat-power"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.whosampled.com/Cat-Power/",
+        "id": "482f3b93-10eb-4b99-a761-e1db2f8e0d15"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1e8495f3-23f1-4516-b7c9-6de4ec5e4223",
+        "resource": "https://www.worldcat.org/identities/containsVIAFID/37115965"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "76ed12a8-1da1-42c2-83ca-71f4233428a0",
+        "resource": "https://itunes.apple.com/us/artist/id2959120"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "45b13339-9683-43d9-ac6c-1c1b0f95333d",
+        "resource": "https://secondhandsongs.com/artist/19001"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1dac4b16-3b24-4ecc-859c-5ac9c2105507",
+        "resource": "https://twitter.com/CATPOWER"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "7c038abb-5c26-43be-ba98-72c4183f7b64",
+        "resource": "https://www.facebook.com/CatPowerSun"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "33e1ffa7-d652-41e0-995f-000b750fc66b",
+        "resource": "https://www.instagram.com/catpowerofficial/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/629497",
+        "id": "3cf09c19-f814-412c-bb5f-a93ea186bbc2"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://soundcloud.com/cat-power-official",
+        "id": "6d0019e8-10ee-42ee-967d-3978352e2d44"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "a1aeb374-20e1-47fd-a4dc-ca699db6564a",
+        "resource": "https://play.qobuz.com/artist/34526https://play.qobuz.com/artist/34526"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://tidal.com/artist/27440",
+        "id": "15ca73c8-b7a5-4041-8daf-710acf10d05e"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "6af997b2-6443-4fb1-96b5-1452a049d747",
+        "resource": "http://viaf.org/viaf/37115965"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "Chan Marshall",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "81527e99-489b-46ae-bf8a-77084e0ac5ae",
+        "resource": "https://www.wikidata.org/wiki/Q232348"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "55789855-9b67-4c6b-9beb-0274ae24b68a",
+        "resource": "https://www.youtube.com/user/CatPowerVEVO"
+      },
+      "attributes": [],
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false
+    }
+  ],
+  "end-area": null,
+  "name": "Cat Power",
+  "area": {
+    "name": "United States",
+    "type-id": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null
+  },
+  "sort-name": "Cat Power",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "05755bf1-380c-487f-983f-d1a02401fa28",
+  "disambiguation": "",
+  "life-span": {
+    "begin": "1972-01-21",
+    "end": null,
+    "ended": false
+  }
+}

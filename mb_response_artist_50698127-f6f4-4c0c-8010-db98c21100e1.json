@@ -1,0 +1,927 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "area": {
+    "type-id": null,
+    "sort-name": "United Kingdom",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type": null,
+    "name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "end-area": null,
+  "gender": "Male",
+  "begin-area": {
+    "disambiguation": "",
+    "type": null,
+    "name": "Worksop",
+    "type-id": null,
+    "id": "40e43adc-ce17-485e-a229-d8759d6cabbc",
+    "sort-name": "Worksop"
+  },
+  "country": "GB",
+  "type": "Person",
+  "name": "Bruce Dickinson",
+  "sort-name": "Dickinson, Bruce",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1958-08-07"
+  },
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "allmusic",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "c3b783aa-f7b2-4295-966d-166a20da020b",
+        "resource": "https://www.allmusic.com/artist/mn0000527024"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/35521",
+        "id": "84b6a6af-8872-421c-b0a5-b62e954e7cbe"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandsintown"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "url": {
+        "id": "1b7e5daf-7aef-4c1e-8268-0563a863d436",
+        "resource": "https://www.bbc.co.uk/music/artists/50698127-f6f4-4c0c-8010-db98c21100e1"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "attributes": [],
+      "end": "2020-11-19",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://bnb.data.bl.uk/id/person/DickinsonBruce1958-",
+        "id": "37017df6-b560-493d-8d5f-5e162ba8947f"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "begin": null,
+      "type": "biography",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "3432de5a-6dcd-4d55-a14f-faf3ece7abef",
+        "resource": "https://www.discogs.com/artist/260980"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/7Iffw1nP3NjCWkRIx3Ily9",
+        "id": "56ba8f7f-7205-4b46-9f23-061c730f12b1"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "f1f3b2c2-458a-475b-9cff-84cb7c1b335a",
+        "resource": "https://www.deezer.com/artist/1779"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Iron_Maiden_en_Costa_Rica_Bruce.jpg",
+        "id": "b584fe78-a6b0-4a8b-bc07-8cc56113a1e7"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0225503/",
+        "id": "6f8614da-5361-4717-9edc-bcba31d16858"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "IMDb"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "url": {
+        "id": "163ad569-778a-4c45-bdca-dc32e705d383",
+        "resource": "https://www.last.fm/music/Bruce+Dickinson"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "http://muzikum.eu/en/122-4664/bruce-dickinson/lyrics.html",
+        "id": "3815fdf2-c105-480c-b884-b3ecd48944d4"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Bruce-dickinson",
+        "id": "0f84cad0-139e-4c1e-9cc9-76cf628ca555"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Bruce-Dickinson",
+        "id": "485f32a9-8e8b-4f2c-a3a0-6e57f44d9f2f"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/brucedickinson",
+        "id": "21bab18c-6fb8-4b0a-92cd-18731a3db067"
+      },
+      "type": "myspace",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "903f8bb0-20aa-48c5-8f3d-18fa54ca40f1",
+        "resource": "http://www.screamforme.com/"
+      },
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "e7f9c3e0-a4f2-41c3-9906-cc6fe484aad6",
+        "resource": "http://id.loc.gov/authorities/names/n2006060876"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139317498",
+        "id": "e664fcda-babb-4d38-bba2-5bc168287096"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "bf18b90b-14d1-4272-b5fb-9f085f18245e",
+        "resource": "https://d-nb.info/gnd/134675541"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://imvdb.com/n/bruce-dickinson-2",
+        "id": "3ef3e4c4-ee19-4e6b-876e-764800becab2"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://musicmoz.org/Bands_and_Artists/D/Dickinson,_Bruce/",
+        "id": "93db2f6c-edd2-4fde-b176-6e04673237f5"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1057506",
+        "id": "e3e82509-1d7c-49c5-95db-730436b32db6"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/bruce_dickinson",
+        "id": "9fb15b41-867c-4aae-96e5-0fd6bc47d1da"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "e3263f22-fe20-499e-9e4b-b0c4dcfbeb5e",
+        "resource": "https://www.45cat.com/artist/bruce-dickinson"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Bruce_Dickinson/295",
+        "id": "e98cc831-d315-43fe-ad87-f2ab8ba16962"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/Bruce-Dickinson/",
+        "id": "6aec445b-299c-44d0-b9c1-0b4e6403095a"
+      }
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "604613f5-4833-4307-b978-4b061f7a3b2c",
+        "resource": "https://www.worldcat.org/identities/lccn-n2006060876/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://www.musik-sammler.de/artist/1877",
+        "id": "c69a4d9c-c787-4470-b601-5a9963c92950"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d16f4c53-41de-469a-82ee-3d9e12fdd7fd",
+        "resource": "http://www.spirit-of-metal.com/groupe-groupe-Bruce_Dickinson-l-en.html"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": "2020-10-12",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": true,
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "url": {
+        "id": "69b01399-3145-4c74-aacc-b42c82b2f5ec",
+        "resource": "https://play.google.com/store/music/artist?id=Axhznrmjkltzb4vi3sgxl226rwu"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id546389",
+        "id": "540f037b-b2e7-4660-9e46-5729de153926"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "0c5ef2cc-52d5-4f71-a9fa-1ab568becd40",
+        "resource": "https://uk.7digital.com/artist/bruce-dickinson"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "url": {
+        "id": "50722611-0b32-4353-86f7-c9933be38f9b",
+        "resource": "https://www.cdjapan.co.jp/person/700212832"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/384",
+        "id": "905eab2c-f329-49c3-98d7-51f5ae73329b"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "setlistfm",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/bruce-dickinson-63d6ba03.html",
+        "id": "0dd6c0d4-7405-4f58-ae74-60c429ac2039"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "a9bcf00e-1ea9-4ac4-93eb-38b2d19be266",
+        "resource": "https://www.facebook.com/pages/BRUCE-DICKINSON-IRON-MAIDEN/56067577104"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.instagram.com/brucedickinsonhq/",
+        "id": "e78b96a5-aacc-48a2-8f55-b94f1a8e16d3"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "bfc74caa-c08b-4899-ada6-9cb6bce8e869",
+        "resource": "https://www.tiktok.com/@officialbrucedickinson"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/18540",
+        "id": "d06d4ba4-520a-4757-baa9-152493c04858"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://soundcloud.com/brucedickinsonofficial",
+        "id": "e55e10e6-3b44-4d64-8f1e-a486b9d45756"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "8e82a6cc-79e4-4e22-9953-164b9a24cc8b",
+        "resource": "https://us.napster.com/artist/bruce-dickinson"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": "2022-06-08",
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "b3588991-f919-4cc0-8a92-c40c80199889",
+        "resource": "https://music.amazon.com/artists/B000QKT2FI"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "b23fded0-0d5d-4770-b19d-70e7a5db1a06",
+        "resource": "https://music.apple.com/gb/artist/546389"
+      }
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/546389",
+        "id": "428aeeff-8ccb-412d-9bda-8aabb5c9f8f8"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/3668337",
+        "id": "27baa994-4dfe-4f8a-b260-561290926e5a"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/bruce-dickinson/download-streaming-albums",
+        "id": "320a0ee7-8829-4658-a1e7-73f717c1548d"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "http://viaf.org/viaf/57829971",
+        "id": "6553fd69-e4de-4490-8493-26e78b2a3bff"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q190151",
+        "id": "46217caf-52b5-48a8-98a2-2e922eaccac4"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "797dae32-b60d-406b-9d0f-11f7db1f8b58",
+        "resource": "https://www.youtube.com/channel/UCuxB-cofMU3KfWkX19q4s0w"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube music",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "1c402d34-850a-4a2b-a051-cc6a4d66fe0f",
+        "resource": "https://music.youtube.com/channel/UC18vB5KHtNwt7B_D8NYesRA"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    }
+  ],
+  "isnis": [
+    "0000000110644553"
+  ],
+  "id": "50698127-f6f4-4c0c-8010-db98c21100e1",
+  "disambiguation": "Iron Maiden vocalist",
+  "ipis": [
+    "00047754947",
+    "00160142416"
+  ]
+}

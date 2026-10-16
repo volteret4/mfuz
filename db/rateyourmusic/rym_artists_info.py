@@ -7,6 +7,10 @@ Compatible con db_creator.py
 
 import asyncio
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import re
 import json
 import random
@@ -22,6 +26,7 @@ INTERACTIVE_MODE = False
 def setup_database(db_path):
     """Configura la base de datos añadiendo las columnas necesarias a rym_artists"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Crear tabla si no existe
@@ -72,6 +77,7 @@ def setup_database(db_path):
 def get_artists_to_process(db_path, limit=None):
     """Obtiene lista de artistas para procesar desde rym_artists"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     query = """
@@ -579,6 +585,7 @@ async def scrape_artist_info(page, rym_url):
 def update_artist_info(db_path, artist_id, artist_info, status='completed'):
     """Actualiza la información del artista en la base de datos"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     try:
@@ -632,6 +639,7 @@ def update_artist_info(db_path, artist_id, artist_info, status='completed'):
 def update_artist_error(db_path, artist_id, error_message):
     """Marca un artista como error en la base de datos"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     cursor.execute("""

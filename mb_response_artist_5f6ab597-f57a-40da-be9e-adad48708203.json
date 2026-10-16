@@ -1,0 +1,910 @@
+{
+  "type": "Person",
+  "name": "Dr. Dre",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Compton",
+    "id": "be9261e4-c8d1-49e6-acb2-3096c47ad4f8",
+    "name": "Compton",
+    "type": null,
+    "disambiguation": ""
+  },
+  "country": "US",
+  "gender": "Male",
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "United States",
+    "name": "United States",
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00128443577",
+    "00128479253"
+  ],
+  "disambiguation": "Andre Young, rap producer",
+  "id": "5f6ab597-f57a-40da-be9e-adad48708203",
+  "isnis": [
+    "0000000078392105",
+    "0000000368468526"
+  ],
+  "relations": [
+    {
+      "direction": "forward",
+      "source-credit": "Andre Young",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "8e65f204-823f-40e8-8eb6-253e704c14ca",
+        "resource": "https://www.allmusic.com/artist/mn0000033715"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "aa8b81b3-20d9-4475-bfc0-a9b0a0313360",
+        "resource": "https://www.allmusic.com/artist/mn0000805274"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "attribute-values": {},
+      "type": "bandsintown",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "368388f0-d2d9-49f4-bfb0-8fa0fc1334e0",
+        "resource": "https://www.bandsintown.com/a/1938020"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/5f6ab597-f57a-40da-be9e-adad48708203",
+        "id": "a655073f-8817-446a-8200-249b4c3cf357"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/251429",
+        "id": "6d4ffb47-c513-481d-92ac-311881b93b80"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "source-credit": "Andre Young",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "url": {
+        "resource": "https://www.discogs.com/artist/50513",
+        "id": "b6abc622-e5e2-4a76-aeb4-7843360b5441"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/6DPYiyq5kWVQS4RGwxzPC7",
+        "id": "1601f5ea-320e-494f-a26f-d76386148670"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/763",
+        "id": "99c71286-c44f-4901-817b-667c945b3530"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "image",
+      "attribute-values": {},
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Dr._Dre_in_2011.jpg",
+        "id": "48079b2c-f273-4c74-b606-46ace36b9e5e"
+      }
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0236564/",
+        "id": "02d21325-c92e-4b8b-ba41-f1b6e117f10b"
+      },
+      "attribute-values": {},
+      "type": "IMDb",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "resource": "https://www.last.fm/music/Dr.+Dre",
+        "id": "a5b757a9-2b1c-462f-b1fb-5ed3867e2376"
+      },
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "58ddf390-3467-434d-916d-3c91d1f0bb99",
+        "resource": "http://muzikum.eu/en/122-3636/dr.-dre/lyrics.html"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "url": {
+        "id": "41b66282-2c3d-4697-94d4-f43e81098d03",
+        "resource": "https://genius.com/artists/Dr-dre"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Dr-Dre",
+        "id": "28810b65-dece-447e-99f1-30881e0fa8c5"
+      },
+      "type": "lyrics",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "21456766-b1df-478a-a7a2-df729a45c7e8",
+        "resource": "https://myspace.com/drdre"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "7e0386c4-a35d-4cc4-b62f-af1abae85c41",
+        "resource": "http://www.drdre.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/D/Dr._Dre/",
+        "id": "c2c0e1e9-998c-4533-ab1e-5c6be7b2d601"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/120731185",
+        "id": "b7e1d3cb-18be-4787-be0d-bea2430e8ef4"
+      }
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://imvdb.com/n/dr.-dre",
+        "id": "ba7ee47a-62fc-4e45-859d-6b40a9b42174"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/dr__dre",
+        "id": "39c7ece0-ef54-45af-b5a0-c6dc4e0f0d4f"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.45cat.com/artist/dr-dre",
+        "id": "e13f2043-a85a-46bb-a816-5d199d406aa5"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/dr-dre/",
+        "id": "0616a87f-bc0b-4e2d-8de1-5e785a5f0cd9"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.whosampled.com/Dr.-Dre/",
+        "id": "e3ec1df3-24b2-47f8-9953-6e3f7aa9acd4"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "e2ce4fb1-68dd-4dd4-8bd6-2381722b25e0",
+        "resource": "https://www.worldcat.org/identities/lccn-n96-019473"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "eb92b835-fcb7-402e-960d-2def1deab1b5",
+        "resource": "http://www.worldcat.org/identities/nc-dr%20dre/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id35315",
+        "id": "cea761a5-e7fe-4438-8111-e9804fd0ab8e"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "url": {
+        "id": "e3d5cff9-a45e-41de-b334-d19db04873e4",
+        "resource": "https://us.7digital.com/artist/dr-dre"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.beatport.com/artist/dr-dre/29345",
+        "id": "9cb3cd80-f912-44cd-a3f9-4abfb29763ff"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.junodownload.com/artists/Dr+Dre/releases/",
+        "id": "00563642-ebf4-4cc5-8960-d32af77a5c2f"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "url": {
+        "id": "4f076704-67d5-4f0f-a66e-88246b4b91f8",
+        "resource": "https://www.qobuz.com/us-en/interpreter/dr-dre/61999"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "id": "39c370ac-a61f-4539-93c9-f286d32ab2f1",
+        "resource": "https://www.cdjapan.co.jp/person/700146543"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/6138",
+        "id": "f547c124-cd4c-4725-bd2b-d83abd5e275b"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/dr-dre-33d69cf5.html",
+        "id": "fe8b67e8-9072-4229-b14c-e7b2ce841eef"
+      },
+      "attribute-values": {},
+      "type": "setlistfm",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/drdre",
+        "id": "abccec08-f672-4b6e-86fb-4b6bb86631cb"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/DrDre",
+        "id": "ad0b904b-d128-4cfa-b85c-27d11281de2e"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "2f3f43ae-6f81-4c13-896c-e81ad33a965f",
+        "resource": "https://www.instagram.com/drdre/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type": "songkick",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "77321d26-1bc1-47d9-9730-01ddaf61416c",
+        "resource": "https://www.songkick.com/artists/357843"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "00ab6c6c-2507-4596-8ed6-b54c32457139",
+        "resource": "https://soundcloud.com/dr-dre-music"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": "2022-06-08",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": true,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "7cad6641-c9bb-4cac-8fb9-4596d71e9355",
+        "resource": "https://us.napster.com/artist/dr-dre"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "e13c6f0c-9347-43c3-a381-81f803dd54bc",
+        "resource": "https://music.amazon.com/artists/B000QKKBL2"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/us/artist/35315",
+        "id": "d8293dcf-f868-4ce7-8d7a-e8ab251f79c1"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "f5d756c7-8229-4665-bffe-564eb41e0826",
+        "resource": "https://tidal.com/artist/3963798"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "4f076704-67d5-4f0f-a66e-88246b4b91f8",
+        "resource": "https://www.qobuz.com/us-en/interpreter/dr-dre/61999"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "ticketing",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.ticketmaster.com/artist/1110",
+        "id": "96f11efa-a622-4309-99a5-046a445b41f4"
+      },
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245"
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "99815b55-5622-4fa0-a592-c461aa090483",
+        "resource": "http://viaf.org/viaf/32190655"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q6078",
+        "id": "8472a9d2-4ad7-4871-89c1-5ffe239e53e7"
+      },
+      "attribute-values": {},
+      "type": "wikidata",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "ce13d422-4e39-4d78-9472-57fb976ca114",
+        "resource": "https://www.youtube.com/user/DrDreVEVO"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "youtube music",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "id": "c49ed72c-a879-44a9-9daa-3c6ac1eb7e02",
+        "resource": "https://music.youtube.com/channel/UC1g7JmTw4Gv8W9YINg3M1FA"
+      }
+    }
+  ],
+  "life-span": {
+    "begin": "1965-02-18",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Dre, Dr."
+}

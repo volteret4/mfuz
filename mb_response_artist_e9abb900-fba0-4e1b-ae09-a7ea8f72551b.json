@@ -1,0 +1,265 @@
+{
+  "country": "ES",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "ipis": [],
+  "area": {
+    "type-id": null,
+    "name": "Spain",
+    "type": null,
+    "id": "471c46a7-afc5-31c4-923c-d0444f5053a4",
+    "iso-3166-1-codes": [
+      "ES"
+    ],
+    "disambiguation": "",
+    "sort-name": "Spain"
+  },
+  "relations": [
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "59a3bc08-236b-4c81-b9c9-7ed11ac0c5a0",
+        "resource": "https://www.allmusic.com/artist/mn0000656420"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/486060",
+        "id": "8f63a825-cac5-4d62-be9b-c141e0211486"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://open.spotify.com/artist/1ZcvF2meiXi5UPDJWxrKR5",
+        "id": "7317b5ef-4091-4d46-9185-d1640731cf8d"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "17445ac2-a053-4030-aeec-fd6966fa5584",
+        "resource": "https://www.imdb.com/name/nm0282871/"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "IMDb"
+    },
+    {
+      "url": {
+        "resource": "https://genius.com/artists/Lola-flores",
+        "id": "1b27a652-49e1-4d79-96fe-b4dc98ab2e61"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n85138309",
+        "id": "8b399f44-6c0c-4810-852e-5514761aeb7d"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "3081e9b9-ed29-44d0-849b-c8bc4b86763d",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13976153w"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/124893708",
+        "id": "6ce35cf1-0f82-4b3d-9809-74cd449e10ac"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "295dc580-aafd-4c85-8463-22278b5db098",
+        "resource": "https://rateyourmusic.com/artist/lola_flores"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n85138309",
+        "id": "4780c0f0-8341-4abb-8281-99a86c1eda03"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "type": "VIAF",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://viaf.org/viaf/24795432",
+        "id": "979ea3fd-5360-4436-b21e-d9ee2352b694"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q242084",
+        "id": "6e6e4396-5132-4a7f-b70f-e2fd6dbc55b8"
+      },
+      "begin": null,
+      "direction": "forward"
+    }
+  ],
+  "gender": "Female",
+  "id": "e9abb900-fba0-4e1b-ae09-a7ea8f72551b",
+  "name": "Lola Flores",
+  "isnis": [
+    "000000010778706X"
+  ],
+  "life-span": {
+    "ended": true,
+    "begin": "1923-01-21",
+    "end": "1995-05-16"
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "sort-name": "Flores, Lola",
+  "disambiguation": "",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Jerez de la Frontera",
+    "id": "7a3e384a-108f-4ba9-b5d7-e519e6e225e3",
+    "type": null,
+    "name": "Jerez de la Frontera",
+    "disambiguation": ""
+  },
+  "end-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "Madrid",
+    "id": "9ddf829c-48ee-4457-a80d-f7370f24f2ec",
+    "type": null,
+    "name": "Madrid"
+  }
+}

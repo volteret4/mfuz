@@ -1,0 +1,1342 @@
+{
+  "country": "US",
+  "gender": "Male",
+  "relations": [
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000005953",
+        "id": "8cc2fe67-5b0f-47cd-b7c5-8c9e199b69b3"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "url": {
+        "resource": "https://alicecooper.bandcamp.com/",
+        "id": "21a6fd29-99fe-4951-9117-9b3ff3265d40"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "url": {
+        "id": "a4ae393f-0804-4e6a-8559-af8918850997",
+        "resource": "https://alicecooperrock.bandcamp.com/"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": true,
+      "type": "bandcamp",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "bandsintown",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "f0b8d037-619f-4c0b-97a4-ae0ab5568f25",
+        "resource": "https://www.bandsintown.com/a/863"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2"
+    },
+    {
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "begin": null,
+      "ended": true,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "505d7b31-f23a-4a0e-9db9-1a2e82a66bfc",
+        "resource": "https://www.bbc.co.uk/music/artists/ee58c59f-8e7f-4430-b8ca-236c4d3745ae"
+      },
+      "target-type": "url",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.nndb.com/people/801/000022735/",
+        "id": "1b63e1bf-1685-4b96-8aec-05d15eb53bc2"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "end": null,
+      "begin": null,
+      "type": "biography",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "ended": false,
+      "source-credit": "Alice Cooper",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/463597",
+        "id": "0630b81d-1175-49db-b453-25aaa7b80084"
+      },
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/495520",
+        "id": "a767a709-3515-43af-b6c9-4f79250717b8"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "Vincent Furnier",
+      "ended": false,
+      "type": "discogs",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "a6324465-6ba2-412a-bfc1-6dbbba67b5a6",
+        "resource": "https://fanart.tv/artist/ee58c59f-8e7f-4430-b8ca-236c4d3745ae/"
+      },
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "ended": false,
+      "type": "fanpage",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "fanpage",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.alicecooperechive.com/",
+        "id": "d40a7562-8d75-4678-8d80-10fb9e55e506"
+      },
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24"
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "dcd117c0-ffa6-4151-9d74-8663d443e210",
+        "resource": "https://www.sickthingsuk.co.uk/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "fanpage",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "fanpage",
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "url": {
+        "id": "8353d804-0244-492c-a4ac-d3d57f5f3fb3",
+        "resource": "https://www.welcometomynightmare.co.uk/"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "02974ab6-632b-4eb6-a521-6c341637fadc",
+        "resource": "https://www.wenneberg.dk/AliceCooper/ACmain.html"
+      },
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "ended": false,
+      "type": "fanpage",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "37a2815e-7b85-4244-8ee5-0166031dcd66",
+        "resource": "https://open.spotify.com/artist/3EhbVgyfGd7HkpsagwL9GS"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/687",
+        "id": "3cc86684-67e4-4160-aac4-1308d49b4ef0"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "image",
+      "begin": null,
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Alice_Cooper_by_Gage_Skidmore.jpg",
+        "id": "b1242bfe-4993-467b-ba61-520d39743bfd"
+      },
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "288f0a46-7b8d-46e5-8000-b3e4f5a254f8",
+        "resource": "https://www.imdb.com/name/nm0004840/"
+      },
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "last.fm",
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "7a99d311-5ec8-4375-8981-1332e9e1fe59",
+        "resource": "https://www.last.fm/music/Alice+Cooper"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://genius.com/artists/Alice-cooper",
+        "id": "a830d07a-0cf2-43b5-a31d-699819145cfb"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "end": null,
+      "type": "lyrics",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "5281ed32-7d92-46b0-869c-fc7a998ac309",
+        "resource": "https://muzikum.eu/en/alice-cooper/lyrics"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "lyrics",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "myspace",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "1299d0c3-e7ce-460b-90f9-7ea547134a8f",
+        "resource": "https://myspace.com/officialalicecooper"
+      },
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "official homepage",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "url": {
+        "resource": "https://alicecooper.com/",
+        "id": "33de3fe1-054c-4eb9-a460-02ab627f5661"
+      },
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://nightswithalicecooper.com/",
+        "id": "6b7e20b3-3b9f-402a-a27f-d29acf3c1268"
+      },
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://jaxsta.com/profile/0099c685-54eb-450d-b205-0e2273a96e08",
+        "id": "3e2b46ba-8b89-4cfb-a114-20d96a0c074b"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": true,
+      "begin": null,
+      "end": "2025-12-17",
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "67b373d3-fd1b-47b1-8adb-4f454f29ccb3",
+        "resource": "http://id.loc.gov/authorities/names/n84161549"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13892711w",
+        "id": "35acf75e-5aa6-49fe-8524-46b32b9b0c22"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/119323737",
+        "id": "d0762e7e-db3c-43a2-8470-5b7a821a205c"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c683c2c1-66de-41f6-ab80-a4ea119ef84e",
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJwxFQGCPtJQpbRRVhGGpP"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://imvdb.com/n/alice-cooper",
+        "id": "39faa767-742e-49c5-ad95-a5a56e6135b1"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c9c6ce97-044c-4cda-b48d-265e94f5ffe7",
+        "resource": "http://snaccooperative.org/ark:/99166/w6m62gsb"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1096110",
+        "id": "96b9e8db-82d4-4247-ac4d-804481df6349"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d260dc3d-65c4-4a6b-9d76-f277cf0d2851",
+        "resource": "https://rateyourmusic.com/artist/alice-cooper"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a49a1b49-7de2-4b47-a30f-a22150613138",
+        "resource": "https://www.45cat.com/artist/alice-cooper"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "06a67f69-fd37-4a25-84cf-03612891504f",
+        "resource": "https://www.ibdb.com/broadway-cast-staff/alice-cooper-84118"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "Alice Cooper"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "Vincent Damon Furnier",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "id": "0134740e-499a-4097-a98f-35f2026be3b0",
+        "resource": "https://www.ibdb.com/broadway-cast-staff/vincent-damon-furnier-84119"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b40838e0-ca70-4f87-b187-b160702b9327",
+        "resource": "https://www.idref.fr/086949349"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.metal-archives.com/artists/Alice_Cooper/15816",
+        "id": "bfb7ff8a-48bd-4a35-8312-342ffd6d8ee2"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c5a9ff5c-267a-40b3-8d89-b47c53fee8fd",
+        "resource": "https://www.musik-sammler.de/artist/411/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000078979/POPULAR/",
+        "id": "e8782ef8-b7c8-4075-972c-24b2a92a2c38"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Alice_Cooper",
+        "id": "b027c601-3d47-4932-8887-4311787aca3e"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "id": "eeb6ee26-d325-48c8-b0b7-db1780506a5b",
+        "resource": "https://www.spirit-of-rock.com/en/band/Alice_Cooper"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.themoviedb.org/person/35824",
+        "id": "42fac8fa-ae00-4615-8e9f-3ed8d037328a"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.whosampled.com/Alice-Cooper/",
+        "id": "4f055da6-af36-4029-a611-24a47f35b0a7"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": true,
+      "end": "2017",
+      "begin": null,
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.starzik.com/mp3/artistes/Alice-Cooper-24657-0.html",
+        "id": "902d0bea-4e20-49e5-94ea-18638fad7b83"
+      },
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Alvzcap5fi725bii6u3a4arpkjq",
+        "id": "a5c9b96e-cccf-45ed-958c-95bb0049d523"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "end": "2020-10-12",
+      "type": "purchase for download",
+      "ended": true,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "7c155469-665d-45c7-9a50-d03c8c079caf",
+        "resource": "https://mora.jp/artist/201460/"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "end": null,
+      "type": "purchase for download",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "url": {
+        "id": "de9d96b1-569a-4d5f-9de0-e2f10626e680",
+        "resource": "https://music.apple.com/us/artist/393703"
+      },
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "purchase for download",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.hdtracks.com/music/artist/view/id/4106/",
+        "id": "e71cb706-99d8-476e-b65a-17754cb6cfd1"
+      },
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "http://wmg.jp/artist/alicecooper/",
+        "id": "67906cab-2180-4ff2-9121-dd4e4e091269"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "purchase for download",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": true,
+      "begin": null,
+      "end": null,
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://mora.jp/artist/571443/",
+        "id": "ac038df1-6ce1-402d-af19-76a60e36439b"
+      },
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "secondhandsongs",
+      "end": null,
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/152",
+        "id": "aff4bde2-6d53-4759-817e-718a8dc4d901"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/alice-cooper-63d63aa3.html",
+        "id": "eeb437c4-6d7f-44f5-9715-f11fcf2b1ca5"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "type": "setlistfm",
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "bb331dd2-4917-4987-a48d-4842d0c14b8f",
+        "resource": "https://www.facebook.com/44596990399"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": true,
+      "type": "social network",
+      "end": null,
+      "begin": "2008-10-18",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": "2009-09-30",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "bbd647bf-1af7-47a8-a921-7939e1ff51b6",
+        "resource": "https://twitter.com/AliceCooper"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/alicecooper/",
+        "id": "f8361a44-8176-499e-86f3-4451a524e995"
+      },
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "end": null,
+      "type": "social network",
+      "begin": "2012-01",
+      "source-credit": ""
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "35b8d71e-2dc6-4adb-a429-c2e8f8e26bdc",
+        "resource": "https://www.threads.com/@alicecooper"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "begin": "2023-07",
+      "end": null,
+      "type": "social network",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "social network",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.facebook.com/AliceCooper",
+        "id": "f0d0c413-a26a-4556-b0e1-9bc4ba82d564"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "f3fd0f20-a351-4087-981d-2b03524b0977",
+        "resource": "https://www.tiktok.com/@alicecooperofficial"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "songkick",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.songkick.com/artists/538293",
+        "id": "24401673-7003-497b-8667-eab4487175fc"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "soundcloud",
+      "begin": null,
+      "ended": false,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "url": {
+        "id": "43b8ddfb-f674-43dc-95d4-c244cc926c1b",
+        "resource": "https://soundcloud.com/alicecooperofficial"
+      },
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://music.amazon.com/artists/B008KF7T4C",
+        "id": "b6faa363-925e-4679-bf3d-a9e751009b3f"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/393703",
+        "id": "de9d96b1-569a-4d5f-9de0-e2f10626e680"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/102",
+        "id": "fad9683f-b2a9-40e4-8afc-43681c959b8f"
+      },
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://web.napster.com/artist/art.3711",
+        "id": "0c13a10d-4501-4554-b15b-d7fc81531caa"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "4d0fdbf2-8d41-49c7-a505-8e7700691417",
+        "resource": "http://viaf.org/viaf/68912047"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "end": null,
+      "type": "VIAF",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "d4c4fe73-2496-41a1-9f68-b5b178113fb5",
+        "resource": "https://www.wikidata.org/wiki/Q332032"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "type": "wikidata",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": "2008-06-26",
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "url": {
+        "id": "6da4c51d-4ecb-421d-8985-b1b622abd230",
+        "resource": "https://www.youtube.com/channel/UCJQa4Ah9-Qf36bl1JhkAaYA"
+      },
+      "target-credit": ""
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC4kxdw7t3p1gedZ5Jp3HS5w",
+        "id": "705329c4-8a1d-471c-a5bf-1c926f441ca4"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "youtube",
+      "end": null,
+      "begin": "2009-05-12",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": "2013-05-17",
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "ec125c5e-1fd2-4258-af9b-9bc870886bbf",
+        "resource": "https://www.youtube.com/channel/UCSjn-oQV136VoKk7FXxxZ0w"
+      }
+    },
+    {
+      "type": "youtube music",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UC4kxdw7t3p1gedZ5Jp3HS5w",
+        "id": "2cb0e289-c179-4e7a-9035-e66c64009f3a"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "youtube music",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCJQa4Ah9-Qf36bl1JhkAaYA",
+        "id": "bc1d429a-9522-4cab-b7d3-9926def10d53"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "youtube music",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCSjn-oQV136VoKk7FXxxZ0w",
+        "id": "df4c1c71-5afc-442e-b0db-b05e2bda57e4"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    }
+  ],
+  "sort-name": "Cooper, Alice",
+  "life-span": {
+    "end": null,
+    "begin": "1948-02-04",
+    "ended": false
+  },
+  "disambiguation": "the musician born Vincent Damon Furnier, changed his name legally to Alice Cooper in 1974",
+  "type": "Person",
+  "end-area": null,
+  "ipis": [
+    "00063816178",
+    "00078127071"
+  ],
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "type": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000114742994",
+    "0000000368591874"
+  ],
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "Detroit",
+    "type-id": null,
+    "id": "b03ff310-d8e2-45cf-9455-769f76641eb2",
+    "sort-name": "Detroit"
+  },
+  "name": "Alice Cooper",
+  "id": "ee58c59f-8e7f-4430-b8ca-236c4d3745ae",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9"
+}

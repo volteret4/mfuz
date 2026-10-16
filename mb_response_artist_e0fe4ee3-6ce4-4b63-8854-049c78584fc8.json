@@ -1,0 +1,233 @@
+{
+  "end-area": null,
+  "name": "Loose Ends",
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "type": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": ""
+  },
+  "gender-id": null,
+  "sort-name": "Loose Ends",
+  "id": "e0fe4ee3-6ce4-4b63-8854-049c78584fc8",
+  "disambiguation": "UK R&B group",
+  "life-span": {
+    "ended": true,
+    "begin": "1980",
+    "end": "1990"
+  },
+  "gender": null,
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": null,
+  "ipis": [],
+  "country": "GB",
+  "isnis": [
+    "0000000115074027"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "66e65164-283d-41a8-b7a2-5770251cd2ba",
+        "resource": "https://www.allmusic.com/artist/mn0000827760"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "id": "2c13fd9c-4b92-4861-920d-3489dbc68ebb",
+        "resource": "https://www.discogs.com/artist/12136"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/4q3lWHEW55hoLJNzZskFVo",
+        "id": "73d48b30-ef78-4445-beaf-9b9271ed0ade"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/8849",
+        "id": "b7e7733a-ca11-45cb-99d5-e55064779e1a"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "24fe8b8c-8916-45e0-a3e2-deca5cc3c998",
+        "resource": "https://www.last.fm/music/Loose+Ends"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "http://www.looseendsmusic.com/",
+        "id": "05fb25cb-a2a5-4715-9ada-dc82ba4ef2d4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "b71f70a3-4695-49a4-bd2e-448a45daed2e",
+        "resource": "https://music.apple.com/us/artist/96554"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q6675941",
+        "id": "efe2b63a-0acb-4404-adc4-49ece699786b"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "29651736-fa6d-48e4-aadc-a557c6add1cb",
+      "ended": false,
+      "type": "wikipedia",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://en.wikipedia.org/wiki/Loose_Ends_(band)",
+        "id": "635b8ada-9a6b-4248-8c6e-58489515b085"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "96c308f4-d30f-45c1-8092-b6585a9d9ee9",
+        "resource": "https://www.youtube.com/channel/UCuIA9GE_AyJzaJIZA0tHUzg"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "youtube music",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCBg9AqrBVbjTQrJ3B3Zax9A?feature=gws_kp_artist&feature=gws_kp_artist",
+        "id": "63f71ba9-83a5-41dc-8bfb-b2b40dac72d8"
+      }
+    }
+  ]
+}

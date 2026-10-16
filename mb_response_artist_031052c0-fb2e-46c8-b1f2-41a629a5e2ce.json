@@ -1,0 +1,48 @@
+{
+  "country": "US",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "ipis": [],
+  "relations": [
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "8bc9329c-15ec-458e-b97a-fbe2cfb54891",
+        "resource": "https://www.discogs.com/artist/6443505"
+      }
+    }
+  ],
+  "gender": "Male",
+  "area": {
+    "disambiguation": "",
+    "id": "0eeb01c2-6e31-46ad-96b8-319749f731d2",
+    "sort-name": "Philadelphia",
+    "name": "Philadelphia",
+    "type": null,
+    "type-id": null
+  },
+  "name": "Loidis",
+  "isnis": [],
+  "id": "031052c0-fb2e-46c8-b1f2-41a629a5e2ce",
+  "life-span": {
+    "ended": false,
+    "begin": null,
+    "end": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Loidis",
+  "disambiguation": "",
+  "begin-area": null,
+  "end-area": null
+}

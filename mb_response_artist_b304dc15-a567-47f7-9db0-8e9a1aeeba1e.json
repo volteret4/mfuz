@@ -1,0 +1,315 @@
+{
+  "gender-id": null,
+  "life-span": {
+    "ended": true,
+    "end": "1977-10",
+    "begin": "1972-08"
+  },
+  "sort-name": "Harvey, Alex, Sensational Band, The",
+  "end-area": null,
+  "disambiguation": "",
+  "begin-area": {
+    "type-id": null,
+    "id": "c279f805-01f8-46f5-99cf-51f165a1adad",
+    "type": null,
+    "name": "Glasgow",
+    "iso-3166-2-codes": [
+      "GB-GLG"
+    ],
+    "sort-name": "Glasgow",
+    "disambiguation": ""
+  },
+  "isnis": [
+    "0000000106689871"
+  ],
+  "name": "The Sensational Alex Harvey Band",
+  "id": "b304dc15-a567-47f7-9db0-8e9a1aeeba1e",
+  "ipis": [],
+  "relations": [
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "70a5abff-83d1-493d-bb5c-defd8f5bf6b4",
+        "resource": "https://www.allmusic.com/artist/mn0000010503"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "369e6861-f54a-4187-9946-fc152f97802b",
+        "resource": "https://www.discogs.com/artist/426655"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "discogs"
+    },
+    {
+      "url": {
+        "resource": "http://www.wunnerful.com/sahb/",
+        "id": "42e447cf-8354-44f1-8f6e-4c71c7ccbc5e"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "fanpage",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": true,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.deezer.com/artist/75267",
+        "id": "8b7da3d8-87d9-4048-aa7c-0c399dae4e6e"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "url": {
+        "id": "71d63b7e-99bd-444c-b79d-abc52003a5bb",
+        "resource": "https://www.imdb.com/name/nm3387822/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "IMDb",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "ended": true,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://www.sahbofficial.co.uk/",
+        "id": "ee671cc7-da9a-473f-a352-21e4db1300dd"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n95109860",
+        "id": "27e66f4c-5dfa-4a6b-b25d-4ef5f1a27c87"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39QH7JmrQTYJ8CJGQtwdXfWvR",
+        "id": "ca6d980d-a4e7-4c7d-bab8-754bee2c9024"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the-sensational-alex-harvey-band",
+        "id": "d2052b79-c965-414a-9d41-976926901c81"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "a8e68704-e2b1-4d45-ba52-a05dfcec2c3b",
+        "resource": "https://www.musik-sammler.de/artist/sensational-alex-the-harvey-band/"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/the-sensational-alex-harvey-band/393313",
+        "id": "2458d9db-2c10-4ada-b70c-bdc684c98fb7"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://tidal.com/artist/30197",
+        "id": "df486e4f-2fca-4d02-9545-6302851ba6a7"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/the-sensational-alex-harvey-band/393313",
+        "id": "2458d9db-2c10-4ada-b70c-bdc684c98fb7"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/144512824",
+        "id": "2c747080-596e-4db5-b57f-c92cc255cb20"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "VIAF",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "9f338a69-1b50-43aa-bb7c-7d420a4beda4",
+        "resource": "https://www.wikidata.org/wiki/Q2030972"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    }
+  ],
+  "area": {
+    "name": "United Kingdom",
+    "type": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ]
+  },
+  "gender": null,
+  "country": "GB",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group"
+}

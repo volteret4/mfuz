@@ -21,6 +21,9 @@ import os
 import re
 import csv
 import sqlite3
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
@@ -84,6 +87,7 @@ def get_db_connection():
     if DB_PATH is None:
         raise ValueError("Base de datos no configurada. Ejecuta init_config() primero.")
     conn = sqlite3.connect(DB_PATH)
+    apply_pragmas(conn)
     conn.row_factory = sqlite3.Row
     return conn
 

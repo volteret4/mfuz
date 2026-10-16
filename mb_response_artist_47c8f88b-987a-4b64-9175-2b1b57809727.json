@@ -1,0 +1,1468 @@
+{
+  "id": "47c8f88b-987a-4b64-9175-2b1b57809727",
+  "isnis": [
+    "0000000121278173"
+  ],
+  "name": "Billy Idol",
+  "begin-area": {
+    "disambiguation": "",
+    "id": "5e611c84-e912-456d-b396-a6d1e715c0c4",
+    "sort-name": "Stanmore",
+    "name": "Stanmore",
+    "type": null,
+    "type-id": null
+  },
+  "disambiguation": "English rock singer\u2010songwriter",
+  "end-area": null,
+  "sort-name": "Idol, Billy",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": false,
+    "begin": "1955-11-30",
+    "end": null
+  },
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "country": "GB",
+  "relations": [
+    {
+      "type": "allmusic",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "45eb074c-c756-403f-ba57-8e03c8f409d6",
+        "resource": "https://www.allmusic.com/artist/mn0000070800"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/1568",
+        "id": "9502e843-3dde-46ba-91f8-e77161fc8b70"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "type": "bandsintown",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "11aeb2c5-dfbb-498f-a5b4-6952c713e0bb",
+        "resource": "https://www.bbc.co.uk/music/artists/47c8f88b-987a-4b64-9175-2b1b57809727"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "BBC Music page",
+      "ended": true,
+      "attribute-values": {},
+      "end": "2020-11-19",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type": "discogs",
+      "source-credit": "William Broad",
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/1348022",
+        "id": "ee802f0e-9373-4bcb-adcb-6c1302d1a470"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "source-credit": "Billy Idol",
+      "type": "discogs",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/46373",
+        "id": "d64da0c7-c6e2-4171-ba89-303b31913412"
+      }
+    },
+    {
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "type": "fanpage",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "e164c9c7-ce20-44bc-b527-efdb0858d0a3",
+        "resource": "https://billyidol.fandom.com/wiki/Billy_Idol"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "fanpage",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "afde70c9-4ba2-4d47-8710-6a173bc19efc",
+        "resource": "https://fanart.tv/artist/47c8f88b-987a-4b64-9175-2b1b57809727/"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "1c333492-3322-4887-89e7-d59d381cca80",
+        "resource": "https://open.spotify.com/artist/7lzordPuZEXxwt9aoVZYmG"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "47831d86-5587-4f2e-91fd-856a66d59ef3",
+        "resource": "https://www.boomplay.com/artists/1978994"
+      }
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/2111",
+        "id": "a0d2e979-27db-499f-9667-7bb23aa2ffce"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Billy_IDOL_2012.JPG",
+        "id": "198018b0-5bb6-4e65-b429-889549dfbcb0"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "image",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c"
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "type": "IMDb",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0002150/",
+        "id": "bc214437-39e2-4173-a9da-70f12ccb1016"
+      }
+    },
+    {
+      "url": {
+        "id": "8000baab-3de6-40f5-8ed9-17f226954f46",
+        "resource": "https://eu.usatoday.com/story/entertainment/music/2025/11/22/billy-idol-documentary-interview/87404734007/"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "interview",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "interview",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://kogo.iheart.com/content/2019-10-25-billy-idol-says-he-got-his-first-gig-in-a-band-because-he-attracted-women/",
+        "id": "e1db22e2-0ea5-4e39-91bd-1ab6a241620e"
+      }
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "interview",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://ultimateclassicrock.com/billy-idol-best-way-out-of-here-rebel-yell/",
+        "id": "b07ef549-5f1f-46f9-86cb-92f9371e6a8d"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "interview",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "url": {
+        "id": "57606ed4-88c0-47f4-b8e6-a09a92fe7629",
+        "resource": "https://ultimateclassicrock.com/billy-idol-interview-2025/"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "interview",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "7d7edf9c-25ff-4e15-80ee-409b74f62bc3",
+        "resource": "https://web.archive.org/web/20071009124523/http://www.chaoscontrol.com/content_article.php?article=billyidol"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "882bcf21-b644-4d1d-b094-59fd4ca36b1b",
+        "resource": "https://web.archive.org/web/20240519232852/https://www.udiscovermusic.com/news/billy-idol-talks-making-eyes-without-a-face-with-vevo-footnotes/"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "interview"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "interview",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "url": {
+        "resource": "https://www.loudersound.com/features/billy-idol-devils-playground",
+        "id": "565441be-7a68-4471-9e2b-bfcae7234a8d"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "f2d4df52-926d-4574-b86c-096486f25196",
+        "resource": "https://www.rollingstone.com/music/music-features/billy-idol-podcast-interview-1096466/"
+      },
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "type": "interview",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "4198555a-8c2a-4a13-a7e6-21ccacfb1518",
+        "resource": "https://www.theguardian.com/music/article/2024/may/16/billy-idol-reader-interview"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "interview",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "last.fm",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/Billy+Idol",
+        "id": "b065041d-4e2a-4869-8a10-76b6129599aa"
+      }
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "resource": "https://genius.com/artists/Billy-idol",
+        "id": "31c0582f-4a32-40f5-95d5-28ae7964dc0d"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "65bf3c97-8498-4278-afcc-0dbf9f84f5c1",
+        "resource": "https://muzikum.eu/en/billy-idol/lyrics"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "lyrics"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "96bb19be-2ad5-46f1-ab68-4e86d1fa5359",
+        "resource": "https://myspace.com/billyidol"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "myspace",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "c694088c-9429-4b9a-a140-d2f79bed21a4",
+        "resource": "https://billyidol.komi.io/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "official homepage",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://billyidol.net/",
+        "id": "052fb45c-6956-46ca-a28e-6dde6eeb4a84"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "b04b4e52-d3ee-4c2f-b912-9ff1c3ec9cd1",
+        "resource": "https://www.hq.vevo.com/artist/billy-idol"
+      },
+      "attribute-values": {},
+      "ended": true,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "ended": true,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://vevo.com/artist/billy-idol",
+        "id": "453787c0-6dce-4bec-8aa2-0e746070e92e"
+      }
+    },
+    {
+      "end": null,
+      "attribute-values": {},
+      "ended": true,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.billyidol.com/",
+        "id": "630257ff-5b5d-4794-8037-79e80789321d"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.rottentomatoes.com/celebrity/billy_idol",
+        "id": "cccb14d9-cb43-4a9a-8e07-c3de03851b1d"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "35b3a50f-bf0e-4309-a3b4-58eeed8cee6a",
+      "type": "online community",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "ended": true,
+      "attribute-values": {},
+      "end": "2025-12-17",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://jaxsta.com/profile/006d92a4-b4e5-4351-b623-e5dbb122ecc2",
+        "id": "4dad889e-d12b-42e5-a4fc-2c6399267710"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n84040476",
+        "id": "07153f66-5c11-4fb2-a7a6-9da21606c91a"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "5ab39a7f-aba2-43d4-a0e5-b98a10d4241f",
+        "resource": "https://castalbums.org/people/Billy-Idol/64718"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb138954573",
+        "id": "9e688f6e-dddf-4f6f-af6c-8958b76d7be0"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://d-nb.info/gnd/124674283",
+        "id": "ff1d6a84-67ca-47f0-ba74-d3e62acf48c7"
+      }
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJtCwQrgdttvyHqYR7x4bd",
+        "id": "8220464b-9f46-4004-9584-898dcf2b8b2d"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "55b822ca-7956-4d37-ac11-6abd36684f7b",
+        "resource": "https://imvdb.com/n/billy-idol"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "71e16396-ab54-4aab-883c-0fedaa10d894",
+        "resource": "https://musicmoz.org/Bands_and_Artists/I/Idol,_Billy/"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6461hz8",
+        "id": "371891f1-4451-48cf-ba62-fe3ca16bf0c7"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-927711",
+        "id": "13a27bee-ad66-4216-834c-b559fa9bd5da"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "eb15a655-e579-4a15-9b8b-c77cd1dcca02",
+        "resource": "https://openlibrary.org/authors/OL2741915A"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/billy-idol",
+        "id": "38476d67-4b1b-4732-ab43-0210db8aaaf7"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "96fe714d-ce84-403e-ba34-128631862751",
+        "resource": "https://www.45cat.com/artist/billy-idol"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.goodreads.com/author/show/51985",
+        "id": "b1ef7963-7466-4716-9b1f-f160d690fac7"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c6409862-532d-4023-b9db-703bc7d46cc3",
+        "resource": "https://www.idref.fr/148952917"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "1ee2bcec-2b4a-4736-8141-82912fc9f201",
+        "resource": "https://www.librarything.com/author/idolbilly"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "2897e763-1b5a-4efe-8afb-49f885d89091",
+        "resource": "https://www.musik-sammler.de/artist/2331/"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "92254db4-e775-4d26-8575-14494a70dabf",
+        "resource": "https://www.muziekweb.nl/Link/M00000060909/POPULAR/"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.spirit-of-rock.com/en/artist/Billy_Idol/13806",
+        "id": "7e4277e7-c2e1-40ad-aba0-14d3ed47dbcd"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "4b5e98cc-b1a0-412c-aa84-2556607dd8bb",
+        "resource": "https://www.themoviedb.org/person/80117"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.whosampled.com/Billy-Idol/",
+        "id": "898c83b2-7467-49a8-ad4e-fa512de52890"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "ee83927c-3189-417b-9e4c-6145474f14a4",
+        "resource": "http://www.maniadb.com/artist/117870"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/550949",
+        "id": "a31a049a-ac2e-4b7c-a919-bc3753a94b62"
+      }
+    },
+    {
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "type": "purevolume",
+      "target-type": "url",
+      "source-credit": "",
+      "end": "2018-06-30",
+      "ended": true,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "96d2462a-b3d7-4e40-a0bb-3235445d7aa8",
+        "resource": "http://www.purevolume.com/billyidol"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "636f0def-bbba-4c26-926f-d60371aa45c8",
+        "resource": "https://secondhandsongs.com/artist/4705"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "setlistfm",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/billy-idol-23d68487.html",
+        "id": "8dd2985a-15fb-40a5-90b1-ddbd22a86807"
+      }
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "8de82243-296d-4776-bed8-5832c7bef56b",
+        "resource": "https://twitter.com/BillyIdol"
+      },
+      "direction": "forward",
+      "begin": "2010-03-20"
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/153679928035576",
+        "id": "af3ef1d6-cbaf-49bf-b30b-f6a329632d17"
+      },
+      "direction": "forward",
+      "begin": "2011-06-07",
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/billyidol/",
+        "id": "b4da97f0-c923-46d5-b017-4c6d43b72ebf"
+      },
+      "begin": "2013-04",
+      "direction": "forward",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": "2023-07",
+      "direction": "forward",
+      "url": {
+        "id": "ee23a924-db9a-4f1e-91d5-a0efcb73d6bc",
+        "resource": "https://www.threads.com/@billyidol"
+      }
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "7e788fd4-3685-430a-aca0-5cba551084c2",
+        "resource": "https://www.facebook.com/BillyIdol"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.tiktok.com/@billyidol",
+        "id": "72aea8c0-7ce0-4c13-b7fd-a5d7ac400c62"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://plus.google.com/u/0/+BillyIdol/",
+        "id": "0cb40854-95d8-4b6a-91f3-4dd7ce8922b4"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "end": null,
+      "attribute-values": {},
+      "ended": true,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "958172bc-ca9b-4549-a2bf-4cc24eb198e0",
+        "resource": "https://www.songkick.com/artists/347869"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "soundcloud",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "resource": "https://soundcloud.com/official-billy-idol",
+        "id": "da3d4e84-ee95-417d-8135-44c8787a69b2"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B008JFTSUG",
+        "id": "60e28d38-cf8a-4c14-a002-f23835e4b881"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/550949",
+        "id": "a31a049a-ac2e-4b7c-a919-bc3753a94b62"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/10283",
+        "id": "d1154d8a-56c6-4151-9d68-3ed009d01efd"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a1e213e2-900a-40c4-96b2-efa529373df0",
+        "resource": "https://www.amazon.com/gp/product/B000QJNH1Y"
+      }
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "02430788-e21b-4a86-a92d-bd06b08c0b84",
+        "resource": "http://viaf.org/viaf/35395926"
+      }
+    },
+    {
+      "url": {
+        "id": "db232c27-8aca-412e-82e7-4763d7ec0c97",
+        "resource": "https://www.dailymotion.com/billyidol"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "video channel",
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q73437",
+        "id": "20b7a873-36b6-4456-8f48-b72a1b90f16b"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "source-credit": "BillyIdolVEVO",
+      "target-type": "url",
+      "type": "youtube",
+      "direction": "forward",
+      "begin": "2010-03-03",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC22iRbeDan0Qe_PrhdOkj2w",
+        "id": "bddbe6ad-89cf-43e8-a033-d235900dedd2"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": "2010-03-24",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCZAfHkJj43Lir2Id3GiGCjQ",
+        "id": "279768d7-9de5-4a4c-a0f8-3ba12cbf1f38"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "source-credit": "Billy Idol",
+      "type": "youtube",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "begin": "2013-06-14",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC_R3nYWHZV0tGgbpuDoI0vA",
+        "id": "253ef61d-192d-4285-8cbc-187751ce44f0"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "source-credit": "Billy Idol",
+      "target-type": "url",
+      "type": "youtube"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "5ce9def6-cc8a-4005-9ad7-070d01dfa61d",
+        "resource": "https://music.youtube.com/channel/UC22iRbeDan0Qe_PrhdOkj2w"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "type": "youtube music",
+      "target-type": "url",
+      "source-credit": "Billy Idol"
+    },
+    {
+      "url": {
+        "id": "22dd37e5-6741-4d38-9b2a-ef8384ebb17a",
+        "resource": "https://music.youtube.com/channel/UC_R3nYWHZV0tGgbpuDoI0vA"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "youtube music",
+      "source-credit": "Billy Idol",
+      "target-type": "url",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a1fba498-95da-4bfd-b8ee-d3d793625bc6",
+        "resource": "https://music.youtube.com/channel/UCZAfHkJj43Lir2Id3GiGCjQ"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "type": "youtube music",
+      "target-type": "url",
+      "source-credit": "Billy Idol"
+    }
+  ],
+  "gender": "Male",
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "name": "United Kingdom",
+    "type": null,
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ]
+  },
+  "ipis": [
+    "00046611297",
+    "00046611395",
+    "00581150859"
+  ]
+}

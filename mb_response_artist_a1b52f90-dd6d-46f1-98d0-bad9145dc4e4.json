@@ -1,0 +1,55 @@
+{
+  "area": {
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "sort-name": "Los Angeles",
+    "type-id": null,
+    "disambiguation": "",
+    "type": null,
+    "name": "Los Angeles"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "end-area": null,
+  "gender": null,
+  "name": "Dick Slessig Combo",
+  "type": "Group",
+  "begin-area": {
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "sort-name": "Los Angeles",
+    "type-id": null,
+    "disambiguation": "",
+    "type": null,
+    "name": "Los Angeles"
+  },
+  "country": "US",
+  "sort-name": "Dick Slessig Combo",
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1990"
+  },
+  "id": "a1b52f90-dd6d-46f1-98d0-bad9145dc4e4",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "2019bec9-2330-4674-a114-331b378e0d6d",
+        "resource": "https://rateyourmusic.com/artist/dick-slessig-combo"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    }
+  ],
+  "isnis": [],
+  "ipis": [],
+  "disambiguation": ""
+}

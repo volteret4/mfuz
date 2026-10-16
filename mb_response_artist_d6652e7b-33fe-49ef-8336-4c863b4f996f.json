@@ -1,0 +1,243 @@
+{
+  "life-span": {
+    "ended": false,
+    "begin": "1972-10",
+    "end": null
+  },
+  "type": "Group",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type-id": null,
+    "disambiguation": "",
+    "name": "United States",
+    "type": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000101928722"
+  ],
+  "gender-id": null,
+  "sort-name": "E Street Band, The",
+  "name": "The E Street Band",
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "name": "New Jersey",
+    "iso-3166-2-codes": [
+      "US-NJ"
+    ],
+    "disambiguation": "",
+    "sort-name": "New Jersey",
+    "id": "a36544c1-cb40-4f44-9e0e-7a5a69e403a8"
+  },
+  "ipis": [],
+  "end-area": null,
+  "id": "d6652e7b-33fe-49ef-8336-4c863b4f996f",
+  "relations": [
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000940507",
+        "id": "9fcbe078-03da-4aa0-8e3c-6eb51b3da854"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.discogs.com/artist/408247",
+        "id": "b8a5f69c-f6b9-4faa-b4df-7d39af81f71e"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "a9deeb74-bbcc-4430-a05b-e0ab63c837f3",
+        "resource": "https://www.discogs.com/artist/760706"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "d706ab3a-3c56-492e-a72b-bdd1a6977f51",
+        "resource": "https://open.spotify.com/artist/6Gt8nwunKGTUYQq5UqiDR2"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "6b19c471-ae8d-4c89-9b72-da646fa93460",
+        "resource": "http://id.loc.gov/authorities/names/n88619746"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14013392z",
+        "id": "ac263a02-578f-41bc-bcc8-066f98d8e36d"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "88d59854-0568-4fd9-b966-2afdc4c17deb",
+        "resource": "https://d-nb.info/gnd/7593535-1"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "265e60f0-1b13-4edc-b578-135687f05fe2",
+        "resource": "https://rateyourmusic.com/artist/e_street_band"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n88619746",
+        "id": "b7c812f2-d14c-4df9-8820-174d356e9227"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "0b656d50-9492-48b0-8a26-0379bc70b7a6",
+        "resource": "http://viaf.org/viaf/213418875"
+      },
+      "attribute-values": {},
+      "type": "VIAF",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1276681",
+        "id": "4c3265a7-1ff5-4052-8a9c-6eea45c9ffcb"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "country": "US",
+  "disambiguation": "",
+  "gender": null
+}

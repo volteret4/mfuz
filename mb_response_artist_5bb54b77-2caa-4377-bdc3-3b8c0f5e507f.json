@@ -1,0 +1,343 @@
+{
+  "name": "Glass Beams",
+  "sort-name": "Glass Beams",
+  "gender-id": null,
+  "country": "AU",
+  "relations": [
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "1ee374da-0117-468d-b79f-47a134fce0b7",
+        "resource": "https://www.allmusic.com/artist/mn0004073981"
+      },
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "e0678d9a-65b5-4629-a0cf-043758ee6e99",
+        "resource": "https://glassbeams.bandcamp.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "bandcamp",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.theguardian.com/music/2024/mar/30/one-to-watch-glass-beams-melbourne-mahal",
+        "id": "821d7098-da22-440e-9eb1-cc66c1a9860b"
+      },
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "biography",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/9337792",
+        "id": "2e6d453d-5db6-4256-acd7-48d203555443"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "54642d04-62f9-468f-9d67-1b0330d27706",
+        "resource": "https://open.spotify.com/artist/1LTFJvVvRw7ghAyThxYmnF"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "d848b46a-3969-4077-9e65-81322f92e63d",
+        "resource": "https://www.deezer.com/artist/126351422"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.last.fm/music/Glass+Beams",
+        "id": "58f6dec6-2cfb-4151-ad11-5286c953d56e"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "type": "last.fm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "url": {
+        "id": "fbbe63be-889c-4dd3-af68-abb757587601",
+        "resource": "https://rateyourmusic.com/artist/glass-beams"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-type": "url",
+      "url": {
+        "id": "7a2e5f5c-5731-4a7d-9fe6-808e63eb9962",
+        "resource": "https://music.apple.com/us/artist/1558093934"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/glass_beams",
+        "id": "73007d63-71ea-485e-aa1a-aff184a15ce5"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/GlassBeams",
+        "id": "d1a90c40-ea30-4d7e-baf5-feae1afd53f6"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "77858b27-7b27-470a-ba3f-942fe46827bd",
+        "resource": "https://www.instagram.com/glass_beams/"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "c970636f-e526-4a22-b419-dce425c812e9",
+        "resource": "https://www.songkick.com/artists/10211383"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "type": "soundcloud",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "71506e08-e5b7-449e-804d-276eaa7cc3df",
+        "resource": "https://soundcloud.com/glassbeams"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1558093934",
+        "id": "7a2e5f5c-5731-4a7d-9fe6-808e63eb9962"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/23927301",
+        "id": "c3a015a8-20cb-4bed-a62e-290e027a33ff"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q125447845",
+        "id": "182a5e1a-9939-412c-8a31-cd30df5b6998"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    }
+  ],
+  "gender": null,
+  "disambiguation": "",
+  "end-area": null,
+  "id": "5bb54b77-2caa-4377-bdc3-3b8c0f5e507f",
+  "ipis": [],
+  "begin-area": {
+    "id": "b4e9352c-8edf-4911-8fa3-e852afa30501",
+    "sort-name": "Melbourne",
+    "type-id": null,
+    "name": "Melbourne",
+    "disambiguation": "",
+    "type": null
+  },
+  "type": "Group",
+  "life-span": {
+    "begin": "2021",
+    "ended": false,
+    "end": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [],
+  "area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "Melbourne",
+    "type-id": null,
+    "sort-name": "Melbourne",
+    "id": "b4e9352c-8edf-4911-8fa3-e852afa30501"
+  }
+}

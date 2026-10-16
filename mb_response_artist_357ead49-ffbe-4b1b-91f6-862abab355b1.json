@@ -1,0 +1,189 @@
+{
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  },
+  "area": {
+    "name": "United Kingdom",
+    "type-id": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type": null
+  },
+  "name": "The Third Eye Foundation",
+  "end-area": null,
+  "disambiguation": "",
+  "id": "357ead49-ffbe-4b1b-91f6-862abab355b1",
+  "sort-name": "Third Eye Foundation, The",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [],
+  "begin-area": {
+    "type": null,
+    "id": "40d758a4-b7c2-40f3-b439-5efbd2a3b038",
+    "disambiguation": "",
+    "sort-name": "Bristol",
+    "iso-3166-2-codes": [
+      "GB-BST"
+    ],
+    "type-id": null,
+    "name": "Bristol"
+  },
+  "country": "GB",
+  "isnis": [
+    "0000000003498255"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "acf1a133-1bdd-40d5-9cd7-440b04437c71",
+        "resource": "https://www.allmusic.com/artist/mn0000592026"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/212837",
+        "id": "3a9c0209-b798-4f47-8480-fb6cf08bc452"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "539d6acd-7546-4640-a1ef-fbaee81d82dd",
+        "resource": "https://open.spotify.com/artist/1C4Ix8pbUGqzAP79elcpcm"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/1698",
+        "id": "19a26caa-f632-40ef-ab2a-73f40d335911"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "3d832785-9ec5-445c-a6bb-62cbbbb271af",
+        "resource": "https://rateyourmusic.com/artist/the_third_eye_foundation"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id5474428",
+        "id": "36a03096-1edd-4877-aa75-b4439ebed253"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "1d7d1838-b87c-4e5d-a9cc-6bea3596e03b",
+        "resource": "https://tidal.com/artist/21788"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "7ae47ce6-d1f4-48c7-ba5e-50c4ced77add",
+        "resource": "https://www.wikidata.org/wiki/Q6788610"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    }
+  ],
+  "gender": "Male",
+  "type": "Person"
+}

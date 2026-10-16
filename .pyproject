@@ -175,6 +175,7 @@
         "modules/scripts_module.py",
         "modules/widget_player_module.py",
         "modules/url_playlist.py",
+        "ui/db_creator/db_creator_module.ui",
         "ui/descargas/descargas_module.ui",
         "ui/base_datos/db_creator_base.ui",
         "ui/muspy/lastfm_bluesky_dialog.ui",

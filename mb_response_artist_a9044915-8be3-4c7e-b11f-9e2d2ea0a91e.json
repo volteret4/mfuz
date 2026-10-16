@@ -1,0 +1,1321 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "type": null,
+    "name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "type-id": null
+  },
+  "end-area": null,
+  "gender": null,
+  "name": "Megadeth",
+  "type": "Group",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Los Angeles",
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "type": null,
+    "name": "Los Angeles",
+    "disambiguation": ""
+  },
+  "country": "US",
+  "sort-name": "Megadeth",
+  "gender-id": null,
+  "life-span": {
+    "begin": "1983-06",
+    "ended": false,
+    "end": null
+  },
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000406294",
+        "id": "6ceca98a-076e-4404-b545-7207ad5a356c"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://officialmegadeth.bandcamp.com/",
+        "id": "5b203195-7e46-47a8-814b-00c5e67837c1"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "id": "7162c79d-307c-4c60-ac07-e148271c3b3e",
+        "resource": "https://www.bandsintown.com/a/551"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "id": "e71a0986-0762-4870-a2c0-f88866e62fb5",
+        "resource": "https://www.bbc.co.uk/music/artists/a9044915-8be3-4c7e-b11f-9e2d2ea0a91e"
+      },
+      "attributes": [],
+      "end": "2020-11-19",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "eb535226-f8ca-499d-9b18-6a144df4ae6f",
+      "url": {
+        "id": "3cade78d-7455-4dc9-aecc-cd7d3afaafff",
+        "resource": "https://megadeth.tumblr.com/"
+      },
+      "attribute-values": {},
+      "type": "blog",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "1c67c081-5146-41f2-94c1-c3d10be8dad8",
+        "resource": "https://www.discogs.com/artist/11770"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "8b93e330-8071-415f-983b-9e513071c5d4",
+        "resource": "http://www.metallipromo.com/meg.html"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "fanpage"
+    },
+    {
+      "type": "fanpage",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "http://megadeth.rockmetal.art.pl/",
+        "id": "7ed7f0d6-dee2-4a3d-9c48-e38ad04eea32"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": true,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "f0c93ac3-221c-4bfd-94a4-b834fe105a58",
+        "resource": "https://music.migu.cn/v3/music/artist/33026"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "begin": null,
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1Yox196W7bzVNZI7RBaPnf",
+        "id": "43920b73-45b9-465e-b98c-481ec6d0abae"
+      },
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "2a70cfd7-084a-4cfe-9bec-b62c9eba921a",
+        "resource": "https://play.anghami.com/artist/10199"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/3487",
+        "id": "09434807-97dc-4eff-85b3-bc5af74fb965"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "url": {
+        "resource": "http://www.pandora.com/megadeth",
+        "id": "3d538018-5d81-4b28-8fdf-ca87afae9d71"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "id": "073b843b-4eb3-4782-b1ae-79ab52b1bb75",
+        "resource": "https://commons.wikimedia.org/wiki/File:Megadeth2010.jpg"
+      }
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "f7cc2a73-fe3a-4033-9509-d2196b43ea1b",
+        "resource": "https://www.imdb.com/name/nm1655103/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.last.fm/music/Megadeth",
+        "id": "7035b5f4-d482-4d50-a212-c03e2285c56c"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Megadeth",
+        "id": "cb49fd5a-5e05-42e7-905a-b6d38da4fef4"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "url": {
+        "id": "1540d5c0-62de-4046-b5ab-799cbdbbd864",
+        "resource": "https://muzikum.eu/en/megadeth/lyrics"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "447d8cea-9bde-4401-b0d4-072dca95b075",
+        "resource": "https://www.musixmatch.com/artist/Megadeth"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/megadeth",
+        "id": "6905059f-a29f-43e7-9870-67cf624aeb22"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "https://www.megadeth.com/",
+        "id": "dda16bf6-dfbc-4df8-b30d-ee2c6ffa95dd"
+      }
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n91071104",
+        "id": "365438a5-e49c-4d50-8131-b4c31caf9ad7"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13904927m",
+        "id": "7c37e141-b774-47f3-9714-4f55f3d0a431"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "19ff6284-7781-4948-9223-0464c576d166",
+        "resource": "https://d-nb.info/gnd/10290379-7"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "92cbdf46-0102-4b0c-b415-91136cc12e99",
+        "resource": "https://imvdb.com/n/megadeth"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://musicmoz.org/Bands_and_Artists/M/Megadeth/",
+        "id": "5cfa640f-7a75-4510-b0d0-c4b7c434578f"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://openlibrary.org/authors/OL2741584A/",
+        "id": "10332eb2-347a-4268-a244-57fbccb84978"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/megadeth",
+        "id": "0dfb02e0-4d5a-4c97-8a4d-ade9da675039"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "6311aa1e-0476-460d-85a0-1b9e7fcfc220",
+        "resource": "https://www.45cat.com/artist/megadeth"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.livefans.jp/artists/3591",
+        "id": "9b79a044-dce0-4d26-a770-7ac7129e2147"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Megadeth/138",
+        "id": "39af2a7b-6ad9-4d15-a2de-7aa68713e8c2"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "b312ee89-e345-41cd-a939-e1efcc46eaba",
+        "resource": "https://www.metalmusicarchives.com/artist/megadeth"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/megadeth/",
+        "id": "2e46f04d-6c8b-405e-ac56-d781679bd5a9"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000021753/POPULAR/",
+        "id": "0dd5efdb-244f-4ea7-9537-8267a160496a"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Megadeth",
+        "id": "0cb8d697-ce75-4990-84f6-25697160a28a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://www.whosampled.com/Megadeth/",
+        "id": "cff6135d-0cad-474c-b28c-49449d4e1367"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "43a9e724-4944-459a-ae37-4ec539b86fdd",
+        "resource": "https://www.worldcat.org/identities/lccn-n91071104"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://worldcat.org/identities/lccn-n91071104/",
+        "id": "8a242fdc-0e8c-4e9f-a91c-f0b2e2d0fb27"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "efe7c23e-fd88-426f-a175-c1e9c97f1545",
+        "resource": "https://play.google.com/store/music/artist?id=A6ibobmpocyvvr72lyu37jg7m6u"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": true,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": "2020-10-12",
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "be634d98-0cff-494b-9b53-25ca58ab1b94",
+        "resource": "https://itunes.apple.com/us/artist/id488289"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "16d59474-fb26-4cd3-a2bd-e407b96e74a5",
+        "resource": "https://mora.jp/artist/200065/all"
+      },
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://us.7digital.com/artist/megadeth",
+        "id": "30ad4b47-2c46-4beb-983b-17a4d6e25d8e"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "2c8d9130-62f9-4890-b3a2-480772766efb",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/megadeth/download-streaming-albums"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "id": "2f9d490c-90d9-4a64-95f6-e995f363a07c",
+        "resource": "https://www.amazon.com/-/e/B000APENBM"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700168910",
+        "id": "dbd9afb6-a361-4a47-9fea-65d9534ede57"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "id": "83dfa76d-6988-49fa-8f5e-5fe1dfb51184",
+        "resource": "https://www.yesasia.com/0-aid34330-0-bpt.47-en/list.html"
+      },
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purevolume",
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "url": {
+        "resource": "http://www.purevolume.com/megadeth",
+        "id": "b4fd6433-bdc2-4390-9705-026a4b7b60c2"
+      },
+      "attributes": [],
+      "end": "2018-06-30",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": true,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/9527",
+        "id": "e74a2a9b-ef02-48f2-a721-6e649a9cd1aa"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type": "setlistfm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "abce7aff-a9f8-4ea6-ac32-2ff58733f95b",
+        "resource": "https://www.setlist.fm/setlists/megadeth-73d6aa19.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "008fa43a-1746-4fb8-80c1-f1286bfd448a",
+        "resource": "https://twitter.com/Megadeth"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/Megadeth",
+        "id": "6c6d7d50-b56f-4345-a06b-962f4b61f29a"
+      },
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/Megadeth/",
+        "id": "179afc4b-a4d9-401a-bd0c-d4afc3fb65e3"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "6f279b15-1e76-412e-a0e1-9dad545b5c32",
+        "resource": "https://www.threads.com/@megadeth"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "a2219eb5-3c04-4a20-a486-388c3d69abef",
+        "resource": "https://www.tiktok.com/@megadeth"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/117140",
+        "id": "2c260579-936f-4d04-9b8f-ae2ddda3005b"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick"
+    },
+    {
+      "url": {
+        "id": "6a431f60-4df7-40cd-9cc7-f1e0b2a2b0f6",
+        "resource": "https://soundcloud.com/megadethofficial"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://music.amazon.com/artists/B000QJPK78",
+        "id": "8e1c6685-0027-4d4f-8a1b-43d4de46e59b"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/us/artist/488289",
+        "id": "70f277f6-4cb8-4228-a6b9-b94948bbf379"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "829a04e5-75a1-4969-8a44-36eda075ed79",
+        "resource": "https://open.qobuz.com/artist/121232"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/946",
+        "id": "d9523282-45f7-4d7c-ac74-c0269dbe1241"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "e4018489-81b7-474a-afb9-16528bcd3bda",
+        "resource": "https://us.napster.com/artist/megadeth"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/megadeth/121232",
+        "id": "67df7f3b-d5c6-46ec-9413-2cd1d7ac5e05"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "ended": true,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "21e4e19f-7ad9-4eea-901b-70203f39a8cd",
+        "resource": "https://web.napster.com/artist/art.2011"
+      },
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "ticketing",
+      "url": {
+        "resource": "https://www.livenation.co.uk/artist-56198",
+        "id": "388b6454-56df-471f-9555-e88fb79e5554"
+      },
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "ticketing",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "url": {
+        "resource": "https://www.ticketmaster.com/artist/735627",
+        "id": "75ba318c-f998-48a8-b364-7c7444badc38"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "vgmdb",
+      "attribute-values": {},
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "url": {
+        "id": "cec70db6-ae53-4d28-847a-f6703ef55072",
+        "resource": "https://vgmdb.net/artist/4334"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/102859188",
+        "id": "e541afc6-269c-4bcf-b124-1815d225a2d6"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "cb3cbcd9-3225-4108-9fb8-8d6debd8c596",
+        "resource": "https://www.wikidata.org/wiki/Q83431"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "megadethvevo",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "56e008d2-59b7-4e09-8000-81eb209672f2",
+        "resource": "https://www.youtube.com/channel/UC-Ugu5IBFgrYuHBAW2DjmZQ"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "youtube",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "Megadeth",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "d3a58e6a-2376-4f36-bd0e-dfffa92b1194",
+        "resource": "https://www.youtube.com/channel/UCLVz1B001PIbq9LliJenV2w"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "8cb19df8-1ca4-4b39-881b-b8965631dad4",
+        "resource": "https://music.youtube.com/channel/UCW5bkwocGGoeJjHTJZIEAOw"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "attribute-values": {},
+      "type": "youtube music",
+      "target-credit": "",
+      "begin": null
+    }
+  ],
+  "isnis": [
+    "0000000119384102",
+    "000000046959103X"
+  ],
+  "id": "a9044915-8be3-4c7e-b11f-9e2d2ea0a91e",
+  "ipis": [],
+  "disambiguation": ""
+}

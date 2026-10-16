@@ -1,0 +1,1122 @@
+{
+  "type": "Group",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1968-08"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "000000012348742X"
+  ],
+  "area": {
+    "name": "Canada",
+    "disambiguation": "",
+    "type": null,
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "type-id": null,
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "sort-name": "Canada"
+  },
+  "name": "Rush",
+  "sort-name": "Rush",
+  "gender-id": null,
+  "relations": [
+    {
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "ea214321-4b40-46c4-a4eb-a7244c568774",
+        "resource": "https://www.allmusic.com/artist/mn0000203008"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "id": "c3d9546f-7927-43ec-9715-2a344c21b6f9",
+        "resource": "https://www.bandsintown.com/a/26702"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "bandsintown"
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "id": "112f6558-690a-4a26-8873-bb7ae6b52432",
+        "resource": "https://www.bbc.co.uk/music/artists/534ee493-bfac-4575-a44a-0ae41e2c3fe4"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": true,
+      "source-credit": "",
+      "end": "2020-11-19",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "e5d2f66a-1969-471f-8685-c7c1c78a386f",
+        "resource": "https://www.discogs.com/artist/61800"
+      },
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "f738b754-ee0d-4e75-8edb-bdd9ad67bb9d",
+        "resource": "https://music.migu.cn/v3/music/artist/14218"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "url": {
+        "id": "3048b7ea-c8fd-4cd4-9395-b1dac0782fd7",
+        "resource": "https://open.spotify.com/artist/2Hkut4rAAyrQxRdof7FVJq"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "7e7271f2-b553-4df8-8d32-c775fbc3eb6f",
+        "resource": "https://www.deezer.com/artist/8686"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "http://www.pandora.com/rush",
+        "id": "fd684d90-4c51-4568-8f9d-53378659d323"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "3dce2ef8-d12e-4892-b24f-a30a57491d4b",
+        "resource": "https://www.imdb.com/name/nm2000037/"
+      },
+      "attribute-values": {},
+      "type": "IMDb",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Rush",
+        "id": "b953f925-9b28-4b79-bc04-1bbdefa5a50c"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "9f7db410-dd3e-4665-b714-d51788b9b3be",
+        "resource": "https://genius.com/artists/Rush"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics",
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "9bb32e2e-5146-4890-9647-4e58f00091e2",
+        "resource": "https://www.musixmatch.com/artist/Rush"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "e1cd3c45-c9c8-49fa-918c-0756907290f4",
+        "resource": "https://myspace.com/officialrush"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.rush.com/",
+        "id": "0717a183-3ad5-4b2b-9442-967f7d9cfc29"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15"
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n84040478",
+        "id": "c24106c8-5e1b-4c8c-8e09-3f2d95b45f5b"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://mvdbase.com/person.php?id=A7870",
+        "id": "dbd43535-3c0f-406d-a049-35eceff76fa5"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1215005-8",
+        "id": "2a045a93-21d0-4c1a-8454-f2de0f15a9bc"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "6255392e-d8b1-45fd-a326-c326819b2b7c",
+        "resource": "https://id.oclc.org/worldcat/entity/E39QQPVp7PwFbVyCCmjXmywc7R"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://imvdb.com/n/rush",
+        "id": "98661671-7050-4a31-b766-d88dc4e4b294"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://musicmoz.org/Bands_and_Artists/R/Rush/",
+        "id": "28904094-3cac-46ee-8f1c-b9900fa3d5fb"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://openlibrary.org/authors/OL2907745A/",
+        "id": "edf05913-91c9-4eda-b471-567749535a33"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "bb747fd4-51e8-4161-bf44-0f0863fde365",
+        "resource": "https://rateyourmusic.com/artist/rush"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "8c83cc4b-606e-47e9-ac2e-640b549b0bc1",
+        "resource": "https://www.45cat.com/artist/rush"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "b87b859f-0c3c-4db3-93dc-42d8f00987fd",
+        "resource": "https://www.livefans.jp/artists/21146"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "91250baf-199c-4d55-bafe-0d93d972d9d7",
+        "resource": "https://www.metal-archives.com/bands/Rush/1206"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.metalmusicarchives.com/artist/rush",
+        "id": "212550c8-935b-432c-b5d5-51647fa4d360"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "30c1fcdb-5955-42ac-b97c-314176f37c90",
+        "resource": "https://www.musik-sammler.de/artist/rush/"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "edbf491e-9bfd-425b-9876-c9f98fa3b263",
+        "resource": "https://www.muziekweb.nl/Link/M00000034284/POPULAR/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a6843baa-aa2c-4e55-824a-89ea284bcb14",
+        "resource": "https://www.progarchives.com/artist.asp?id=609"
+      },
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Rush",
+        "id": "78ed34df-55e1-44c6-b1d9-073a3213f252"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "86a47196-9721-4218-b0c0-a7d0bc56b53f",
+        "resource": "https://www.spirit-of-rock.com/en/band/Rush"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.whosampled.com/Rush/",
+        "id": "01edce97-ef57-4d84-8970-1f5d416b7aa7"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n84040478/",
+        "id": "290b8e17-a8e2-4824-9fff-7b74e013f94a"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": "2020-10-12",
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=A4d2wgapbj27kffi5u6sorktbtm",
+        "id": "86c1fc47-d236-4ebe-b68b-38b56c502541"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-type": "url",
+      "url": {
+        "resource": "https://ca.7digital.com/artist/rush",
+        "id": "926710c3-bf1d-401f-a5e1-2b17dfb4840c"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://mora.jp/artist/230351/all",
+        "id": "5bee394a-d686-4a1c-8c6b-c6eb132feb7e"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "2f9bfeb9-3609-449c-9dcb-95e59dd2740a",
+        "resource": "https://music.apple.com/ca/artist/50526"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "91b2f13f-4816-43e7-8653-f166137403de",
+        "resource": "https://ototoy.jp/_/default/a/285291"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "\u30e9\u30c3\u30b7\u30e5",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://ototoy.jp/_/default/a/522034",
+        "id": "78a6b340-dcbb-4023-a6fa-ad674e4fe579"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "resource": "https://www.melon.com/artist/detail.htm?artistId=100334",
+        "id": "7d4e8724-9932-420f-b138-e47ded97d1c3"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "9803d29e-54bc-47c6-990a-af44ff725d22",
+        "resource": "https://www.qobuz.com/ca-en/interpreter/rush/71886"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "url": {
+        "id": "d570953d-2c97-49c5-a276-0adcc7761c88",
+        "resource": "https://itunes.apple.com/ca/artist/id50526"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": true,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700295385",
+        "id": "43a317a9-a5f0-4bce-acf1-b155aaf9fd4a"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "end": "2018-06-30",
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "4e7b20f6-a06b-4f42-9831-9512bd6dcea6",
+        "resource": "http://www.purevolume.com/rush"
+      },
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "target-type": "url",
+      "type": "purevolume",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "03f64693-401e-418a-a575-1de81aa2128b",
+        "resource": "https://secondhandsongs.com/artist/2886"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "type": "setlistfm",
+      "attribute-values": {},
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/rush-13d6dd1d.html",
+        "id": "69d118be-62aa-4c28-baa6-54e7965f75b7"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/rushtheband",
+        "id": "85715622-0b90-4ed4-b081-644b3828413a"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/rushtheband",
+        "id": "c7c4bef1-005d-46ac-b85c-8f345a897329"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "f682cfab-e40b-450e-9b9f-e50039d1c635",
+        "resource": "https://www.instagram.com/rush/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "145cd144-c86b-42c9-a26a-6edd1b9960aa",
+        "resource": "https://www.songkick.com/artists/18841"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "songkick",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": "2022-06-08",
+      "source-credit": "",
+      "attributes": [],
+      "ended": true,
+      "url": {
+        "id": "f915664e-d264-479f-9233-118df77821ef",
+        "resource": "https://us.napster.com/artist/rush"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "33ad2022-151c-4a53-ad7a-3e4f1d1981b6",
+        "resource": "https://music.amazon.ca/artists/B000QJHSJ6"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/ca/artist/50526",
+        "id": "2f9bfeb9-3609-449c-9dcb-95e59dd2740a"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "c2e6b58a-af62-4203-9df0-9eb429288e8f",
+        "resource": "https://tidal.com/artist/19141"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.melon.com/artist/detail.htm?artistId=100334",
+        "id": "7d4e8724-9932-420f-b138-e47ded97d1c3"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://www.qobuz.com/ca-en/interpreter/rush/71886",
+        "id": "9803d29e-54bc-47c6-990a-af44ff725d22"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/153525475",
+        "id": "e847cb90-c52d-4f75-9a3a-9960710d5e29"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q203871",
+        "id": "a7b12d1e-709c-43b9-b096-13357f290c49"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "d6649c3b-bd51-4365-9d4c-d28d3de38f6a",
+        "resource": "https://www.youtube.com/channel/UC5C-Asy_myoWCkLEtZR72SA"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "44346d8e-6b48-4068-adf2-468e50af469b",
+        "resource": "https://music.youtube.com/channel/UCDCgtKZG6r7C9n87FMxR5ow"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "begin": null,
+      "attribute-values": {},
+      "type": "youtube music",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    }
+  ],
+  "disambiguation": "Canadian rock trio",
+  "country": "CA",
+  "gender": null,
+  "end-area": null,
+  "id": "534ee493-bfac-4575-a44a-0ae41e2c3fe4",
+  "ipis": [],
+  "begin-area": {
+    "id": "74b24e62-d2fe-42d2-9d96-31f2da756c77",
+    "sort-name": "Toronto",
+    "name": "Toronto",
+    "disambiguation": "",
+    "type": null,
+    "type-id": null
+  }
+}

@@ -49,3 +49,8 @@ uk_indie_nme_charts_data/
 **/__init__.py
 boot.sh
 config/config_database_creator_MIX.json
+config/config_database_creator_copy.json
+config/ui_db_creator/temp_config_database_creator.json
+
+# db antigua en la raíz del repo
+/musica_local.sqlite*

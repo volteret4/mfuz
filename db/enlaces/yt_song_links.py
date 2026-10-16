@@ -11,6 +11,8 @@ import os
 import sys
 import time
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import logging
 import json
@@ -328,6 +330,7 @@ class DiscogsLinksModule:
             
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
@@ -357,6 +360,7 @@ class DiscogsLinksModule:
         """Obtener álbumes que ya tienen URL de Discogs"""
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
@@ -396,6 +400,7 @@ class DiscogsLinksModule:
         """Obtener canciones de un álbum que necesitan enlaces de YouTube"""
         try:
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
@@ -684,6 +689,7 @@ class DiscogsLinksModule:
             return
             
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         conn.row_factory = sqlite3.Row  # Importante: esto hace que fetchone() devuelva un Row object
         cursor = conn.cursor()
         
@@ -765,6 +771,7 @@ class DiscogsLinksModule:
             return
             
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         update_fields = []
@@ -796,6 +803,7 @@ class DiscogsLinksModule:
             return
             
         conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         update_fields = []
@@ -896,6 +904,7 @@ class DiscogsLinksModule:
             # Verificar las tablas necesarias
             self.logger.info("Verificando estructura de la base de datos...")
             conn = sqlite3.connect(self.db_path)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             # Comprobar la tabla song_links

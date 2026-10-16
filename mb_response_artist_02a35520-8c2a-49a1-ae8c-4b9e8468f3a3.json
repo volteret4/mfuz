@@ -1,0 +1,69 @@
+{
+  "id": "02a35520-8c2a-49a1-ae8c-4b9e8468f3a3",
+  "gender-id": null,
+  "isnis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "type": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "begin-area": null,
+  "name": "Blind Mr. Jones",
+  "type": "Group",
+  "end-area": null,
+  "ipis": [],
+  "disambiguation": "",
+  "life-span": {
+    "begin": null,
+    "end": "1994",
+    "ended": true
+  },
+  "country": "GB",
+  "sort-name": "Blind Mr. Jones",
+  "gender": null,
+  "relations": [
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/256669",
+        "id": "a273a20a-f2a7-4a9b-86a3-d0d896b64c11"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "type": "wikidata",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q4926597",
+        "id": "d0c553ad-b104-4401-acf3-1a4cd1010da6"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    }
+  ]
+}

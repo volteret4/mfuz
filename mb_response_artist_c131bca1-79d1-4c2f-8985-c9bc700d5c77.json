@@ -1,0 +1,213 @@
+{
+  "life-span": {
+    "begin": "1998",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": null,
+  "sort-name": "Disco",
+  "disambiguation": "Finnish pop group",
+  "ipis": [],
+  "id": "c131bca1-79d1-4c2f-8985-c9bc700d5c77",
+  "isnis": [],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "cf17c463-3fba-4baa-8aea-7f1f8dc6d61f",
+        "resource": "https://www.discogs.com/artist/197624"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "d0da6f53-aefe-4130-83e0-ed9bcde6d1c1",
+        "resource": "https://open.spotify.com/artist/7riuyR6fKOhyAMgWW3MLos"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "8c604786-79b3-4d3d-b4b5-580c03e59727",
+        "resource": "https://www.deezer.com/artist/153293542"
+      }
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "db4cd7f2-be21-4d67-9442-64e108ed4511",
+        "resource": "https://www.last.fm/music/Disco"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "8cc6518b-2e68-4478-bc6a-dc8eaf62813c",
+        "resource": "http://discolive.fi/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/profile.php?id=100057820281727",
+        "id": "43e25e01-9b9a-422b-8c7e-bedfe3228852"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "url": {
+        "id": "89f2f6e2-54b6-4bde-94a4-5e2a7d58b327",
+        "resource": "https://www.instagram.com/virallinendisco/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "d5472d36-7f5c-4379-9ad6-f94deb2882bb",
+        "resource": "https://www.tiktok.com/@virallinendisco"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "23451da2-da8a-4022-afa5-093f587ada7e",
+        "resource": "https://www.wikidata.org/wiki/Q11856152"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata"
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "18e6820d-a600-472c-bc9b-8d9e634b06a6",
+        "resource": "https://www.youtube.com/channel/UCkXxG0r_MxYIm1sAXp-BWkg"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    }
+  ],
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "Finland",
+    "id": "6a264f94-6ff1-30b1-9a81-41f7bfabd616",
+    "name": "Finland",
+    "type": null,
+    "iso-3166-1-codes": [
+      "FI"
+    ],
+    "disambiguation": ""
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "country": "FI",
+  "begin-area": null,
+  "type": "Group",
+  "name": "Disco",
+  "gender": null
+}

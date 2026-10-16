@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import time
 import json
@@ -25,6 +29,7 @@ RATE_LIMIT = 1.1  # seconds between requests
 def create_label_tables(db_path):
     """Create the necessary tables if they don't exist and add any missing columns"""
     with sqlite3.connect(db_path) as conn:
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         # First check if the table exists
@@ -225,6 +230,7 @@ def update_existing_labels(db_path):
         db_path (str): Ruta a la base de datos SQLite
     """
     conn = sqlite3.connect(db_path, timeout=60)
+    apply_pragmas(conn)
     try:
         cursor = conn.cursor()
         
@@ -755,6 +761,7 @@ def update_wikipedia_content(db_path, label_mbid=None):
         int: Número de sellos actualizados
     """
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     updated_count = 0
     
@@ -876,6 +883,7 @@ def update_wikipedia_urls(db_path, label_mbid=None):
         int: Número de URLs actualizadas
     """
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     updated_count = 0
     
@@ -978,6 +986,7 @@ def find_catalog_relationships(db_path, label_id, label_mbid, artist_relationshi
         return 0, 0
     
     with sqlite3.connect(db_path) as conn:
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         found_artists = 0
@@ -1271,6 +1280,7 @@ def save_label_data(db_path, label_info, label_relationships, release_relationsh
         conn = None
         try:
             conn = sqlite3.connect(db_path, timeout=60)
+            apply_pragmas(conn)
             cursor = conn.cursor()
             
             # Debug: Check which fields have content
@@ -1538,6 +1548,7 @@ def fetch_label_by_album(db_path, album_mbid, conn=None):
     try:
         if conn is None:
             conn = sqlite3.connect(db_path, timeout=60)
+            apply_pragmas(conn)
             should_close_conn = True
         
         # Validate album_mbid
@@ -1688,6 +1699,7 @@ def fetch_label_by_mbid(db_path, label_mbid, conn=None):
     try:
         if conn is None:
             conn = sqlite3.connect(db_path, timeout=60)
+            apply_pragmas(conn)
             should_close_conn = True
         
         # Validate label_mbid
@@ -2192,6 +2204,7 @@ def update_all_albums_with_labels(db_path, skip_existing=True):
     """
     # Enable WAL mode for better concurrency
     conn = sqlite3.connect(db_path, timeout=60)
+    apply_pragmas(conn)
     try:
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA busy_timeout=60000")  # 60 second timeout
@@ -2266,6 +2279,7 @@ def update_all_albums_with_labels(db_path, skip_existing=True):
     # Print summary statistics
     try:
         with sqlite3.connect(db_path) as conn:
+            apply_pragmas(conn)
             label_count = safe_db_query(conn, "SELECT COUNT(*) FROM labels", fetch_one=True)
             label_with_content = safe_db_query(conn, "SELECT COUNT(*) FROM labels WHERE wikipedia_content IS NOT NULL", fetch_one=True)
             relationships_count = safe_db_query(conn, "SELECT COUNT(*) FROM label_release_relationships", fetch_one=True)
@@ -2322,6 +2336,7 @@ def repair_database_schema(db_path):
         db_path (str): Ruta a la base de datos SQLite
     """
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     try:
@@ -2482,6 +2497,7 @@ def check_wikipedia_content(db_path, label_mbid=None):
         label_mbid (str, optional): Si se proporciona, verifica solo este sello específico
     """
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     try:
@@ -2745,6 +2761,7 @@ def main(config=None):
         elif choice == '6':
             # Show database statistics
             with sqlite3.connect(db_path) as conn:
+                apply_pragmas(conn)
                 cursor = conn.cursor()
                 
                 cursor.execute("SELECT COUNT(*) FROM labels")

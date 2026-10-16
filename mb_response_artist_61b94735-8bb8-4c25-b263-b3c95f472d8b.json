@@ -1,0 +1,474 @@
+{
+  "life-span": {
+    "end": null,
+    "begin": "1987",
+    "ended": false
+  },
+  "type": "Person",
+  "area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "United States",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000462701478"
+  ],
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "sort-name": "Smith, Kaitlyn Aurelia",
+  "name": "Kaitlyn Aurelia Smith",
+  "ipis": [],
+  "begin-area": {
+    "type-id": null,
+    "name": "Agoura Hills",
+    "disambiguation": "",
+    "type": null,
+    "id": "ab42be96-8579-4952-b29a-5cbdf7227e7e",
+    "sort-name": "Agoura Hills"
+  },
+  "end-area": null,
+  "id": "61b94735-8bb8-4c25-b263-b3c95f472d8b",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "6b933f59-a4ef-4d60-95ad-25489faa24ad",
+        "resource": "https://www.allmusic.com/artist/mn0002786786"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "id": "f158c593-8e71-4b76-ae99-cd53a5ff0051",
+        "resource": "https://kaitlynaureliasmith.bandcamp.com/"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/4220279",
+        "id": "73c8988e-2476-4de9-9343-53a7cd0a1775"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6P86FLVAK4sxu8OhyQJBvH",
+        "id": "d83b30d9-507d-4b91-8af3-e21267092f01"
+      },
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/328712141",
+        "id": "3c97ea6b-a965-45b2-abde-a61aa9c80189"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "url": {
+        "id": "ccfb6ff7-77a5-409c-897a-c20ee59fe50c",
+        "resource": "https://www.deezer.com/artist/6885381"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Kaitlyn_Aurelia_Smith_Live_Performance_26_March_2016_at_Reims_Cartonerie.jpg",
+        "id": "9989e0f7-653a-4e84-8051-c81a1bcc68b2"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "image",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "IMDb",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm5902986/",
+        "id": "bf9baf46-0442-430b-8c70-2cd945052acd"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "c4d2bd9a-4b05-4d87-b9ba-5bc67b3e607a",
+        "resource": "https://www.last.fm/music/Kaitlyn+Aurelia+Smith"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://kaitlynaureliasmith.com/",
+        "id": "00652d01-14ab-4e03-9dcf-87357dd21095"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://ra.co/dj/kaitlynaureliasmith",
+        "id": "f6918b2e-6565-4402-8781-fa9ec5227b57"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "9da053c2-081b-4962-95a2-f62bb9ca0b99",
+        "resource": "https://rateyourmusic.com/artist/kaitlyn-aurelia-smith"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/928621652",
+        "id": "e0a1186a-387e-4d53-a8f7-5b577499d067"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.beatport.com/artist/kaitlyn-aurelia-smith/441008",
+        "id": "5b4a4407-a449-4415-ac51-2660d964b448"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "9d09fb39-3fea-423a-9b97-70b5ba5a98d1",
+        "resource": "https://twitter.com/kaitlynaurelia"
+      },
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/kaitlynaurelia",
+        "id": "7d2e0fb0-f5bf-4675-a810-b0a861730fd0"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "89a2c26d-4229-4c62-bf1b-88a6b2787fc6",
+        "resource": "https://www.instagram.com/kaitlynaurelia/"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "8dbb60ba-d63f-4724-9bcd-ccca30c15e12",
+        "resource": "https://www.songkick.com/artists/8661124"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "b12eaf06-f656-47af-8f93-0484067a15d7",
+        "resource": "https://soundcloud.com/kaitlynaureliasmith"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/928621652",
+        "id": "1e424cd4-6c5f-4466-8b9d-7324ccc5b066"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/928621652",
+        "id": "e0a1186a-387e-4d53-a8f7-5b577499d067"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/6109503",
+        "id": "a99db5e1-bad6-46e5-9b23-a82db07906c0"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "d535cae0-f1d1-43ee-b5c4-c5270835f7a1",
+        "resource": "https://www.wikidata.org/wiki/Q26357065"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "youtube",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCw_RIp5AxG7ECVeXHboZfVw",
+        "id": "4295ab61-86d7-41f7-b84b-260a164f9aed"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    }
+  ],
+  "disambiguation": "",
+  "gender": "Female",
+  "country": "US"
+}

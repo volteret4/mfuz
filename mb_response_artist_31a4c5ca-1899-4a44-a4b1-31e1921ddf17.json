@@ -1,0 +1,369 @@
+{
+  "end-area": null,
+  "area": {
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "name": "United States"
+  },
+  "name": "Daryl Hall",
+  "sort-name": "Hall, Daryl",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "31a4c5ca-1899-4a44-a4b1-31e1921ddf17",
+  "disambiguation": "",
+  "life-span": {
+    "begin": "1946-10-11",
+    "end": null,
+    "ended": false
+  },
+  "gender": "Male",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type": null,
+    "sort-name": "Pottstown",
+    "disambiguation": "",
+    "id": "de539dbe-0407-49dc-b94a-47a153649701",
+    "type-id": null,
+    "name": "Pottstown"
+  },
+  "ipis": [
+    "00055620393",
+    "00061735484"
+  ],
+  "country": "US",
+  "isnis": [
+    "0000000114960609"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000957102",
+        "id": "aa4dc6b8-392a-4d74-8e2d-6dfefcd31220"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "58ee9b40-9bad-4df8-b2ca-198f0fcd8915",
+        "resource": "https://www.bbc.co.uk/music/artists/31a4c5ca-1899-4a44-a4b1-31e1921ddf17"
+      },
+      "attributes": [],
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": "2020-11-19",
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/63318",
+        "id": "464ffe02-6d8e-4a56-83fb-f1765823fc17"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/5jit9WjiAxxvdA0onOHBLd",
+        "id": "9d3e34a4-7e60-4758-9231-8bffef60bc0e"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "fd3a66af-5831-4f3c-be42-6dbe6e3ac8ae",
+        "resource": "https://www.deezer.com/artist/146376"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "90ea0623-796c-413c-97a8-cfa2fb29290d",
+        "resource": "https://www.imdb.com/name/nm0355461/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "8cf97512-2cc0-49f9-8d1f-8a70083e02dc",
+        "resource": "http://www.hallandoates.com/"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "ef50740f-d974-416c-a1a8-9361b51b0e30",
+        "resource": "http://id.loc.gov/authorities/names/n84088339"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "17b832ad-8dbd-4e9d-9e41-15f24b606e37",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb138949050"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/103991360",
+        "id": "bdd40a38-8950-4304-8c7a-5f949f719d01"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "c31ed04a-4ebb-4bfd-add5-9266457be016",
+        "resource": "https://rateyourmusic.com/artist/daryl_hall"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "3d1bf541-dc5f-44a4-922a-0fd9477f4095",
+        "resource": "https://www.worldcat.org/identities/lccn-n84088339"
+      },
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "18ee061c-f101-4491-b3da-f4b3bc77de9f",
+        "resource": "https://itunes.apple.com/us/artist/id180594"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "7a242fdb-e7bc-469c-8c1a-7f4632aab1f8",
+        "resource": "https://secondhandsongs.com/artist/13616"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.songkick.com/artists/164266",
+        "id": "f1cad352-fd58-4f9f-92b1-f691da05b4b7"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "b54dbea2-f7f1-4e79-9968-59a036a4726a",
+        "resource": "https://tidal.com/artist/29590"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "93b2c6c2-e024-402e-acb4-18cf4fea0fb7",
+        "resource": "http://viaf.org/viaf/100313845"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "b4a8f5d3-1c7e-4110-9334-0bc1b0b6c9a9",
+        "resource": "https://www.wikidata.org/wiki/Q1166988"
+      },
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false
+    }
+  ]
+}

@@ -1,0 +1,621 @@
+{
+  "ipis": [
+    "00548526133",
+    "00548526231"
+  ],
+  "begin-area": {
+    "id": "664a93d7-3f90-49cb-8e46-a93dada1d247",
+    "sort-name": "Penboyr",
+    "type-id": null,
+    "name": "Penboyr",
+    "disambiguation": "",
+    "type": null
+  },
+  "id": "f2393e49-b791-46da-a6d7-1e9e60743405",
+  "end-area": null,
+  "country": "GB",
+  "relations": [
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0001451327",
+        "id": "e608cf50-7db5-4013-b16a-728c30981437"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://catelebon.bandcamp.com/",
+        "id": "12d041cc-e45f-4745-ae3f-d51b7912b370"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/f2393e49-b791-46da-a6d7-1e9e60743405",
+        "id": "c25602d2-6378-4f82-b096-39b2eff1c794"
+      },
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "end": "2020-11-19",
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/1087951",
+        "id": "da021c87-4870-4fe1-81ca-9a488247e2ec"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "5d29b79e-43d2-4f95-a36b-558054358581",
+        "resource": "https://open.spotify.com/artist/0LZac5VicY19QLaIUvIB0G"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.deezer.com/artist/288658",
+        "id": "2385d52f-3b61-4c63-b960-049ca5b9afcf"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "id": "d0dfd663-ca86-4bee-85df-5f81c890602a",
+        "resource": "https://commons.wikimedia.org/wiki/File:Glastonbury2022_(313_of_413)_(52182429448).jpg"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "image",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "id": "9a869ff7-690c-4a11-8d1b-49445ca6adbf",
+        "resource": "https://www.imdb.com/name/nm11412658/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "IMDb",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "url": {
+        "id": "7ff85fdc-a0cb-400e-88ad-8ec844c455da",
+        "resource": "https://www.last.fm/music/Cate+le+Bon"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "2c5678d6-0b78-48e4-912a-1a98779d2610",
+        "resource": "https://genius.com/artists/Cate-le-bon"
+      },
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "eace78d9-7d5c-4dcf-95ab-d535f3cce283",
+        "resource": "https://myspace.com/catelebon"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "myspace"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "resource": "http://catelebon.com/",
+        "id": "f1751936-a0c5-40bb-a637-9489d648aa1f"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a638916b-0260-443b-a036-052719a094e4",
+        "resource": "http://id.loc.gov/authorities/names/no2012041338"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "20389609-6f72-4718-8b84-289c04cdec59",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb17020229t"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "cf14fa48-8e9f-4016-b9d5-284eac7220a5",
+        "resource": "https://d-nb.info/gnd/1115810804"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/cate_le_bon",
+        "id": "b95c40aa-a053-4b82-aa1e-3de86c62ce81"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d85b8ef6-4eb0-421f-a503-dd13243aba38",
+        "resource": "https://www.musik-sammler.de/artist/214363/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f0da3103-7cb0-4c12-a291-6edd0b028c33",
+        "resource": "https://www.muziekweb.nl/Link/M00000313255/POPULAR/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "id": "3b0c301a-ce06-460d-9c6d-112bfeb30480",
+        "resource": "https://www.whosampled.com/Cate-Le-Bon/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2012041338/",
+        "id": "06f477d6-3701-4d33-a097-6e53dea05842"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "45c32af0-2430-42d6-91e9-6d24217a1227",
+        "resource": "https://secondhandsongs.com/artist/116722"
+      },
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "31737407-dd4c-493d-ae5f-b077cb77be63",
+        "resource": "https://www.setlist.fm/setlists/cate-le-bon-23d4c4f7.html"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-type": "url",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a7b75f50-e7f4-4061-848d-fe0f4631adcc",
+        "resource": "https://twitter.com/CateLeBon"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/123104391166347",
+        "id": "b26ba013-1e3f-4e8b-89a0-c57b36957d5e"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "5e10bfb0-bdff-497c-83c7-3829297bc0b6",
+        "resource": "https://www.instagram.com/catelebon/"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "35044452-74b8-4e02-ac2c-3f8a50c7d4bd",
+        "resource": "https://www.songkick.com/artists/585392"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "b8b26334-60dd-4b32-bcda-b4996b53df48",
+        "resource": "https://soundcloud.com/catelebon"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/275731560",
+        "id": "5650cc10-d485-4b6e-8e73-04a942e7700a"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/3635703",
+        "id": "fae321bf-c23d-467c-9b5e-d03e5ef0180b"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/233257637",
+        "id": "377e88c1-fd95-48b8-b6c1-095e9bb03d7c"
+      },
+      "type": "VIAF",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q5051783",
+        "id": "7455ce56-c811-42c8-8092-aaae3111d22e"
+      },
+      "target-type": "url",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "6d7b8e16-ef5e-4dc3-8821-9e7d57517b1d",
+        "resource": "https://www.youtube.com/channel/UCKuSPILU1CBzeAOW81VF2Bw"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "youtube",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    }
+  ],
+  "disambiguation": "",
+  "gender": "Female",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "sort-name": "Le Bon, Cate",
+  "name": "Cate Le Bon",
+  "area": {
+    "sort-name": "Wales",
+    "id": "8297708c-5743-47d6-a5ac-f40a41c49ad9",
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-WLS"
+    ],
+    "name": "Wales"
+  },
+  "isnis": [
+    "0000000367265313"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "life-span": {
+    "ended": false,
+    "begin": "1983-03-04",
+    "end": null
+  },
+  "type": "Person"
+}

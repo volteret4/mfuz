@@ -1,0 +1,908 @@
+{
+  "life-span": {
+    "end": null,
+    "begin": "1969-03-27",
+    "ended": false
+  },
+  "type": "Person",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type-id": null,
+    "disambiguation": "",
+    "name": "United States",
+    "type": null
+  },
+  "isnis": [
+    "0000000114722280"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "sort-name": "Carey, Mariah",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "name": "Mariah Carey",
+  "id": "494e8d09-f85b-4543-892f-a5096aed1cd4",
+  "end-area": null,
+  "ipis": [
+    "00227453081"
+  ],
+  "begin-area": {
+    "type-id": null,
+    "name": "Huntington",
+    "disambiguation": "",
+    "type": null,
+    "id": "c9c39cb4-c978-4a00-97ed-9f8831dab11d",
+    "sort-name": "Huntington"
+  },
+  "gender": "Female",
+  "relations": [
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "2a778029-ad26-44e7-96b3-6cdc81518dee",
+        "resource": "https://www.allmusic.com/artist/mn0000262255"
+      },
+      "type": "allmusic",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "bandsintown",
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/75",
+        "id": "73921948-1913-4144-a785-336e792f6a46"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/494e8d09-f85b-4543-892f-a5096aed1cd4",
+        "id": "e5e8270c-6cdd-4b57-8428-88606a366487"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true,
+      "attributes": [],
+      "source-credit": "",
+      "end": "2020-11-19",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "292970a6-c22c-48f6-bbfb-543a040e1217",
+        "resource": "https://www.discogs.com/artist/33534"
+      },
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/4iHNK0tOyZPYnBU7nGAgpQ",
+        "id": "3256dcde-8277-4a9a-9b52-ef45efaccff8"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "054a8407-ccf6-40ba-bec5-dd42ee014774",
+        "resource": "https://www.deezer.com/artist/65"
+      },
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "3f0c47d3-5ef4-4b82-bc11-34da9af82451",
+        "resource": "https://commons.wikimedia.org/wiki/File:Mariah_Carey_2005.jpg"
+      },
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "type": "image",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "73d32e51-e394-4600-9c69-c4e9b0b0e59c",
+        "resource": "https://www.imdb.com/name/nm0001014/"
+      },
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Mariah+Carey",
+        "id": "8ca751d7-9c75-425c-832e-349b107b5271"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "d18c5c2e-8ae9-4f2a-9cd7-39c69b019f12",
+        "resource": "http://muzikum.eu/en/122-3519/mariah-carey/lyrics.html"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "lyrics",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "5b29b483-ea37-4c4f-b75a-0b1ff0bf7e53",
+        "resource": "https://genius.com/artists/Mariah-carey"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "myspace",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "resource": "https://myspace.com/mariahcarey",
+        "id": "5b9219b3-ddb3-48e2-a1b2-73f80726f48c"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "30811ba2-56c5-403a-a843-a440f8c10a8b",
+        "resource": "http://www.mariahcarey.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": true,
+      "source-credit": "",
+      "end": "2025-12-17",
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "url": {
+        "id": "80c485fa-995b-4ae8-a991-7b17790d59a9",
+        "resource": "https://jaxsta.com/profile/665e910e-5d13-461e-b1e1-13c100faac0b"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "id": "bfdcd54f-26bc-45d0-8c0b-2f591ffe3139",
+        "resource": "http://id.loc.gov/authorities/names/n91112415"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "a2b6eeea-4c4f-431c-8587-e11b4dc1651b",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13933084b"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/119293161",
+        "id": "4e9b15fa-6703-4016-8c84-c338a650eb58"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "6d22ee6e-c88a-49c7-b038-5e17b1b1d0a3",
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJk4BtWBymdX7qJyVVG8md"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "a89f69a7-70c3-4424-bedc-ea04dee82d0b",
+        "resource": "https://imvdb.com/n/mariah-carey"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6qd0w98",
+        "id": "d0dfbaf4-68ee-4049-a6bc-03af2f1e03a3"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1308733",
+        "id": "f5d8165c-d26f-4747-bc44-c2d4e911d815"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/mariah_carey",
+        "id": "2322ccc1-a154-41e0-aa33-eb6b7720ce58"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "4687075f-260c-4c74-aaa8-2fe75b99ad79",
+        "resource": "https://www.idref.fr/077444051"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "72846c2d-b1c6-4bc0-bdd0-2118b6aabab3",
+        "resource": "https://www.musik-sammler.de/artist/11819"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://www.themoviedb.org/person/66586",
+        "id": "9ca29f84-218f-41c4-9fa7-9302dcb165ff"
+      }
+    },
+    {
+      "ended": true,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n91112415/",
+        "id": "68b36fa9-76aa-49ba-9071-e115b91368b7"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/91853",
+        "id": "ff732adb-c51a-46d8-a655-3924951a6c38"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "url": {
+        "resource": "https://tower.jp/artist/174884",
+        "id": "12e5fbc3-34f4-484e-9b79-264dbbe49813"
+      },
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/239",
+        "id": "551d84c8-ca15-4ba3-a491-b1667d90348c"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "c7a3586b-87b3-4a1f-9a96-bb6b874e02c0",
+        "resource": "https://www.setlist.fm/setlists/mariah-carey-2bd6bc4a.html"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://plus.google.com/+MariahCarey",
+        "id": "15e5db86-cd43-4309-9f12-1cad66f0f549"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "ended": true,
+      "source-credit": "",
+      "end": "2019-04",
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "bf55abaf-ca95-4290-aa72-3aa55b13e18f",
+        "resource": "https://twitter.com/MariahCarey"
+      },
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "9e04a342-704f-496f-a404-142c1dfe7f8e",
+        "resource": "https://www.facebook.com/mariahcarey"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.instagram.com/mariahcarey/",
+        "id": "c33943c8-8298-4bbb-918f-804901c44905"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "43884d2e-d246-4e84-a806-c7ef17490ed2",
+        "resource": "https://www.tiktok.com/@mariahcarey"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "id": "e410655c-58a6-4cb9-b247-f94645b8ffc8",
+        "resource": "https://www.songkick.com/artists/423164"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "songkick",
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "url": {
+        "id": "522df0ea-1db2-4cd3-b693-d45b92cd5d3d",
+        "resource": "https://soundcloud.com/mariahcarey"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://us.napster.com/artist/mariah-carey",
+        "id": "863a6431-87a9-4b59-94c7-7925a3e9b349"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": true,
+      "end": "2022-06-08",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B001Q59JOG",
+        "id": "9696fcae-eed0-43c1-9bfc-0567b713365d"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "452b163a-a8b1-4208-9316-98740f4b4e30",
+        "resource": "https://music.apple.com/fr/artist/91853"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "ff732adb-c51a-46d8-a655-3924951a6c38",
+        "resource": "https://music.apple.com/us/artist/91853"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/518",
+        "id": "d7c3fed4-eb64-48ab-95b6-676b9f6ab641"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "type": "ticketing",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.ticketmaster.com/artist/767870",
+        "id": "7fc9cbab-4903-4c4d-880e-8410d5f57971"
+      },
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "516eb702-af2f-485e-8893-d70570ba6b26",
+        "resource": "http://viaf.org/viaf/49411392"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "VIAF",
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q41076",
+        "id": "64e0ab65-4015-47f8-a84c-0b338b42442d"
+      },
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "d60d9028-add2-4f38-9838-c9b535dd6e80",
+        "resource": "https://www.youtube.com/channel/UClS0wn3LPs9jdX_yt2g1k8w"
+      }
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "youtube",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCurpiDXSkcUbgdMwHNZkrCg",
+        "id": "042bfece-6b5a-471e-95f8-461d32487398"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "youtube music",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCKRnq8aBOCanYlffje7HyvA",
+        "id": "8be1b340-493b-4c2c-a153-441f9c707b70"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-type": "url",
+      "direction": "forward"
+    }
+  ],
+  "disambiguation": "",
+  "country": "US"
+}

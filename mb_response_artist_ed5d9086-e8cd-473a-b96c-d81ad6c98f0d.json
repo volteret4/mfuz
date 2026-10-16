@@ -1,0 +1,582 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "sort-name": "LMFAO",
+  "disambiguation": "US electronic dance music duo",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "sort-name": "United States",
+    "type": null,
+    "type-id": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "id": "ed5d9086-e8cd-473a-b96c-d81ad6c98f0d",
+  "end-area": null,
+  "relations": [
+    {
+      "type": "allmusic",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0001029659",
+        "id": "05cc3ff4-7ac2-4e0b-bb96-aca00ec94095"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "discogs",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "2e03e809-7ae5-4c8e-9dfb-35283035a6ee",
+        "resource": "https://www.discogs.com/artist/1229202"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attributes": [],
+      "url": {
+        "id": "203574e6-f444-4042-a3e8-d57ba3118219",
+        "resource": "https://open.spotify.com/artist/3sgFRtyBnxXD5ESfmbK4dl"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "ceee7042-6e5a-4a71-b715-8af343cfb964",
+        "resource": "https://www.deezer.com/artist/167225"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "IMDb",
+      "attributes": [],
+      "url": {
+        "id": "dd4f8fd7-c76b-475b-96f1-33d6371fe6a4",
+        "resource": "https://www.imdb.com/name/nm3395864/"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "last.fm",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.last.fm/music/LMFAO",
+        "id": "e518a4b4-80d8-4cd7-ae1f-7b1797f53998"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "9ecf8585-f15a-44fb-b9e9-1f9006603d06",
+        "resource": "http://muzikum.eu/en/122-7342/lmfao/lyrics.html"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Lmfao",
+        "id": "700de178-e805-498d-a6a3-9c4ab669856f"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "myspace",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/lmfao",
+        "id": "172b2c68-64a9-44e7-b886-5b9521988f5f"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "c723f748-ccf6-4cb1-afdd-3eabd3ad3b0d",
+        "resource": "http://www.lmfaomusic.com/"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "official homepage"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2009105006",
+        "id": "97b0c1fe-c0f5-4490-af31-a11aece67936"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16145119w",
+        "id": "625e597e-6eb7-485c-8b70-8ed571c3fd84"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1023237059",
+        "id": "481c29ee-d42d-45e6-a353-e08f59a69b75"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://imvdb.com/n/lmfao",
+        "id": "2f2ddff6-94aa-4d7c-95b6-48484bd0581c"
+      },
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/lmfao",
+        "id": "ccff030e-6b91-4ee5-92e8-a5c271d36180"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.whosampled.com/LMFAO/",
+        "id": "57a2b008-e745-4def-a007-7499e9224277"
+      },
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "6748a4de-a543-431e-b935-596509dff54b",
+        "resource": "https://www.worldcat.org/identities/lccn-no2009105006"
+      }
+    },
+    {
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "4d5e4c4a-8d42-455c-8cc8-2ff92655861f",
+        "resource": "https://music.apple.com/gb/artist/284482668"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://music.apple.com/us/artist/284482668",
+        "id": "7537889e-9ed4-46bb-a4de-1cbef70437c0"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/70221",
+        "id": "d3029977-af79-4409-a885-4a001dc58d82"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/lmfao",
+        "id": "7856d385-09db-4759-b605-a9f2debe35fc"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "2be5029f-7516-46ab-993e-a8b603182626",
+        "resource": "https://www.facebook.com/lmfao"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/767916",
+        "id": "9880ef3d-ee08-4f62-ac34-42941811eca2"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "songkick"
+    },
+    {
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "4d5e4c4a-8d42-455c-8cc8-2ff92655861f",
+        "resource": "https://music.apple.com/gb/artist/284482668"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://music.apple.com/us/artist/284482668",
+        "id": "7537889e-9ed4-46bb-a4de-1cbef70437c0"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/3576750",
+        "id": "5d06325f-2b48-471f-8671-b8d1a5f1a4c6"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "VIAF",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "2752956b-659b-4f76-8706-2fca8c32c7f3",
+        "resource": "http://viaf.org/viaf/42145970133532251221"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "c05eb865-75a2-4c0a-a713-33e0be237f37",
+        "resource": "https://www.wikidata.org/wiki/Q48978"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "youtube",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/user/LMFAOVEVO",
+        "id": "18ef650c-5cf8-4427-ad41-5996b69227c5"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url"
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "youtube",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.youtube.com/user/redfoothedude",
+        "id": "46a7e999-aa99-48dd-ab00-568bd9d0d3b8"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    }
+  ],
+  "name": "LMFAO",
+  "life-span": {
+    "ended": true,
+    "begin": "2006",
+    "end": "2012-09-21"
+  },
+  "country": "US",
+  "type": "Group",
+  "begin-area": {
+    "name": "Pacific Palisades",
+    "type": null,
+    "type-id": null,
+    "id": "2a87a504-320b-4392-9bd7-1b22ababef49",
+    "disambiguation": "",
+    "sort-name": "Pacific Palisades"
+  },
+  "ipis": [],
+  "gender-id": null,
+  "isnis": [
+    "0000000093734791"
+  ]
+}

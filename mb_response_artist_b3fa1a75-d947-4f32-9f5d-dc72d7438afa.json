@@ -1,0 +1,445 @@
+{
+  "gender": "Male",
+  "type": "Person",
+  "begin-area": {
+    "type": null,
+    "id": "519fb127-912a-43ab-b5f7-68ba2ce7253d",
+    "disambiguation": "",
+    "sort-name": "Alexandria",
+    "type-id": null,
+    "name": "Alexandria"
+  },
+  "ipis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000243851",
+        "id": "20716c12-bd5c-411f-a9e0-382f9c7962b0"
+      },
+      "attributes": []
+    },
+    {
+      "end": "2020-11-19",
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "46b64583-e1e8-4bc1-a0b8-5889f261dcda",
+        "resource": "https://www.bbc.co.uk/music/artists/b3fa1a75-d947-4f32-9f5d-dc72d7438afa"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "9950cbf9-83d8-4a16-8150-1387bafd6dc5",
+        "resource": "https://www.discogs.com/artist/29809"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/0J9mbwg4BquN4XlHzdMK3X",
+        "id": "0d9d09b2-2d3a-4616-b7ee-9b6c7536bb62"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "58d36d41-ed6c-45b4-888c-61e8ef3e92a1",
+        "resource": "https://www.deezer.com/artist/2420"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0746096/",
+        "id": "cca09e91-58bd-4284-a2ea-297fe303bc95"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.last.fm/music/Demis+Roussos",
+        "id": "06f706d2-805d-4761-88eb-bee56da9e9be"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm",
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "8a82eff5-c8f6-4441-83bb-61bc3a533ee8",
+        "resource": "http://muzikum.eu/en/122-4764/demis-roussos/lyrics.html"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://demisroussos.net/",
+        "id": "4683c1b8-9710-4ec1-9ccd-1a3bdd6147c3"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "dd9aa319-bd3f-48e5-b0d2-3735150a7529",
+        "resource": "http://id.loc.gov/authorities/names/n89635974"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13899236j",
+        "id": "31ca59bd-4599-4845-abe1-a4fe6f751679"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/134503260",
+        "id": "0a08eba1-1831-4bb0-84dc-77ed1548e97b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/demis_roussos",
+        "id": "1ba6232f-bd32-4c06-bcb0-1b1f1c2f18b3"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n89635974/",
+        "id": "a3a034c3-d898-4dd1-979a-4f53fc03287a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.facebook.com/DemisRoussosOfficial",
+        "id": "05fbbcae-5dd6-4724-bc6a-4c76a81287ee"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "d9785d17-fb39-46c7-b976-c47011e7c2aa",
+        "resource": "https://www.songkick.com/artists/11136"
+      },
+      "attributes": [],
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/123800",
+        "id": "d3b3098a-d254-4a67-9adf-8f8567fb73b8"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "e477646b-2be3-4abf-90fa-56e3d3c48373",
+        "resource": "https://music.apple.com/us/artist/123800"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/16908",
+        "id": "20193373-f7d0-4ba7-89dd-6a356ed5fb15"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "13a9ecc8-36b3-4fb0-98c7-3c8e10c0af25",
+        "resource": "http://viaf.org/viaf/7575167"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "attributes": [],
+      "url": {
+        "id": "77831c69-5612-424d-ae0e-92a971472e4e",
+        "resource": "https://www.wikidata.org/wiki/Q487882"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "53bb0cad-8ef3-40c8-b6fa-ad876e0666d4",
+        "resource": "https://www.youtube.com/channel/UCbYtmVAh2CxhR2t4xfYAlcQ"
+      }
+    }
+  ],
+  "country": "GR",
+  "isnis": [
+    "0000000108675043"
+  ],
+  "end-area": {
+    "id": "1876749b-4a07-495b-8b57-9dde0ac39c24",
+    "disambiguation": "",
+    "sort-name": "Athens",
+    "type": null,
+    "name": "Athens",
+    "type-id": null
+  },
+  "name": "Demis Roussos",
+  "area": {
+    "disambiguation": "",
+    "id": "803db0ca-b6ed-3bbc-aeb8-f89efd0a2168",
+    "iso-3166-1-codes": [
+      "GR"
+    ],
+    "sort-name": "Greece",
+    "type": null,
+    "name": "Greece",
+    "type-id": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Roussos, Demis",
+  "disambiguation": "",
+  "id": "b3fa1a75-d947-4f32-9f5d-dc72d7438afa",
+  "life-span": {
+    "ended": true,
+    "begin": "1946-06-15",
+    "end": "2015-01-25"
+  }
+}

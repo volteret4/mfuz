@@ -1,0 +1,447 @@
+{
+  "sort-name": "Russell, Arthur",
+  "disambiguation": "American cellist, composer and singer",
+  "begin-area": {
+    "type-id": null,
+    "name": "Oskaloosa",
+    "type": null,
+    "sort-name": "Oskaloosa",
+    "id": "f953a15b-7d94-41da-8731-2212a6d02876",
+    "disambiguation": ""
+  },
+  "end-area": {
+    "type-id": null,
+    "sort-name": "New York",
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "name": "New York",
+    "type": null,
+    "disambiguation": ""
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": true,
+    "begin": "1951-05-21",
+    "end": "1992-04-04"
+  },
+  "name": "Arthur Russell",
+  "isnis": [
+    "0000000055188283"
+  ],
+  "id": "f43370e3-6d86-44e7-ae4c-ca098962dcd0",
+  "gender": "Male",
+  "relations": [
+    {
+      "url": {
+        "id": "759a13df-cc22-4e92-bd19-7aa24289d1c2",
+        "resource": "https://www.allmusic.com/artist/mn0000475362"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "bandcamp",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://arthurrussell.bandcamp.com/",
+        "id": "6fc1ca6d-7585-45aa-b032-424c3b284611"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "e965ebb1-4168-4997-a73c-6b82dd98df86",
+        "resource": "https://www.discogs.com/artist/23524"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/3iJJD5v7oIFUevW4N5w5cj",
+        "id": "1d2ec685-9eb0-4e3e-ab1b-053856daf476"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "free streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/4725",
+        "id": "5cbe09ba-f4ae-4c9e-a6f5-e69670435a33"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://upload.wikimedia.org/wikipedia/en/1/1a/Arthur_russell_soul_jazz.jpg",
+        "id": "f82b96c8-0e68-4a7b-880d-9a8fd57b3baa"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "image",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "cb2a5adb-a6d7-4888-905e-1ed8001156bc",
+        "resource": "https://www.imdb.com/name/nm4449299/"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "IMDb"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.last.fm/music/Arthur%20Russell",
+        "id": "d5dc79f7-91cb-4251-af9f-52e15a1abbd3"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Arthur-russell",
+        "id": "5db673ab-a419-4c11-b423-cd094d779ed3"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "lyrics",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "be32e70a-3e08-4011-a3f9-d3c6556f33f5",
+        "resource": "http://id.loc.gov/authorities/names/n92107097"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "45a77f4d-fd3c-4c10-88c5-7e33f94f5bfc",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139808914"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "4f51c894-bcb2-49b1-87fb-45c72793dd1a",
+        "resource": "https://d-nb.info/gnd/13492410X"
+      }
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "ea905df9-851f-40a5-9e29-d96d9d75d8fc",
+        "resource": "http://snaccooperative.org/ark:/99166/w6g3066c"
+      }
+    },
+    {
+      "url": {
+        "id": "cded9f2d-153f-49f5-9748-631540961103",
+        "resource": "https://rateyourmusic.com/artist/arthur_russell"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "09093b34-1bb1-46db-a889-7f52902a157b",
+        "resource": "https://music.apple.com/us/artist/6845451"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "fb1f0e8f-2567-4551-97d6-4d1a0dc3a4ce",
+        "resource": "https://www.facebook.com/arthurrussellhq"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "streaming",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/6845451",
+        "id": "09093b34-1bb1-46db-a889-7f52902a157b"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://tidal.com/artist/3566050",
+        "id": "7d9066ea-550f-4aca-bb27-11f1a2df2a3f"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "a8395a3d-092e-448d-85e3-29c04d49f34a",
+        "resource": "http://viaf.org/viaf/61740277"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "wikidata",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "de7783e0-dfe5-423e-8f00-9401d4d6074f",
+        "resource": "https://www.wikidata.org/wiki/Q670277"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "youtube",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCCGfYZyLxvXvBWeC_3wX9SA",
+        "id": "b2945d90-ace6-42d1-aa5c-f7341cd63a0e"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "youtube music",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCCGfYZyLxvXvBWeC_3wX9SA",
+        "id": "095fb73c-6ee4-40ed-90c7-2721231b7a24"
+      },
+      "begin": null,
+      "direction": "forward"
+    }
+  ],
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "type-id": null,
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "ipis": [
+    "00087477917"
+  ],
+  "type": "Person",
+  "country": "US",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

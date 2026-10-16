@@ -1,0 +1,77 @@
+{
+  "isnis": [],
+  "begin-area": null,
+  "ipis": [],
+  "gender-id": null,
+  "type": "Group",
+  "name": "Mumford\u2019s",
+  "life-span": {
+    "end": null,
+    "begin": "2008",
+    "ended": false
+  },
+  "country": null,
+  "end-area": null,
+  "relations": [
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/2j3ZFq112DtSlW4p6zLyhT",
+        "id": "88aefce0-452a-49bd-87b8-49ead785dcfa"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "97b32a0a-3192-4e7a-b950-98414d03fae1",
+        "resource": "https://myspace.com/mumford39s"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "myspace",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id407744892",
+        "id": "814c98f3-032e-4145-b15c-0acc6ac98490"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url"
+    }
+  ],
+  "sort-name": "Mumford\u2019s",
+  "disambiguation": "",
+  "id": "57f73e51-5b95-485b-9102-bc7bd23584f7",
+  "area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null
+}

@@ -1,0 +1,528 @@
+{
+  "disambiguation": "German black metal",
+  "sort-name": "Weg einer Freiheit, Der",
+  "id": "2d75fdbd-2158-4ab4-a9ac-eec8d997d70b",
+  "area": {
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "name": "Germany",
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "Germany",
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "life-span": {
+    "end": null,
+    "begin": "2009-02",
+    "ended": false
+  },
+  "name": "Der Weg einer Freiheit",
+  "country": "DE",
+  "end-area": null,
+  "relations": [
+    {
+      "type": "allmusic",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "79400197-f737-4d5f-91f3-806b4866f967",
+        "resource": "https://www.allmusic.com/artist/mn0002509168"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://derwegeinerfreiheit.bandcamp.com/",
+        "id": "ec369d81-dc23-4e55-8aab-65057f3f6a93"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "bandsintown",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/584510",
+        "id": "688e705a-a428-4816-8a9e-5df7c5e5b9df"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/1673959",
+        "id": "c974660a-523f-4c41-bad6-be174dbb8d1e"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://open.spotify.com/artist/7e823b0KQoVtLG86Ui5xGD",
+        "id": "c06f230d-4cc8-4156-ab2e-7a094f68611a"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1386896",
+        "id": "0e6a5948-a9f5-4a8c-8aad-5af61127be7e"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "free streaming"
+    },
+    {
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "last.fm",
+      "attributes": [],
+      "url": {
+        "id": "337810ff-3b6a-4b21-a841-190bbd9ebe61",
+        "resource": "https://www.last.fm/music/Der+Weg+einer+Freiheit"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://genius.com/artists/Der-weg-einer-freiheit",
+        "id": "bf9651d2-c013-4d68-ad0d-550bbfcdea42"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "lyrics",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "http://www.derwegeinerfreiheit.de/",
+        "id": "350ded4a-5add-42fc-9216-ddd70503fac7"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/der-weg-einer-freiheit",
+        "id": "ed45da34-9ba3-4618-916e-acc66af3587e"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.metal-archives.com/bands/Der_Weg_einer_Freiheit/3540275159",
+        "id": "2eba92f7-ce34-45b1-b52c-ed4109849064"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/der-weg-einer-freiheit/",
+        "id": "23ff2ac5-242f-466d-8eb8-7c082a148ec5"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Der_Weg_Einer_Freiheit",
+        "id": "c60c3dcc-37bd-4350-aac0-2c9159a50bb5"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/de/artist/id363526020",
+        "id": "8f0d7487-aeb1-4c55-bb90-74a0b465a9d7"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "begin": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/der-weg-einer-freiheit-6bd2eede.html",
+        "id": "c091a505-c7e0-4d3c-a15c-f88c0e8ba96f"
+      },
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "b3493396-9f53-4b52-8373-8dddcf048296",
+        "resource": "https://twitter.com/dwef_official"
+      },
+      "ended": false
+    },
+    {
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "social network",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/derwegeinerfreiheit",
+        "id": "7114d63a-c62a-49e3-9372-c48760d9aead"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.instagram.com/derwegeinerfreiheit/",
+        "id": "41a7db58-531b-40e8-92a8-3d9492ce840f"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "cc8d948a-e584-4e10-84a1-5f32b6585698",
+        "resource": "https://www.songkick.com/artists/2953466"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "soundcloud",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "5b706458-af2f-4825-966f-e2639e165368",
+        "resource": "https://soundcloud.com/derwegeinerfreiheit"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.amazon.de/artists/B003DXLPEQ",
+        "id": "ac3ecbca-5b3c-477a-ac14-cf1f229c7f51"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "73ac58b3-c5c9-4a64-bf87-7e57183c8561",
+        "resource": "https://music.apple.com/de/artist/363526020"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/4479035",
+        "id": "247b2b31-ee8b-48cc-bb60-c4a3c5dce452"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/der-weg-einer-freiheit/1218963",
+        "id": "ed700b8f-a0b3-4df1-b510-e881ba0621f2"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1197938",
+        "id": "8a284767-eb0e-4bb3-adab-30a934a0947a"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "wikidata",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCE5l5JqwS9t22B--KSW8HeA",
+        "id": "84a0b6d9-5ea3-4f27-b154-b6034d27eb8f"
+      },
+      "attributes": [],
+      "type": "youtube",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCFPmzX0GBwDWOMOFCZ5NFlw",
+        "id": "ebca1244-f2fb-443f-98c0-1ce3fd58f748"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "youtube music",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "begin": null
+    }
+  ],
+  "type": "Group",
+  "isnis": [
+    "0000000471235325"
+  ],
+  "begin-area": {
+    "name": "W\u00fcrzburg",
+    "type-id": null,
+    "type": null,
+    "id": "f0463abf-0d3b-4be7-bb68-145e65311193",
+    "disambiguation": "",
+    "sort-name": "W\u00fcrzburg"
+  },
+  "gender-id": null,
+  "ipis": []
+}

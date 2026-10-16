@@ -5,6 +5,10 @@ Compatible con db_creator.py
 """
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import time
 import urllib.parse
 import logging
@@ -129,6 +133,7 @@ def extract_musicmap_recommendations(driver, artist_name, max_wait=10):
 def create_musicmap_table(db_path):
     """Crea la tabla para almacenar recomendaciones de Music-Map"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     cursor.execute('''
@@ -156,6 +161,7 @@ def create_musicmap_table(db_path):
 def get_artists_from_db(db_path, limit=None, force_update=False, missing_only=True):
     """Obtiene la lista de artistas de la base de datos"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     if missing_only and not force_update:
@@ -195,6 +201,7 @@ def save_recommendations(db_path, artist_id, artist_name, recommendations):
         return
     
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     # Limpiar recomendaciones existentes si existe force_update

@@ -1,0 +1,528 @@
+{
+  "type": "Group",
+  "end-area": null,
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "type-id": null,
+    "name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "sort-name": "London",
+    "type": null,
+    "disambiguation": "Greater London"
+  },
+  "isnis": [
+    "0000000492590473"
+  ],
+  "area": {
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "type-id": null,
+    "name": "United Kingdom",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "type": null,
+    "sort-name": "United Kingdom"
+  },
+  "name": "Dry Cleaning",
+  "id": "8a74e5ea-6f68-49e1-951c-80d2291f7c3f",
+  "gender-id": null,
+  "country": "GB",
+  "relations": [
+    {
+      "url": {
+        "id": "fd50b433-7375-4f2e-99ac-a89dfb5959b7",
+        "resource": "https://www.allmusic.com/artist/mn0003859059"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "end": null,
+      "type": "allmusic",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "url": {
+        "id": "6be4c1c7-9a63-4e2f-8479-9c5b4d1c3b22",
+        "resource": "https://drycleaning.bandcamp.com/"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "bandcamp",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "url": {
+        "id": "3ce4403b-4768-4b73-b41b-8c093a4a26b2",
+        "resource": "https://www.discogs.com/artist/7042935"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://open.spotify.com/artist/7DlD7rLG9MKuvXtTeACzkO",
+        "id": "73bb502b-78d9-4a34-b4c0-9c84f06530c6"
+      },
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "26e5e010-adb8-4035-98fd-8ccf1ea90260",
+        "resource": "https://www.deezer.com/artist/67907232"
+      },
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "url": {
+        "resource": "https://ibb.co/mHQpwcF",
+        "id": "1eac534f-eb9a-4d9a-b653-9daf58ecbf15"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "image",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.last.fm/music/Dry+Cleaning",
+        "id": "686a77eb-bf1a-440b-ba3a-ee5e96bea173"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "last.fm",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "type": "lyrics",
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "url": {
+        "resource": "https://genius.com/artists/Dry-cleaning",
+        "id": "f28badfd-aa0a-483b-b4c9-9c13a6eccd8c"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "eb2bdb4f-c27a-4bfe-a391-501b556abe34",
+        "resource": "https://drycleaningband.com/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "official homepage",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://imvdb.com/n/dry-cleaning",
+        "id": "5615e4e3-4e40-45aa-83b4-29c06aa45983"
+      },
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "0c435700-796e-4596-b4fb-30d907700304",
+        "resource": "https://www.musik-sammler.de/artist/dry-cleaning/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "7c6792ba-d955-4ce0-8ebc-63706a2d9daa",
+        "resource": "https://www.muziekweb.nl/Link/M00000550887/POPULAR/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "purchase for download",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://bleep.com/artist/160443-dry-cleaning",
+        "id": "9e9d53d6-3f9c-416a-9789-c8a607163b3f"
+      },
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "url": {
+        "id": "f3a32295-097b-4e3d-9349-2e02e13b2169",
+        "resource": "https://boomkat.com/artists/dry-cleaning"
+      },
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.qobuz.com/au-en/interpreter/dry-cleaning/download-streaming-albums",
+        "id": "3bbfe358-7368-422e-9b91-6752454562e3"
+      },
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "secondhandsongs",
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/195530",
+        "id": "b5cc88f4-c1b7-40ed-a62d-8e9b80d11796"
+      }
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "897b15ad-f031-4207-967c-eb936753ba83",
+        "resource": "https://www.facebook.com/drycleaningband"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "social network",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "url": {
+        "id": "184b9289-92ed-4744-88c3-677571fd7066",
+        "resource": "https://www.instagram.com/drycleaningband/"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "social network",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "songkick",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "dee87d3d-0565-438e-a2ff-1167deee9302",
+        "resource": "https://www.songkick.com/artists/9763674"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "resource": "https://soundcloud.com/drycleaningband",
+        "id": "d52daac5-09ea-448b-b845-c9d1856a8458"
+      },
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "soundcloud",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B07TBVSFD7",
+        "id": "cb408b40-395f-40b8-84ae-7702fcb2deaf"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/1469164908",
+        "id": "a77bd0b0-f6a3-4d3f-b2fe-c83f728e37b4"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/16065992",
+        "id": "0bb0f185-8d6e-4bf7-9394-b5633aaf2d2a"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.qobuz.com/au-en/interpreter/dry-cleaning/download-streaming-albums",
+        "id": "3bbfe358-7368-422e-9b91-6752454562e3"
+      },
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "wikidata",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "d8724e80-ce26-4aa3-bca3-328866c88cde",
+        "resource": "https://www.wikidata.org/wiki/Q105677002"
+      },
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "ended": false,
+      "end": null,
+      "type": "youtube",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "6a61941f-61b7-471d-b44d-bf76bb1d9122",
+        "resource": "https://www.youtube.com/channel/UCYAb_yLdag6D098es0-agwg"
+      },
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "youtube music",
+      "ended": false,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "url": {
+        "id": "95f3556f-c06c-44f2-a8fb-7e9fac5e42da",
+        "resource": "https://music.youtube.com/channel/UCoSgLAvtgQVCxO6Wt5vwEeA?feature=gws_kp_artist&feature=gws_kp_artist"
+      },
+      "target-type": "url",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    }
+  ],
+  "gender": null,
+  "sort-name": "Dry Cleaning",
+  "life-span": {
+    "ended": false,
+    "begin": "2017",
+    "end": null
+  },
+  "disambiguation": "English post\u2010punk band"
+}

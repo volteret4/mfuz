@@ -1,0 +1,964 @@
+{
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type-id": null,
+    "name": "Honolulu",
+    "type": null,
+    "disambiguation": "",
+    "id": "a1411661-be21-4290-8dc1-50f3d8e3ea67",
+    "sort-name": "Honolulu"
+  },
+  "ipis": [
+    "00477487104",
+    "00583145346",
+    "00583145444"
+  ],
+  "isnis": [
+    "0000000117226071"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0001032082",
+        "id": "8bdccec5-f065-45aa-955d-ddae7bb17c9c"
+      }
+    },
+    {
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "attributes": [],
+      "url": {
+        "id": "4117dce1-05af-4755-b3c9-fd97fbf2881f",
+        "resource": "https://www.bandsintown.com/a/279327"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/afb680f2-b6eb-4cd7-a70b-a63b25c763d5",
+        "id": "18cc63a8-4bc2-4bce-b93b-35c05e71796a"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "6d004aed-b686-4ea9-899b-499c28ecf50f",
+        "resource": "https://www.discogs.com/artist/1357693"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "Peter Hernandez",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "6de19b03-3f7a-4f2d-9857-e4a62da448ea",
+        "resource": "https://www.discogs.com/artist/2294733"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C",
+        "id": "aac991b4-c711-4419-96f6-3332ac03109a"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/429675",
+        "id": "0bcd89cb-cef7-4ad8-848b-d2ba6baa6297"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Bruno_Mars%2C_Las_Vegas_2010.jpg",
+        "id": "08a6c5b4-eb93-48f9-94e3-8970e3a1f8ec"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "image",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm3960069/",
+        "id": "974d685e-7d4b-4f84-a5c3-38e9a1fff8dc"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.last.fm/music/Bruno+Mars",
+        "id": "7c5b3ddf-cbce-475d-a288-ff46697c2f65"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-8562/bruno-mars/lyrics.html",
+        "id": "8f794d2c-d894-40f8-a3ef-a70ddf11dad3"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Bruno-mars",
+        "id": "705fc64b-68e2-46ac-bd58-68e6f588ae57"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "3a750532-b83e-4964-9027-4c0722d3ae68",
+        "resource": "https://www.musixmatch.com/artist/Bruno-Mars"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/brunossongs",
+        "id": "246e25e2-3abd-49bd-a63e-2a395a9172e0"
+      },
+      "attributes": [],
+      "type": "myspace",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "68d53e37-cc5b-42e9-a8d9-73f1d67807a9",
+        "resource": "https://www.brunomars.com/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2010094614",
+        "id": "efeeb8b4-23a7-4cca-bbb4-fee568a9966e"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "63a020d5-7eb3-475e-8b05-fdf574f08e32",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16265613s"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "3e075006-0ff3-4cc8-8887-696880b9d862",
+        "resource": "https://d-nb.info/gnd/141560630"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://imvdb.com/n/bruno-mars",
+        "id": "e04cfcdf-7730-400f-b0e8-763939d27c3d"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-1680514",
+        "id": "6ef11d0c-52f5-4249-8ce4-6821bcf6912f"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/bruno-mars",
+        "id": "f848db90-303f-44f0-b0cf-b97328481543"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/bruno-mars/",
+        "id": "2365b891-570b-437f-b358-e56b122a102a"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.whosampled.com/Bruno-Mars/",
+        "id": "1e8ec2ab-012c-492b-bd93-3ac6716b3d64"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2010094614",
+        "id": "214c4e35-37fa-47cc-aa73-a46807444f6c"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "8465e6e9-50e1-421d-b71d-bec003c17a2e",
+        "resource": "https://itunes.apple.com/us/artist/id278873078"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": "2019-05-19",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": true
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": true,
+      "begin": null,
+      "end": "2020-10-12",
+      "url": {
+        "id": "abcbe4ac-c4b0-49e9-8224-f707e543bb14",
+        "resource": "https://play.google.com/store/music/artist?id=A75kqwzpoke43xhbjxrbloyylwq"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/278873078",
+        "id": "f84ebe0e-4b00-4499-8df2-605e7764b1ec"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "cd733149-ef34-40dd-b9a4-8b6124b4d23c",
+        "resource": "https://www.7digital.com/artist/bruno-mars"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "53df4335-c05d-471f-ab1f-a867718625b7",
+        "resource": "https://www.qobuz.com/us-en/interpreter/bruno-mars/260803"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/51310",
+        "id": "3c56d298-e64b-45b7-8ae9-c5ddca8e5d19"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/bruno-mars-bd5153a.html",
+        "id": "69db5fac-5c3e-48b0-bc4b-9ba538d213b7"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {}
+    },
+    {
+      "end": "2019-04",
+      "begin": null,
+      "ended": true,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "344ede23-c789-4847-97d5-9a12ded05886",
+        "resource": "https://plus.google.com/+BrunoMars"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "cbc37d92-080e-4fc7-8b42-c2ebcebe075f",
+        "resource": "https://twitter.com/BRUNOMARS"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://vk.com/brunomars",
+        "id": "a27833c3-bd7f-44ff-82d3-52a749901856"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://www.facebook.com/brunomars",
+        "id": "7a0bfffa-ab03-4e4f-bca8-1653ce1cf42a"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.instagram.com/brunomars/",
+        "id": "0379b5a6-2d22-4d9a-a9d7-d1476e0eef04"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "de4c6417-0631-480e-b6bd-c34ebbf270fc",
+        "resource": "https://www.tiktok.com/@brunomars"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "f9431760-ce35-44a7-ab6c-dda8703d26ec",
+        "resource": "https://www.songkick.com/artists/941964"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://soundcloud.com/brunomars",
+        "id": "5b1d0847-781d-47f4-813c-6842f9dd3a00"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "id": "ba7b306c-798f-4735-87d8-fc1609a5bb2a",
+        "resource": "https://music.amazon.com/artists/B001T1TD0W"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "d05d064c-051e-4a69-a61f-f6ccdd001f75",
+        "resource": "https://music.apple.com/gb/artist/278873078"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/278873078",
+        "id": "f84ebe0e-4b00-4499-8df2-605e7764b1ec"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://tidal.com/artist/3658521",
+        "id": "09db908e-b3cc-4056-8f87-55930548109f"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/bruno-mars/260803",
+        "id": "53df4335-c05d-471f-ab1f-a867718625b7"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "ticketing",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "6494268e-325b-47d0-9466-8180cd3ebe73",
+        "resource": "https://concerts50.com/artists/bruno-mars-tour-dates"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "20d5c78c-bc52-4b7f-a9c6-54b94f8754ff",
+        "resource": "https://www.ticketmaster.com/artist/1466801"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "ticketing",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "d9ef75ed-e90c-4768-8a75-645f7ac2b319",
+        "resource": "http://viaf.org/viaf/165707945"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "cb93a0f2-2913-441a-b462-e595b8486289",
+        "resource": "https://www.wikidata.org/wiki/Q1450"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://en.wikipedia.org/wiki/Bruno_Mars",
+        "id": "ce6f60f4-c74e-48be-b39a-eb865b795cd8"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikipedia",
+      "type-id": "29651736-fa6d-48e4-aadc-a557c6add1cb",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.youtube.com/user/ElektraRecords",
+        "id": "dfe2c701-6b63-4fed-a450-733667c00562"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "youtube",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "8c89c623-406f-4d90-a12f-5018f8f5c1ee",
+        "resource": "https://music.youtube.com/channel/UCZn4r7heNOPY-C43YIywnVA"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube music",
+      "source-credit": ""
+    }
+  ],
+  "gender": "Male",
+  "type": "Person",
+  "life-span": {
+    "end": null,
+    "begin": "1985-10-08",
+    "ended": false
+  },
+  "end-area": null,
+  "area": {
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type-id": null,
+    "name": "United States"
+  },
+  "name": "Bruno Mars",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Mars, Bruno",
+  "disambiguation": "US singer",
+  "id": "afb680f2-b6eb-4cd7-a70b-a63b25c763d5"
+}

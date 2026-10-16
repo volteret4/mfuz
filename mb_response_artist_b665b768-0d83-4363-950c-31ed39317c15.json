@@ -1,0 +1,1159 @@
+{
+  "isnis": [
+    "0000000122424734",
+    "0000000122434852"
+  ],
+  "begin-area": {
+    "name": "Pasadena",
+    "sort-name": "Pasadena",
+    "disambiguation": "",
+    "id": "56e1c305-859d-4fbb-8a7c-6e45e1b8ebf1",
+    "type": null,
+    "type-id": null
+  },
+  "gender-id": null,
+  "ipis": [],
+  "type": "Group",
+  "name": "Van Halen",
+  "life-span": {
+    "begin": "1972",
+    "ended": true,
+    "end": "2019-09-30"
+  },
+  "country": "US",
+  "end-area": null,
+  "relations": [
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "allmusic",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "c5fdb011-4bbb-4b78-b08c-3c8d628c8b40",
+        "resource": "https://www.allmusic.com/artist/mn0000260206"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "5e7eec32-41c1-4702-ae4b-8690a9e0af3e",
+        "resource": "https://www.bandsintown.com/a/50322"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "id": "fece6d05-5352-4294-90dd-76884522b405",
+        "resource": "https://www.bbc.co.uk/music/artists/b665b768-0d83-4363-950c-31ed39317c15"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.discogs.com/artist/94066",
+        "id": "1402852d-05fb-48b9-8706-5a2b08905c83"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://open.spotify.com/artist/2cnMpRsOVqtPMfq7YiFE6K",
+        "id": "4012cdf7-8e57-494f-a83d-c6ff0cc1eab8"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "6f8e01f8-ae24-4e09-807c-61db4c46c5cd",
+        "resource": "https://play.anghami.com/artist/30192"
+      },
+      "ended": false
+    },
+    {
+      "type": "free streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.deezer.com/artist/1168",
+        "id": "a0ee33f1-bd8f-44ff-babd-0f3744531048"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "f8c0289d-3829-406d-aea1-985221c20f00",
+        "resource": "http://www.pandora.com/van-halen"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "image",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "0025e205-6326-47d1-bfe8-6c4c32562a99",
+        "resource": "https://commons.wikimedia.org/wiki/File:VAN_HALEN2007.JPG.jpg"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "27f7aa77-3cfb-4ba5-9111-da4db7dedd3d",
+        "resource": "https://www.imdb.com/name/nm1663666/"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "IMDb"
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.last.fm/music/Van+Halen",
+        "id": "19200452-e275-40c9-9b26-1a9bba1b9c88"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "lyrics",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://muzikum.eu/en/122-4950/van-halen/lyrics.html",
+        "id": "b9b8d437-0d75-48aa-84df-d48626866850"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "34328ed2-8962-45b0-b44e-66df5362e5b9",
+        "resource": "https://genius.com/artists/Van-halen"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Van-Halen",
+        "id": "3f3d1f80-e0ea-4337-af08-3f7c25179620"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "myspace",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/vanhalen",
+        "id": "c16cf6cf-c7da-4161-a519-9899ce61d5f9"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://www.van-halen.com/",
+        "id": "6ed268e1-157a-461c-858e-7fbcc9b042ef"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "official homepage",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://jaxsta.com/profile/97d78d79-c00c-4d5d-b68d-d059c4a96da9",
+        "id": "24708869-5c76-4816-9695-ad9d8d10e1d1"
+      },
+      "direction": "forward",
+      "ended": true,
+      "end": "2025-12-17",
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "8be899c4-1be7-4545-ab19-99d9a12f6011",
+        "resource": "http://id.loc.gov/authorities/names/n84088350"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13907276m",
+        "id": "7718ed19-9dda-4baa-99a7-f6e3e0710b9a"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "fa2babc3-a982-499e-94c7-52048f22f968",
+        "resource": "https://d-nb.info/gnd/5229986-7"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "97df3300-21cb-4824-8eec-9179678582b1",
+        "resource": "https://id.ndl.go.jp/auth/ndlna/001132296"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "174c6fc8-edf8-4f0c-b7ae-3e71e61147d4",
+        "resource": "https://imvdb.com/n/van-halen"
+      },
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "b75aeecf-cd58-477e-aafb-5436eba307d0",
+        "resource": "https://musicmoz.org/Bands_and_Artists/V/Van_Halen/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "3962a874-88cb-4c84-96ec-56fb33614bc6",
+        "resource": "https://rateyourmusic.com/artist/van_halen"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "6e5bc288-2406-4808-908a-b1dd195f7e0f",
+        "resource": "https://www.45cat.com/artist/van-halen"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "url": {
+        "id": "373d09f9-4694-4b45-84eb-dff7171d57a9",
+        "resource": "https://www.livefans.jp/artists/13390"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "e7d60014-2091-41dc-bde0-be588f5cbe75",
+        "resource": "https://www.metalmusicarchives.com/artist/van-halen"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/van-halen/",
+        "id": "a43b409f-d974-4685-80c7-60f65cfcb978"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000011825/POPULAR/",
+        "id": "f827f7b1-57e4-43b0-8dcc-4944befa3ad7"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.spirit-of-metal.com/en/band/Van_Halen",
+        "id": "5366a311-8e89-49ae-a5a5-394d30de09c3"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "02af6f09-d53a-455c-b428-0e8470925492",
+        "resource": "https://www.spirit-of-rock.com/en/band/Van_Halen"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "5680386b-3692-4c62-8def-7f819c1fbee2",
+        "resource": "https://www.whosampled.com/Van-Halen/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "663dcf06-517a-435a-88b9-8044a6cb81db",
+        "resource": "https://www.worldcat.org/identities/lccn-n84088350"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url",
+      "end": "2020-10-12",
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "ff3bc7ef-d4f6-4945-bfcb-bebad3723e48",
+        "resource": "https://play.google.com/store/music/artist?id=Av2isacb3vjzjjv6k7shuti542y"
+      },
+      "direction": "forward",
+      "ended": true
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "30ccd4ba-a62c-42d8-923f-1d0d32d064ed",
+        "resource": "https://mora.jp/artist/72008/"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "6a11c035-f46a-4e05-a7e2-c9817b27aa8c",
+        "resource": "https://music.apple.com/us/artist/166529"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://ototoy.jp/_/default/a/247636",
+        "id": "1f1372bc-641a-42bd-93bd-f294c3c6071a"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "576a49db-7bfa-4a80-bb6e-2aaabff38967",
+        "resource": "https://ototoy.jp/_/default/a/623505"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download"
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "6c1199de-05e3-4f56-a528-28c151ff09fb",
+        "resource": "https://ototoy.jp/_/default/a/761034"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "4e7cabcc-30fd-4367-9a7b-39efb57d52e4",
+        "resource": "https://ototoy.jp/_/default/a/815500"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "d111400a-44ef-41b5-be2f-4286d9fa4630",
+        "resource": "https://www.7digital.com/artist/van-halen"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "09cf3b37-ba1b-4223-b86d-c9d87fd16658",
+        "resource": "https://www.junodownload.com/artists/Van+Halen/releases/"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id166529",
+        "id": "94d37e3b-254c-4bd3-931d-6ce629351b1c"
+      },
+      "direction": "forward",
+      "ended": true
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000AQU37Y",
+        "id": "fc57b484-9142-4778-b3ae-459881661bdc"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for mail-order",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "secondhandsongs",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "5468476c-bf3c-433b-98f1-d895ad4c8dc2",
+        "resource": "https://secondhandsongs.com/artist/484"
+      },
+      "direction": "forward"
+    },
+    {
+      "type": "setlistfm",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "35a87f6e-be68-4917-a67e-733734cbd6d1",
+        "resource": "https://www.setlist.fm/setlists/van-halen-2bd68066.html"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "ended": true,
+      "url": {
+        "id": "35259664-5513-456a-9545-b708c99b554d",
+        "resource": "https://plus.google.com/114462055082148733149"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": "2019-04",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": ""
+    },
+    {
+      "type": "social network",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "a6e580ce-137a-4565-a3dd-105dced06ad0",
+        "resource": "https://twitter.com/VanHalen"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "https://www.facebook.com/VanHalen",
+        "id": "b2b283ae-dcf9-4b11-b075-91d3e41a3f2c"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "social network",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "fe0b3e26-050c-44a3-aaad-2d24c9d8dcbd",
+        "resource": "https://www.instagram.com/vanhalen/"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "social network"
+    },
+    {
+      "type": "songkick",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/185559",
+        "id": "ed478100-110d-4edc-982d-57ce3d8a20bd"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://soundcloud.com/vanhalenofficial",
+        "id": "f075d02a-08e5-43ba-b713-1b1327b2cc2e"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "soundcloud",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "source-credit": "",
+      "end": "2022-06-08",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "beaf9a3b-3889-442e-b92e-e88f20bd2b42",
+        "resource": "https://us.napster.com/artist/van-halen"
+      },
+      "ended": true,
+      "attributes": []
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B000UQPR7A",
+        "id": "a7d29e7c-2353-4d91-9aa2-e107df4a4626"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/166529",
+        "id": "dec47b48-8041-4eb0-958b-a80592fe0518"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/166529",
+        "id": "6a11c035-f46a-4e05-a7e2-c9817b27aa8c"
+      },
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "d4240704-3b07-4e53-b4f8-134893ed65d5",
+        "resource": "https://tidal.com/artist/13462"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "0529d1a6-4b72-43c4-9792-8de3fc97b886",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/van-halen/322470"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "5ad9c4d7-8c19-4d47-8ad2-c79f70e6ac3e",
+        "resource": "http://viaf.org/viaf/168896008"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "VIAF",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "277b74a7-055a-4f08-afb4-2fe981e28467",
+        "resource": "https://www.wikidata.org/wiki/Q190155"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "youtube",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "e3d50541-cb1e-4561-a7ce-1b75a2055525",
+        "resource": "https://www.youtube.com/channel/UCP7SHuVeFOHi27A1VSseFPQ"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url"
+    },
+    {
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "youtube music",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCPi7wU0ppI6ad7EEpHs7lHg",
+        "id": "6cefdc52-95f3-4caa-8380-7e0c9d2515bc"
+      },
+      "ended": false,
+      "attributes": []
+    }
+  ],
+  "disambiguation": "American hard rock band",
+  "sort-name": "Van Halen",
+  "area": {
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States"
+  },
+  "id": "b665b768-0d83-4363-950c-31ed39317c15",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null
+}

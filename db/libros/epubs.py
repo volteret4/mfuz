@@ -6,6 +6,9 @@ Compatible con db_creator.py
 
 import os
 import sqlite3
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import re
 from pathlib import Path
 from datetime import datetime
@@ -130,6 +133,7 @@ def extract_text_from_xhtml(xhtml_content):
 def create_artists_books_table(db_path):
     """Crea la tabla artists_books si no existe"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     cursor.execute('''
@@ -443,6 +447,7 @@ def are_contexts_similar(context1, context2, similarity_threshold=0.8):
 def get_artists_from_db(db_path):
     """Obtiene la lista de artistas de la base de datos, excluyendo nombres problemáticos"""
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     cursor.execute("SELECT id, name FROM artists WHERE name IS NOT NULL AND name != ''")
@@ -485,6 +490,7 @@ def process_epub_files(config):
     print(f"Encontrados {len(epub_files)} archivos EPUB")
     
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     cursor = conn.cursor()
     
     processed_count = 0

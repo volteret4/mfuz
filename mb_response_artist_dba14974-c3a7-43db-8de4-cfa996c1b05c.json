@@ -1,0 +1,373 @@
+{
+  "country": "US",
+  "sort-name": "Collins, Lyn",
+  "relations": [
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-type": "url",
+      "url": {
+        "id": "38256724-eec1-4c04-ad36-1d50656a491d",
+        "resource": "https://www.allmusic.com/artist/mn0000803242"
+      },
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "ended": true,
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "fac27b1c-fbca-479f-8a4d-f25f50b92ef6",
+        "resource": "https://www.bbc.co.uk/music/artists/dba14974-c3a7-43db-8de4-cfa996c1b05c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "cd7a5f79-fe18-4c11-b0ab-987f3c20899a",
+        "resource": "https://www.discogs.com/artist/44125"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "e0a76454-b11c-4fba-bba7-b1386bfd89d3",
+        "resource": "https://open.spotify.com/artist/6XJPGyxrP66scKvIE9kpPN"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "free streaming",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "be54330c-2fe3-4118-b5e2-1b571f03fb48",
+        "resource": "https://www.imdb.com/name/nm0172503/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "last.fm",
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "65b0312c-280a-49a3-84cf-285fc259853b",
+        "resource": "https://www.last.fm/music/Lyn+Collins"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "lyrics",
+      "begin": null,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "cf0c0875-6aea-4e80-92ba-0fecd584b18c",
+        "resource": "https://genius.com/artists/Lyn-collins"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "a5ca2f3b-65fe-40ae-bfb7-9503b726c030",
+        "resource": "http://id.loc.gov/authorities/names/n95013195"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13975267m",
+        "id": "abe31cdf-4f61-450a-995a-c5c0b4d8ae89"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "https://d-nb.info/gnd/134658930",
+        "id": "c0e1c3be-de55-4b88-abe8-de4dcaed0dea"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "2a089b60-603e-4074-8aaa-671b82f525d5",
+        "resource": "https://rateyourmusic.com/artist/lyn_collins"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d7e6fc50-2533-46ed-8fcb-c2923d822021",
+        "resource": "https://www.whosampled.com/Lyn-Collins/"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n95013195",
+        "id": "abb65ba8-979a-410b-9431-84127ae374af"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "end": null,
+      "begin": null,
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "15a2b51c-fa21-454a-9dd1-ce0ff139d17a",
+        "resource": "https://secondhandsongs.com/artist/2460"
+      },
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "songkick",
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/92262",
+        "id": "68393b55-b80a-4b78-b2af-74eab4736983"
+      },
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/250548",
+        "id": "fae51190-5753-455f-b80b-1504faeb37d6"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "type": "streaming",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "VIAF",
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "83db357a-0ea1-4893-b5a3-55a767bae26f",
+        "resource": "http://viaf.org/viaf/44492848"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q469097",
+        "id": "9a9b0c4c-c326-41dd-82e9-7f0aaac2a7b6"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "wikidata",
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "gender": "Female",
+  "life-span": {
+    "begin": "1948-06-12",
+    "end": "2005-03-13",
+    "ended": true
+  },
+  "disambiguation": "",
+  "type": "Person",
+  "ipis": [],
+  "end-area": {
+    "id": "56e1c305-859d-4fbb-8a7c-6e45e1b8ebf1",
+    "sort-name": "Pasadena",
+    "name": "Pasadena",
+    "type-id": null,
+    "disambiguation": "",
+    "type": null
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "dba14974-c3a7-43db-8de4-cfa996c1b05c",
+  "name": "Lyn Collins",
+  "area": {
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type-id": null,
+    "type": null,
+    "sort-name": "United States"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000055177744"
+  ],
+  "begin-area": {
+    "id": "d9d1ef49-4d1c-4ab3-8bb0-041e29126fe5",
+    "sort-name": "Abilene",
+    "name": "Abilene",
+    "type-id": null,
+    "disambiguation": "",
+    "type": null
+  }
+}

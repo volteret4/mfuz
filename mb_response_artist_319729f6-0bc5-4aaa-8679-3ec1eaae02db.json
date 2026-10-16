@@ -1,0 +1,151 @@
+{
+  "type": "Group",
+  "ipis": [],
+  "end-area": null,
+  "name": "Dar Disku",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "name": "Bahrain",
+    "type-id": null,
+    "id": "65f4f7a6-d3c1-3a6b-a726-85e147d555b7",
+    "iso-3166-1-codes": [
+      "BH"
+    ],
+    "disambiguation": "",
+    "sort-name": "Bahrain",
+    "type": null
+  },
+  "isnis": [],
+  "begin-area": {
+    "sort-name": "Bahrain",
+    "type": null,
+    "id": "65f4f7a6-d3c1-3a6b-a726-85e147d555b7",
+    "type-id": null,
+    "name": "Bahrain",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "BH"
+    ]
+  },
+  "gender-id": null,
+  "id": "319729f6-0bc5-4aaa-8679-3ec1eaae02db",
+  "country": "BH",
+  "relations": [
+    {
+      "source-credit": "",
+      "ended": false,
+      "type": "bandcamp",
+      "end": null,
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "url": {
+        "resource": "https://dardisku.bandcamp.com/",
+        "id": "5f32afd2-4f48-424e-b84c-ecdd0e18102d"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/7696705",
+        "id": "cfed93f3-ffe7-49f3-9976-9184cd9738a6"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "free streaming",
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "id": "3d0d21b7-26a3-4810-96e8-6aff6532468b",
+        "resource": "https://open.spotify.com/artist/70XpwqZmbGHH9TnDuvPhGR"
+      },
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/57149642",
+        "id": "a917c4e3-e62c-47e6-89f1-bbd5879d8f4d"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "eb2d29d1-468c-47cd-9129-a14bc82658e4",
+        "resource": "https://ra.co/dj/dardisku"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "source-credit": "",
+      "url": {
+        "id": "599f5f24-9653-412a-a9e6-91970494599c",
+        "resource": "https://tidal.com/artist/10814006"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    }
+  ],
+  "gender": null,
+  "sort-name": "Dar Disku",
+  "disambiguation": "Dar Disku Records is Label",
+  "life-span": {
+    "end": null,
+    "begin": "2018-05-14",
+    "ended": false
+  }
+}

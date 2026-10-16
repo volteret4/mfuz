@@ -1,0 +1,1158 @@
+{
+  "isnis": [
+    "0000000115373852"
+  ],
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000813946",
+        "id": "8031a3fb-2fb3-4172-a554-8723240247c9"
+      },
+      "type": "allmusic",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://deftones.bandcamp.com/",
+        "id": "42d93d64-9e73-4ab2-b5ee-c03bce3781f0"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/81",
+        "id": "989bb930-6748-432e-858f-813229d1bb19"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": "2020-11-19",
+      "url": {
+        "id": "cff6a36d-2a42-40ac-9533-7ac2624feeef",
+        "resource": "https://www.bbc.co.uk/music/artists/7527f6c2-d762-4b88-b5e2-9244f1e34c46"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/12210",
+        "id": "afe010e1-4735-4b25-8b34-05a8fe46affc"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.deftonesworld.com/",
+        "id": "6080c640-da6c-4bff-8b0b-834de6fc1a6e"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "begin": null,
+      "type": "fanpage",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "ended": true,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "http://www.deftones-archives.com/",
+        "id": "61a7c725-713e-4e27-acb8-2cc9662d1f92"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "attribute-values": {},
+      "type": "fanpage",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "026acdf9-565f-426b-a19c-a7aa2012436f",
+        "resource": "https://open.spotify.com/artist/6Ghvu1VvMGScGpOUJBAHNH"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "ccf730ce-78eb-409a-95df-06eafe2ef96e",
+        "resource": "https://www.deezer.com/artist/535"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "e6363738-5bd1-49fb-addb-94c79aa36c22",
+        "resource": "https://www.imdb.com/name/nm2475277/"
+      },
+      "type": "IMDb",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "2564c571-986d-43ce-aa3b-adaed3bdf284",
+        "resource": "https://www.last.fm/music/Deftones"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Deftones",
+        "id": "68f3d78f-1236-4a4f-9db6-cf7802db81c3"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "lyrics",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://muzikum.eu/en/deftones/lyrics",
+        "id": "7758f15e-b187-43db-9b93-83d7c06e4731"
+      },
+      "attribute-values": {},
+      "type": "lyrics",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Deftones",
+        "id": "1e93f734-248f-4546-927a-49c8561a59a5"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "url": {
+        "id": "1ca5a806-65a6-45de-a798-eb9fa041f469",
+        "resource": "https://myspace.com/deftones"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156"
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "89498420-445e-4fbc-86cc-d823d0c3a9cc",
+        "resource": "https://www.deftones.com/"
+      },
+      "attribute-values": {},
+      "type": "official homepage",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no99017704",
+        "id": "f1bea7e8-cf42-4abf-bae2-1e919099a551"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb14007311w",
+        "id": "f59a2575-e93a-4ec9-bf53-515f84b4b039"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "resource": "https://d-nb.info/gnd/10310548-7",
+        "id": "ba9ffd48-d483-4081-85bc-60190cebea61"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39QQPVp7TPpGjgfpkqWMpbP6g",
+        "id": "de3da340-c31b-4588-bddc-565d0af2644e"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://imvdb.com/n/deftones",
+        "id": "a2065c8c-f4b8-47be-a9de-5369717298e0"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://musicmoz.org/Bands_and_Artists/D/Deftones/",
+        "id": "b8e6e993-9584-46f4-9e33-7e80ac96539b"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/deftones",
+        "id": "0eabf5dd-eabc-451e-9e31-55a452b3ae80"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.livefans.jp/artists/2585",
+        "id": "267b7cd3-f86f-4630-b949-4ef0d0fde6e0"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://www.metalmusicarchives.com/artist/deftones",
+        "id": "80f857c9-c42d-4c77-bffb-a3411a1464fd"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "3ec27893-4244-400c-a0b3-c5305712e125",
+        "resource": "https://www.musik-sammler.de/artist/2972/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "b2640b36-4f13-4d5b-a0d7-cd71106720b1",
+        "resource": "https://www.muziekweb.nl/Link/M00000076680/POPULAR/"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "38ee6476-c7e7-4672-ace5-7959e16af846",
+        "resource": "https://www.spirit-of-metal.com/en/band/Deftones"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "id": "3c6b1734-192c-4ea7-8067-424d76ef9a9c",
+        "resource": "https://www.whosampled.com/Deftones/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": true,
+      "attributes": [],
+      "end": "2020-10-12",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "f62b0b63-b399-4006-8a96-ecfebbea2ed2",
+        "resource": "https://play.google.com/store/music/artist?id=Anbhmpcu6gkoktnaygdhdnftlii"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id1092903",
+        "id": "bdd037f1-3749-4958-a762-ae6d787da2a5"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://mora.jp/artist/60426/all",
+        "id": "ea2895ba-4232-45f1-8ba7-8b6cb88ec1e2"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1092903",
+        "id": "c69d533f-5d8d-4be0-90d3-cca0a1ac0538"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "id": "88e1cbb3-8c9d-453e-aabf-c88df9e13d96",
+        "resource": "https://music.bugs.co.kr/artist/32885"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "359f1864-7a7b-496d-8813-63abc47f830f",
+        "resource": "https://us.7digital.com/artist/deftones"
+      },
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "url": {
+        "id": "d226a650-f579-4819-baf9-0851aa68d625",
+        "resource": "https://www.beatport.com/artist/deftones/559170"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "4761a2bf-24da-452f-894f-d397211093a6",
+        "resource": "https://www.junodownload.com/artists/Deftones/"
+      }
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.microsoft.com/en-us/store/music/artist/deftones/be1f0000-0200-11db-89ca-0019b92a3933",
+        "id": "1e10bf43-e2d1-4119-9ad0-3c897730b09d"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/album/deftones-deftones/0093624919780",
+        "id": "73c7abdf-d6aa-4021-9dfc-a22d58c92619"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700141419",
+        "id": "b853857e-ab9c-4d97-923d-78f46b65d502"
+      },
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2018-06-30",
+      "url": {
+        "id": "d88360c3-721d-40c7-9f14-4d5a1ec77849",
+        "resource": "http://www.purevolume.com/deftones"
+      },
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purevolume"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "844c44c7-f61c-4aaa-9b7a-e9be933f3adc",
+        "resource": "https://secondhandsongs.com/artist/1923"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-credit": "",
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/deftones-1bd689cc.html",
+        "id": "9128c1bf-ba7e-4932-9eb2-b6613ccde88d"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207"
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://plus.google.com/+deftones",
+        "id": "06296e3a-47e1-4372-ade3-b542e5a5bb0a"
+      },
+      "end": "2019-04",
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://twitter.com/deftones",
+        "id": "18022e1e-57ca-4081-a520-63a40b26f871"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "7e2a7134-41f5-4b2e-b08d-d52bfcce4616",
+        "resource": "https://www.facebook.com/deftones"
+      },
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/deftones/",
+        "id": "d650d255-24ee-40d4-a158-83615c805ceb"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.tiktok.com/@deftones",
+        "id": "bc2afead-049f-4509-8305-8251f3f315f7"
+      }
+    },
+    {
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "52c125c6-46e3-45ef-8c4d-fef208474f4b",
+        "resource": "https://www.songkick.com/artists/83230"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "soundcloud",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "24c62fc2-f9df-4d70-b1c4-865ef17a1c25",
+        "resource": "https://soundcloud.com/deftones_official"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "3231fbd1-e70b-4b15-81ba-e86c900b8525",
+        "resource": "https://music.amazon.com/artists/B0011TTKN2"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1092903",
+        "id": "c69d533f-5d8d-4be0-90d3-cca0a1ac0538"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "resource": "https://music.bugs.co.kr/artist/32885",
+        "id": "88e1cbb3-8c9d-453e-aabf-c88df9e13d96"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "6e1eb352-5195-47c6-b064-6ecfbf7db9de",
+        "resource": "https://tidal.com/artist/15349"
+      },
+      "type": "streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://us.napster.com/artist/deftones",
+        "id": "2fd2cccb-acd3-4f1b-8094-e4c233a6e929"
+      }
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "73c7abdf-d6aa-4021-9dfc-a22d58c92619",
+        "resource": "https://www.qobuz.com/us-en/album/deftones-deftones/0093624919780"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "b611a46d-16d7-4749-a606-d10110864e63",
+        "resource": "https://www.ticketmaster.com/artist/777416"
+      },
+      "type-id": "34beaf28-cbdd-4bf7-bc41-e7de18135245",
+      "type": "ticketing",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "e0fe0bb1-b671-455a-bc2c-029c81a0aadb",
+        "resource": "http://viaf.org/viaf/149126214"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "b9591b2a-d1ec-420e-ba62-e6ee3e039a2c",
+        "resource": "https://www.twitch.tv/deftonesofficial"
+      },
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b",
+      "type": "video channel",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "710ce31b-ca8f-4e38-8ba2-ef523bdf60fd",
+        "resource": "https://www.wikidata.org/wiki/Q485039"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "youtube",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCQDsiRE--IQe5ycCLeetIxQ",
+        "id": "4efa7554-e15f-46f2-8fe4-d8f5e54dd869"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": true,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "url": {
+        "id": "292e142b-b0bb-4801-aacf-e6041770d826",
+        "resource": "https://music.youtube.com/channel/UCXQtyZ6gWbOYR5B8Sc2sr3g"
+      },
+      "type": "youtube music",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "id": "7527f6c2-d762-4b88-b5e2-9244f1e34c46",
+  "ipis": [],
+  "disambiguation": "",
+  "sort-name": "Deftones",
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1988"
+  },
+  "gender": null,
+  "name": "Deftones",
+  "type": "Group",
+  "begin-area": {
+    "name": "Sacramento",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Sacramento",
+    "id": "21879fba-fe4e-4dbc-99e8-cad9142e5618"
+  },
+  "country": "US",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "end-area": null
+}

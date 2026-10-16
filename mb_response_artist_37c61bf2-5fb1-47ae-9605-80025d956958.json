@@ -1,0 +1,447 @@
+{
+  "country": "DE",
+  "gender": "Female",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "0673256a-78a7-462f-9d88-233cf0056b36",
+        "resource": "https://www.allmusic.com/artist/mn0000868306"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "bandcamp",
+      "ended": false,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://nicobbc.bandcamp.com/",
+        "id": "42a937bf-2e04-49db-bc4a-335f0733ac9b"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type": "biography",
+      "ended": true,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-type": "url",
+      "url": {
+        "id": "11715000-15f7-4305-8f04-8a1dcc195221",
+        "resource": "http://www.swinginchicks.com/nico2.htm"
+      },
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "2a1ffc71-4565-4253-a00a-245cbdf3baf3",
+        "resource": "https://www.discogs.com/artist/158676"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "type": "discogs",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://smironne.free.fr/NICO/",
+        "id": "a7392e9f-15fe-4fd0-9432-0977c8ce6146"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "type": "fanpage",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "d0ec7f90-6c17-4a52-9a42-759b1395a497",
+        "resource": "https://open.spotify.com/artist/0IwlY33zbBXN7zlS9DP2Cj"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.deezer.com/artist/1855",
+        "id": "212128e4-b620-465f-a93c-c85d82292d3c"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "target-credit": "",
+      "url": {
+        "id": "74cf2eac-bd7a-4841-876b-2882bc2013f7",
+        "resource": "https://www.imdb.com/name/nm0630113/"
+      },
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "IMDb",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "url": {
+        "id": "433d0d5e-8aae-44c0-a423-1022054e0d3a",
+        "resource": "https://www.last.fm/music/Nico"
+      },
+      "target-credit": "",
+      "source-credit": "",
+      "type": "last.fm",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/nr89011698",
+        "id": "31d66b60-11d5-436b-863a-5fc510a7040c"
+      },
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "0279b603-6679-4410-a354-34d3930a44fd",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13897954x"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "53b14558-a38d-495d-a9dc-e24470c3c190",
+        "resource": "https://d-nb.info/gnd/119073285"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/nico",
+        "id": "83b3e6e0-9d3c-4752-abba-8750df101abc"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "id": "43627ecc-b688-463b-ba1c-d6a5058e2076",
+        "resource": "https://www.musik-sammler.de/artist/nico/"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-nr89011698",
+        "id": "74338c16-375b-474c-8e4a-2c768d0668cc"
+      },
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "end": null,
+      "type": "other databases",
+      "ended": false,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Auuiailp2zyuh3l3gaxib5dv54u",
+        "id": "d233de92-6fbe-4f92-9ddb-365725172f8c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": true,
+      "end": "2020-10-12",
+      "type": "purchase for download",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/136825",
+        "id": "0195409d-9b47-41ae-9d50-b2dc45339831"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "type": "streaming",
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "e7303bb6-9467-47ca-848d-b373cfd882c6",
+        "resource": "https://music.apple.com/us/artist/136825"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type": "streaming",
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/14642",
+        "id": "e55f86ea-8076-4c8b-9c6b-776d3fc2ced8"
+      },
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "begin": null,
+      "type": "VIAF",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "http://viaf.org/viaf/39562817",
+        "id": "bb04843a-15de-44ca-baf0-386f5482fd76"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "begin": null,
+      "end": null,
+      "type": "wikidata",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q44634",
+        "id": "a950b94e-268a-42e0-84d2-dd42700045eb"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "type": "youtube music",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCjk87eFr83Lr7ioGcHgx0Cg",
+        "id": "27108f4a-e9fc-4636-850b-638bfdc5972b"
+      },
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    }
+  ],
+  "sort-name": "Nico",
+  "disambiguation": "Christa P\u00e4ffgen, German singer, fashion model, actress",
+  "life-span": {
+    "ended": true,
+    "end": "1988-07-18",
+    "begin": "1938-10-16"
+  },
+  "type": "Person",
+  "ipis": [
+    "00041274017"
+  ],
+  "end-area": {
+    "name": "Ibiza Town",
+    "type-id": null,
+    "sort-name": "Ibiza Town",
+    "id": "120340e7-c06e-4498-baa9-29fd7f01f77e",
+    "type": null,
+    "disambiguation": ""
+  },
+  "name": "Nico",
+  "isnis": [
+    "0000000121291239"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "K\u00f6ln",
+    "type-id": null,
+    "id": "b8a2776a-eedf-48ea-a6f3-1a9070f0b823",
+    "sort-name": "K\u00f6ln"
+  },
+  "area": {
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "name": "Germany",
+    "type-id": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "sort-name": "Germany",
+    "type": null
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "37c61bf2-5fb1-47ae-9605-80025d956958"
+}

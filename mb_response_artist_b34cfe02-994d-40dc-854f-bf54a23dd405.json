@@ -1,0 +1,456 @@
+{
+  "disambiguation": "Spanish balladist",
+  "relations": [
+    {
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "6f8506d3-573c-4255-9e03-aab56b6dbf15",
+        "resource": "https://www.allmusic.com/artist/mn0000402440"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discography page",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "url": {
+        "id": "061dd191-3159-44d7-a99a-dcb672a1bb3d",
+        "resource": "http://www.raphaelsite.com/discografia.htm"
+      }
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "973175b9-5ba7-41b5-be28-21153953b115",
+        "resource": "https://www.discogs.com/artist/133327"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://open.spotify.com/artist/796OSRuB0E9Hq55uTFL9U8",
+        "id": "25d0a3e7-b1fe-4d84-95a6-f0b6cdd2eb35"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "2c5e8714-ff24-44fd-8382-a760e75dd5fe",
+        "resource": "https://www.deezer.com/artist/5179221"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/7657794",
+        "id": "173fcdae-798d-42c8-9d31-d1752d5a8fb1"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "1ed3c1ee-f7dd-4c7d-849d-2eaace2e3287",
+        "resource": "https://www.imdb.com/name/nm0710687/"
+      },
+      "type": "IMDb",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://genius.com/artists/Raphael-spanish-singer",
+        "id": "9757e120-f949-4738-ba16-e7ca1ca66f6e"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.raphaelnet.com/",
+        "id": "0a0fcff6-f98f-4273-a649-74189ceef4fc"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "ee84a3cb-089b-42aa-bae7-1b1b1a8a0617",
+        "resource": "http://id.loc.gov/authorities/names/n2006043890"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "65db2131-5fea-4828-922c-3606e5f17321",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139338867"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/1056511443",
+        "id": "69a58d6e-06b1-451b-875a-36adccd4935a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "3f1c3989-e3b8-4cc4-8d23-079644a315db",
+        "resource": "https://rateyourmusic.com/artist/raphael"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "46de2542-f8ce-4b5d-98c4-06d3da1caabe",
+        "resource": "https://www.whosampled.com/Raphael/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "cb9d4587-f67e-42ed-aaf5-d9f1754d1362",
+        "resource": "https://www.worldcat.org/identities/lccn-n2006043890"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "http://www.maniadb.com/artist/200495",
+        "id": "9cc6529f-9879-428c-8059-935d75252213"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id2421574",
+        "id": "bf514d48-66d3-49a6-b142-7a3de665023a"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "6fc28478-de02-487c-91c8-6ad2d61d4a5d",
+        "resource": "https://secondhandsongs.com/artist/18813"
+      },
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3"
+    },
+    {
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.instagram.com/raphaelartista/",
+        "id": "ae47175c-0c97-45c1-b67f-3ed98188128c"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "e8e9a2dc-cb47-4cfe-94a9-b62262ed78d8",
+        "resource": "https://www.songkick.com/artists/266413"
+      },
+      "target-type": "url",
+      "type": "songkick",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-type": "url",
+      "url": {
+        "id": "a391b397-fdac-4e96-a552-d44d48a0f58c",
+        "resource": "https://tidal.com/artist/8801"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "VIAF",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/42028947",
+        "id": "b1772274-2546-498a-a08b-2782bc6fe133"
+      }
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "3ffa019f-b4e8-4042-a6c5-857786216ddc",
+        "resource": "https://www.wikidata.org/wiki/Q561205"
+      }
+    }
+  ],
+  "gender": "Male",
+  "country": "ES",
+  "ipis": [],
+  "begin-area": {
+    "type": null,
+    "name": "Linares",
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Linares",
+    "id": "38e57a29-4feb-4c97-b9e3-53f54dbd6185"
+  },
+  "end-area": null,
+  "id": "b34cfe02-994d-40dc-854f-bf54a23dd405",
+  "name": "Raphael",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Raphael",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000123078570"
+  ],
+  "area": {
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "ES"
+    ],
+    "type": null,
+    "name": "Spain",
+    "disambiguation": "",
+    "sort-name": "Spain",
+    "id": "471c46a7-afc5-31c4-923c-d0444f5053a4"
+  },
+  "type": "Person",
+  "life-span": {
+    "ended": false,
+    "begin": "1943-05-05",
+    "end": null
+  }
+}

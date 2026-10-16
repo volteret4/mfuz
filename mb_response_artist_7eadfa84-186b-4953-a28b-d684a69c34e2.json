@@ -1,0 +1,251 @@
+{
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1944"
+  },
+  "gender-id": null,
+  "sort-name": "Panchos, Los",
+  "disambiguation": "",
+  "ipis": [],
+  "isnis": [
+    "0000000119312731"
+  ],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "allmusic",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "2a576cc2-54f0-4cbb-ad5e-95ddbe68bb0e",
+        "resource": "https://www.allmusic.com/artist/mn0000354189"
+      }
+    },
+    {
+      "url": {
+        "id": "ede8de33-51fa-490a-a3de-10522e1a73d2",
+        "resource": "https://www.discogs.com/artist/294209"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "begin": null,
+      "type": "discogs",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "Trio Los Panchos",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "fanpage",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "296fe66e-e5fb-4710-ba0c-1bb922e24033",
+        "resource": "http://www.lospanchos.com/"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "IMDb",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "c47a12fd-78fa-4de9-8080-6b73272fa1d3",
+        "resource": "https://www.imdb.com/name/nm1210481/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "url": {
+        "id": "6d582838-f89e-4141-b09d-c429b7d8b0bf",
+        "resource": "http://id.loc.gov/authorities/names/n92106353"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://adp.library.ucsb.edu/names/356102",
+        "id": "c285215f-bd67-44cb-8091-f75241a04c6e"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13978569v",
+        "id": "4f318b86-8d14-4a25-a624-ea2626dced1a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://d-nb.info/gnd/320555453",
+        "id": "123455f8-a2c8-4a41-adc4-4235048ac98c"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c1a9d04a-0961-4342-908c-0c2e99867712",
+        "resource": "https://www.worldcat.org/identities/lccn-n92106353"
+      },
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "e22e93cd-7d1b-435e-91ee-2bce6aa66301",
+        "resource": "https://www.songkick.com/artists/318766"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "attribute-values": {},
+      "type": "songkick",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/294240392",
+        "id": "bf43dada-573e-417c-93f7-4cdad30b4636"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "893be177-7b0b-45b3-a46e-bb1cbf85fb6b",
+        "resource": "https://www.wikidata.org/wiki/Q1361546"
+      }
+    }
+  ],
+  "id": "7eadfa84-186b-4953-a28b-d684a69c34e2",
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "Mexico",
+    "type-id": null,
+    "id": "3e08b2cd-69f3-317c-b1e4-e71be581839e",
+    "type": null,
+    "name": "Mexico",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "MX"
+    ]
+  },
+  "begin-area": null,
+  "country": "MX",
+  "type": "Group",
+  "name": "Los Panchos",
+  "gender": null
+}

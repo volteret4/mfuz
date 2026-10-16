@@ -1,0 +1,897 @@
+{
+  "life-span": {
+    "begin": "1926-09-23",
+    "end": "1967-07-17",
+    "ended": true
+  },
+  "sort-name": "Coltrane, John",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "disambiguation": "",
+  "id": "b625448e-bf4a-41c3-a421-72ad46cdb831",
+  "end-area": {
+    "name": "Huntington",
+    "type-id": null,
+    "id": "c9c39cb4-c978-4a00-97ed-9f8831dab11d",
+    "disambiguation": "",
+    "sort-name": "Huntington",
+    "type": null
+  },
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": ""
+  },
+  "name": "John Coltrane",
+  "isnis": [
+    "000000012280792X"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000175553",
+        "id": "bf92541c-6982-4906-b66f-9ae51705d6f3"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "f3aa31c6-4c27-4c28-a7b3-6604af94b53e",
+        "resource": "https://www.bandsintown.com/a/51206"
+      }
+    },
+    {
+      "begin": null,
+      "end": "2020-11-19",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "ended": true,
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "ca66fbf6-1fd6-4dac-99dd-43309bf3361b",
+        "resource": "https://www.bbc.co.uk/music/artists/b625448e-bf4a-41c3-a421-72ad46cdb831"
+      }
+    },
+    {
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "biography",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "86f350af-856b-4a54-9a4e-ab011d44ac2e",
+        "resource": "http://www.findagrave.com/cgi-bin/fg.cgi?page=gr&GRid=218"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "type": "discography page",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "6bab88de-ce95-4b45-b7dc-f01fe6a40ac9",
+        "resource": "https://www.jazzdisco.org/john-coltrane/catalog/"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "ab47f80d-d8e2-4a89-9434-21cd5b122c5c",
+        "resource": "http://www.mossiehigh.com/Coltrane/Main.htm"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "discography page",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "The Blue Train",
+      "attribute-values": {},
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/2766215",
+        "id": "1daf3d47-38ef-4461-bf9a-7082513182cb"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "62960e69-a7c8-4064-b9cf-af7bd67b7f99",
+        "resource": "https://www.discogs.com/artist/97545"
+      }
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "207ceac4-1fe7-4f43-aa77-b0b25879a629",
+        "resource": "https://open.spotify.com/artist/2hGh5VOeeqimQFxqXvfCUf"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "c1ecf0ee-990a-4766-b247-67f6efe21582",
+        "resource": "https://www.deezer.com/artist/2449"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:John_Coltrane_1963a.jpg",
+        "id": "9c13ef27-f5ba-418d-829a-b2d1a0531eb7"
+      },
+      "attributes": [],
+      "type": "image",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "a9ef86f8-d833-48d5-876c-a9b3ae1fad98",
+        "resource": "https://www.imdb.com/name/nm0173328/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "end": null,
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.last.fm/music/John+Coltrane",
+        "id": "b03cfdb1-efc9-4621-a8d6-bf1615428be0"
+      },
+      "attributes": [],
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "url": {
+        "resource": "https://genius.com/artists/John-coltrane",
+        "id": "f6bead13-2e20-4f12-a8a1-a24d0fd60ddd"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.johncoltrane.com/",
+        "id": "277af3ab-a573-4cf7-9632-a5fffee5a7dc"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "bcacc940-2b92-4767-ba29-788bd9efebf1",
+        "resource": "http://id.loc.gov/authorities/names/n50031907"
+      }
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://adp.library.ucsb.edu/names/309224",
+        "id": "b9d75919-c3c3-4c0c-aac6-66b5563fef83"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "8c951510-6290-4218-9658-697355be9043",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb138926615"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/118521667",
+        "id": "fe1105da-57e5-4f1e-bc7c-9bb3779e046d"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://ibdb.com/person.php?id=485239",
+        "id": "44dd8c73-451d-46dd-a750-6986383d6890"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6x92hns",
+        "id": "8ee13876-e768-4696-9d4f-910e87693be8"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "3dd38ceb-d0db-468f-99da-0f338ff11116",
+        "resource": "https://nla.gov.au/nla.party-1006213"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://openlibrary.org/works/OL7513936A",
+        "id": "ddfc7ef2-f414-40d3-aa68-45279c0b437f"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/john_coltrane",
+        "id": "d3a89aa4-76c0-4b1e-80fc-06a068b6f8c9"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.45cat.com/artist/john-coltrane",
+        "id": "6a91beab-5125-4c50-9241-8d87d95b4a97"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.45cat.com/cdalbum/artist/john-coltrane",
+        "id": "e099f8ed-92f4-41a6-90ec-dfc963c32352"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "7d53dc29-ec07-4244-ba40-678c3097af2e",
+        "resource": "https://www.45cat.com/tape/artist/john-coltrane"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "89373a4b-0204-4e1b-a387-deab92577416",
+        "resource": "https://www.45cat.com/vinyl/artist/john-coltrane"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f360a3bb-3b5a-472d-9fb1-a8b2c250e8f0",
+        "resource": "https://www.musik-sammler.de/artist/john-coltrane/"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "3c6b56d8-7a8a-4cec-a040-f02263715a5d",
+        "resource": "https://www.whosampled.com/John-Coltrane/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "id": "8f419bc4-0813-4878-9cbe-014c6f994252",
+        "resource": "https://www.worldcat.org/identities/lccn-n50-031907"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "87d5e50a-79d2-4f4f-bfd0-16a54b0736b9",
+        "resource": "https://mora.jp/artist/31621/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "cabab72f-4459-4a9e-ae77-adc2a53e0546",
+        "resource": "https://music.apple.com/us/artist/120199"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000APURBM",
+        "id": "4883db66-3178-4c2c-85af-c3d01134c428"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "4883db66-3178-4c2c-85af-c3d01134c428",
+        "resource": "https://www.amazon.com/-/e/B000APURBM"
+      },
+      "attributes": [],
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/2281",
+        "id": "a2459a12-90ad-4db1-a0b2-504deca0a4cf"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/john-coltrane-bd6b596.html",
+        "id": "cc18654a-3def-4e70-ae44-60a36ea03522"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "ended": false,
+      "type": "setlistfm",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "id": "a8345752-4359-409e-9dd5-e09a4d87e0e5",
+        "resource": "https://twitter.com/JohnColtrane"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "20016260-9198-43cb-8455-0f060026e93f",
+        "resource": "https://www.facebook.com/johncoltrane"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/160815",
+        "id": "b4b9e60c-4117-408f-a1f2-d3b266f372a5"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "e34675c7-3bf1-4eb9-bba0-2aaeb259b90a",
+        "resource": "https://soundcloud.com/johncoltraneofficial"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/tr/artist/120199",
+        "id": "e3d39fdd-a069-4a0d-95a4-f620a99f01f5"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://music.apple.com/us/artist/120199",
+        "id": "cabab72f-4459-4a9e-ae77-adc2a53e0546"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "7d5ebc81-e96c-447a-9a2d-fecf86c353a7",
+        "resource": "https://tidal.com/artist/9042"
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/61731379",
+        "id": "213eecf2-09a5-4828-970e-554c334cf8d8"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "e84558d6-be30-47a4-a548-ff18d9c98751",
+        "resource": "https://www.wikidata.org/wiki/Q7346"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCH4T2kv7rr9qnuP0DOXLxMA",
+        "id": "cef100d8-44cd-4d8f-acd2-20b41f2caf49"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "name": "Hamlet",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "aadf903b-960e-49b5-9e80-083a65f552ce",
+    "sort-name": "Hamlet",
+    "type": null
+  },
+  "ipis": [
+    "00006572202"
+  ],
+  "type": "Person",
+  "gender": "Male"
+}

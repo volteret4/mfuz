@@ -1,0 +1,519 @@
+{
+  "end-area": {
+    "name": "New York",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "74e50e58-5deb-4b99-93a2-decbb365c07f",
+    "sort-name": "New York",
+    "type": null
+  },
+  "name": "Benny Goodman",
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Goodman, Benny",
+  "disambiguation": "clarinetist and bandleader",
+  "id": "b09ae88f-4156-4caa-b129-1cacb5e1632e",
+  "life-span": {
+    "end": "1986-06-13",
+    "begin": "1909-05-30",
+    "ended": true
+  },
+  "gender": "Male",
+  "type": "Person",
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "29a709d8-0320-493e-8d0c-f2c386662b7f",
+    "sort-name": "Chicago",
+    "type-id": null,
+    "name": "Chicago"
+  },
+  "ipis": [
+    "00012336919"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "9d9cfbde-301e-4d98-9654-c52a9ceb6bed",
+        "resource": "https://www.allmusic.com/artist/mn0000163133"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19",
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/b09ae88f-4156-4caa-b129-1cacb5e1632e",
+        "id": "0bdf9f0f-77e9-44e0-bb8c-7b9d6645dda1"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "780441e9-1943-44f3-a56c-9709f69bded2",
+        "resource": "https://www.discogs.com/artist/254768"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/1pBuKaLHJlIlqYxQQaflve",
+        "id": "2842f240-f8b5-42dd-a744-5d06327d9623"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "cf7b827c-b7fc-48c0-8cab-e5d7bfa4c9bd",
+        "resource": "https://www.deezer.com/artist/151999"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "5e5b8aac-97f6-40f1-8056-bd8aa0584867",
+        "resource": "https://commons.wikimedia.org/wiki/File:BennyGoodmanStageDoorCanteen.jpg"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0329015/",
+        "id": "5a5a256d-5cd4-4495-b099-ff38436200a0"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "41f94636-0464-48cc-b8ec-c35c8a33f83a",
+        "resource": "https://www.last.fm/music/Benny%20Goodman"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "last.fm",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "5fc7571b-5a26-442e-bec9-9713c393c780",
+        "resource": "http://www.bennygoodman.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n81139256",
+        "id": "894a3116-c348-441d-9a50-9d4d5617c3f6"
+      },
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "4afa79b6-8cbe-4ea2-9426-e3544ebb3e0c",
+        "resource": "https://adp.library.ucsb.edu/names/103384"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13894604t",
+        "id": "aa477551-b829-48b4-a23f-b2f83b835cc1"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/118696424",
+        "id": "074d2ff2-214d-4eac-a8f4-cf616c0c84ef"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://ibdb.com/person.php?id=11766",
+        "id": "76a75312-5cd3-4a9b-861a-66ee0cb099d3"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "7eedede7-aa3d-439b-a345-9dcd9522cf3d",
+        "resource": "http://snaccooperative.org/ark:/99166/w6xp73km"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-450056",
+        "id": "a94ac106-af99-494d-82df-c618e269b7ed"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://openlibrary.org/works/OL1069190A",
+        "id": "43e86f6d-24a1-4a2e-9e13-bc275f07cbcb"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/benny_goodman",
+        "id": "d4c8f639-d740-4da8-9199-37b30c85f813"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "ee60b084-b19c-403b-87a0-622d273994b4",
+        "resource": "https://www.worldcat.org/identities/lccn-n81139256"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/2057",
+        "id": "aca91155-fe1e-4715-a17a-2f1037efe723"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "52ae65c9-ff56-4958-8983-1d02f6491050",
+        "resource": "https://www.facebook.com/BennyGoodman"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/274539",
+        "id": "026d5d95-ca05-450c-b461-e2e08f8e26be"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/79108",
+        "id": "3472708f-14f8-46d4-bbb8-9bd53b16f880"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/381",
+        "id": "9b2d76eb-e5ac-4912-8ad8-0733459751e5"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://viaf.org/viaf/7573997",
+        "id": "f690ec63-b212-407f-ba22-7efef7b67ccc"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q46755",
+        "id": "8c4abe5e-f5e0-442e-97ba-5f19da57eb2e"
+      },
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "country": "US",
+  "isnis": [
+    "0000000123197959"
+  ]
+}

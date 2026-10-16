@@ -1,0 +1,171 @@
+{
+  "begin-area": {
+    "type-id": null,
+    "name": "Reykjav\u00edk",
+    "type": null,
+    "iso-3166-2-codes": [
+      "IS-0"
+    ],
+    "sort-name": "Reykjav\u00edk",
+    "id": "e498a3ef-704c-462e-b144-6e6fc108a6f2",
+    "disambiguation": ""
+  },
+  "ipis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "77cc447d-3ab6-4965-a661-a5c4dc65ccd8",
+        "resource": "https://www.discogs.com/artist/105041"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/0tcAr5iQkX49C7AjuhAtC2",
+        "id": "03d96510-fc84-4329-868d-28a0d35cf45c"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "attributes": [],
+      "url": {
+        "resource": "https://myspace.com/mugison",
+        "id": "e55a51fe-9335-4ce5-8738-9c4ffe0e6d7a"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.mugison.com/",
+        "id": "ae38bd3a-027a-46c7-b4fc-db5a3a222aeb"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/113085",
+        "id": "22e1de85-5261-4746-a416-6e856e92aed1"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "94c877ed-046b-4eb7-b44f-2a162721d372",
+        "resource": "http://viaf.org/viaf/160088163"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1397139",
+        "id": "6e0a746d-d411-4b65-b634-e6096df4c7b3"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    }
+  ],
+  "isnis": [
+    "0000000107496676"
+  ],
+  "country": "IS",
+  "gender": "Male",
+  "type": "Person",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1976-09-04"
+  },
+  "end-area": null,
+  "area": {
+    "type": null,
+    "iso-3166-1-codes": [
+      "IS"
+    ],
+    "sort-name": "Iceland",
+    "disambiguation": "",
+    "id": "48802a32-075a-3805-a183-277c66047693",
+    "type-id": null,
+    "name": "Iceland"
+  },
+  "name": "Mugison",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Mugison",
+  "disambiguation": "",
+  "id": "3af5a722-4e32-4a57-81a8-b5449c79504e"
+}

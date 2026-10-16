@@ -1,8 +1,13 @@
 import sqlite3
 import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
+import sys
 
 db_path = sys.argv[1]
 conn = sqlite3.connect(db_path)
+apply_pragmas(conn)
 cursor = conn.cursor()
 
 # Obtener todas las tablas

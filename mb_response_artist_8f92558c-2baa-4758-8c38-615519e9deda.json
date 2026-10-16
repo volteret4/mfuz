@@ -1,0 +1,654 @@
+{
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000122485115"
+  ],
+  "area": {
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type-id": null,
+    "disambiguation": "",
+    "name": "United Kingdom",
+    "type": null,
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "sort-name": "United Kingdom"
+  },
+  "type": "Group",
+  "life-span": {
+    "begin": "1976",
+    "ended": true,
+    "end": "1986"
+  },
+  "disambiguation": "70s\u201380s British punk rock band",
+  "relations": [
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000075747",
+        "id": "7a51092a-5c76-44dd-9dcc-7865c80b43dc"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "target-credit": "",
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/8f92558c-2baa-4758-8c38-615519e9deda",
+        "id": "7738aace-a345-4b16-9d3c-d135c6211ba8"
+      },
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "00b13eba-1683-489e-b15e-b3d2a7a9c797",
+        "resource": "https://www.discogs.com/artist/29890"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "type": "fanpage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "56f1d439-f354-426d-8cdb-89ecb1d9bc6f",
+        "resource": "http://www.theclashonline.com/"
+      },
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/3RGLhK1IP9jnYFH4BRFJBS",
+        "id": "08142bc3-8797-4ede-95cf-878939f25d2b"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "url": {
+        "resource": "http://www.deezer.com/artist/2",
+        "id": "f4924403-2a84-46bc-a122-7b1696ad9e92"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "attribute-values": {},
+      "type": "image",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Clash_21051980_12_800.jpg",
+        "id": "3341f1e1-9904-4d06-a5a9-fcd26dc9c67e"
+      },
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "IMDb",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1502648/",
+        "id": "713bf0e2-963a-4367-a8cf-38d5bd449ce0"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "begin": null,
+      "url": {
+        "id": "6246bff7-ca22-4061-bce5-6e462d049bbe",
+        "resource": "https://www.last.fm/music/The+Clash"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "type": "lyrics",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-4267/the-clash/lyrics.html",
+        "id": "013814f8-a6e6-4972-8e60-b40c16ddbd23"
+      },
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://myspace.com/theclash",
+        "id": "fabb3806-bdb4-42da-9960-77fb6cd5831c"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "myspace",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "http://www.theclash.com/",
+        "id": "36382ff4-87d3-4a5e-af06-0ad0215c7f48"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "official homepage",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n81130525",
+        "id": "cc802adb-9dfd-479a-a9f2-dbb04e7908ac"
+      },
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/C/Clash,_The/",
+        "id": "ef302ec4-b869-4cf2-ab65-a2058d607645"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "1bdeb2b6-3082-4509-848a-6e706d4c435b",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139025271"
+      },
+      "target-type": "url",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/803669-X",
+        "id": "983e8211-d60f-404e-8130-10157eb979e3"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "211e56b0-2a78-4b72-b2cb-c5b6b2a81ae1",
+        "resource": "https://imvdb.com/n/the-clash"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_clash",
+        "id": "bd34c9f4-d905-4005-9c91-180f8cb1c68e"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "7b020a25-238f-487a-95e3-2e369b39a7a5",
+        "resource": "https://www.worldcat.org/identities/lccn-n81130525"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.musik-sammler.de/artist/3639",
+        "id": "dbe5d900-7495-402b-8672-ccccba426ad9"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "ended": true,
+      "attributes": [],
+      "target-credit": "",
+      "end": "2020-10-12",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "c4e839e7-87b2-420d-b0a9-1a39d2b3b9f1",
+        "resource": "https://play.google.com/store/music/artist?id=At6n6betceywy5d2jsx5erznn34"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id522000",
+        "id": "30d89335-8bfc-455a-b6b7-be80de91e192"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/the-clash/148999",
+        "id": "a6e60f80-5c79-4e20-ba01-8cc79a5e853a"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "18d4dc9d-3c7b-46cf-b33f-c6ad973ae949",
+        "resource": "https://secondhandsongs.com/artist/524"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://twitter.com/theclash",
+        "id": "7f5713de-1ca2-4271-bc57-609f12ab268e"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "social network",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "d8f24174-32aa-4bbb-a988-5ed758f0bf7d",
+        "resource": "https://www.facebook.com/theclash"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/174408",
+        "id": "c3e11ee8-904a-448f-a9ef-a3844e6e16e0"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "type": "songkick",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/522000",
+        "id": "53dd71b5-2d6f-4675-b063-9fac968d69ef"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "url": {
+        "resource": "https://tidal.com/artist/65",
+        "id": "f95657d9-86cd-48ef-b6db-b55d638d93ec"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "a6e60f80-5c79-4e20-ba01-8cc79a5e853a",
+        "resource": "https://www.qobuz.com/us-en/interpreter/the-clash/148999"
+      },
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "77f132b7-a896-4a91-87f3-867de3c08e41",
+        "resource": "http://viaf.org/viaf/132537903"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "type": "VIAF",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "wikidata",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q125603",
+        "id": "f1786fc0-c0fb-449f-92aa-a63257fdf24a"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "begin": null,
+      "type": "youtube",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "28fd3df8-8ce6-4095-bf06-bf2bf6f876bf",
+        "resource": "https://www.youtube.com/user/theclash"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/user/TheClashtv",
+        "id": "96b7b90f-793d-447f-9965-bb4305ea2642"
+      },
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "begin": null
+    }
+  ],
+  "country": "GB",
+  "gender": null,
+  "end-area": null,
+  "id": "8f92558c-2baa-4758-8c38-615519e9deda",
+  "ipis": [],
+  "begin-area": {
+    "sort-name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type": null,
+    "disambiguation": "Greater London",
+    "name": "London",
+    "type-id": null
+  },
+  "name": "The Clash",
+  "sort-name": "Clash, The",
+  "gender-id": null
+}

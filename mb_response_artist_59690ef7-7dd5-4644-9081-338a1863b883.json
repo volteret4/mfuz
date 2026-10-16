@@ -1,0 +1,213 @@
+{
+  "type": "Person",
+  "begin-area": null,
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": [],
+  "isnis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "disambiguation": "",
+  "sort-name": "Soriah",
+  "id": "59690ef7-7dd5-4644-9081-338a1863b883",
+  "area": {
+    "type-id": null,
+    "type": null,
+    "sort-name": "United States",
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States"
+  },
+  "end-area": null,
+  "relations": [
+    {
+      "url": {
+        "resource": "https://soriah.bandcamp.com/",
+        "id": "3dd33eea-687d-408b-b273-2ea0c5ffee37"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "bandcamp",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/207654",
+        "id": "aadc071c-b12b-45bc-8327-81e2240f375c"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "9b7756eb-82a5-4dda-8816-4b55298d7deb",
+        "resource": "https://open.spotify.com/artist/5jyF7QVqMwqvmxtQJ9uLA9"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "http://soriahmusic.com/",
+        "id": "1a96b969-51a1-4f0a-9e9b-75422e1bbdbc"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "fcc72049-6afa-4388-bf76-ad241275b5d2",
+        "resource": "https://rateyourmusic.com/artist/soriah"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://itunes.apple.com/mx/artist/id278077984",
+        "id": "7669b7d4-99a1-4df9-a4e1-856a5efa0a40"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "social network",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/soriahmusic",
+        "id": "3c974142-455b-4d41-a79e-0e3bd52c785a"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "3d4bae02-bcf1-4c35-894e-dabfb9adae81",
+        "resource": "https://www.instagram.com/soriah23/"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "url": {
+        "resource": "https://soundcloud.com/soriah",
+        "id": "62d6aad1-3566-47de-86e9-5d977e12f205"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "soundcloud",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q51337443",
+        "id": "5ee489f1-641d-48b3-a8f9-4538d3c2236e"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    }
+  ],
+  "life-span": {
+    "end": null,
+    "begin": null,
+    "ended": false
+  },
+  "name": "Soriah",
+  "country": "US"
+}

@@ -1,0 +1,77 @@
+{
+  "disambiguation": "",
+  "ipis": [],
+  "id": "02a12594-856b-468b-a52a-d885b1fc342c",
+  "isnis": [],
+  "relations": [
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "95cba0ba-ee0e-455e-ae9b-c8024953743c",
+        "resource": "https://www.discogs.com/artist/14802389"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "id": "a6bc6f53-c7fa-4723-9811-9683324026eb",
+        "resource": "https://open.spotify.com/artist/6sXF3naVGIqO5axr7EVgPi"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "88efe6b9-071e-475f-8aa6-8a67ea29fc3c",
+        "resource": "https://www.deezer.com/artist/257145772"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    }
+  ],
+  "life-span": {
+    "begin": null,
+    "ended": false,
+    "end": null
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "BDB",
+  "begin-area": null,
+  "country": null,
+  "type": "Person",
+  "name": "BDB",
+  "gender": "Male",
+  "end-area": null,
+  "area": null,
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

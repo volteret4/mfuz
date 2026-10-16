@@ -1,0 +1,1068 @@
+{
+  "isnis": [
+    "0000000121515044"
+  ],
+  "begin-area": {
+    "disambiguation": "",
+    "sort-name": "Athens",
+    "id": "29d7853f-28be-4114-8a5b-5dd95d162d69",
+    "type": null,
+    "type-id": null,
+    "name": "Athens"
+  },
+  "gender-id": null,
+  "ipis": [],
+  "type": "Group",
+  "name": "R.E.M.",
+  "life-span": {
+    "begin": "1980-04-05",
+    "ended": true,
+    "end": "2011-09-21"
+  },
+  "country": "US",
+  "end-area": null,
+  "relations": [
+    {
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "allmusic",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000325459",
+        "id": "be80f2d5-43a1-4ff6-a9c2-7b993bd9b7cb"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "bandcamp",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "79fb36cb-8f6c-4d7e-b77f-ca03659271b9",
+        "resource": "https://remhq.bandcamp.com/"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "25ead929-5d59-4b3b-87d8-78b4d7cee8fb",
+        "resource": "https://www.bandsintown.com/a/2850"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "bandsintown"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/ea4dfa26-f633-4da6-a52a-f49ea4897b58",
+        "id": "12ace5d4-e0c4-4094-88e7-cc2401cebfb1"
+      },
+      "ended": true,
+      "source-credit": "",
+      "end": "2020-11-19",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "BBC Music page"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "discography page",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://orangefox.svs.com/rem/",
+        "id": "4cf92b4a-8906-4925-9483-8f3e98fab006"
+      }
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discography page",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.remtimeline.com/",
+        "id": "af6af92b-7e6e-4f74-b000-38a91849cb32"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.discogs.com/artist/74500",
+        "id": "5a44ad76-44e7-4412-8dca-733939661d48"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "discogs"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "fanpage",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "2b3aa6e3-3d46-4b30-9269-a3b06bbb9b71",
+        "resource": "https://www.murmurs.com/"
+      },
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.remrock.com/",
+        "id": "3802d387-77a1-40bf-a976-97bb01ef8b96"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "fanpage",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "d29d930b-ebf9-44e6-b658-9e869f59b07e",
+        "resource": "https://open.spotify.com/artist/4KWTAlx2RvbpseOGMEmROg"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "315da7b8-f2ac-4652-98c6-5c23fe5a5672",
+        "resource": "https://www.deezer.com/artist/129"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "1f296f1b-61c6-4b73-871e-49d66ae630ee",
+        "resource": "https://commons.wikimedia.org/wiki/File:Padova_REM_concert_July_22_2003_blue.jpg"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "image",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1032121/",
+        "id": "5c57d0d3-90cb-4ced-b3cc-510054c0d646"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "IMDb",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "last.fm",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "dba9a402-0bce-42b8-a0b4-862541f4909f",
+        "resource": "https://www.last.fm/music/R.E.M."
+      }
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-5041/r.e.m./lyrics.html",
+        "id": "9131b668-2cf5-44cc-b6f5-875044ce1439"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "lyrics",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "fd2e1381-56f9-4859-93c8-008e2874974a",
+        "resource": "https://genius.com/artists/Rem"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "lyrics",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "3a3bf2ec-1a0b-4cf3-9c28-606eda6a8fe6",
+        "resource": "https://myspace.com/rem"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "myspace",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "efef9d7e-8ea4-45b1-a174-df4b69a7fcd3",
+        "resource": "https://remhq.com/"
+      },
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "official homepage",
+      "attributes": [],
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "id": "08a1c094-2837-4d25-997f-632e05e95f1c",
+        "resource": "http://www.remhq.de/"
+      }
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n89673788",
+        "id": "10723c67-b7f4-4a20-8ed1-d4c5a34a93b3"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "8666eb42-a11d-4df4-b014-17a71217f520",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13906118x"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "c70920fa-5725-43d1-9ae8-04096ef843c5",
+        "resource": "https://d-nb.info/gnd/1224460-0"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39QQPVp7PyWHt8t4hwPFbMrFg",
+        "id": "e320252d-e2a2-41eb-a8a1-28320b91921e"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://imvdb.com/n/r.e.m.",
+        "id": "af0d4add-b1bc-47dd-9ee6-2f3c3ae4bcec"
+      },
+      "ended": false
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "f10abb5c-44b7-4d41-939a-d53bc4cd526a",
+        "resource": "https://musicmoz.org/Bands_and_Artists/R/R.E.M./"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/r_e_m",
+        "id": "dd11b200-d251-4455-ab33-28a51fade99e"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "12e4eb3d-ac4e-4e18-a0ca-ca66e633f76e",
+        "resource": "https://www.45cat.com/artist/rem"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.idref.fr/069737967",
+        "id": "4a9eb2d2-e9fe-494d-aad4-7c58e9ed5fae"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/rem/",
+        "id": "d980b88d-ade3-47c0-85d7-8ac5407d7053"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "cee69e46-56df-447d-9d9a-076e437e5def",
+        "resource": "https://www.spirit-of-rock.com/en/band/REM"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "f64ff6af-c868-4141-91a7-8fe3300b1b8d",
+        "resource": "https://www.whosampled.com/R.E.M./"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "02703cd9-4949-40dc-8d90-39f1912918fb",
+        "resource": "https://www.worldcat.org/identities/lccn-n89673788/"
+      },
+      "direction": "forward",
+      "ended": true
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "8b34f181-9f20-4e5f-a60d-bdf534387817",
+        "resource": "https://play.google.com/store/music/artist?id=Arryupkgcrx5srnqhkcpfmldjci"
+      },
+      "ended": true,
+      "source-credit": "",
+      "end": "2020-10-12",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "url": {
+        "id": "6180a9eb-6fd6-417b-a4ae-70e343eb360a",
+        "resource": "http://7digital.com/artist/r-e-m"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://mora.jp/artist/2731/",
+        "id": "8f2ed7cb-de99-4b7b-91f8-af9c68fe0c76"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "7f39b56e-89b1-4462-8a64-b097005cbdee",
+        "resource": "https://mora.jp/artist/32547/"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for download"
+    },
+    {
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "860d1bb4-044d-419c-9516-f754e0ba35d8",
+        "resource": "https://music.apple.com/us/artist/311145"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "abec5c0e-9634-4311-ba69-cb2765fa0942",
+        "resource": "https://www.hdtracks.com/#/artist/R.E.M."
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/r-e-m/43839",
+        "id": "2444464a-11fc-4f3e-a810-7a7960f6156b"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "b6f02157-a9d3-4f24-9057-0675b2dbc581",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": "2018-06-30",
+      "source-credit": "",
+      "type": "purevolume",
+      "attributes": [],
+      "ended": true,
+      "url": {
+        "resource": "http://www.purevolume.com/rem",
+        "id": "09696ba0-accc-472f-9e4b-3884ced9d9f0"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "attributes": [],
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/96",
+        "id": "bb894ee1-a6d8-4022-8e1c-4435d0b6a89e"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "setlistfm",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/rem-33d6b859.html",
+        "id": "5fbc6cf6-3622-4c76-9843-16e0f2dd9750"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "b14ffd01-d53f-4295-a5ca-43ef3e397dbd",
+        "resource": "https://bsky.app/profile/remhq.bsky.social"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/remhq",
+        "id": "fd5d1395-fb47-4819-9bf6-9bbb88f31de5"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/REMhq",
+        "id": "c8b25828-9e79-4983-be8b-aa13d8843d8d"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "673b99f5-4fd5-403d-b666-1953701cce97",
+        "resource": "https://www.instagram.com/rem/"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "421207fc-8674-4453-b45c-45fbf3561aa5",
+        "resource": "https://www.songkick.com/artists/220219"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "songkick"
+    },
+    {
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "soundcloud",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://soundcloud.com/remhq",
+        "id": "5c062348-80ea-408e-9958-d3e3e6ba5538"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "a65ea9c4-1c58-455a-b652-2d7d920d4322",
+        "resource": "https://music.apple.com/gb/artist/311145"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "3917b655-4115-4508-a475-7a3b8c79bb88",
+        "resource": "https://music.apple.com/mx/artist/311145"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/311145",
+        "id": "860d1bb4-044d-419c-9516-f754e0ba35d8"
+      },
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/9366",
+        "id": "2ae0892d-2f51-48c5-8cb3-a01ecf3c4afa"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "2444464a-11fc-4f3e-a810-7a7960f6156b",
+        "resource": "https://www.qobuz.com/us-en/interpreter/r-e-m/43839"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming"
+    },
+    {
+      "url": {
+        "id": "cabaa85f-a9ed-4572-a0bd-91a5b33adc36",
+        "resource": "http://viaf.org/viaf/125165162"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "VIAF",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "92c08c20-daf7-4d38-bd07-777b74c5c7ee",
+        "resource": "https://www.wikidata.org/wiki/Q134969"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "6747e21a-bc59-42af-8baf-a4bfb30c9518",
+        "resource": "https://www.youtube.com/channel/UC7eaRqtonpyiYw0Pns0Au_g"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "youtube",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "9a0a085c-304d-4596-a45d-079572a79487",
+        "resource": "https://music.youtube.com/channel/UCZQMYjqm_j5mBVTfPcCy3FA"
+      },
+      "attributes": [],
+      "type": "youtube music",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "target-credit": ""
+    }
+  ],
+  "disambiguation": "American rock band",
+  "sort-name": "R.E.M.",
+  "area": {
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "type-id": null
+  },
+  "id": "ea4dfa26-f633-4da6-a52a-f49ea4897b58",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null
+}

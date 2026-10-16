@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import argparse
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import json
 import time
@@ -443,6 +447,7 @@ def main():
     
     try:
         conn = sqlite3.connect(args.db_path)
+        apply_pragmas(conn)
         setup_database(conn)
         
         if args.stats:

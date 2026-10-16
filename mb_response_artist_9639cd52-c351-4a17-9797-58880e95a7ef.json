@@ -1,0 +1,510 @@
+{
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1991"
+  },
+  "gender-id": null,
+  "sort-name": "Mountain Goats, The",
+  "ipis": [],
+  "disambiguation": "",
+  "relations": [
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "9b05a1f0-e562-4541-bfb5-116d4037495f",
+        "resource": "https://www.allmusic.com/artist/mn0000480830"
+      },
+      "attribute-values": {},
+      "type": "allmusic",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://themountaingoats.bandcamp.com/",
+        "id": "13d9072a-183b-4726-98ee-fe1d89698c5a"
+      },
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "bandsintown",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.bandsintown.com/a/5975",
+        "id": "9ace7006-bbc7-4e24-94a9-157957dd0ca0"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "discogs",
+      "url": {
+        "id": "09cd7a41-36bd-4f6e-a4f2-f4ab4fc8c4a1",
+        "resource": "https://www.discogs.com/artist/95417"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4"
+    },
+    {
+      "url": {
+        "id": "e2c6e622-9f49-4ad4-9d6c-06fec22a23c6",
+        "resource": "https://archive.org/details/MountainGoats"
+      },
+      "type-id": "34ae77fe-defb-43ea-95d4-63c7540bac78",
+      "attribute-values": {},
+      "type": "download for free",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "fanpage",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "url": {
+        "id": "87ea85bf-b85f-4d9c-b62d-80d056091f15",
+        "resource": "http://www.themountaingoats.net/"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/3hyGGjxu73JuzBa757H6R5",
+        "id": "20576a61-402b-4562-802d-e1cdadfc62c5"
+      },
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "6b7d1e32-566e-4268-a863-003458763633",
+        "resource": "https://www.deezer.com/artist/6116"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "last.fm",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.last.fm/music/The+Mountain+Goats",
+        "id": "6fc55903-14df-4e3b-9568-d5f5e174d21c"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://myspace.com/themountaingoats",
+        "id": "e78cb9a2-5298-4cb6-997b-185bd0554672"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "http://www.mountain-goats.com/",
+        "id": "3298c272-0a2c-4022-b78d-b19f8d63ec77"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "04efd301-e57f-4427-b281-42d21854e3ca",
+        "resource": "http://id.loc.gov/authorities/names/no2006029613"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "d8b2f65c-2935-42cd-acbd-255715e84aa3",
+        "resource": "https://id.oclc.org/worldcat/entity/E39QH7JmqKgQvBB3qDRtPgH8xt"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://imvdb.com/n/the-mountain-goats",
+        "id": "4cee4acf-7c7a-4cb2-bca0-d87ad6522a5a"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_mountain_goats",
+        "id": "80e71b2e-3ed3-4b12-bbde-9c9da527f602"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/the-mountain-goats-5bd69b48.html",
+        "id": "79d532fa-f1ec-4310-9d68-b278ea98bfae"
+      },
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "446302fc-52bb-40c0-a17e-04da7ff10b83",
+        "resource": "https://twitter.com/mountain_goats"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "c0d2688f-d56c-4f4d-81c8-c01cae61f20d",
+        "resource": "https://www.facebook.com/pages/the-Mountain-Goats/17314008126"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "c318194b-329b-4744-849a-c25805e6080e",
+        "resource": "https://www.songkick.com/artists/488253"
+      },
+      "type": "songkick",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "afe4dae9-d30a-467e-8c7b-e0da95c5b956",
+        "resource": "https://music.apple.com/us/artist/4978336"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "url": {
+        "resource": "https://tidal.com/artist/3565245",
+        "id": "26d9489a-6994-4dbf-b3c9-1c54929b1824"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "685a3139-e9f2-414a-974b-4c392dc930f6",
+        "resource": "http://viaf.org/viaf/168218128"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "VIAF"
+    },
+    {
+      "url": {
+        "id": "fb76de2a-e8db-40b5-87f3-225d349ec807",
+        "resource": "https://www.wikidata.org/wiki/Q145515"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "wikipedia",
+      "url": {
+        "id": "cb375b55-1115-4174-a8e7-21947a867f6a",
+        "resource": "https://en.wikipedia.org/wiki/The_Mountain_Goats"
+      },
+      "type-id": "29651736-fa6d-48e4-aadc-a557c6add1cb"
+    },
+    {
+      "url": {
+        "id": "3faf54f5-4320-49b1-b231-a92f680734a7",
+        "resource": "https://www.youtube.com/channel/UCl4hLK-YKeHuCAvS8ZPVv5Q"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "2de90082-8bea-44ea-a821-610a78e3d6ff",
+        "resource": "https://www.youtube.com/user/MountainGoatsVEVO"
+      },
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "type": "youtube",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "isnis": [
+    "0000000115271821"
+  ],
+  "id": "9639cd52-c351-4a17-9797-58880e95a7ef",
+  "end-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "sort-name": "United States",
+    "type-id": null,
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "United States"
+  },
+  "name": "The Mountain Goats",
+  "type": "Group",
+  "begin-area": {
+    "type": null,
+    "name": "Claremont",
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Claremont",
+    "id": "23363cab-d4c2-4c19-956d-01ea37ff06fd"
+  },
+  "country": "US",
+  "gender": null
+}

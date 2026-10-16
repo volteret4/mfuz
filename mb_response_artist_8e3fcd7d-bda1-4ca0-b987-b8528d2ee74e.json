@@ -1,0 +1,1111 @@
+{
+  "relations": [
+    {
+      "direction": "forward",
+      "url": {
+        "id": "505eb60f-4fe9-4ceb-a014-698fbcc487b2",
+        "resource": "https://www.allmusic.com/artist/mn0000199995"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "allmusic",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.bandsintown.com/a/25285",
+        "id": "b1fe96cc-373c-4975-8cc3-f3653185a94c"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "bandsintown",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2"
+    },
+    {
+      "type": "BBC Music page",
+      "end": "2020-11-19",
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "765450c6-0d38-4941-abf5-74a10d9731f4",
+        "resource": "https://www.bbc.co.uk/music/artists/8e3fcd7d-bda1-4ca0-b987-b8528d2ee74e"
+      },
+      "direction": "forward",
+      "ended": true,
+      "attributes": [],
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "http://www.genesisdiscography.com/",
+        "id": "3168074f-4c5a-4966-9fac-6e8e49b59551"
+      },
+      "direction": "forward",
+      "ended": true,
+      "attributes": [],
+      "type": "discography page",
+      "end": "2012",
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://tagyourmusic.org/artists/6064",
+        "id": "edd19d26-6d69-4be3-835c-fcf0e8ef992f"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "discography page",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "http://www.genesis-discography.org/",
+        "id": "39d0b739-d0b2-4320-b529-03f4ecd36c3f"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "discography page",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "bcea521d-8ca6-4402-9e34-40ad9336c024",
+        "resource": "https://www.discogs.com/artist/124506"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs"
+    },
+    {
+      "type": "free streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "f356125c-dde8-4e39-89c6-c4dfa12416d4",
+        "resource": "https://open.spotify.com/artist/3CkvROUTQ6nRi9yQOcsB50"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.deezer.com/artist/3037",
+        "id": "be440a00-f06a-4ba3-9154-d3bef1b5a5f6"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "3b4307d7-7e40-48c8-bfe9-3503a3e95bb9",
+        "resource": "https://commons.wikimedia.org/wiki/File:2180_-_Pittsburgh_-_Mellon_Arena_-_Genesis_-_The_Carpet_Crawlers.JPG"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "image",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1949500/",
+        "id": "04ecefed-97f6-4446-9197-2dcd0530dc6d"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "IMDb",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "http://www.muzines.co.uk/articles/at-home-in-the-studio/1848",
+        "id": "a7be032c-4501-42af-a3a6-e114bbe1971c"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "interview",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "7e19258b-182a-4d2d-a89b-55634855310c",
+        "resource": "https://www.last.fm/music/Genesis"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "last.fm",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/Genesis",
+        "id": "aec03bf1-d15f-4041-882b-76af36f2de3b"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "a82dd189-737b-4a93-9852-f03ef1a63b6c",
+        "resource": "https://muzikum.eu/en/genesis/lyrics"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "lyrics",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "lyrics",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Genesis",
+        "id": "27665e59-5e5a-4ff2-b717-8d77ec8e15e7"
+      },
+      "ended": false
+    },
+    {
+      "target-type": "url",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "868b628c-fff3-42fa-bcd5-ad5641123cf9",
+        "resource": "https://myspace.com/genesismusic"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "myspace",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "official homepage",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://www.genesis-music.com/",
+        "id": "7f9da5b9-25c2-47a9-8684-94893d9829de"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "ended": true,
+      "direction": "forward",
+      "url": {
+        "resource": "https://jaxsta.com/profile/67e4f048-8dc7-4187-9649-a1fd612faef5",
+        "id": "0957ccbf-4e3a-47a5-9adc-144c8a5630f4"
+      },
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2025-12-17",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n82104295",
+        "id": "04c9373c-c5b4-4bfd-939f-a8f473ac4c07"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "a8d356b1-981c-4eb7-ade8-ce5b4fc0e175",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139036653"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://d-nb.info/gnd/2124071-1",
+        "id": "a9fa5cd5-f52a-4841-97ae-e9c1f9dd511a"
+      }
+    },
+    {
+      "type": "other databases",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "08013d46-205f-4f46-b4a6-33bc426b1aa6",
+        "resource": "https://id.oclc.org/worldcat/entity/E39QQPVp7K4yXM8CH64bqVHvTR"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://imvdb.com/n/genesis",
+        "id": "50ef2dbf-b14a-4be4-a1b6-264e830e4939"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "direction": "forward",
+      "url": {
+        "id": "bafe579e-4fa2-4bfa-b336-3a63ef86f5f0",
+        "resource": "https://musicmoz.org/Bands_and_Artists/G/Genesis/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://nla.gov.au/nla.party-835462",
+        "id": "04e4fc1b-968f-4f69-9bf2-081a9f68e792"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "id": "ab0e62f7-3df4-413a-a003-08450cff459d",
+        "resource": "https://rateyourmusic.com/artist/genesis"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.45cat.com/artist/genesis",
+        "id": "c82fecd5-78a4-42e2-96a2-1b3f55b141ef"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.idref.fr/02722788X",
+        "id": "3dba6744-78bc-4f71-a36a-fd6dd0165517"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "42b0c6a2-c550-49df-8498-2b840cf9825f",
+        "resource": "https://www.musik-sammler.de/artist/genesis/"
+      },
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.muziekweb.nl/Link/M00000043072/POPULAR/",
+        "id": "97bee6cd-72c5-46b6-b38b-f60e3a90bdf0"
+      },
+      "direction": "forward",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "b335472c-2774-46f3-a71d-b5e440e01a0d",
+        "resource": "https://www.progarchives.com/artist.asp?id=1"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.spirit-of-rock.com/en/band/Genesis",
+        "id": "dd0b6b3c-f0b1-43d9-beaa-5fdd0c6382cf"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "83a5700f-fbeb-4184-b677-ea737755b7b5",
+        "resource": "https://www.whosampled.com/Genesis/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "other databases",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "4aa7f1f9-0090-41a7-8e59-1ac5cb02d8f0",
+        "resource": "https://www.worldcat.org/identities/lccn-n82104295/"
+      },
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "type": "purchase for download",
+      "end": "2020-10-12",
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Au545n5cwlcwp4qiove2vjdxlcm",
+        "id": "2f148446-9990-452c-8711-88b7266c18d6"
+      },
+      "direction": "forward",
+      "ended": true,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "beb2177d-c2eb-4458-8746-df17980545b2",
+        "resource": "https://mora.jp/artist/255471/all"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://uk.7digital.com/artist/genesis",
+        "id": "37a41e2f-e1ba-4bb3-b5e5-112b221bde5d"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url"
+    },
+    {
+      "type": "purchase for download",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "bd9dbf1e-cae7-432e-806e-6cc16a84bc3b",
+        "resource": "https://www.qobuz.com/gb-en/interpreter/genesis-2/4438885"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attributes": [],
+      "ended": true,
+      "url": {
+        "id": "c4ded4ae-0e80-4b0a-a1b9-8c65cd77e3e5",
+        "resource": "https://itunes.apple.com/gb/artist/id95966"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "18936ce8-d60f-4c10-bb23-df169edf956f",
+        "resource": "https://www.onkyomusic.com/GB/artist/genesis"
+      },
+      "direction": "forward",
+      "ended": true,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "6f3b8b78-0b88-402b-bd71-5ae4cbcce3fe",
+        "resource": "https://www.amazon.com/-/e/B001LICQR0"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for mail-order"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "purchase for mail-order",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "e5170e25-f7c8-411c-b9b2-16f5b929c163",
+        "resource": "https://www.cdjapan.co.jp/person/700278570"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "url": {
+        "id": "48cbaa96-f2bc-46b5-8e9d-0d0a990dbd30",
+        "resource": "https://secondhandsongs.com/artist/1902"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "secondhandsongs",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "setlistfm",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/genesis-1bd6b520.html",
+        "id": "f4f3b2b2-2369-44d2-b29d-bc41f92e0f91"
+      },
+      "direction": "forward",
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "285e0bba-8a4c-47c0-b42b-130d9493749d",
+        "resource": "https://twitter.com/genesis_band"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "type": "social network",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.facebook.com/genesis",
+        "id": "4bfc6a02-0f8a-48d3-ac4b-b621fe53e974"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.instagram.com/genesis_band/",
+        "id": "da9b7c4f-8ace-4b75-b1b5-49f0b16c327a"
+      },
+      "direction": "forward",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "id": "5ba715b7-863e-41a6-8763-80df4a495c81",
+        "resource": "https://www.songkick.com/artists/137873"
+      },
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://us.napster.com/artist/genesis",
+        "id": "028df79a-4d55-4375-a0a1-42227310a731"
+      },
+      "direction": "forward",
+      "ended": true,
+      "end": "2022-06-08",
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "streaming"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.amazon.com/artists/B000QJIAY8",
+        "id": "633f5207-534c-47e9-8a5a-f0822d42590a"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "d80ed044-e95a-4742-8315-241ba3fec188",
+        "resource": "https://music.apple.com/gb/artist/95966"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "resource": "https://tidal.com/artist/9163",
+        "id": "9f89618a-651e-4d38-9092-56b39b8abb84"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.qobuz.com/gb-en/interpreter/genesis-2/4438885",
+        "id": "bd9dbf1e-cae7-432e-806e-6cc16a84bc3b"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "3690a605-aca0-4de4-95e2-bf54ceeb408f",
+        "resource": "http://viaf.org/viaf/133623541"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "VIAF",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "type": "video channel",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "url": {
+        "id": "55b3a8a4-c79e-454e-986c-01575c0fbf83",
+        "resource": "https://www.dailymotion.com/genesis"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": [],
+      "type-id": "d86c9450-b6d0-4760-a275-e7547495b48b",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "wikidata",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q151012",
+        "id": "5e7dbf1d-8865-4380-8956-76cafadc62a8"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "youtube",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "ce6916e5-08a6-475a-a6ba-40e902403621",
+        "resource": "https://www.youtube.com/channel/UChv9FR8xwUxEkdBUVu4VUOw"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCqlnY5lvEp6F52AZSql04qQ",
+        "id": "01f73c8c-b5fa-4461-95e5-ffd9c5cbb715"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "youtube music",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "begin": null,
+      "target-credit": ""
+    }
+  ],
+  "end-area": {
+    "name": "London",
+    "type": null,
+    "type-id": null,
+    "disambiguation": "Greater London",
+    "sort-name": "London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f"
+  },
+  "country": "GB",
+  "life-span": {
+    "ended": true,
+    "begin": "1967",
+    "end": "2022-03-26"
+  },
+  "name": "Genesis",
+  "gender": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "area": {
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "name": "United Kingdom",
+    "type-id": null,
+    "type": null,
+    "sort-name": "United Kingdom",
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "id": "8e3fcd7d-bda1-4ca0-b987-b8528d2ee74e",
+  "sort-name": "Genesis",
+  "disambiguation": "English rock band",
+  "ipis": [],
+  "gender-id": null,
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "Godalming",
+    "id": "03088987-5f2c-44f1-aec6-e2f147d133af",
+    "name": "Godalming"
+  },
+  "isnis": [
+    "0000000115301250"
+  ],
+  "type": "Group"
+}

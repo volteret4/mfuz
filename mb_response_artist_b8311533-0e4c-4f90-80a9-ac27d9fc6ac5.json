@@ -1,0 +1,159 @@
+{
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  },
+  "end-area": null,
+  "name": "Omar-S",
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Omar-S",
+  "id": "b8311533-0e4c-4f90-80a9-ac27d9fc6ac5",
+  "disambiguation": "",
+  "begin-area": null,
+  "ipis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "url": {
+        "resource": "https://www.discogs.com/artist/166506",
+        "id": "6d05d2e1-85d4-4bf2-9802-ab7521b2699a"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "Alex. O. Smith",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "e8772fc9-025c-4bcb-8eb6-f9b2ff5f394c",
+        "resource": "https://www.discogs.com/artist/466085"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "86c5e903-fdc3-417a-aa9d-302200a8b1ab",
+        "resource": "https://www.deezer.com/artist/6211774"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "c3c3fd7e-d55d-4656-98ff-00d7dd4c81f7",
+        "resource": "http://www.omarsdetroit.us/"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.songkick.com/artists/2437861",
+        "id": "a7a486db-006b-4802-8e49-ed4e60a217e7"
+      },
+      "attributes": [],
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "182e0f69-78e5-403c-a8c1-988010b75048",
+        "resource": "https://tidal.com/artist/8877222"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q3351814",
+        "id": "1cafaba9-b93f-43e8-b5f8-b05ae33c38b3"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null
+    }
+  ],
+  "country": "US",
+  "isnis": [],
+  "gender": "Male",
+  "type": "Person"
+}

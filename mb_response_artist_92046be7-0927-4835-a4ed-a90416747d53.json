@@ -1,0 +1,711 @@
+{
+  "gender-id": null,
+  "sort-name": "Cornershop",
+  "disambiguation": "",
+  "id": "92046be7-0927-4835-a4ed-a90416747d53",
+  "end-area": null,
+  "name": "Cornershop",
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "type": null,
+    "sort-name": "United Kingdom",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "life-span": {
+    "end": null,
+    "begin": "1991",
+    "ended": false
+  },
+  "type": "Group",
+  "gender": null,
+  "country": "GB",
+  "isnis": [
+    "000000010721590X"
+  ],
+  "relations": [
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000121746",
+        "id": "4a215eba-ec71-4d83-90a5-a10b98cdd412"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/92046be7-0927-4835-a4ed-a90416747d53",
+        "id": "56c372e1-38d2-4258-bbc5-e0d011e19553"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "begin": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c1bb651e-98c7-4dd8-b7f9-7130ab08b4e2",
+        "resource": "https://www.bbc.co.uk/radio1/johnpeel/artists/c/cornershop/"
+      }
+    },
+    {
+      "url": {
+        "id": "9b88d7d2-7334-4726-88be-05c8ab41e5aa",
+        "resource": "http://www.rollingstone.com/artists/cornershop/biography"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "biography",
+      "ended": false,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "bde0b227-6d21-4c3b-bb20-37bb0d92408d",
+        "resource": "http://www.scaruffi.com/vol6/cornersh.html"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discography page",
+      "attributes": [],
+      "url": {
+        "id": "b8c31896-2b42-47ff-b464-7bb20ad83532",
+        "resource": "http://www.cornershop.com/archive.html"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "type": "discography page",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "cdeac154-5513-45c3-932c-c6672ba552ca",
+        "resource": "http://www.wiiija.com/artists/cornershop/disco.htm"
+      },
+      "attributes": []
+    },
+    {
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "94e4cc2a-74ad-4fcc-aaeb-93a342d038f0",
+        "resource": "https://www.discogs.com/artist/7203"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/3Kf7VEIRWquxrNIuyJZnfF",
+        "id": "c2cfc977-a298-462e-bbf2-26260affbc28"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4d37183e-35a1-486c-9ed5-6754dce5c649",
+        "resource": "https://www.deezer.com/artist/541"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "8753bf77-3f36-4a39-ad7f-87009ab0ca86",
+        "resource": "https://commons.wikimedia.org/wiki/File:Cornershop.jpg"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "2e03e2a1-1e0e-4d8a-9945-052f0ff3d081",
+        "resource": "https://www.last.fm/music/Cornershop"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "f0076b6d-5180-4d0b-9d22-8115f85fb964",
+        "resource": "http://muzikum.eu/en/122-4318/cornershop/lyrics.html"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://myspace.com/cornershop",
+        "id": "f34a31b8-c60b-4a0d-afbb-b7adce03b8bb"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "myspace",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.cornershop.com/",
+        "id": "520fd6cd-b7d0-437d-a375-6b9008a3330d"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/C/Cornershop/",
+        "id": "7b8c2580-0209-4ff5-84c0-88b6adc8c5a4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "d140556a-6310-479f-b1d5-f56d892c8d4f",
+        "resource": "https://imvdb.com/n/cornershop"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/cornershop",
+        "id": "a4220984-a8c2-408d-9471-a0c669af47fe"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "url": {
+        "resource": "https://www.45cat.com/12single/artist/cornershop",
+        "id": "00566fa7-aeab-4463-bd1f-8b088ec426ac"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "2a81686d-29a8-4d29-a91d-c93511a5ff7e",
+        "resource": "https://www.45cat.com/artist/cornershop"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.45cat.com/cdalbum/artist/cornershop",
+        "id": "3a7b8963-9ba9-45af-87e6-1fce96e11d67"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.45cat.com/cdsingle/artist/cornershop",
+        "id": "f54049f9-ef43-4ef2-8499-c7aed82bffd9"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.45cat.com/live/artist/cornershop",
+        "id": "b2afaceb-3eba-47d3-8d78-56ebee4ce1d4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.45cat.com/tape/artist/cornershop",
+        "id": "af2f2457-6f7f-41ce-94e1-d51535d8d242"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "4638beed-6c19-420d-8dce-26f2cc681946",
+        "resource": "https://www.45cat.com/vinyl/artist/cornershop"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "f8114db3-1ecd-4887-a131-c8b676b821c2",
+        "resource": "https://www.musik-sammler.de/artist/cornershop/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id156106",
+        "id": "e6ade65d-8b93-44e3-9b9d-3e8365273b0f"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/156106",
+        "id": "8fdcb149-8f35-4d7d-9084-038548534013"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.beatport.com/artist/cornershop/33291",
+        "id": "0e84e2e5-fc53-4fbc-8ee3-ef3018dba84b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/cornershop-bd6bd36.html",
+        "id": "d68266e0-7341-4be3-8757-d24838379871"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "setlistfm",
+      "source-credit": ""
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/cornershopHQ",
+        "id": "6cebf20c-f865-407a-b2ea-52c1e3077cda"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "1a743fae-2f23-4435-aed8-f9ce47aa55c5",
+        "resource": "https://www.facebook.com/CornershopHQ"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.songkick.com/artists/52764",
+        "id": "820bf834-8864-451f-8491-fcaa9be99f8a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "d6f434e6-3f32-46c5-9e29-b07b228d9ec0",
+        "resource": "https://tidal.com/artist/6524"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "attributes": [],
+      "url": {
+        "id": "5c7df652-5fe6-43c3-8129-e5c2ca2e7d0b",
+        "resource": "http://viaf.org/viaf/128864776"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "wikidata",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "7757880e-3498-45e7-81b7-4b467529718a",
+        "resource": "https://www.wikidata.org/wiki/Q1134101"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "youtube music",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "a8998ba5-e6b6-46ee-9e75-28f2b62afda7",
+        "resource": "https://music.youtube.com/channel/UC1gtYwNtvygcHZ6xDIlIXyw"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    }
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "sort-name": "Leicester",
+    "iso-3166-2-codes": [
+      "GB-LCE"
+    ],
+    "disambiguation": "",
+    "id": "806b9b3b-5daf-4eaa-807d-7a2a29cde0da",
+    "type": null,
+    "name": "Leicester",
+    "type-id": null
+  },
+  "ipis": []
+}

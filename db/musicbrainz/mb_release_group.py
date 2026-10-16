@@ -3,6 +3,9 @@ import argparse
 import json
 import os
 import sqlite3
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import time
 import requests
 from datetime import datetime
@@ -20,6 +23,7 @@ class MusicBrainzReleaseGroups:
         self.db_path = db_path
         self.config = config or {}
         self.conn = sqlite3.connect(self.db_path)
+        apply_pragmas(self.conn)
         self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
         

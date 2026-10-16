@@ -1,0 +1,854 @@
+{
+  "area": {
+    "id": "8297708c-5743-47d6-a5ac-f40a41c49ad9",
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-WLS"
+    ],
+    "sort-name": "Wales",
+    "type": null,
+    "name": "Wales",
+    "type-id": null
+  },
+  "name": "Tom Jones",
+  "end-area": null,
+  "disambiguation": "Welsh pop singer",
+  "id": "57c6f649-6cde-48a7-8114-2a200247601a",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Jones, Tom",
+  "life-span": {
+    "ended": false,
+    "begin": "1940-06-07",
+    "end": null
+  },
+  "gender": "Male",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00015496287"
+  ],
+  "begin-area": {
+    "name": "Pontypridd",
+    "type-id": null,
+    "disambiguation": "",
+    "id": "33f34110-e4f1-4c51-8a12-8a1ac8fdc487",
+    "sort-name": "Pontypridd",
+    "type": null
+  },
+  "isnis": [
+    "0000000107991896"
+  ],
+  "country": "GB",
+  "relations": [
+    {
+      "attributes": [],
+      "url": {
+        "id": "b98c7007-6695-4f10-87e6-f93dfe365ccb",
+        "resource": "https://www.allmusic.com/artist/mn0000609396"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "allmusic",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.bandsintown.com/a/28449",
+        "id": "a3a21609-b68d-4945-8e24-aae804cc371b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "bandsintown",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "ended": true,
+      "begin": null,
+      "end": "2020-11-19",
+      "url": {
+        "id": "0df39f5e-733d-467c-9a33-4bc113908f0e",
+        "resource": "https://www.bbc.co.uk/music/artists/57c6f649-6cde-48a7-8114-2a200247601a"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "6651915f-0ccf-4ecb-a059-92539e2b3fc7",
+        "resource": "https://www.discogs.com/artist/51039"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "bbf1432a-5428-4c6a-b7b8-d7655dedc799",
+        "resource": "https://open.spotify.com/artist/1T0wRBO0CK0vK8ouUMqEl5"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "url": {
+        "id": "5f9bc7d7-4ef5-4cb5-baa5-d702c8867ed7",
+        "resource": "https://www.deezer.com/artist/903"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "image",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Tom_Jones_concert.jpg",
+        "id": "9a24e271-2e7a-4c11-a257-0c9d436a63d0"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "46b82abb-9580-482c-bb90-b66e60798589",
+        "resource": "https://www.imdb.com/name/nm0429367/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "75d5559a-ca66-448b-95a2-a8bde25978b6",
+        "resource": "https://www.last.fm/music/Tom+Jones"
+      },
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "http://muzikum.eu/en/122-4304/tom-jones/lyrics.html",
+        "id": "6836eb0b-3089-4add-9044-8226d882c739"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "2358b387-1a2a-4cfa-a1a1-6b48b950f84f",
+        "resource": "https://genius.com/artists/Tom-jones"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://www.tomjones.com/",
+        "id": "e9d1c6b3-0e19-41c2-b49e-4cb439eca900"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "03999c15-549f-4c97-a2b1-e9d354c31686",
+        "resource": "https://jaxsta.com/profile/05b00ba7-80d1-420c-9404-6aea7f6ab74c"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": true,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": "2025-12-17",
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "42ff35ba-0af9-4bc1-bcd6-f2a97d5c44d3",
+        "resource": "http://id.loc.gov/authorities/names/n50041096"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "5049edea-3a9f-4744-ba81-92101c3e847f",
+        "resource": "http://musicmoz.org/Bands_and_Artists/J/Jones,_Tom/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1c0aec54-06dd-4005-ae7e-06ba01429b22",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13895747m"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "f45be55b-ac37-4b5a-9d82-ea93179b7ad0",
+        "resource": "https://d-nb.info/gnd/118895877"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJfx4VhKgqPXqvW68CpByd",
+        "id": "1deca847-31cf-4e5a-bfbe-178ffb9a11b7"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "6543460d-8b13-4eeb-92fd-6ada52e95e2a",
+        "resource": "https://imvdb.com/n/tom-jones"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6m07vqt",
+        "id": "5712f088-52f4-4dd0-bc0e-12397654494e"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "7bc7beb0-726c-456b-bda3-82b76f2d2745",
+        "resource": "https://nla.gov.au/nla.party-908011"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/tom_jones",
+        "id": "7355b5d0-6619-405f-9124-f56db0f53ea7"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.45cat.com/artist/tom-jones",
+        "id": "fa01b677-33e1-4aae-9b68-760c78d355a1"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/tom-jones/",
+        "id": "7ab04084-6bc6-4d6f-9a42-457e43c3f9d1"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "ba514dc0-96fa-49e7-8a9f-bc5bce325369",
+        "resource": "https://www.whosampled.com/Tom-Jones/"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n50041096",
+        "id": "d33d5261-c2bf-4eb3-b822-b86d8942320b"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": true
+    },
+    {
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "6238f479-a0d5-421c-9284-1e5d66d8cdc9",
+        "resource": "https://itunes.apple.com/us/artist/id85054"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "resource": "https://uk.7digital.com/artist/tom-jones",
+        "id": "0cd05ca5-99ae-4778-8670-5b5ac857b246"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.junodownload.com/artists/Tom+Jones/releases/",
+        "id": "e37f917c-a74f-4204-a2ec-a25c44d9e3d8"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://tower.jp/artist/176195",
+        "id": "15050dec-f4cb-4d6b-9fda-665eccded964"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for mail-order",
+      "ended": false,
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c2899189-2e65-45d2-8f50-fc75af077c50",
+        "resource": "https://www.amazon.com/-/e/B000APJ7YA"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "attributes": [],
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/79",
+        "id": "1a9eecef-aadf-4b72-8ac4-6e0187cf40c4"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "52428d58-da82-41d3-965b-33542df53fbf",
+        "resource": "https://www.setlist.fm/setlists/tom-jones-3d6bd73.html"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "setlistfm",
+      "ended": false,
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "7ca29475-3fdc-4f3e-937a-bd592578e4a6",
+        "resource": "https://twitter.com/RealSirTomJones"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.facebook.com/SirTomJones",
+        "id": "eaecce31-7df4-493c-961a-c61ee6a4bbde"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "fcc1ff4c-b747-4960-9b9f-9dcc3deb17e8",
+        "resource": "https://www.instagram.com/realsirtomjones/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": true,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://plus.google.com/111199744297828080096",
+        "id": "66518915-889c-4bc2-b07f-1cf5ef150a8a"
+      }
+    },
+    {
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "2f7137a6-e34f-4038-b615-f25a33f6e268",
+        "resource": "https://www.songkick.com/artists/172258"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "69a4680e-db41-43d3-9b10-427607a58799",
+        "resource": "https://soundcloud.com/tom-jones-official"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "f7c9edac-d9e6-4b6f-8fe6-c7ba4d0ff794",
+        "resource": "https://music.apple.com/gb/artist/85054"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "1f5b4570-c167-41f1-9884-bc7c0cdc50bd",
+        "resource": "https://music.apple.com/us/artist/85054"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "69585fc3-7bb3-412a-80fa-900f78f6384b",
+        "resource": "https://tidal.com/artist/10997"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "5983281e-7a0d-49c8-a730-6a1322bce82d",
+        "resource": "http://viaf.org/viaf/37714666"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q180850",
+        "id": "db004f15-0788-4577-927a-7f08db0ce0a5"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCy2JIPsxsCoDK3M1BcEVGGA",
+        "id": "8576711c-1c11-4df9-9790-3638ad3038ae"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    }
+  ]
+}

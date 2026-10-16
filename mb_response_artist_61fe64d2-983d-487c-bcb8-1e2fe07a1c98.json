@@ -1,0 +1,192 @@
+{
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "name": "Home Front",
+  "area": {
+    "name": "Edmonton",
+    "type-id": null,
+    "id": "0197a505-d351-475f-9e6d-eda15a83a235",
+    "disambiguation": "",
+    "sort-name": "Edmonton",
+    "type": null
+  },
+  "end-area": null,
+  "id": "61fe64d2-983d-487c-bcb8-1e2fe07a1c98",
+  "disambiguation": "Canadian punk band",
+  "gender-id": null,
+  "sort-name": "Home Front",
+  "ipis": [],
+  "begin-area": null,
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "relations": [
+    {
+      "url": {
+        "resource": "https://arewenothomefront.bandcamp.com/",
+        "id": "d87cbf93-5c5d-4339-8fd1-5d0e83a71e7f"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/10450639",
+        "id": "b5aa16ff-35b5-4350-9260-9d62d0be5fd9"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/0CyB1ZUexbBDoyHb15UJrU",
+        "id": "c0925a45-6069-4c3d-ad38-d10edae26aca"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "d103f24d-974d-412c-8a82-2b740e9da7b4",
+        "resource": "https://www.deezer.com/artist/91614"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "f440fa17-52e8-463f-917d-23b4d3f5f512",
+        "resource": "https://www.homefrontband.com/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c4c82636-4b3a-4942-923c-c2da69ab2897",
+        "resource": "https://www.facebook.com/arewenothomefront"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "6dd7f0e1-1916-451a-b651-4e4f0793fe8c",
+        "resource": "https://music.apple.com/gb/artist/284916554"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/4493649",
+        "id": "2f66c91f-c774-4f7a-aed2-18fcc0ea4c34"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://en.wikipedia.org/wiki/Home_Front_(band)",
+        "id": "ade8f952-ccfc-41d8-9462-9f21d4397e14"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikipedia",
+      "type-id": "29651736-fa6d-48e4-aadc-a557c6add1cb",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    }
+  ],
+  "country": "CA",
+  "isnis": [],
+  "gender": null,
+  "type": "Group"
+}

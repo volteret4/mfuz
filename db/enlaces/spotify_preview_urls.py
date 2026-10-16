@@ -1,6 +1,10 @@
 import re
 import sqlite3
 import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
+import sys
 import time
 import logging
 from pathlib import Path
@@ -211,6 +215,7 @@ def main(config=None):
             raise ValueError("db_path not found in configuration")
             
         db = sqlite3.connect(db_path)
+        apply_pragmas(db)
         
         try:
             # Ensure database column exists

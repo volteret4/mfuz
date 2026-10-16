@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import time
 import datetime
 import musicbrainzngs as mb
@@ -22,6 +26,7 @@ def connect_to_db():
         raise ValueError("DB_PATH no está definido")
     
     conn = sqlite3.connect(DB_PATH)
+    apply_pragmas(conn)
     conn.row_factory = sqlite3.Row
     return conn
 

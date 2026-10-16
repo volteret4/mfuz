@@ -4,6 +4,8 @@
 import os
 import sys
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import requests
 import time
 import json
@@ -337,7 +339,9 @@ class OrpheusTorrentsModule:
             
             for db_path in db_paths:
                 if os.path.exists(str(db_path)):
-                    return sqlite3.connect(str(db_path))
+                    _conn = sqlite3.connect(str(db_path))
+                    apply_pragmas(_conn)
+                    return _conn
             
             print(f"Base de datos no encontrada en ninguna ubicación")
             return None

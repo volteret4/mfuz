@@ -3,6 +3,10 @@
 Script para extraer URLs de instrumentos de las páginas de artistas en equipboard.com
 """
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import time
 import re
 import logging
@@ -852,6 +856,7 @@ def inspect_equipboard_urls(database_path, limit=10):
     """Inspecciona las URLs de equipboard en la base de datos"""
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         # Verificar tabla equipboard_artists
@@ -954,6 +959,7 @@ def debug_urls(database_path):
     # Mostrar URLs problemáticas específicas
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -1011,6 +1017,7 @@ def process_artists_instruments(database_path, force_update=False, limit=None, h
         logger.info(f"🎯 Parámetro headless recibido: {headless} (tipo: {type(headless)})")
 
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         logger.info("✅ Conexión a base de datos establecida")
         
@@ -1399,6 +1406,7 @@ def get_instruments_stats(database_path):
     """Muestra estadísticas de instrumentos extraídos"""
     try:
         conn = sqlite3.connect(database_path)
+        apply_pragmas(conn)
         cursor = conn.cursor()
         
         # Estadísticas básicas

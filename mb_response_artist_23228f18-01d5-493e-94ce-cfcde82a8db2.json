@@ -1,0 +1,654 @@
+{
+  "relations": [
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "0c80bbd6-d288-4d4a-95f3-e7a62ba39d25",
+        "resource": "https://www.allmusic.com/artist/mn0000084053"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "74d00c34-d0b2-4c1f-b7e0-aa448aaf35cc",
+        "resource": "https://www.bbc.co.uk/music/artists/23228f18-01d5-493e-94ce-cfcde82a8db2"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "15bd7e2f-df3e-45e7-aa27-4299c0b3f44e",
+        "resource": "https://www.discogs.com/artist/10384"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "fba5f59c-5a77-463e-9f2f-bef65e83f52e",
+        "resource": "https://open.spotify.com/artist/2P560DaOMNDUACoH8ZhOCR"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {}
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "b3fcac52-9419-4763-a056-932a716ee797",
+        "resource": "https://www.deezer.com/artist/3944"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f1601ea6-7040-4fb5-8b13-12bb4d92e765",
+        "resource": "https://www.imdb.com/name/nm1949648/"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4286e419-35d7-496c-ac7c-ba134efeb660",
+        "resource": "https://www.last.fm/music/The+Jam"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "29b122bc-7754-41c1-a3ae-5516f94f2396",
+        "resource": "http://muzikum.eu/en/122-6688/the-jam/lyrics.html"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://genius.com/artists/The-jam",
+        "id": "4353ea08-e9aa-49b8-a76a-004ae7b85af4"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/The-Jam",
+        "id": "4974afe7-bac9-479a-a46d-28ecba148060"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "c09a601c-d64f-431f-af6e-1f504edef92b",
+        "resource": "http://id.loc.gov/authorities/names/n82255263"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "f413b32b-9d5a-4cba-a293-5e6aa1939280",
+        "resource": "http://musicmoz.org/Bands_and_Artists/J/Jam,_The/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16691377j",
+        "id": "c98cbf31-fe45-4422-9395-3c3bd066eed6"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "21c920f8-7014-43cb-9c99-eeb6e2a1d18a",
+        "resource": "https://d-nb.info/gnd/4381317-3"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://imvdb.com/n/the-jam-1",
+        "id": "dda0f10d-971f-43fc-bbf8-7664e990c43a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_jam",
+        "id": "984b69ba-175a-4ab0-99fd-1caa9280bf5e"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.45cat.com/artist/the-jam",
+        "id": "b1dec10e-e5f4-4a76-a6c3-d9a7ece6d80c"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "76747ba9-814b-4fc8-b237-e3605a2940a6",
+        "resource": "https://www.musik-sammler.de/artist/the-jam/"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "bc5252ff-8306-43ac-be36-f41c66c727fe",
+        "resource": "https://www.spirit-of-rock.com/en/band/The_Jam"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "id": "70e349cb-5924-42cb-a929-69907cc6174e",
+        "resource": "https://www.whosampled.com/The-Jam/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n82255263",
+        "id": "9b608b74-cb55-4d3c-9d24-f914bb162326"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://uk.7digital.com/artist/the-jam",
+        "id": "50f9eb55-5a92-425c-bb91-b566d21f042c"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.junodownload.com/artists/The+Jam/releases/",
+        "id": "62121f28-1840-4e90-be71-e9a1862e62d1"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.cdjapan.co.jp/person/700307378",
+        "id": "2154e8d3-4419-486b-ac1a-ee9fb20ff3a8"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1c7e3b90-9fec-4945-9f18-74ebb09a3e98",
+        "resource": "https://secondhandsongs.com/artist/10109"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/the-jam-1bd6bdd8.html",
+        "id": "07db1eb7-cf82-4898-af1f-69726ae9f50f"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "setlistfm",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://www.songkick.com/artists/44460",
+        "id": "93161be9-02a3-4f06-b236-e605560851de"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "songkick",
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": true,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": "2022-06-08",
+      "begin": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "a968f006-aaae-4912-a393-1d562d19cbae",
+        "resource": "https://us.napster.com/artist/the-jam"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "5abbcd82-8719-426b-9428-ad7a2d042936",
+        "resource": "https://music.amazon.com/artists/B00G9FKGVI"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming"
+    },
+    {
+      "url": {
+        "id": "644e23c6-d089-4ed3-afd2-d85f7f3118a1",
+        "resource": "https://music.apple.com/gb/artist/92673"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "5b8a9daf-5195-493d-9ee7-ccf50506f770",
+        "resource": "https://tidal.com/artist/19366"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "d22bcf46-b37b-4ba5-853b-2f528bbaff18",
+        "resource": "http://viaf.org/viaf/157247045"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q916461",
+        "id": "279957d6-4875-483b-9a92-5052f133f0dd"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "7b5ad509-f088-41c8-a75a-5e8d8f8806ae",
+        "resource": "https://www.youtube.com/user/TheJamVEVO"
+      },
+      "attributes": []
+    }
+  ],
+  "country": "GB",
+  "isnis": [
+    "0000000123699625"
+  ],
+  "begin-area": {
+    "type-id": null,
+    "name": "Woking",
+    "type": null,
+    "sort-name": "Woking",
+    "disambiguation": "",
+    "id": "a6baeb59-8829-4926-82b1-09803dd7bba2"
+  },
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "gender": null,
+  "life-span": {
+    "end": "1982",
+    "begin": "1976",
+    "ended": true
+  },
+  "gender-id": null,
+  "sort-name": "Jam, The",
+  "disambiguation": "late 70s/early 80s UK punk/mod revival band",
+  "id": "23228f18-01d5-493e-94ce-cfcde82a8db2",
+  "end-area": null,
+  "name": "The Jam",
+  "area": {
+    "type-id": null,
+    "name": "United Kingdom",
+    "type": null,
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "sort-name": "United Kingdom",
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  }
+}

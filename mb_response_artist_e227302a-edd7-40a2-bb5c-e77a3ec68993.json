@@ -1,0 +1,251 @@
+{
+  "life-span": {
+    "begin": "1993",
+    "ended": false,
+    "end": null
+  },
+  "gender-id": null,
+  "sort-name": "Skylab",
+  "ipis": [],
+  "disambiguation": "UK ambient/electronic group",
+  "id": "e227302a-edd7-40a2-bb5c-e77a3ec68993",
+  "isnis": [
+    "0000000115461465"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {},
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000024032",
+        "id": "32f6850c-5010-4118-8485-a3c9298131de"
+      }
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://skylab.bandcamp.com/",
+        "id": "2de81ec6-642e-4dcb-a4d4-0599e2abeef9"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "bandcamp",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "url": {
+        "id": "d552bf72-dc3a-42e7-8eba-828f8b9b9db3",
+        "resource": "https://www.discogs.com/artist/2771"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "122765cc-6b98-47d4-8b80-b0714f8fa812",
+        "resource": "https://www.deezer.com/artist/185752"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "url": {
+        "id": "4ccb26f2-beb5-4ab7-bc32-6df1ba2ee4b8",
+        "resource": "https://www.last.fm/music/Skylab"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "id": "a03028d8-665c-402b-9783-d8743241e1bf",
+        "resource": "http://id.loc.gov/authorities/names/no98114087"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "37b88f57-d4a3-4467-b617-22a91303b5da",
+        "resource": "https://rateyourmusic.com/artist/skylab"
+      },
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no98114087",
+        "id": "b996efd8-4cdb-4312-82a9-7c35975ef021"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "3e588488-84c8-4ff5-87ac-0519e236817d",
+        "resource": "https://www.songkick.com/artists/560599"
+      }
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "766c57ad-d2a5-4cde-bc0d-12648431e138",
+        "resource": "https://tidal.com/artist/3568835"
+      },
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "7698915f-69bb-484d-a9aa-1465aefa416a",
+        "resource": "http://viaf.org/viaf/6740149296248880670006"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "begin": null,
+      "type": "VIAF",
+      "attribute-values": {}
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q7537771",
+        "id": "54ec3993-0598-4735-b64f-551767204bf0"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    }
+  ],
+  "end-area": null,
+  "area": {
+    "type-id": null,
+    "sort-name": "United Kingdom",
+    "name": "United Kingdom",
+    "type": null,
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "disambiguation": "",
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "name": "Skylab",
+  "type": "Group",
+  "country": "GB",
+  "begin-area": null,
+  "gender": null
+}

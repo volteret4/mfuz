@@ -1,0 +1,349 @@
+{
+  "ipis": [],
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type": null,
+    "name": "United States",
+    "type-id": null,
+    "sort-name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "relations": [
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "6fc75878-68cc-4d85-95fc-8e030a333350",
+        "resource": "https://dijondijon.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "type": "bandcamp",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/7776479",
+        "id": "19fd11e6-180d-498c-939c-a7cab4776120"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "url": {
+        "id": "932974a4-0b42-4d5b-953a-df34a9787cc6",
+        "resource": "https://open.spotify.com/artist/0knGpCTbmG4ctl1wzYRZs4"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/145894",
+        "id": "2857e87b-9cb5-44a4-acc0-3de556402b3a"
+      }
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "8b9f79f5-af05-4b6f-9b36-af14382f4f9d",
+        "resource": "https://www.last.fm/music/Dijon"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "official homepage",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "0fbc2cd5-43fe-46f7-b899-35a4f40b54d8",
+        "resource": "https://www.dijondijon.com/"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "purchase for download",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id1292964044",
+        "id": "4a9e5ec3-4e4b-4fb4-9ef5-cbeff9dd05aa"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "18ca9162-45fb-4b87-b2d7-2769aed1d88b",
+        "resource": "https://twitter.com/dijondijon_"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "07f60794-5d30-4305-931a-fa1e166f8f7f",
+        "resource": "https://www.facebook.com/DijonOfficial"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "url": {
+        "resource": "https://www.instagram.com/dijondijon_/",
+        "id": "3280bec7-6c9c-4c02-b419-60ff08e25594"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "bdd68974-6e4b-48e9-8a81-bd50c3e98574",
+        "resource": "https://www.songkick.com/artists/1620772"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "songkick",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://soundcloud.com/officialdijon",
+        "id": "10df1c7c-eed3-4d4e-8750-b427b46c6afc"
+      },
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "type": "soundcloud",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/fr/artist/1292964044",
+        "id": "a1fc4703-ac1f-4e45-92d9-ce9eac894317"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://tidal.com/artist/52162126",
+        "id": "dda23a5b-51e3-41ce-94c2-892da335898f"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "5e02ba36-89f9-4809-970d-c9647855c302",
+        "resource": "https://tidal.com/artist/9177293"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "13229ec2-4497-4760-84cc-97330bc22bd1",
+        "resource": "https://www.wikidata.org/wiki/Q109297503"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "type": "youtube",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "fb41418b-609b-4e34-9dce-cee19bf1aa93",
+        "resource": "https://www.youtube.com/channel/UC-rr-YumyDDWDE9BjGYrnIQ"
+      }
+    }
+  ],
+  "gender": "Male",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "country": "US",
+  "type": "Person",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "ended": false,
+    "begin": "1992-06-09",
+    "end": null
+  },
+  "sort-name": "Dijon",
+  "end-area": null,
+  "disambiguation": "R&B singer",
+  "begin-area": {
+    "type-id": null,
+    "id": "39383cce-6f78-4afe-b19a-8377995ce702",
+    "type": null,
+    "name": "Washington",
+    "iso-3166-2-codes": [
+      "US-WA"
+    ],
+    "disambiguation": "",
+    "sort-name": "Washington"
+  },
+  "isnis": [],
+  "name": "Dijon",
+  "id": "cceea21d-f3ec-4586-be7a-d2e939c15c78"
+}

@@ -1,0 +1,621 @@
+{
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Zur, Inon",
+  "id": "ba23bac1-2b00-43fb-95e5-c3c0fd286e7e",
+  "disambiguation": "",
+  "end-area": null,
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "name": "United States",
+    "type-id": null
+  },
+  "name": "Inon Zur",
+  "life-span": {
+    "begin": "1965-07-04",
+    "end": null,
+    "ended": false
+  },
+  "type": "Person",
+  "gender": "Male",
+  "relations": [
+    {
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "6483ba92-5722-49b0-b818-31485b4cd8f5",
+        "resource": "https://www.allmusic.com/artist/mn0000996973"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/993129",
+        "id": "e698ed40-c66c-4424-80bb-4e28d3f1323c"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/5tzixIjD4uBPCqZTljYvQi",
+        "id": "42449cd9-fb20-476d-8bae-f3a1ec88ed83"
+      }
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "bf1b85b2-65ed-4652-b818-60aad6d10291",
+        "resource": "https://www.deezer.com/artist/305612"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0958735/",
+        "id": "a7f00b5f-49a1-492d-821b-4879a10a883b"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "IMDb",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "b007e815-bb28-470a-8235-0af3bbb4e2db",
+        "resource": "https://www.last.fm/music/Inon+Zur"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "964033a0-14e7-439b-b17c-6ca89f3f7648",
+        "resource": "https://myspace.com/inonzur"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://www.inonzur.com/",
+        "id": "cacbabdf-1937-45e2-979e-f000aacc8664"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "b66130b5-df86-418a-a774-8a2529ee9519",
+        "resource": "http://id.loc.gov/authorities/names/no2022112939"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "da525183-7294-45ad-a3fb-51897f64e6be",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb141473665"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "3de085de-00d3-44ad-9e5b-c953d1dd2ddd",
+        "resource": "https://d-nb.info/gnd/1144925479"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://id.oclc.org/worldcat/entity/E39PBJdx7Bh7PPgDjFcw7bQDv3",
+        "id": "a1c82ef6-091a-4233-b47d-dd92d8e770a3"
+      }
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "ecb5ba9f-d435-4fbd-9788-3bdf17a6f6d8",
+        "resource": "http://soundtrackcollector.com/composer/3839/"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "524fbe86-7c02-4e63-84b8-190c485458c0",
+        "resource": "https://rateyourmusic.com/artist/inon_zur"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/241584/",
+        "id": "361962c9-11de-4d2d-b76e-475b653b39b9"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://itunes.apple.com/artist/id272826102",
+        "id": "ec231979-c85d-4226-8c79-15941bdb7d75"
+      },
+      "attributes": []
+    },
+    {
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://itunes.apple.com/gb/artist/id272826102",
+        "id": "ecd7a301-fce6-4bf9-8fd3-580b781e0b2a"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id272826102",
+        "id": "cf49df1b-a446-4d5d-a481-128fed733626"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "6f4c157c-4fcf-482c-b3b0-8dff9f0731d9",
+        "resource": "https://music.sonyselect.net/page/artist.html?artistId=2590"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": "2019-04",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": true,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "fd74dd0d-ec2b-4a4f-b0e4-7da0311527d4",
+        "resource": "https://plus.google.com/117274176411949880632"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://twitter.com/inonzur",
+        "id": "e134b78b-76ef-4312-97c3-7ff94254c211"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network"
+    },
+    {
+      "url": {
+        "id": "846ceb43-0d2f-4e35-a191-11b24b30c985",
+        "resource": "https://www.facebook.com/InonZurMusic"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.instagram.com/inonzurofficial/",
+        "id": "fbde1844-c060-4226-8e33-18368e73f553"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.linkedin.com/pub/inon-zur/5/a90/1ab",
+        "id": "b4dfb579-107b-403e-978e-552d807de707"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "soundcloud",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "66c8af67-467b-4b3b-a65a-b905bc7d9cbe",
+        "resource": "https://soundcloud.com/inonzur"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "9171316e-246f-4eb2-a45a-0a112333e248",
+        "resource": "https://music.apple.com/gb/artist/272826102"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "f84b333b-fe6e-49b0-bf00-8b75063b507a",
+        "resource": "https://tidal.com/artist/35133380"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "attributes": [],
+      "url": {
+        "resource": "https://tidal.com/artist/3663670",
+        "id": "471fa2f8-beaf-49b7-b603-38afdef54690"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://vgmdb.net/artist/1411",
+        "id": "19f4b29a-53ea-4499-86a7-f733a2acfe02"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "0af15ab3-c615-46d6-b95b-a5fcd2a92ed9",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "vgmdb"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://viaf.org/viaf/69138417",
+        "id": "c42a77c8-7489-46f7-aeb2-093b9007c162"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q933777",
+        "id": "d2b218d7-5711-459b-a9d8-5c143ea342f9"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "d109e8b4-562d-4b87-abda-9125adbf949e",
+        "resource": "https://www.youtube.com/c/InonZurOfficial"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {}
+    }
+  ],
+  "country": "US",
+  "isnis": [
+    "000000000133824X"
+  ],
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "03691455-bb46-37e3-91d2-cb064a35ffcc",
+    "sort-name": "Israel",
+    "iso-3166-1-codes": [
+      "IL"
+    ],
+    "type-id": null,
+    "name": "Israel"
+  },
+  "ipis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}

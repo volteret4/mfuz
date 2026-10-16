@@ -1,0 +1,330 @@
+{
+  "isnis": [
+    "000000007988569X"
+  ],
+  "name": "D\u2010Train",
+  "id": "1d0b2ed9-56a2-4792-a5a1-a47313fb24c4",
+  "gender-id": null,
+  "life-span": {
+    "ended": true,
+    "begin": "1980",
+    "end": "1985"
+  },
+  "disambiguation": "",
+  "begin-area": {
+    "type-id": null,
+    "disambiguation": "",
+    "type": null,
+    "name": "Brooklyn",
+    "id": "a71b0d32-7752-49e9-8594-2247ad6ac12c",
+    "sort-name": "Brooklyn"
+  },
+  "end-area": null,
+  "sort-name": "D\u2010Train",
+  "country": "US",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "ipis": [],
+  "gender": null,
+  "relations": [
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "type": "allmusic",
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002853961",
+        "id": "2c6c55fa-a84a-4012-8e42-6bc998f31c2e"
+      }
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "07ccbff7-a03d-4088-ab3f-5adf64129c95",
+        "resource": "https://www.discogs.com/artist/14185"
+      }
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "last.fm",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "id": "f120451c-95d2-47a1-bf3f-991efbce65f2",
+        "resource": "https://www.last.fm/music/D+Train"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "id": "194cdc5c-55cf-4f08-8390-20d12ae5b0a7",
+        "resource": "https://rateyourmusic.com/artist/d_train"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "abc8965c-2617-4cb7-8639-8ea48ae9b501",
+        "resource": "https://www.45cat.com/12single/artist/d-train"
+      },
+      "begin": null,
+      "direction": "forward",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "025d0367-7672-44b9-a66c-73dd14fdafbb",
+        "resource": "https://www.45cat.com/artist/d-train"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.45cat.com/artist/dtrain",
+        "id": "81742f98-4acf-45a4-8a94-8bd08b8be2cb"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "37f907d1-20eb-4f6f-88eb-2d6145d9224f",
+        "resource": "https://www.45cat.com/artist/d-train2"
+      }
+    },
+    {
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "33bc200e-1499-4e7a-9116-8e39a5b88df9",
+        "resource": "https://www.45cat.com/artist/d-train-566668"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "4dabb4a5-0096-4b39-91dd-632dab552769",
+        "resource": "https://www.45cat.com/cdalbum/artist/d-train-097370"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.45cat.com/tape/artist/d-train",
+        "id": "2f101184-0e15-42ae-a193-d6101d2009e0"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "13fd54dd-48ab-4e4c-b839-733ce3a83043",
+        "resource": "https://www.45cat.com/tape/artist/dtrain"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "911f455b-f6d5-4eb2-989e-12616596129b",
+        "resource": "https://www.45cat.com/vinyl/artist/d-train2"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null
+    },
+    {
+      "url": {
+        "id": "969f653e-39bb-4cde-8264-1eab7427116b",
+        "resource": "https://secondhandsongs.com/artist/10517"
+      },
+      "direction": "forward",
+      "begin": null,
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/dtrain-1bd79198.html",
+        "id": "cb01fb31-3e05-4d53-9fab-4d8d1216338b"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "type": "setlistfm",
+      "target-type": "url",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "source-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q593139",
+        "id": "106dc54e-e255-4200-9fd4-f52c88d8bff6"
+      }
+    }
+  ],
+  "area": {
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "type-id": null
+  }
+}

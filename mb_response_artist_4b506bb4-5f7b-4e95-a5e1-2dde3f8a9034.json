@@ -1,0 +1,494 @@
+{
+  "gender": "Male",
+  "type": "Person",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "begin-area": {
+    "type-id": null,
+    "name": "Prospect Heights",
+    "type": null,
+    "sort-name": "Prospect Heights",
+    "disambiguation": "",
+    "id": "65b8a930-2e86-4b9c-85b2-fb0fcfbacacb"
+  },
+  "ipis": [
+    "00609775120"
+  ],
+  "isnis": [
+    "0000000465473060"
+  ],
+  "country": "US",
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002873817",
+        "id": "d82868aa-dcc0-4621-8053-b01fa586fabd"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://moonboots.bandcamp.com/",
+        "id": "8b0b52f4-9027-4d22-a608-3c9fba3e7c63"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "396fa484-69e8-47ea-862a-888e16506cd9",
+        "resource": "https://www.discogs.com/artist/2516181"
+      },
+      "attributes": [],
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/3cIXmCH7iNcslTbwrwS7zy",
+        "id": "51e50d65-86d8-40bb-996c-4e5193d3a401"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "797f4b1b-0901-4e0a-921e-4c2f52950624",
+        "resource": "https://www.deezer.com/artist/2503961"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "c9b9dd20-6a21-4afc-b969-23ccfad1c755",
+        "resource": "https://www.last.fm/music/Moon%20Boots"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "24773b69-b628-4022-a9f1-b57471a78dfd",
+        "resource": "https://genius.com/artists/Moon-boots"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "official homepage",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.moonbootsmusic.com/",
+        "id": "3b7a60f1-5dfc-4adc-bfa2-4ec73798dc03"
+      },
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16771231q",
+        "id": "04b81ea0-b345-43cc-859e-359032240e12"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://ra.co/dj/moonboots",
+        "id": "dfe5385b-768d-421e-8b25-6e733beb9516"
+      }
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "d2e537b0-f452-45b4-b133-c2dbd4bba950",
+        "resource": "https://rateyourmusic.com/artist/moon-boots"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "82b75d05-57c8-4297-8d92-7f09e419c7f0",
+        "resource": "https://www.muziekweb.nl/Link/M00000390935/POPULAR/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.whosampled.com/Moon-Boots/",
+        "id": "65cbe658-d41d-43c7-8988-dbf410df1170"
+      }
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "c9a6c401-57af-41be-b6fb-d9c85d0e9aad",
+        "resource": "http://www.maniadb.com/artist/470290"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id212315511",
+        "id": "63249332-f4b5-4798-9ee6-7f5154de52d5"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attributes": [],
+      "url": {
+        "id": "612cfc25-f64d-4979-a9ba-3cca7551027c",
+        "resource": "https://www.beatport.com/artist/moon-boots/221901"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "814afddb-6f8b-4f7c-a53a-4654c0995872",
+        "resource": "https://www.traxsource.com/artist/79935"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://twitter.com/MoonBootsMusic",
+        "id": "f5e64894-20e4-411b-aeaf-9f072d546446"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/moonbootsmusic",
+        "id": "5b2d5ec7-942b-4458-9194-97ee41937a78"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.instagram.com/moonbootsmusic/",
+        "id": "4ff6b3c2-49db-4ac9-b9be-497c74362568"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://soundcloud.com/moonbootsmusic",
+        "id": "d6dadfdd-8edf-4267-80fd-6eed53c1a05c"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "ended": false,
+      "type": "soundcloud",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "720b3166-207d-440e-bd78-b9d58fb96a62",
+        "resource": "https://tidal.com/artist/4487760"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "attributes": [],
+      "url": {
+        "id": "338eb65d-9974-48e4-badb-9ffc077f4987",
+        "resource": "http://viaf.org/viaf/309578107"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q66846517",
+        "id": "dd44db08-5a87-42ed-beaf-db4c8503ca83"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "c180d616-70a9-4f81-8ea7-03cb6773864a",
+        "resource": "https://www.youtube.com/channel/UCwuA5SQ3s8UiWKFCm45_Gwg"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube"
+    }
+  ],
+  "end-area": null,
+  "name": "Moon Boots",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "sort-name": "United States",
+    "type": null,
+    "name": "United States",
+    "type-id": null
+  },
+  "sort-name": "Moon Boots",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "id": "4b506bb4-5f7b-4e95-a5e1-2dde3f8a9034",
+  "disambiguation": "DJ and nu disco producer from Brooklyn",
+  "life-span": {
+    "begin": "1984-06-27",
+    "end": null,
+    "ended": false
+  }
+}

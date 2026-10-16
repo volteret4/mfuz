@@ -703,8 +703,7 @@ class ConciertosModule(BaseModule):
                         QMessageBox.StandardButton.Yes
                     )
                     if reply == QMessageBox.StandardButton.Yes:
-                        # Obtener código de país
-                        country_code = self.country_code_input.text() or self.default_country
+                        country_code = self.get_country_code()
                         self.search_concerts_for_saved_artists(country_code)
     
     def on_search_text_changed(self, text):
@@ -1827,8 +1826,7 @@ class ConciertosModule(BaseModule):
                         QMessageBox.StandardButton.Yes
                     )
                     if reply == QMessageBox.StandardButton.Yes:
-                        # Obtener código de país
-                        country_code = self.country_code_input.text() or self.default_country
+                        country_code = self.get_country_code()
                         self.search_concerts_for_saved_artists(country_code)
 
 

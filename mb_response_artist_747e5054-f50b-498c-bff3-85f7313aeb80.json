@@ -1,0 +1,386 @@
+{
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "1952-06-16"
+  },
+  "sort-name": "Vannelli, Gino",
+  "ipis": [
+    "00057404387"
+  ],
+  "disambiguation": "",
+  "id": "747e5054-f50b-498c-bff3-85f7313aeb80",
+  "relations": [
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000948061",
+        "id": "3a745fdb-d163-45ec-9aab-b48e148cbb8b"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/141308",
+        "id": "20ea586a-1142-41cd-8848-8db74fd3574f"
+      }
+    },
+    {
+      "url": {
+        "id": "f10837f3-fa1d-4e59-94b0-08cb15c1b6ce",
+        "resource": "http://www.ginovannelli.info/"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "type": "fanpage",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "ended": true,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "26c55200-4528-4e85-baa2-819abb8d2503",
+        "resource": "https://open.spotify.com/artist/6ltcwvni6HdZAJaWhmIvNR"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://www.deezer.com/artist/13189",
+        "id": "0fd49332-c090-43f4-91a1-e1336b3b09cb"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "97a7c047-cee5-4a2b-8355-ac92a2275405",
+        "resource": "https://www.imdb.com/name/nm1218212/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "begin": null,
+      "type": "IMDb",
+      "attribute-values": {}
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "785bf3e2-5612-498d-8ffb-9b6f65d5d7ae",
+        "resource": "https://www.last.fm/music/Gino+Vannelli"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "type": "last.fm",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-11766/gino-vannelli/lyrics.html",
+        "id": "d6b77bbc-ead4-44d3-a453-502e103f8930"
+      }
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "a2dfd593-d699-453a-b1f5-713571cff16a",
+        "resource": "http://www.ginov.com/"
+      },
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "88ead04f-0aed-4bd7-959a-ea5a3614ccfc",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13935879f"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "985168f1-8a33-47e7-9e60-b49bec905165",
+        "resource": "https://rateyourmusic.com/artist/gino_vannelli"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-values": {},
+      "type": "other databases",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "30c0348f-24c5-48a4-9337-4ffccabf524b",
+        "resource": "https://itunes.apple.com/us/artist/id93241"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/23549",
+        "id": "780863c0-5600-4b0f-8298-0fae8c3330cf"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "2719f1ae-84c7-4742-b9a6-021b991dbb03",
+        "resource": "https://twitter.com/GinoVOfficial"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "social network",
+      "url": {
+        "id": "b3ba3d8e-e379-496e-811d-c4b78322727e",
+        "resource": "https://www.facebook.com/GinoVannelliOfficial"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "41ca1b1f-e691-4064-8397-3e8dc07cc696",
+        "resource": "https://tidal.com/artist/26377"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "74dd461d-bccd-4821-a326-b6e147dc6d99",
+        "resource": "http://viaf.org/viaf/51878903"
+      },
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1345565",
+        "id": "8397cad7-1923-4f45-abed-ae2436e32929"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube music",
+      "url": {
+        "resource": "https://music.youtube.com/channel/UCbWmWpTS9IhAbEEYTBgLdhg",
+        "id": "62ffd70c-9451-4db0-b099-b2bcd416dd25"
+      },
+      "type-id": "631712a0-7525-42ba-b7a3-605aa7a238c4",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    }
+  ],
+  "isnis": [
+    "0000000073659798"
+  ],
+  "end-area": null,
+  "area": {
+    "type": null,
+    "name": "Canada",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "type-id": null,
+    "sort-name": "Canada"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "name": "Gino Vannelli",
+  "begin-area": {
+    "id": "c3cc624e-b963-49cf-ad0b-e318cb341963",
+    "sort-name": "Montr\u00e9al",
+    "type-id": null,
+    "disambiguation": "city",
+    "name": "Montr\u00e9al",
+    "type": null
+  },
+  "country": "CA",
+  "gender": "Male"
+}

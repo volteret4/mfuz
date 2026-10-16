@@ -1,0 +1,549 @@
+{
+  "end-area": null,
+  "area": {
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "name": "United States",
+    "type-id": null
+  },
+  "name": "Candi Staton",
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "sort-name": "Staton, Candi",
+  "disambiguation": "",
+  "id": "6afcc957-d742-41c6-ad0b-31b2f1967353",
+  "life-span": {
+    "begin": "1940-03-13",
+    "end": null,
+    "ended": false
+  },
+  "gender": "Female",
+  "type": "Person",
+  "begin-area": {
+    "disambiguation": "",
+    "id": "ed5826f1-1f01-497d-9052-c1fb74278dc3",
+    "sort-name": "Hanceville",
+    "type": null,
+    "name": "Hanceville",
+    "type-id": null
+  },
+  "ipis": [
+    "00066947728",
+    "00126242403"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "52d2ba40-e32e-45ba-85b2-d15dd04183de",
+        "resource": "https://www.allmusic.com/artist/mn0000542976"
+      }
+    },
+    {
+      "type": "BBC Music page",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": "2020-11-19",
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "1125f67d-09c0-4d7f-aa49-289023e2d3f4",
+        "resource": "https://www.bbc.co.uk/music/artists/6afcc957-d742-41c6-ad0b-31b2f1967353"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "da07b588-65de-41fe-b9e7-121ef6b75627",
+        "resource": "http://web.archive.org/web/20080517155830/http://www.discomuseum.com/CandiStaton.html"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://www.soulwalking.co.uk/Candi%20Staton.html",
+        "id": "7b590cc9-ba85-4ecd-87ab-9542cd4af48a"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "biography",
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/17399",
+        "id": "1496d36f-374c-4385-9c55-35d9cf14f378"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attributes": [],
+      "url": {
+        "id": "77b55d19-0061-4aaf-8e9e-73eaeacf126a",
+        "resource": "https://open.spotify.com/artist/3S34Unhn5yRcaH5K9aU5Et"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.deezer.com/artist/2098",
+        "id": "d5f1e2fb-fbdd-4daf-b656-1fadab5f3d13"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.imdb.com/name/nm1922135/",
+        "id": "1935e511-4c84-4192-89f5-1acff658e07f"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "interview",
+      "attributes": [],
+      "url": {
+        "id": "5006e614-3b55-43ef-8d3f-a09fcae9cf9f",
+        "resource": "http://www.disco-disco.com/artists/candi.shtml"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "04961bdc-300d-46a6-996d-6e3d72d8c12a",
+        "resource": "https://www.last.fm/music/Candi+Staton"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://muzikum.eu/en/122-8597/candi-staton/lyrics.html",
+        "id": "81a681c0-5ae2-4f5c-89f9-2188b8c852e5"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "type": "lyrics",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://myspace.com/candistaton",
+        "id": "74d40383-e20e-481c-8cd3-ce0177f9ea63"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "e7aa0c26-bada-4464-8d78-67afff4c0ec9",
+        "resource": "http://www.candi-staton.com/"
+      },
+      "attributes": [],
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n95077992",
+        "id": "12e65bb3-6e26-47d5-b73d-8a5c695f1cce"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13987999v",
+        "id": "ebab9439-5821-4514-ac1a-e895e2695e58"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/134780566",
+        "id": "3dd89b5a-d81c-42a3-ba60-25aa5ac90971"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/candi_staton",
+        "id": "d13d25bc-c365-4360-b8f8-5d81ea7df663"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.whosampled.com/Candi-Staton/",
+        "id": "b54342fe-843c-4972-a636-55435987e1a7"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n95077992",
+        "id": "79c95f00-5b6d-43b0-9c02-0eed80a43e52"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/795789",
+        "id": "8f54bd8a-e1d0-4620-8b02-624188a0c697"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "7c6cd645-e25f-43aa-bb05-d75be0c48fdd",
+        "resource": "https://www.beatport.com/artist/candi-staton/117221"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://twitter.com/IamCandiStaton",
+        "id": "88c71ea1-9152-46e7-aeba-b1c9e789a908"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "id": "6a1616a1-1983-48df-b6fd-0f523d74a867",
+        "resource": "https://www.facebook.com/TheRealCandiStaton"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.songkick.com/artists/320832",
+        "id": "b110aeb1-1e2a-492b-aeae-ca0e35ffe82f"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/us/artist/795789",
+        "id": "8f54bd8a-e1d0-4620-8b02-624188a0c697"
+      }
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://tidal.com/artist/13956",
+        "id": "8baeaac7-fe9b-450b-af5e-2cd801cb2e8c"
+      }
+    },
+    {
+      "url": {
+        "id": "10125262-2404-45e5-9e65-564da332e1d5",
+        "resource": "http://viaf.org/viaf/5127097"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q449200",
+        "id": "e22e3756-ea70-4222-ae63-697193681a82"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    }
+  ],
+  "isnis": [
+    "0000000079698851"
+  ],
+  "country": "US"
+}

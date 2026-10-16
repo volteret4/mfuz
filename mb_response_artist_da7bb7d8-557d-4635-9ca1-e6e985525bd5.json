@@ -1,0 +1,964 @@
+{
+  "country": "US",
+  "isnis": [
+    "0000000108970392"
+  ],
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "5945c5e8-0643-44be-974d-ffae6a6d41cd",
+        "resource": "https://www.allmusic.com/artist/mn0000394806"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "url": {
+        "id": "698603cd-8dee-4c9b-abfb-aa3d16e47ecb",
+        "resource": "https://www.bandsintown.com/a/6914"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandsintown",
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "ead25baf-5ded-4bf0-80a7-bd4192b8e35e",
+        "resource": "https://www.bbc.co.uk/music/artists/da7bb7d8-557d-4635-9ca1-e6e985525bd5"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "BBC Music page",
+      "source-credit": "",
+      "begin": null,
+      "end": "2020-11-19",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "ended": true
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "14d7f91e-746c-4888-8c83-4e389633a009",
+        "resource": "https://www.songhall.org/profile/Randy_Newman"
+      },
+      "attributes": [],
+      "type": "biography",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "452c1d3d-7b49-4a0a-8457-d0ae129305c1",
+        "resource": "https://www.discogs.com/artist/166320"
+      }
+    },
+    {
+      "attribute-values": {},
+      "type": "fanpage",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://fanart.tv/artist/da7bb7d8-557d-4635-9ca1-e6e985525bd5/",
+        "id": "f3b4f6b7-cfde-431c-bdda-629271cc3a15"
+      },
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/3HQyFCFFfJO3KKBlUfZsyW",
+        "id": "d90091dc-d605-4ed5-a986-37d76ec874e4"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.deezer.com/artist/5679",
+        "id": "60516de8-01ea-4b8e-8d24-38a6b03b1a95"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:RandyNewman_nojhf_May12008.jpg",
+        "id": "0dea7854-9826-4091-9ded-e52262de4ec3"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "image",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0005271/",
+        "id": "14249be0-937e-4312-a799-a95b277eace3"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.last.fm/music/Randy+Newman",
+        "id": "a3d4cb55-3122-402c-81bb-fa7b6c7c15ac"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "fecdbbbf-c772-4b87-b5b6-6dfa97914bbe",
+        "resource": "http://muzikum.eu/en/122-5525/randy-newman/lyrics.html"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://genius.com/artists/Randy-newman",
+        "id": "546ec235-0cad-44e7-ac44-de259c3bdc1b"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.musixmatch.com/artist/Randy-Newman",
+        "id": "bb2dc593-ba2e-4266-8753-6020937a067c"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "lyrics",
+      "ended": false,
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "ended": false,
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "official homepage",
+      "attributes": [],
+      "url": {
+        "resource": "http://www.randynewman.com/",
+        "id": "eb567d12-9ac9-456e-8ae3-ac25ddfcee39"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://castalbums.org/people/Randy-Newman/2384",
+        "id": "0970a8f9-97c1-4cbf-960d-3bf07a3c1937"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "5ad1fabf-7e30-4ca8-8bc8-7369082a0e3f",
+        "resource": "http://id.loc.gov/authorities/names/n85194022"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "http://musicmoz.org/Bands_and_Artists/N/Newman,_Randy/",
+        "id": "08a9ea85-9b51-49a6-b58d-0066a2c45204"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "9033618a-bd04-40c5-aa47-41ce8824d888",
+        "resource": "http://mvdbase.com/person.php?&id=A6754"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "a1a0ab62-0eb1-450b-9412-2463f75be6f1",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13897935n"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/118734709",
+        "id": "6ad8261d-3da4-41d4-8055-05852406cbdc"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://ibdb.com/person.php?id=391823",
+        "id": "77e603f8-dcd6-42f8-b979-024b0f208723"
+      }
+    },
+    {
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "id": "23d3fe14-30c5-4443-8ed4-195be86bf77c",
+        "resource": "http://snaccooperative.org/ark:/99166/w6hh7fz7"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://openlibrary.org/works/OL2786097A",
+        "id": "edc11206-dec5-474e-a64d-514153515a9b"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "4e85882a-74f6-4776-bbe9-b49a637187b6",
+        "resource": "http://soundtrackcollector.com/composer/377/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "7891fcb3-b8c2-443a-bb82-a992d824e682",
+        "resource": "https://rateyourmusic.com/artist/randy_newman"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.45cat.com/artist/randy-newman",
+        "id": "64fdfb5d-0e8a-4290-b1b5-f0808975bff9"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "477eee29-e173-4573-ba5b-ee78bab7cc7c",
+        "resource": "https://www.livefans.jp/artists/36748"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/randy-newman/",
+        "id": "fefe4709-1613-457a-be86-9eb6c181089a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.whosampled.com/Randy-Newman/",
+        "id": "f95639a9-1aff-46f0-8e2a-d514eafdc8fc"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n85194022",
+        "id": "60d0ab22-c4e6-47e8-8f69-dec1811cb60d"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Ahawlkzqmqk4jrjs5cboniz3qum",
+        "id": "2a5e7a1e-089d-4992-b0c1-7915b0abd4db"
+      },
+      "end": "2020-10-12",
+      "begin": null,
+      "ended": true,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.apple.com/us/artist/200900",
+        "id": "da4dec45-d870-45fa-9b60-a27f653157b2"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.7digital.com/artist/randy-newman",
+        "id": "f7244875-7fda-4e25-829b-e9e4b1d3f524"
+      },
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "6f82243f-e4b2-4643-8d29-df164c0314b1",
+        "resource": "https://www.qobuz.com/us-en/interpreter/randy-newman/15473"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "0ab6ab99-87b9-45bf-8433-d0a4671985cd",
+        "resource": "https://secondhandsongs.com/artist/756"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.setlist.fm/setlists/randy-newman-63d68ac3.html",
+        "id": "0b54acb8-7565-4331-90b0-8a6c71eb984a"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "ended": false,
+      "type": "setlistfm",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://twitter.com/randynewman",
+        "id": "23130b60-d898-479c-a9f9-f3848d5edd62"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.facebook.com/RandyNewman",
+        "id": "1960f4d5-d238-45ee-ac17-2eb527bda63d"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "a2334785-8cd7-47f1-8dc3-deb5b2fa8234",
+        "resource": "https://www.instagram.com/randynewmanofficial/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/291304",
+        "id": "c8be686e-d59b-4e42-bb6b-ffe005cd61c6"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "59089fa8-6105-4ed0-8032-39dfd3402889",
+        "resource": "https://soundcloud.com/randynewman"
+      }
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": true,
+      "begin": null,
+      "end": "2022-06-08",
+      "url": {
+        "resource": "https://us.napster.com/artist/randy-newman",
+        "id": "545641aa-ec7b-4f09-a3b3-4c21fcd296d7"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://music.amazon.com/artists/B000QJJSYY",
+        "id": "a9d8294d-f6d8-45ef-8dc1-00342f55be21"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "a7c4c56f-e518-44c2-a7b9-383289d699b0",
+        "resource": "https://music.apple.com/gb/artist/200900"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://tidal.com/artist/9532",
+        "id": "1ee941f4-ef80-4ec9-978b-5076941389ee"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.amazon.com/-/e/B000AQ0S7O",
+        "id": "e9ea42ab-aa72-41b1-8e40-3f4b94b65d51"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.qobuz.com/us-en/interpreter/randy-newman/15473",
+        "id": "6f82243f-e4b2-4643-8d29-df164c0314b1"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "1371baef-2729-42c7-b4b1-fb60a1af956e",
+        "resource": "http://viaf.org/viaf/47557171"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q318475",
+        "id": "3b543cca-b169-4bb5-80b4-86acf6f314dd"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "youtube",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "031b2451-a065-4eac-9c5d-f895233a7fb1",
+        "resource": "https://www.youtube.com/channel/UCI2zfGHCt68rzyGepRsr7wA"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    }
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00022282713",
+    "00022282811",
+    "00125728769"
+  ],
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "sort-name": "Los Angeles",
+    "type-id": null,
+    "name": "Los Angeles"
+  },
+  "type": "Person",
+  "gender": "Male",
+  "life-span": {
+    "ended": false,
+    "begin": "1943-11-28",
+    "end": null
+  },
+  "disambiguation": "American singer\u2010songwriter and score composer",
+  "id": "da7bb7d8-557d-4635-9ca1-e6e985525bd5",
+  "sort-name": "Newman, Randy",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "name": "Randy Newman",
+  "area": {
+    "type-id": null,
+    "name": "United States",
+    "type": null,
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "end-area": null
+}

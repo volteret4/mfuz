@@ -1,0 +1,602 @@
+{
+  "life-span": {
+    "begin": "1990-04-30",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "DeMarco, Mac",
+  "id": "f2492c31-54a8-4347-a1fc-f81f72873bbf",
+  "disambiguation": "",
+  "end-area": null,
+  "name": "Mac DeMarco",
+  "area": {
+    "sort-name": "Canada",
+    "iso-3166-1-codes": [
+      "CA"
+    ],
+    "disambiguation": "",
+    "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+    "type": null,
+    "name": "Canada",
+    "type-id": null
+  },
+  "relations": [
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0002872922",
+        "id": "7ac864f8-93cf-4f2a-93a9-34804acc6392"
+      }
+    },
+    {
+      "type": "bandcamp",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "5514d377-ade7-4145-a96b-ffebec075830",
+        "resource": "https://macdemarco.bandcamp.com/"
+      },
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/2568722",
+        "id": "ec87fea3-5cae-4c3d-8f75-0c35662a450b"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://open.spotify.com/artist/3Sz7ZnJQBIHsXLUSo0OQtM",
+        "id": "fac51bfa-b60e-409c-9f90-2c83d0cbb1a5"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {}
+    },
+    {
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "4edae843-278b-4a2f-bd5f-d93eedccf374",
+        "resource": "https://www.deezer.com/artist/1619572"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "attributes": [],
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Mac_DeMarco_2019_(48210650642)_(cropped).jpg",
+        "id": "dcf020f1-e0a7-4596-b13c-0d6977a30841"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "0ffd8200-6a74-48ce-87cb-54546ad04c8b",
+        "resource": "https://www.imdb.com/name/nm6762590/"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "IMDb",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "http://noisey.vice.com/en_ca/blog/no-canada-mac-demarco-is-on-an-enchanting-adventure",
+        "id": "cff17088-5387-4a58-8405-a4c07f2a79b9"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "1f171391-1f98-4f45-b191-038ec3b12395",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "interview",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.last.fm/music/Mac+DeMarco",
+        "id": "e1003732-f64e-4dd0-ba64-f7dc2794b26d"
+      },
+      "attributes": [],
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "type": "lyrics",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://genius.com/artists/Mac-demarco",
+        "id": "e0ac24b8-8315-40ab-9dda-527fd2cb8184"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "myspace",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "226795b2-c83c-4f12-ad1e-e72c24019426",
+        "resource": "https://myspace.com/macdemarco"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "3eda98b3-51d6-4ef8-8fa6-66f6df40d8cb",
+        "resource": "http://www.mac-demarco.com/"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "b23836e4-adb5-44d7-aef3-4dc714f4b658",
+        "resource": "http://id.loc.gov/authorities/names/no2014050282"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb169236590",
+        "id": "97e1ed3f-a788-4ea1-ad15-ae36a449329c"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "7fcb05c3-af0b-41e0-9a88-2613abbf4632",
+        "resource": "https://d-nb.info/gnd/1051292301"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "82d2cfb0-9b62-4102-9c35-10cad25ac625",
+        "resource": "https://imvdb.com/n/mac-demarco"
+      }
+    },
+    {
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "e05b7686-5bdc-47eb-a8c9-ee6a148a25a2",
+        "resource": "https://rateyourmusic.com/artist/mac_demarco"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2014050282/",
+        "id": "6da67f0a-0d27-4b13-9a41-bc2f24fd8810"
+      },
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id501437762",
+        "id": "12ad953c-fb5f-4b86-93c5-594da1b277ab"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "7cf095d6-d078-4481-a2a2-6295f69c2fcb",
+        "resource": "https://secondhandsongs.com/artist/114467"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "type": "social network",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://twitter.com/msldemarco",
+        "id": "03ffa068-b08d-4501-bb5c-212faaf564a9"
+      },
+      "attributes": []
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "attributes": [],
+      "url": {
+        "id": "02853df1-6d60-498c-9bef-a9a93db38836",
+        "resource": "https://www.facebook.com/MacDeMarco"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.facebook.com/MacDeMarcoBand",
+        "id": "490cb13c-111d-423f-9483-0dbf693ed953"
+      },
+      "attributes": [],
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "ended": false,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.instagram.com/macdemarco/",
+        "id": "84e0666e-8ad0-4cd6-b007-871b05c25533"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.songkick.com/artists/5105188",
+        "id": "173ed99b-88cd-4053-ba23-57be2e8581d0"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://soundcloud.com/mac-demarco-official",
+        "id": "672ee548-704b-43ae-a29a-2285d587b9f6"
+      },
+      "begin": null,
+      "end": null,
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "soundcloud",
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/501437762",
+        "id": "d9f7a28a-78ac-44b7-8a31-3d9d4c4c3d4c"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "1123acd6-db57-40f0-b74f-34f504b2a606",
+        "resource": "https://tidal.com/artist/4496618"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "http://viaf.org/viaf/308698151",
+        "id": "1a889276-23ea-4b95-a233-a507575fbb40"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "VIAF",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "7d9b2dee-62c1-4d6c-8c13-8da0aaab0296",
+        "resource": "https://www.wikidata.org/wiki/Q14517"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.youtube.com/channel/UCqnMk5GA1spXDiHYFcPN-eA",
+        "id": "8284625f-a0a9-4da7-a876-697e20c6aa7d"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    }
+  ],
+  "isnis": [
+    "0000000434300220"
+  ],
+  "country": "CA",
+  "begin-area": {
+    "name": "Duncan",
+    "type-id": null,
+    "sort-name": "Duncan",
+    "disambiguation": "",
+    "id": "b43eccfe-628c-41d1-a257-cc07ed19942c",
+    "type": null
+  },
+  "ipis": [
+    "00682250252"
+  ],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "gender": "Male"
+}

@@ -1,0 +1,438 @@
+{
+  "gender": null,
+  "type": "Group",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "ipis": [],
+  "begin-area": {
+    "type": null,
+    "sort-name": "D\u00fcsseldorf",
+    "disambiguation": "",
+    "id": "03e75281-c3a3-454a-8d78-c85a5415c49e",
+    "type-id": null,
+    "name": "D\u00fcsseldorf"
+  },
+  "country": "DE",
+  "isnis": [
+    "000000012109303X"
+  ],
+  "relations": [
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000929800",
+        "id": "f6488b78-4e24-4fb8-9419-a91348073e15"
+      },
+      "attributes": [],
+      "type": "allmusic",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attributes": [],
+      "url": {
+        "id": "1a4f5c01-33c6-4a81-877a-c3bc172419a6",
+        "resource": "https://mouseonmars.bandcamp.com/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/2540",
+        "id": "9926dd8a-d4a3-46b5-91eb-a46083e376b7"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/4ZgIWfyg9BkcqnJJ2xVR3f",
+        "id": "aaba5dd3-738b-4b29-b937-2b2e1d926144"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "ed156045-497f-4f07-b505-9660352a0731",
+        "resource": "https://www.deezer.com/artist/11554"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://myspace.com/mouseonmars",
+        "id": "4ebe5fca-c510-49f1-b3e3-20cfd34f2fd6"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "source-credit": "",
+      "type": "official homepage",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "id": "7317238b-70b0-46df-a09b-6ece1e392405",
+        "resource": "http://www.mouseonmars.de/"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "e5f647f8-fe2d-47ae-8962-742c752c34ac",
+        "resource": "http://id.loc.gov/authorities/names/no2002107639"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb139701403",
+        "id": "e51ee6a7-d9d0-425f-af65-1eb3f98dfee4"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/10068576-6",
+        "id": "10a911f3-0e18-4291-8df5-8c4c2155323c"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/mouse_on_mars",
+        "id": "d6f3d682-08a4-4714-a554-00c4e7fcfd1d"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "2da1258b-306b-457d-b362-8a964963441d",
+        "resource": "https://www.worldcat.org/identities/lccn-no2002107639"
+      },
+      "attributes": []
+    },
+    {
+      "end": "2020-10-12",
+      "begin": null,
+      "ended": true,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download",
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://play.google.com/store/music/artist?id=Apjficv724d2elqbhicshlgecg4",
+        "id": "548c19f6-b3c0-4b9c-ac06-3bfefa97612c"
+      }
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://de.7digital.com/artist/mouse-on-mars",
+        "id": "ebee43d1-f8bd-48ba-aed3-4b366b29eb45"
+      },
+      "attributes": [],
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "d79e4a6e-59d7-4a90-9632-c57aa0e41d73",
+        "resource": "https://www.beatport.com/artist/mouse-on-mars/16404"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "ended": false,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "purchase for download"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "f5685269-14b8-42b6-8788-f73dee76796f",
+        "resource": "https://www.junodownload.com/artists/Mouse+On+Mars/"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "a006764d-94c7-4f36-bee6-437e182dddd8",
+        "resource": "https://www.onkyomusic.com/DE/artist/mouse-on-mars"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {}
+    },
+    {
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "id": "5caf142b-5b00-4fc5-bf0f-24041ad1fdef",
+        "resource": "https://www.facebook.com/mouseonmars"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "0e83bee1-04e9-4f2d-94af-728e3de3c822",
+        "resource": "https://www.songkick.com/artists/526952"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "948a46d1-0116-4488-810d-e5ba5397267e",
+        "resource": "https://tidal.com/artist/3565252"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "8b6ef85f-5784-4649-bd2b-345e81ebeeb7",
+        "resource": "http://viaf.org/viaf/126851005"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "VIAF",
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q702006",
+        "id": "133f656e-71c2-4b8f-8f30-a8f16d3f317a"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward"
+    }
+  ],
+  "name": "Mouse on Mars",
+  "area": {
+    "type": null,
+    "sort-name": "Germany",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "disambiguation": "",
+    "type-id": null,
+    "name": "Germany"
+  },
+  "end-area": null,
+  "id": "4d4f5d92-0589-42fa-bc0e-1bd73e17a2ce",
+  "disambiguation": "",
+  "gender-id": null,
+  "sort-name": "Mouse on Mars",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1993"
+  }
+}

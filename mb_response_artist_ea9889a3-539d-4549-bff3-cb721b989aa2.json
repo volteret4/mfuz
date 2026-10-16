@@ -1,0 +1,312 @@
+{
+  "country": "US",
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "ipis": [],
+  "relations": [
+    {
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "allmusic",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "86a2ba2f-a0b5-410a-8ed7-4c760a258d9f",
+        "resource": "https://www.allmusic.com/artist/mn0000918682"
+      }
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "type": "discogs",
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/254867",
+        "id": "5aa2516f-5968-4bf9-b8c0-c13383f045a2"
+      }
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://open.spotify.com/artist/6gZVflqhSHhG3MjYrf1dOv",
+        "id": "aeea7764-4290-4e42-9994-87f06c5aecca"
+      },
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming"
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "resource": "https://www.deezer.com/artist/11039",
+        "id": "d7705026-1a31-445d-aa4c-73f7beb45971"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "633f1f26-9cc3-4837-a2d9-51578c2ed979",
+        "resource": "http://thesurfaris.com/"
+      },
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "type": "official homepage",
+      "source-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "resource": "https://adp.library.ucsb.edu/names/345897",
+        "id": "10d99a3c-8c95-444b-89e3-338a90f99778"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type": "other databases",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "url": {
+        "resource": "https://d-nb.info/gnd/10291417-5",
+        "id": "49997990-1747-46bd-8f4c-52e9cee5a056"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/the_surfaris",
+        "id": "385abcb5-7424-44e0-83eb-e184a153dcf8"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://itunes.apple.com/us/artist/id3444019",
+        "id": "4beb0c23-2c7b-4204-ac55-5630e9758fcb"
+      },
+      "direction": "forward",
+      "begin": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "purchase for download",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "secondhandsongs",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/363",
+        "id": "a9098691-7d4c-4da1-918f-8182e7ec9461"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "type": "social network",
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "624328b4-ab4d-44ef-a643-fcb10d0ce51e",
+        "resource": "https://www.facebook.com/surfaris"
+      }
+    },
+    {
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "type": "songkick",
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "71327b4b-9e13-4e6a-85a8-3c6b1caefc11",
+        "resource": "https://www.songkick.com/artists/215584"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/32928",
+        "id": "898dacbf-8752-4271-96b5-73bcb8924173"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://viaf.org/viaf/152598764",
+        "id": "4ed9263f-bb10-4eb9-b777-1f577dd57c65"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "VIAF",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q2165679",
+        "id": "a273b2c6-a2c1-4bf1-9e95-232a8ed0a203"
+      }
+    }
+  ],
+  "area": {
+    "disambiguation": "",
+    "sort-name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "type": null,
+    "name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null
+  },
+  "gender": null,
+  "id": "ea9889a3-539d-4549-bff3-cb721b989aa2",
+  "isnis": [
+    "0000000106732374"
+  ],
+  "name": "The Surfaris",
+  "gender-id": null,
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": "1962"
+  },
+  "sort-name": "Surfaris, The",
+  "disambiguation": "",
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Glendora",
+    "id": "1422cabc-1b46-451f-8c38-c596c16d3b9b",
+    "name": "Glendora",
+    "type": null,
+    "disambiguation": ""
+  },
+  "end-area": null
+}

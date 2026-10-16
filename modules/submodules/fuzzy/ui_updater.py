@@ -1,5 +1,6 @@
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QImage, QImageReader
+from PyQt6.QtCore import Qt, QObject, QRunnable, QThreadPool, QTimer, QSize, pyqtSignal
+from collections import OrderedDict
 import os
 from PyQt6.QtWidgets import (QLabel, QGroupBox, QTextEdit, QPushButton, QStackedWidget, 
                             QWidget, QSizePolicy, QTableWidget, QTableWidgetItem, QHeaderView)
@@ -13,11 +14,109 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from base_module import PROJECT_ROOT
 
 
+
+class _ImageLoadSignals(QObject):
+    """Señal para devolver al hilo de la interfaz una imagen cargada en segundo plano"""
+    loaded = pyqtSignal(object, int, object, QImage)  # label, token, clave de caché, imagen
+
+
+class _ImageLoadTask(QRunnable):
+    """Lee y reduce una imagen fuera del hilo de la interfaz (las portadas están en NFS)"""
+
+    def __init__(self, path, size, label, token, key, signals):
+        super().__init__()
+        self.path = path
+        self.size = size
+        self.label = label
+        self.token = token
+        self.key = key
+        self.signals = signals
+
+    def run(self):
+        image = QImage()
+        try:
+            if os.path.exists(self.path):
+                reader = QImageReader(self.path)
+                reader.setAutoTransform(True)
+                source_size = reader.size()
+                # Decodificar a un tamaño cercano al final (mucho más rápido en JPEG grandes)
+                if source_size.isValid() and (source_size.width() > 2 * self.size.width() or
+                                              source_size.height() > 2 * self.size.height()):
+                    reader.setScaledSize(source_size.scaled(self.size * 2, Qt.AspectRatioMode.KeepAspectRatio))
+                image = reader.read()
+                if not image.isNull():
+                    image = image.scaled(self.size, Qt.AspectRatioMode.KeepAspectRatio,
+                                         Qt.TransformationMode.SmoothTransformation)
+        except Exception as e:
+            print(f"Error cargando imagen {self.path}: {e}")
+        self.signals.loaded.emit(self.label, self.token, self.key, image)
+
+
 class UIUpdater:
     """Updates UI elements based on selection in the tree widget."""
     
+    IMAGE_CACHE_SIZE = 100
+
     def __init__(self, parent):
         self.parent = parent
+        # Carga de imágenes en segundo plano con caché de las ya mostradas
+        self._image_signals = _ImageLoadSignals()
+        self._image_signals.loaded.connect(self._on_image_loaded)
+        self._image_cache = OrderedDict()   # {(ruta, ancho, alto): QPixmap}
+        self._image_tokens = {}             # {id(label): última petición}
+        self._image_placeholders = {}       # {id(label): texto si no hay imagen}
+        self._feeds_token = 0
+
+    def _set_label_image(self, label, path, placeholder):
+        """Muestra una imagen en un QLabel sin bloquear la interfaz"""
+        token = self._image_tokens.get(id(label), 0) + 1
+        self._image_tokens[id(label)] = token
+        self._image_placeholders[id(label)] = placeholder
+
+        if not path:
+            label.setText(placeholder)
+            return
+
+        size = QSize(label.width(), label.height())
+        key = (str(path), size.width(), size.height())
+        cached = self._image_cache.get(key)
+        if cached is not None:
+            self._image_cache.move_to_end(key)
+            label.setPixmap(cached)
+            return
+
+        label.setText("Cargando…")
+        QThreadPool.globalInstance().start(
+            _ImageLoadTask(str(path), size, label, token, key, self._image_signals))
+
+    def _on_image_loaded(self, label, token, key, image):
+        """Coloca la imagen cargada si sigue siendo la última pedida para ese QLabel"""
+        if self._image_tokens.get(id(label)) != token:
+            return  # El usuario ya seleccionó otro elemento
+        try:
+            if image.isNull():
+                label.setText(self._image_placeholders.get(id(label), ""))
+                return
+            pixmap = QPixmap.fromImage(image)
+            self._image_cache[key] = pixmap
+            if len(self._image_cache) > self.IMAGE_CACHE_SIZE:
+                self._image_cache.popitem(last=False)
+            label.setPixmap(pixmap)
+        except RuntimeError:
+            pass  # El QLabel se destruyó mientras se cargaba la imagen
+
+    def _schedule_feeds(self, *args, **kwargs):
+        """Carga los feeds cuando la interfaz ya ha pintado la información principal;
+        si entretanto se selecciona otro elemento, la carga pendiente se descarta"""
+        self._feeds_token += 1
+        token = self._feeds_token
+
+        def run():
+            if token == self._feeds_token:
+                self.load_artist_feeds(*args, **kwargs)
+
+        # Margen para que Qt pinte antes la información y las portadas
+        QTimer.singleShot(50, run)
     
     def update_artist_view(self, artist_id):
         """Update UI with artist details."""
@@ -35,16 +134,7 @@ class UIUpdater:
         
         # Update artist image if available
         artist_image_path = self._get_artist_image_path(artist_name)
-        if artist_image_path and os.path.exists(artist_image_path):
-            pixmap = QPixmap(artist_image_path)
-            self.parent.artist_image_label.setPixmap(pixmap.scaled(
-                self.parent.artist_image_label.width(),
-                self.parent.artist_image_label.height(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            ))
-        else:
-            self.parent.artist_image_label.setText("No imagen de artista")
+        self._set_label_image(self.parent.artist_image_label, artist_image_path, "No imagen de artista")
         
         # Update Wikipedia content - only show if content exists
         if artist.get('wikipedia_content'):
@@ -68,7 +158,7 @@ class UIUpdater:
         self._update_artist_links(artist)
         
         # Load feeds for this artist
-        self.load_artist_feeds(artist_id)
+        self._schedule_feeds(artist_id)
         
         # Show the info page by default
         if hasattr(self.parent, 'info_panel_stacked'):
@@ -93,30 +183,12 @@ class UIUpdater:
         
         # Update album cover if available
         album_art_path = album.get('album_art_path')
-        if album_art_path and os.path.exists(album_art_path):
-            pixmap = QPixmap(album_art_path)
-            self.parent.cover_label.setPixmap(pixmap.scaled(
-                self.parent.cover_label.width(),
-                self.parent.cover_label.height(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            ))
-        else:
-            self.parent.cover_label.setText("No imagen")
+        self._set_label_image(self.parent.cover_label, album_art_path, "No imagen")
         
         # Update artist image if available
         artist_name = artist.get('name', '') if artist else ""
         artist_image_path = self._get_artist_image_path(artist_name)
-        if artist_image_path and os.path.exists(artist_image_path):
-            pixmap = QPixmap(artist_image_path)
-            self.parent.artist_image_label.setPixmap(pixmap.scaled(
-                self.parent.artist_image_label.width(),
-                self.parent.artist_image_label.height(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            ))
-        else:
-            self.parent.artist_image_label.setText("No imagen de artista")
+        self._set_label_image(self.parent.artist_image_label, artist_image_path, "No imagen de artista")
         
         # Update Wikipedia content (album) - only show if content exists
         if album.get('wikipedia_content'):
@@ -154,7 +226,7 @@ class UIUpdater:
 
         # Load feeds specific to this album
         artist_id = album.get('artist_id') if album else None
-        self.load_artist_feeds(artist_id, album_id)
+        self._schedule_feeds(artist_id, album_id)
     
     def update_song_view(self, song_id):
         """Update UI with song details."""
@@ -291,16 +363,7 @@ class UIUpdater:
         except (AttributeError, TypeError):
             pass
         
-        if album_art_path and os.path.exists(album_art_path):
-            pixmap = QPixmap(album_art_path)
-            self.parent.cover_label.setPixmap(pixmap.scaled(
-                self.parent.cover_label.width(),
-                self.parent.cover_label.height(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            ))
-        else:
-            self.parent.cover_label.setText("No imagen")
+        self._set_label_image(self.parent.cover_label, album_art_path, "No imagen")
         
         # Try to get artist and album information
         artist_name = None
@@ -338,7 +401,7 @@ class UIUpdater:
                         if result:
                             artist_id = result['id']
                             # Cargar feeds para este artista
-                            self.load_artist_feeds(artist_id)
+                            self._schedule_feeds(artist_id)
                     except Exception as e:
                         print(f"Error obteniendo artist_id para cargar feeds: {e}")
                     finally:
@@ -350,16 +413,7 @@ class UIUpdater:
             if artist_id:
                 # Update artist image
                 artist_image_path = self._get_artist_image_path(artist_name)
-                if artist_image_path:
-                    pixmap = QPixmap(artist_image_path)
-                    self.parent.artist_image_label.setPixmap(pixmap.scaled(
-                        self.parent.artist_image_label.width(),
-                        self.parent.artist_image_label.height(),
-                        Qt.AspectRatioMode.KeepAspectRatio,
-                        Qt.TransformationMode.SmoothTransformation
-                    ))
-                else:
-                    self.parent.artist_image_label.setText("No imagen de artista")
+                self._set_label_image(self.parent.artist_image_label, artist_image_path, "No imagen de artista")
                 
                 # Get artist details
                 artist = self.parent.db_manager.get_artist_details(artist_id)
@@ -415,7 +469,7 @@ class UIUpdater:
         
         # Cargar feeds para la canción específica
         print(f"Cargando feeds para canción id={song_id}, album_id={album_id}, artist_id={artist_id}")
-        self.load_artist_feeds(artist_id=artist_id, album_id=album_id, song_id=song_id)
+        self._schedule_feeds(artist_id=artist_id, album_id=album_id, song_id=song_id)
     
     def _clear_content(self):
         """Clear previous content from UI and hide all groups."""

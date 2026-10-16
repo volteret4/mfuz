@@ -1,0 +1,59 @@
+{
+  "gender": null,
+  "relations": [
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "type": "allmusic",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000625731",
+        "id": "d51f44b8-484f-4be7-bb84-49c03bca067b"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "type": "last.fm",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "c803526e-2ede-4cd3-9b96-d7fc0a9650bb",
+        "resource": "https://www.last.fm/music/SY3"
+      },
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    }
+  ],
+  "sort-name": "SY3",
+  "country": null,
+  "disambiguation": "",
+  "life-span": {
+    "ended": false,
+    "end": null,
+    "begin": null
+  },
+  "end-area": null,
+  "ipis": [],
+  "type": null,
+  "type-id": null,
+  "isnis": [],
+  "begin-area": null,
+  "area": null,
+  "name": "SY3",
+  "id": "b5eadc7c-3ee4-4f8c-845e-cd28b8da6771",
+  "gender-id": null
+}

@@ -45,6 +45,9 @@ from time import sleep
 import threading
 import time as time_module
 import sqlite3
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 from pathlib import Path
 import sys
 
@@ -1734,6 +1737,7 @@ def get_db_connection():
     if DB_PATH is None:
         raise ValueError("Base de datos no configurada. Ejecuta init_config() primero.")
     conn = sqlite3.connect(DB_PATH)
+    apply_pragmas(conn)
     conn.row_factory = sqlite3.Row
     return conn
 

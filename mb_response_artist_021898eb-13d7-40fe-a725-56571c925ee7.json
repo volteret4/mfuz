@@ -1,0 +1,369 @@
+{
+  "area": {
+    "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GB"
+    ],
+    "type": null,
+    "name": "United Kingdom",
+    "type-id": null,
+    "sort-name": "United Kingdom"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "end-area": null,
+  "gender": "Male",
+  "begin-area": {
+    "iso-3166-2-codes": [
+      "GB-HCK"
+    ],
+    "sort-name": "Hackney",
+    "type-id": null,
+    "type": null,
+    "name": "Hackney",
+    "disambiguation": "",
+    "id": "76325eca-c006-429f-93bb-d499ae80916c"
+  },
+  "country": "GB",
+  "name": "Dele Sosimi",
+  "type": "Person",
+  "sort-name": "Sosimi, Dele",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1963-02-22",
+    "ended": false,
+    "end": null
+  },
+  "id": "021898eb-13d7-40fe-a725-56571c925ee7",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://delesosimi.bandcamp.com/",
+        "id": "97cbcf07-2ea9-4a23-8ad4-1080a53410ff"
+      }
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "biography",
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5",
+      "url": {
+        "id": "25037a85-a750-4937-83be-b5ee1acd48fc",
+        "resource": "http://www.africanmusiciansprofiles.com/delesosimi.htm"
+      }
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/291026",
+        "id": "71a01fa4-be84-40cd-8244-749e411e16ec"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "id": "ebc0de9e-7560-44b0-b17d-8e1e6620cc00",
+        "resource": "https://open.spotify.com/artist/2HHFbP3OFh0bOgdnMYfqsc"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "url": {
+        "id": "c37c0425-7f66-4aa6-b2d9-e760f6ebfcae",
+        "resource": "https://www.deezer.com/artist/377091"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "image",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "id": "0f8e7f84-ed16-4dbc-9ea0-a4ae89879e9e",
+        "resource": "https://commons.wikimedia.org/wiki/File:Dele_Sosimi.jpg"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "url": {
+        "resource": "https://myspace.com/delesosimi",
+        "id": "ed0800f6-91b5-4c6f-a59e-b422ed68159f"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "myspace",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "official homepage",
+      "attribute-values": {},
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://www.delesosimi.org/",
+        "id": "8485f792-87e4-40ea-b4c7-e9824d2c8f36"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "896a461b-df66-4e3e-9fb4-da5e380181eb",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb17043298s"
+      },
+      "type": "other databases",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "b732d4e1-d02a-47ed-922a-a8a967ac1be2",
+        "resource": "https://itunes.apple.com/gb/artist/id30241010"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "url": {
+        "id": "33ae11e5-c23a-4f46-ad20-c72d76659cdc",
+        "resource": "https://itunes.apple.com/mx/artist/id30241010"
+      },
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203"
+    },
+    {
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://www.beatport.com/artist/dele-sosimi/86821",
+        "id": "6c061669-48c7-43c5-b02d-57823ef15cd2"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "purchase for download",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/delesosimi",
+        "id": "79807857-435e-42bd-a9b3-c23b6722132e"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "8f9f1683-6960-45fd-86ce-986d314f2439",
+        "resource": "https://www.songkick.com/artists/3446526"
+      }
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/30241010",
+        "id": "62a5149d-cdd8-41c2-bdb6-5b231f0bf4c0"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "5f711060-942d-4ed6-a1c2-c828043a7c46",
+        "resource": "https://tidal.com/artist/3612806"
+      }
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "VIAF",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "ccc49f83-a8c3-408e-a395-892b896ad5e9",
+        "resource": "http://viaf.org/viaf/306251408"
+      }
+    },
+    {
+      "url": {
+        "id": "f48ba825-4cb9-4321-bc0e-510e5a6bcc69",
+        "resource": "https://www.wikidata.org/wiki/Q785786"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "type": "wikidata",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    }
+  ],
+  "isnis": [
+    "0000000130890380"
+  ],
+  "disambiguation": "",
+  "ipis": []
+}

@@ -1,0 +1,423 @@
+{
+  "name": "Marcos Valle",
+  "type": "Person",
+  "country": "BR",
+  "begin-area": {
+    "disambiguation": "",
+    "name": "Rio de Janeiro",
+    "type": null,
+    "type-id": null,
+    "id": "9443d4f5-668c-4f30-96bd-6caf831de30f",
+    "sort-name": "Rio de Janeiro"
+  },
+  "gender": "Male",
+  "end-area": null,
+  "area": {
+    "sort-name": "Brazil",
+    "type-id": null,
+    "iso-3166-1-codes": [
+      "BR"
+    ],
+    "disambiguation": "",
+    "type": null,
+    "name": "Brazil",
+    "id": "f45b47f8-5796-386e-b172-6c31b009a5d8"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "ipis": [
+    "00015936188",
+    "00031476697"
+  ],
+  "disambiguation": "",
+  "id": "1ba347eb-58e8-45d6-b7e3-09873dc2506a",
+  "relations": [
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "allmusic",
+      "url": {
+        "id": "ce2d4c6b-ecd7-4083-875f-3e8c0df73a36",
+        "resource": "https://www.allmusic.com/artist/mn0000954817"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846"
+    },
+    {
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://marcosvalle.bandcamp.com/",
+        "id": "934f7073-8ff9-4542-8da9-68fad7fac433"
+      },
+      "attribute-values": {},
+      "type": "bandcamp",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": true,
+      "target-type": "url",
+      "attributes": [],
+      "end": "2020-11-19",
+      "url": {
+        "id": "7b257e7a-b0d4-45c5-8f6b-f3e7d722e276",
+        "resource": "https://www.bbc.co.uk/music/artists/1ba347eb-58e8-45d6-b7e3-09873dc2506a"
+      },
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "BBC Music page"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "cbd94955-fd61-4699-93d3-b4333727700a",
+        "resource": "https://www.discogs.com/artist/3756"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "attribute-values": {},
+      "type": "discogs",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/5I0EPnV9gwrZYTbScjnaOk",
+        "id": "d2828a86-d0ce-4cb2-942b-d2dda3735190"
+      }
+    },
+    {
+      "url": {
+        "id": "3e288bd8-7088-4140-b298-3309da3c6cfc",
+        "resource": "https://www.deezer.com/artist/9728"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-values": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "begin": null,
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "1f88f666-d58d-4173-9c50-b7700e47ed87",
+        "resource": "https://www.imdb.com/name/nm0884930/"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "type": "last.fm",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "id": "3e1eaf5e-d429-4bf1-b028-3b0237a487fc",
+        "resource": "https://www.last.fm/music/Marcos%20Valle"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": [],
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "resource": "https://genius.com/artists/Marcos-valle",
+        "id": "14c811e6-1919-48e2-a7c4-700b74fb91df"
+      },
+      "attribute-values": {},
+      "type": "lyrics",
+      "target-credit": "",
+      "begin": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "myspace",
+      "target-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://myspace.com/marcosvallebrazil",
+        "id": "b5cc10c5-1bd2-49a4-9d64-c14dcdb7f808"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156"
+    },
+    {
+      "attribute-values": {},
+      "type": "other databases",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "dfef3caf-b5ef-49e6-b616-0f444083dd41",
+        "resource": "http://id.loc.gov/authorities/names/n85014445"
+      },
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13900687p",
+        "id": "7647f63c-c433-4d37-be84-d56a69419886"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://d-nb.info/gnd/134882997",
+        "id": "65f24ab6-3025-41cd-92ac-345f06e41a44"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/marcos_valle",
+        "id": "99a03ebc-427a-48ea-b451-3cbb148c3d31"
+      },
+      "begin": null,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "other databases",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n85014445",
+        "id": "3ea2a6e2-de82-4b8d-8cc3-e3f952fe2270"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/4674",
+        "id": "92635bb2-e5a2-43a4-b861-f5a7f3c5c00f"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "secondhandsongs",
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "609e6e75-539d-4e42-9166-072c445eedcb",
+        "resource": "https://www.songkick.com/artists/5852"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "1d858a1e-e126-4228-9402-efe10c1a8ed5",
+        "resource": "https://music.apple.com/gb/artist/138939"
+      },
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "id": "2f41e4c3-3795-4863-80d3-0c214983ad1a",
+        "resource": "https://tidal.com/artist/19383"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "VIAF",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "id": "46994196-9f23-407e-b81a-c9f764cbca1e",
+        "resource": "http://viaf.org/viaf/197883"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460"
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "id": "fe173ff7-c863-44df-9950-5d6a946a2ea5",
+        "resource": "https://www.wikidata.org/wiki/Q3039180"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata"
+    }
+  ],
+  "isnis": [
+    "0000000078389184"
+  ],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "life-span": {
+    "begin": "1943-09-14",
+    "end": null,
+    "ended": false
+  },
+  "sort-name": "Valle, Marcos"
+}

@@ -1,0 +1,220 @@
+{
+  "relations": [
+    {
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "attributes": [],
+      "url": {
+        "id": "75d46719-8d0b-4a9d-8942-44ea868436b5",
+        "resource": "https://www.allmusic.com/artist/mn0004141931"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://deadletter-band.bandcamp.com/",
+        "id": "ba30e72e-b29a-4701-84b7-48fada753644"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "bandcamp",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": ""
+    },
+    {
+      "ended": false,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "resource": "https://www.discogs.com/artist/9961648",
+        "id": "e15adb43-6bfe-488e-9b5c-f6203609d614"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/4MfUQ99z2kgMnl9hAwffBx",
+        "id": "7e29ece8-df09-4c7b-82a5-62115dea57cb"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "type": "free streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "3c88bd22-5b0e-4dd9-9a83-a0a12d3d64ae",
+        "resource": "https://www.deezer.com/artist/92786852"
+      },
+      "attributes": [],
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://www.last.fm/music/Deadletter",
+        "id": "355cae37-ff7c-43bf-827a-9ba56da0aaa7"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "last.fm"
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "6164a05e-7f05-4969-8bf8-b6edf5eac351",
+        "resource": "https://twitter.com/_deadletter"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null,
+      "url": {
+        "resource": "https://www.facebook.com/DEADLETTERTHEBAND",
+        "id": "92012153-080a-441d-8f14-cfe3eb63878e"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "id": "97ddca80-f28d-4f46-ac26-ff0547537c80",
+        "resource": "https://music.apple.com/gb/artist/1510366909"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "9c98fcad-fa47-47bf-b8a4-831c2e0c88ef",
+        "resource": "https://tidal.com/artist/19327437"
+      },
+      "attributes": [],
+      "type": "streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    }
+  ],
+  "isnis": [],
+  "country": "GB",
+  "begin-area": {
+    "type-id": null,
+    "name": "North Yorkshire",
+    "type": null,
+    "disambiguation": "",
+    "id": "a584d799-9025-4c7c-a72a-cf214ff16563",
+    "sort-name": "North Yorkshire",
+    "iso-3166-2-codes": [
+      "GB-NYK"
+    ]
+  },
+  "ipis": [],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "type": "Group",
+  "gender": null,
+  "life-span": {
+    "ended": false,
+    "begin": "2020",
+    "end": null
+  },
+  "gender-id": null,
+  "sort-name": "DEADLETTER",
+  "disambiguation": "",
+  "id": "f62f5f75-f6a2-42ea-a8b2-9732ca1be53c",
+  "end-area": null,
+  "name": "DEADLETTER",
+  "area": {
+    "name": "London",
+    "type-id": null,
+    "sort-name": "London",
+    "disambiguation": "Greater London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type": null
+  }
+}

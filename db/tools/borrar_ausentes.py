@@ -1,6 +1,9 @@
 import os
 import sqlite3
 import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
+import sys
 import argparse
 from datetime import datetime
 
@@ -26,6 +29,7 @@ def conectar_bd(db_path):
     """Establece conexión con la base de datos."""
     try:
         conn = sqlite3.connect(db_path)
+        apply_pragmas(conn)
         conn.row_factory = sqlite3.Row
         return conn
     except sqlite3.Error as e:

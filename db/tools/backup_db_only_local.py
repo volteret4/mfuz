@@ -5,6 +5,10 @@ Extrae solo los registros con origen específico y toda la información relacion
 """
 
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import os
 import sys
 import argparse
@@ -32,7 +36,9 @@ class MusicDatabaseBackup:
         """Conectar a las bases de datos origen y destino"""
         try:
             self.source_conn = sqlite3.connect(self.source_db_path)
+            apply_pragmas(self.source_conn)
             self.backup_conn = sqlite3.connect(self.backup_db_path)
+            apply_pragmas(self.backup_conn)
             print(f"✓ Conectado a {self.source_db_path}")
             print(f"✓ Creando backup en {self.backup_db_path}")
             print(f"✓ Filtrando por origen: '{self.origen}'")

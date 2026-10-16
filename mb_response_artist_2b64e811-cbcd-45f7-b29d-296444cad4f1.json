@@ -1,0 +1,531 @@
+{
+  "life-span": {
+    "begin": "1997",
+    "ended": false,
+    "end": null
+  },
+  "type": "Group",
+  "area": {
+    "iso-3166-1-codes": [
+      "IS"
+    ],
+    "type-id": null,
+    "name": "Iceland",
+    "disambiguation": "",
+    "type": null,
+    "id": "48802a32-075a-3805-a183-277c66047693",
+    "sort-name": "Iceland"
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [
+    "0000000099726119"
+  ],
+  "gender-id": null,
+  "sort-name": "m\u00fam",
+  "name": "m\u00fam",
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "name": "Reykjav\u00edk",
+    "iso-3166-2-codes": [
+      "IS-0"
+    ],
+    "disambiguation": "",
+    "sort-name": "Reykjav\u00edk",
+    "id": "e498a3ef-704c-462e-b144-6e6fc108a6f2"
+  },
+  "ipis": [],
+  "end-area": null,
+  "id": "2b64e811-cbcd-45f7-b29d-296444cad4f1",
+  "relations": [
+    {
+      "begin": null,
+      "type": "allmusic",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "de91d98f-5750-4651-a0d6-e14293b6ebb0",
+        "resource": "https://www.allmusic.com/artist/mn0000811395"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://mumband.bandcamp.com/",
+        "id": "5c3519e6-8b9e-4d42-9fa9-9c4bdb8921c8"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "bandcamp",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "type": "discogs",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/8298",
+        "id": "ac215ebe-c59b-4ea0-b061-6330ddf01ce8"
+      },
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "http://mumweb.net/",
+        "id": "93503c0e-8c9f-4bbb-b57f-b2eab292a87b"
+      },
+      "type-id": "f484f897-81cc-406e-96f9-cd799a04ee24",
+      "begin": null,
+      "attribute-values": {},
+      "type": "fanpage",
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": true,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "fe55fe1a-5f08-40da-9dea-27912c5bcfe9",
+        "resource": "https://open.spotify.com/artist/2aRc7OH6LKbppk6yUvG811"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "resource": "https://open.spotify.com/artist/4mw86zm4QZIL8SksdyE6OU",
+        "id": "ddbd2b14-0ee7-4ed6-82d3-065c02823e37"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "e318e8cf-e09d-4143-82d5-07c7d3c29093",
+        "resource": "https://www.deezer.com/artist/1672"
+      }
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "id": "062bb142-e031-43e8-944a-7a45e4e52e57",
+        "resource": "https://commons.wikimedia.org/wiki/File:M%C3%BAm.jpg"
+      },
+      "begin": null,
+      "attribute-values": {},
+      "type": "image",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "url": {
+        "id": "275103f9-c8dd-46bd-a752-0968e7931e01",
+        "resource": "https://www.last.fm/music/m%C3%BAm"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "last.fm",
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "url": {
+        "id": "2181a9b7-4d77-4a14-9067-1b9222839929",
+        "resource": "https://genius.com/artists/Mum"
+      },
+      "target-type": "url",
+      "attribute-values": {},
+      "type": "lyrics",
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://myspace.com/mumtheband",
+        "id": "652959cd-2e1b-42a1-9772-b76bd270b4cf"
+      },
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "myspace",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    },
+    {
+      "ended": true,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "id": "04cdc312-662c-48be-9e2e-7748a293b5fd",
+        "resource": "http://mum.is/"
+      }
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "other databases",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "2c5bbb45-7a25-4c37-9ea9-d7c09ac10b58",
+        "resource": "https://imvdb.com/n/m%C3%BAm"
+      },
+      "direction": "forward"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases",
+      "target-type": "url",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "2c062b23-ef6d-4622-86f7-c4f538750b13",
+        "resource": "https://rateyourmusic.com/artist/mum"
+      },
+      "direction": "forward"
+    },
+    {
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.musik-sammler.de/artist/20008/",
+        "id": "ccdd5eb6-9476-4234-abec-12a6d7c46e3e"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "feef51d2-289c-405f-962d-3fc573411d0d",
+        "resource": "https://www.muziekweb.nl/Link/M00000020362/POPULAR/"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "attribute-values": {},
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "resource": "https://music.apple.com/is/artist/4504094",
+        "id": "c7eeb444-6f89-412a-805e-1927972ea9f2"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "secondhandsongs",
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "url": {
+        "id": "da1330e4-46a8-4bd5-8726-754f00582d44",
+        "resource": "https://secondhandsongs.com/artist/27688"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "social network",
+      "begin": null,
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "a9511474-f07a-4c01-b786-ae76a1f6e90b",
+        "resource": "https://twitter.com/mumtheband"
+      },
+      "target-type": "url",
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "02c14069-778f-428a-b7db-a3288b796dad",
+        "resource": "https://www.facebook.com/mumtheband"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "9822ccf4-d9cd-42e2-bb0f-1dcd9b8afdab",
+        "resource": "https://www.instagram.com/mumtheband/"
+      },
+      "direction": "forward"
+    },
+    {
+      "direction": "forward",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "858ddcbc-bd11-4584-ade1-09bb3a05063f",
+        "resource": "https://www.songkick.com/artists/350562"
+      },
+      "target-type": "url",
+      "begin": null,
+      "attribute-values": {},
+      "type": "songkick",
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "c7eeb444-6f89-412a-805e-1927972ea9f2",
+        "resource": "https://music.apple.com/is/artist/4504094"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "type": "streaming",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attributes": [],
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/3568898",
+        "id": "01c86881-4d48-410e-9a24-63b81c596e4a"
+      },
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "type": "streaming",
+      "attribute-values": {},
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "ended": false,
+      "attributes": [],
+      "source-credit": "",
+      "end": null,
+      "target-credit": "",
+      "begin": null,
+      "type": "VIAF",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "id": "6b060ba0-09c3-45e4-9c0d-55d0e8a8d8b8",
+        "resource": "http://viaf.org/viaf/143571239"
+      }
+    },
+    {
+      "target-credit": "",
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "source-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q306130",
+        "id": "1f2746a3-84a6-4ba5-b08c-6b3af934e1b7"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "begin": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "wikidata"
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "id": "0b24f7b1-d58d-4bce-9283-17bdd8d6154e",
+        "resource": "https://www.youtube.com/channel/UCLUFu22ANri-wKqnT39EZuw"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "type": "youtube",
+      "attribute-values": {},
+      "begin": null
+    }
+  ],
+  "country": "IS",
+  "disambiguation": "Icelandic experimental group",
+  "gender": null
+}

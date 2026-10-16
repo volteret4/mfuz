@@ -1,0 +1,476 @@
+{
+  "type": "Person",
+  "disambiguation": "",
+  "ipis": [
+    "00062114614"
+  ],
+  "gender": "Male",
+  "country": "US",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "isnis": [
+    "0000000121489915"
+  ],
+  "name": "Stanley Clarke",
+  "begin-area": {
+    "type": null,
+    "disambiguation": "",
+    "name": "Philadelphia",
+    "type-id": null,
+    "id": "0eeb01c2-6e31-46ad-96b8-319749f731d2",
+    "sort-name": "Philadelphia"
+  },
+  "sort-name": "Clarke, Stanley",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "attribute-ids": {},
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "allmusic",
+      "attributes": [],
+      "direction": "forward",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "source-credit": "",
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "url": {
+        "id": "25e51f18-ab31-4c6b-949e-0f1d360ece36",
+        "resource": "https://www.allmusic.com/artist/mn0000745316"
+      }
+    },
+    {
+      "begin": null,
+      "source-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/87519",
+        "id": "79457a4a-7519-4b38-8c31-1f47194d12ef"
+      },
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "target-credit": "",
+      "type": "discogs",
+      "attribute-ids": {}
+    },
+    {
+      "direction": "forward",
+      "end": null,
+      "target-type": "url",
+      "attributes": [],
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "778de3ce-3c45-4e47-a4e9-9daad6454628",
+        "resource": "https://open.spotify.com/artist/1lGt9WgdYGpMnmwGkcCm05"
+      },
+      "begin": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "free streaming",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "url": {
+        "id": "9698d361-43f2-4f24-b4be-a58fc1c20dbe",
+        "resource": "https://www.deezer.com/artist/6338"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attributes": [],
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "target-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "type": "free streaming",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "target-credit": "",
+      "type": "image",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "url": {
+        "resource": "https://commons.wikimedia.org/wiki/File:Stanley%20Clarke%202009.jpg",
+        "id": "824b7727-1dd2-4085-85ba-4735b53a6afa"
+      }
+    },
+    {
+      "type": "IMDb",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.imdb.com/name/nm0006010/",
+        "id": "6ddc99f6-b265-44e4-98af-a0708a5e30ee"
+      },
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "source-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "attribute-values": {},
+      "target-credit": "",
+      "type": "myspace",
+      "attribute-ids": {},
+      "begin": null,
+      "source-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "url": {
+        "id": "080e2f6c-d205-4899-ac36-688c0e33ae68",
+        "resource": "https://myspace.com/stanleyclarkemusic"
+      },
+      "attributes": [],
+      "direction": "forward",
+      "end": null,
+      "target-type": "url"
+    },
+    {
+      "begin": null,
+      "source-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "url": {
+        "resource": "http://stanleyclarke.com/",
+        "id": "e06aee2d-9223-4fa9-b0e0-35f1a7b07723"
+      },
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "type": "other databases",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "direction": "forward",
+      "end": null,
+      "target-type": "url",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/n85076504",
+        "id": "7c73114a-1d8e-4ba8-b584-95c7a7c6b69c"
+      },
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "url": {
+        "id": "347582db-9821-4b9a-bd90-16840a1d0b22",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13892539q"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-ids": {}
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "id": "c3b12745-e145-46f8-b1a1-2d441cd7780c",
+        "resource": "https://d-nb.info/gnd/134348036"
+      },
+      "begin": null,
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "end": null,
+      "attributes": [],
+      "type": "other databases",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6kw6c9x",
+        "id": "df34cf50-3181-48ea-a2b0-b486dde25485"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "source-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "target-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {}
+    },
+    {
+      "target-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "type": "other databases",
+      "attribute-ids": {},
+      "source-credit": "",
+      "begin": null,
+      "url": {
+        "id": "6e4348fc-24b4-4a22-9b3a-7db135dded6c",
+        "resource": "https://openlibrary.org/works/OL3975909A"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "target-type": "url",
+      "end": null,
+      "direction": "forward"
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "url": {
+        "id": "170640af-d13c-4e02-ab5c-d6280af727ea",
+        "resource": "https://rateyourmusic.com/artist/stanley_clarke"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attributes": [],
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type": "other databases",
+      "attribute-ids": {}
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n85076504",
+        "id": "9dc2fe16-2561-4bec-87af-96b731b9a02e"
+      },
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type": "other databases"
+    },
+    {
+      "type": "purchase for download",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "fc20ad74-5e3c-4fac-bd37-dc69a2f29907",
+        "resource": "https://itunes.apple.com/us/artist/id544227"
+      },
+      "begin": null,
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "type": "purchase for download",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "direction": "forward",
+      "target-type": "url",
+      "end": null,
+      "attributes": [],
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "32902aff-866d-44dc-b5f2-d1aa6a3bf218",
+        "resource": "https://music.apple.com/us/artist/544227"
+      },
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type": "social network",
+      "attributes": [],
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "begin": null,
+      "url": {
+        "id": "3c7329f6-a336-4c39-9611-6c39b695024b",
+        "resource": "https://twitter.com/MrStanleyClarke"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "attribute-ids": {},
+      "type": "social network",
+      "target-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "attributes": [],
+      "url": {
+        "id": "e2fd1667-18be-4b1d-8788-adf9852ef093",
+        "resource": "https://www.facebook.com/stanleyclarkemusic"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "source-credit": "",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "type": "songkick",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "end": null,
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "url": {
+        "id": "30b2195a-fb71-43c8-87e5-85361c57c6fd",
+        "resource": "https://www.songkick.com/artists/217343"
+      },
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "source-credit": "",
+      "begin": null
+    },
+    {
+      "begin": null,
+      "source-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/544227",
+        "id": "32902aff-866d-44dc-b5f2-d1aa6a3bf218"
+      },
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "end": null,
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "attribute-ids": {}
+    },
+    {
+      "type": "streaming",
+      "ended": false,
+      "attribute-values": {},
+      "target-credit": "",
+      "attribute-ids": {},
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://tidal.com/artist/342",
+        "id": "44d1a8cf-6955-46e0-96df-c2900204a23e"
+      },
+      "begin": null,
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "attribute-ids": {},
+      "type": "VIAF",
+      "ended": false,
+      "attribute-values": {},
+      "target-credit": "",
+      "direction": "forward",
+      "end": null,
+      "target-type": "url",
+      "attributes": [],
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "url": {
+        "resource": "http://viaf.org/viaf/120016841",
+        "id": "d1aa7c24-1362-4c6c-b7d3-d12359af24ac"
+      },
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q453406",
+        "id": "81bcd498-5150-4e96-a3b9-0b8657e85b1a"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "target-type": "url",
+      "end": null,
+      "direction": "forward",
+      "target-credit": "",
+      "attribute-values": {},
+      "ended": false,
+      "type": "wikidata",
+      "attribute-ids": {}
+    }
+  ],
+  "life-span": {
+    "end": null,
+    "begin": "1951-06-30",
+    "ended": false
+  },
+  "area": {
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "sort-name": "United States",
+    "type-id": null,
+    "type": null,
+    "disambiguation": ""
+  },
+  "id": "5ab6ca23-9e17-43f2-ad92-869d28bdbf11",
+  "end-area": null
+}

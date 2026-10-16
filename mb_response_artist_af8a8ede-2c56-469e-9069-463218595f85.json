@@ -1,0 +1,355 @@
+{
+  "disambiguation": "",
+  "sort-name": "Smith, Johnny \u201cHammond\u201d",
+  "id": "af8a8ede-2c56-469e-9069-463218595f85",
+  "area": {
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "disambiguation": "",
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "type-id": null,
+    "type": null
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "gender": "Male",
+  "life-span": {
+    "end": "1997-06-04",
+    "begin": "1933-12-16",
+    "ended": true
+  },
+  "name": "Johnny \u201cHammond\u201d Smith",
+  "country": "US",
+  "end-area": {
+    "name": "Chicago",
+    "disambiguation": "",
+    "sort-name": "Chicago",
+    "id": "29a709d8-0320-493e-8d0c-f2c386662b7f",
+    "type-id": null,
+    "type": null
+  },
+  "relations": [
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000200322",
+        "id": "f829bfa0-8272-41d3-943f-0590b3b7c2cf"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "allmusic"
+    },
+    {
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-type": "url",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "discogs",
+      "attributes": [],
+      "url": {
+        "id": "076e121f-e54e-44ad-b4fa-f621c3adf475",
+        "resource": "https://www.discogs.com/artist/11648"
+      },
+      "direction": "forward",
+      "ended": false
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "id": "bbccfa17-666c-4bfc-a3a6-fabb48e993f3",
+        "resource": "https://open.spotify.com/artist/1HlUMELUuz04YNiIbzWLsq"
+      },
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "id": "98a8a950-d0d4-4e09-a684-7466614cc12e",
+        "resource": "https://www.deezer.com/artist/205413"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "free streaming"
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "id": "20460771-694b-4f76-968e-86690c08e284",
+        "resource": "https://www.imdb.com/name/nm0358716/"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "IMDb",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "ended": false,
+      "url": {
+        "id": "2d076189-740e-48a2-aaf5-da30f08d9523",
+        "resource": "http://id.loc.gov/authorities/names/n94081572"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "951eef85-a005-4e00-b281-e9fc1fb4e23b",
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb140028143"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://d-nb.info/gnd/134903153",
+        "id": "410db7ab-9f1b-4be7-9e7b-6358307e4aa4"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "c1c9e191-fea1-4fa8-a2e0-ff7aa7f55006",
+        "resource": "https://rateyourmusic.com/artist/johnny_hammond"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "begin": null,
+      "attributes": [],
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n94081572",
+        "id": "c4367c85-8a7e-4b1e-a8b2-28ca9caace71"
+      },
+      "direction": "forward",
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "other databases"
+    },
+    {
+      "type": "purchase for download",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/206673648",
+        "id": "dcc20a5a-1def-4181-8ee9-49a45e3ceeb5"
+      },
+      "attributes": [],
+      "begin": null,
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "secondhandsongs",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/52627",
+        "id": "16679056-3ac4-412e-8182-1e7135910fe9"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/206673648",
+        "id": "dcc20a5a-1def-4181-8ee9-49a45e3ceeb5"
+      },
+      "ended": false,
+      "attributes": [],
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "a988018d-eacf-4e67-a19d-974bdaa5ff01",
+        "resource": "https://tidal.com/artist/3679228"
+      },
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url"
+    },
+    {
+      "type": "streaming",
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "direction": "forward",
+      "url": {
+        "resource": "https://tidal.com/artist/5425721",
+        "id": "a65e157c-06a8-4352-860d-91385c761b40"
+      },
+      "ended": false,
+      "attributes": [],
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "6ff7f14b-f657-47ff-b682-9ed4643862dd",
+        "resource": "http://viaf.org/viaf/37112876"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "VIAF",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q322489",
+        "id": "09c653d0-3101-4e48-a30a-43b5cc70bef3"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "wikidata"
+    }
+  ],
+  "type": "Person",
+  "isnis": [
+    "0000000118158576"
+  ],
+  "begin-area": {
+    "name": "Louisville",
+    "type": null,
+    "type-id": null,
+    "id": "b21e4552-050d-4c0c-ac5a-031108eb0c47",
+    "disambiguation": "",
+    "sort-name": "Louisville"
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "ipis": []
+}

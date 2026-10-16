@@ -1,0 +1,382 @@
+{
+  "life-span": {
+    "end": null,
+    "ended": false,
+    "begin": "2014"
+  },
+  "gender-id": null,
+  "sort-name": "Parcels",
+  "disambiguation": "",
+  "ipis": [],
+  "id": "5318e774-f5b6-4ee0-82cb-4dcf398c3ff8",
+  "isnis": [],
+  "relations": [
+    {
+      "begin": null,
+      "target-credit": "",
+      "type": "allmusic",
+      "attribute-values": {},
+      "url": {
+        "id": "6fafdbc6-7703-4f6b-a648-b26a5d30c5d1",
+        "resource": "https://www.allmusic.com/artist/mn0003588620"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "target-type": "url",
+      "ended": false
+    },
+    {
+      "url": {
+        "id": "b0166750-ff70-48a8-be55-4414a26545ed",
+        "resource": "https://www.bandsintown.com/a/11827262"
+      },
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "bandsintown",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "2e1e0411-598e-4fe2-8f14-db3783149896",
+        "resource": "https://www.discogs.com/artist/4669649"
+      },
+      "attribute-values": {},
+      "type": "discogs",
+      "begin": null,
+      "target-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": [],
+      "url": {
+        "id": "5ba0b692-cf0a-42dc-bbbf-4a89df40d6be",
+        "resource": "https://open.spotify.com/artist/3oKRxpszQKUjjaHz388fVA"
+      },
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "15257390-7564-4ae1-b431-673da31195c5",
+        "resource": "https://www.deezer.com/artist/7626764"
+      }
+    },
+    {
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "url": {
+        "id": "919309b8-0650-4ec5-84d5-33343b066086",
+        "resource": "https://www.imdb.com/name/nm8744027/"
+      },
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "IMDb",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "id": "399eda2b-381b-46a8-aaa3-1df7f10db58c",
+        "resource": "https://www.last.fm/music/The+Parcels"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "begin": null,
+      "type": "last.fm",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "id": "995dcb44-742a-4ba7-8eaa-0bec199ff95d",
+        "resource": "http://www.parcelsmusic.com/"
+      },
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "official homepage",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "attributes": [],
+      "end": null
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "begin": null,
+      "target-credit": "",
+      "type": "purchase for download",
+      "attribute-values": {},
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "url": {
+        "id": "f3450bef-c0c0-42f6-9ff2-764b0eb9a0ba",
+        "resource": "https://www.beatport.com/artist/parcels/514123"
+      }
+    },
+    {
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null,
+      "url": {
+        "resource": "https://www.facebook.com/parcelsmusic",
+        "id": "ba59f6e1-51df-48b8-9370-72cb25dc0435"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "begin": null,
+      "type": "social network",
+      "attribute-values": {}
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "type": "social network",
+      "attribute-values": {},
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://www.instagram.com/parcelsmusic/",
+        "id": "6d0e242e-24f1-4779-a956-4b1c1cab3db6"
+      },
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770"
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "attribute-ids": {},
+      "direction": "forward",
+      "type": "songkick",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "b0f25f60-a4a7-4254-afea-6ac13185d0f1",
+        "resource": "https://www.songkick.com/artists/8653309"
+      }
+    },
+    {
+      "url": {
+        "id": "abd3fc37-6f9c-4b36-97e3-f79bbf6bb693",
+        "resource": "https://soundcloud.com/parcels-music"
+      },
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/fr/artist/1148094312",
+        "id": "6c5d5ffe-b3ad-4292-a568-3acf9d59be1d"
+      },
+      "end": null,
+      "attributes": [],
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {}
+    },
+    {
+      "url": {
+        "id": "f9b80c1a-e4fc-4955-9890-0270dffb7c2b",
+        "resource": "https://music.apple.com/gb/artist/1148094312"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "type": "streaming",
+      "attribute-values": {},
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "direction": "forward",
+      "source-credit": "",
+      "attribute-ids": {},
+      "end": null,
+      "attributes": []
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/us/artist/1148094312",
+        "id": "c011fadc-cb92-4ce2-b059-feed60ccf3bd"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "attribute-values": {},
+      "type": "streaming",
+      "target-credit": "",
+      "begin": null,
+      "target-type": "url",
+      "ended": false,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "end": null,
+      "attributes": []
+    },
+    {
+      "end": null,
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "url": {
+        "resource": "https://tidal.com/artist/6853522",
+        "id": "eaf8464f-6095-49a9-aa86-5f53bea35d26"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "attributes": [],
+      "end": null,
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "ended": false,
+      "target-credit": "",
+      "begin": null,
+      "attribute-values": {},
+      "type": "wikidata",
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q47293799",
+        "id": "9e65ed74-e893-4a4b-bdae-2fa1aea068f5"
+      },
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698"
+    },
+    {
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "url": {
+        "resource": "https://www.youtube.com/channel/UC2as7PrmUgmdZAkMIWNY6EQ",
+        "id": "49d9522c-1d6a-448c-ac49-4ff71a688708"
+      },
+      "begin": null,
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "youtube",
+      "attribute-ids": {},
+      "source-credit": "",
+      "direction": "forward",
+      "ended": false,
+      "target-type": "url",
+      "attributes": [],
+      "end": null
+    }
+  ],
+  "end-area": null,
+  "area": {
+    "id": "106e0bec-b638-3b37-b731-f53d507dc00e",
+    "name": "Australia",
+    "type": null,
+    "iso-3166-1-codes": [
+      "AU"
+    ],
+    "disambiguation": "",
+    "sort-name": "Australia",
+    "type-id": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "begin-area": {
+    "name": "Byron Bay",
+    "type": null,
+    "disambiguation": "",
+    "type-id": null,
+    "sort-name": "Byron Bay",
+    "id": "54f1527c-cfb3-46f4-b43c-ea5b9ab7e75c"
+  },
+  "country": "AU",
+  "name": "Parcels",
+  "type": "Group",
+  "gender": null
+}

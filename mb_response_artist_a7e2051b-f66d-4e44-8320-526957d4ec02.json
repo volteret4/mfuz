@@ -1,0 +1,494 @@
+{
+  "name": "Pete Namlook",
+  "area": {
+    "type-id": null,
+    "name": "Germany",
+    "type": null,
+    "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "DE"
+    ],
+    "sort-name": "Germany"
+  },
+  "end-area": null,
+  "disambiguation": "German ambient/electronic composer",
+  "id": "a7e2051b-f66d-4e44-8320-526957d4ec02",
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Namlook, Pete",
+  "life-span": {
+    "ended": true,
+    "begin": "1960-11-25",
+    "end": "2012-11-08"
+  },
+  "gender": "Male",
+  "type": "Person",
+  "ipis": [
+    "00237090675"
+  ],
+  "begin-area": {
+    "type": null,
+    "sort-name": "Frankfurt am Main",
+    "disambiguation": "",
+    "id": "16560d3e-358b-4869-8a6d-727db2ee7b69",
+    "type-id": null,
+    "name": "Frankfurt am Main"
+  },
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "relations": [
+    {
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000841430",
+        "id": "9a66898f-ca3c-4c35-ad70-d5fb358c2771"
+      },
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-credit": "",
+      "attribute-values": {},
+      "type": "allmusic",
+      "source-credit": ""
+    },
+    {
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "bandcamp",
+      "attributes": [],
+      "url": {
+        "id": "8d1a6745-b980-4930-980f-c9f6a992ad78",
+        "resource": "https://namlooktribute.bandcamp.com/"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "e287112b-29ff-4f84-93fa-9bb61988457c",
+        "resource": "https://www.bandsintown.com/a/71658"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "bandsintown",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "ea45ed3d-2d5e-456e-8c32-94b6f51426e2",
+      "target-credit": "",
+      "ended": false
+    },
+    {
+      "url": {
+        "resource": "https://www.kompaktkiste.de/namlook.htm",
+        "id": "dd93fea3-8a38-449c-947b-c4a30ea9079b"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "discography page",
+      "type-id": "4fb0eeec-a6eb-4ae3-ad52-b55765b94e8f",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attribute-values": {},
+      "type": "discogs",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.discogs.com/artist/1910",
+        "id": "711ef1f9-5edd-4d28-97ee-fb93a93637cd"
+      },
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://open.spotify.com/artist/1zdrhzkCEqTrUrIiRzVeQ3",
+        "id": "2dbcc9e6-b5f0-4efe-b559-1d51691dca22"
+      },
+      "attributes": []
+    },
+    {
+      "type": "free streaming",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.deezer.com/artist/4777416",
+        "id": "d1ed229f-58ce-4626-a8b1-f94d4b7ecd26"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "151a9c13-f66d-4c64-8410-10f172642708",
+        "resource": "https://www.imdb.com/name/nm8730695/"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "ended": false,
+      "type": "IMDb",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.last.fm/music/Pete+Namlook",
+        "id": "5c5db109-c30b-4fca-b934-b9aa19d8d875"
+      },
+      "attributes": [],
+      "type": "last.fm",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f"
+    },
+    {
+      "url": {
+        "id": "0ff83afe-b75f-4583-9372-e4e7f3cc0641",
+        "resource": "https://myspace.com/namlook"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "myspace",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "ended": false,
+      "type": "official homepage",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "http://www.namlook.de/",
+        "id": "d8d69cb5-195b-4634-868c-62090922b5ee"
+      }
+    },
+    {
+      "url": {
+        "resource": "http://id.loc.gov/authorities/names/no2006132405",
+        "id": "78ec10f3-650d-4bf6-b27f-4bdc49d612a6"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "attributes": [],
+      "url": {
+        "resource": "https://d-nb.info/gnd/135061776",
+        "id": "b728f7c4-72b8-4f5d-a085-5c640d30e2d6"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {}
+    },
+    {
+      "begin": null,
+      "end": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "ended": false,
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/pete_namlook",
+        "id": "b3cdc513-3c1d-4301-9580-cd5a91bfaad1"
+      }
+    },
+    {
+      "url": {
+        "id": "4909a190-316f-48c8-8f14-d3c14ebf9133",
+        "resource": "https://www.musik-sammler.de/artist/pete-namlook/"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "other databases",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "end": null,
+      "begin": null
+    },
+    {
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.progarchives.com/artist.asp?id=2805",
+        "id": "b3c63dc3-861a-40b7-aace-d2685fa30605"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "other databases",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.whosampled.com/Pete-Namlook/",
+        "id": "93f02ccd-3876-41ff-ad54-f68a5dbc1520"
+      }
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-no2006-132405",
+        "id": "06ad3af2-3a05-46e3-ae8e-a4668bcc2df6"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "abe9778d-101c-42f9-a719-c146f6698ae9",
+        "resource": "https://itunes.apple.com/artist/id3700332"
+      }
+    },
+    {
+      "url": {
+        "id": "3fa50588-c862-445b-b5e5-a578ccef0eee",
+        "resource": "https://www.amazon.de/-/e/B000APWPP8"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "purchase for mail-order",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "611b1862-67af-4253-a64f-34adba305d1d",
+      "end": null,
+      "begin": null
+    },
+    {
+      "url": {
+        "id": "af1e8876-9cbd-45f3-a625-7cdca388d052",
+        "resource": "https://twitter.com/petenamlook"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "social network",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null
+    },
+    {
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.songkick.com/artists/100154",
+        "id": "904a6484-a4a0-4ed2-81be-37d9eff39f13"
+      },
+      "attributes": [],
+      "attribute-values": {},
+      "type": "songkick",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "target-credit": ""
+    },
+    {
+      "type": "VIAF",
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "aac55fbe-a4c4-448d-8fc2-0d0f59633964",
+        "resource": "http://viaf.org/viaf/79941631"
+      },
+      "attributes": []
+    },
+    {
+      "type": "wikidata",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "8fa655de-ef5a-408b-98ee-61c1053d220e",
+        "resource": "https://www.wikidata.org/wiki/Q677600"
+      },
+      "attributes": []
+    },
+    {
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "target-credit": "",
+      "type-id": "6a540e5b-58c6-4192-b6ba-dbc71ec8fcf0",
+      "type": "youtube",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "400e59fd-0171-4c02-8afd-6a70f3b47d2d",
+        "resource": "https://www.youtube.com/channel/UCXq1CF-oYEdha_REItSp_IQ"
+      }
+    }
+  ],
+  "isnis": [
+    "0000000106778145"
+  ],
+  "country": "DE"
+}

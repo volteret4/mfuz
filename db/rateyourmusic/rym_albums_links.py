@@ -2,6 +2,10 @@ import requests
 from time import sleep
 from urllib.parse import quote
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 from bs4 import BeautifulSoup
 import re
 
@@ -224,6 +228,7 @@ def main(config):
     
     try:
         conn = sqlite3.connect(config['db_path'])
+        apply_pragmas(conn)
         cursor = conn.cursor()
         print(f"[DEBUG] Successfully connected to database")
     except Exception as e:

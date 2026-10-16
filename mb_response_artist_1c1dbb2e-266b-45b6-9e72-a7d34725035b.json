@@ -1,0 +1,120 @@
+{
+  "type": "Group",
+  "life-span": {
+    "ended": false,
+    "begin": null,
+    "end": null
+  },
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "isnis": [],
+  "area": {
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "sort-name": "London",
+    "name": "London",
+    "disambiguation": "Greater London",
+    "type": null,
+    "type-id": null
+  },
+  "name": "Yuuf",
+  "gender-id": null,
+  "sort-name": "Yuuf",
+  "relations": [
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "url": {
+        "resource": "https://yuuf.bandcamp.com/",
+        "id": "ba100b22-f11d-421c-bf5c-2c0c18dc5d20"
+      },
+      "type": "bandcamp",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null
+    },
+    {
+      "end": null,
+      "target-credit": "",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "url": {
+        "id": "b4b4ca90-a8b6-44e4-975b-50abb873f19f",
+        "resource": "https://www.deezer.com/artist/164142997"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "free streaming",
+      "begin": null
+    },
+    {
+      "type": "social network",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "id": "c368731e-e9a5-4bf1-8107-8b1fcdf87e86",
+        "resource": "https://www.instagram.com/yuuf.official/"
+      },
+      "source-credit": "",
+      "ended": false,
+      "attributes": [],
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "songkick",
+      "begin": null,
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "6eabdf95-0b52-4a35-8112-d9f2b99b6fe9",
+        "resource": "https://www.songkick.com/artists/10317004"
+      },
+      "direction": "forward",
+      "source-credit": "",
+      "attributes": [],
+      "ended": false,
+      "end": null,
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "id": "daf8ee7c-0be4-4303-940b-b25171bdd381",
+        "resource": "https://tidal.com/artist/31268908"
+      },
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "streaming",
+      "begin": null,
+      "target-credit": "",
+      "end": null,
+      "source-credit": "",
+      "attributes": [],
+      "ended": false
+    }
+  ],
+  "gender": null,
+  "disambiguation": "London based collective",
+  "country": "GB",
+  "ipis": [],
+  "begin-area": null,
+  "end-area": null,
+  "id": "1c1dbb2e-266b-45b6-9e72-a7d34725035b"
+}

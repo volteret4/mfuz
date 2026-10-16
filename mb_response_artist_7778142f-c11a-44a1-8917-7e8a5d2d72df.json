@@ -1,0 +1,369 @@
+{
+  "life-span": {
+    "ended": false,
+    "begin": "1983-10-17",
+    "end": null
+  },
+  "disambiguation": "kora player",
+  "country": "GB",
+  "relations": [
+    {
+      "begin": null,
+      "end": null,
+      "type": "bandcamp",
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "7890f978-d865-4cd5-b274-b20d8f75f1ad",
+        "resource": "https://sonajobarteh.bandcamp.com/"
+      },
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {}
+    },
+    {
+      "url": {
+        "resource": "https://www.bbc.co.uk/music/artists/7778142f-c11a-44a1-8917-7e8a5d2d72df",
+        "id": "73ca1b95-0045-4d5a-bd80-38cf1486407b"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "d028a975-000c-4525-9333-d3c8425e4b54",
+      "end": "2020-11-19",
+      "type": "BBC Music page",
+      "begin": null,
+      "ended": true,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward"
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {},
+      "url": {
+        "resource": "https://www.discogs.com/artist/4329539",
+        "id": "1e57a80f-8fbd-420d-a7af-9106d2f3058c"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "ended": true,
+      "end": null,
+      "type": "discogs",
+      "begin": null,
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "id": "e68ea357-b041-4339-a184-8e7f0c866b6a",
+        "resource": "https://www.discogs.com/artist/2175247"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {}
+    },
+    {
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-credit": "",
+      "url": {
+        "id": "47b6d8da-0cd2-410d-b260-301d32fddbff",
+        "resource": "https://open.spotify.com/artist/7JksKqLDuYE8QYj2WjiNQr"
+      },
+      "target-type": "url",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "source-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "221132e9-e30e-43f2-a741-15afc4c5fa7c",
+      "target-credit": "",
+      "url": {
+        "id": "22d08674-773d-4eeb-8659-5fcf0beae134",
+        "resource": "https://commons.wikimedia.org/wiki/File:Sona_Jobarteh_TFF_01.JPG"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "type": "image",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "attribute-values": {},
+      "end": null,
+      "type": "IMDb",
+      "begin": null,
+      "ended": false,
+      "source-credit": "",
+      "target-credit": "",
+      "url": {
+        "id": "639ef69d-465b-42a6-8e54-74ba6455b743",
+        "resource": "https://www.imdb.com/name/nm2008346/"
+      },
+      "target-type": "url",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "last.fm",
+      "begin": null,
+      "ended": false,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": "",
+      "url": {
+        "id": "047afe39-7de2-4808-a94b-69c0fade801a",
+        "resource": "https://www.last.fm/music/Sona+Jobarteh"
+      },
+      "target-type": "url"
+    },
+    {
+      "type-id": "fe33d22f-c3b0-4d68-bd53-a856badf2b15",
+      "target-credit": "",
+      "url": {
+        "resource": "http://www.sonajobarteh.com/",
+        "id": "8589e7a4-9d66-478b-8c3c-8085aa180c1f"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "ended": false,
+      "end": null,
+      "type": "official homepage",
+      "begin": null,
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb16778064t",
+        "id": "d53eb20c-567a-4333-a0d1-306f31f5d094"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "end": null,
+      "type": "other databases",
+      "begin": null,
+      "ended": false
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "url": {
+        "id": "a18a5bde-76ca-415f-a1e8-3030e196e95c",
+        "resource": "https://d-nb.info/gnd/1046972413"
+      },
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://twitter.com/sonajobarteh",
+        "id": "4d3d3640-2b34-45a0-b750-0aa5ec47e683"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "url": {
+        "resource": "https://www.facebook.com/sonajobarteh",
+        "id": "ece4be49-24e4-4a5b-9eff-88edaa7fbf06"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "source-credit": "",
+      "ended": false,
+      "type": "social network",
+      "end": null,
+      "begin": null
+    },
+    {
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "type": "songkick",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "id": "ba5f240b-1aba-4120-9e21-6a6b625c60b5",
+        "resource": "https://www.songkick.com/artists/3832446"
+      },
+      "target-type": "url",
+      "target-credit": ""
+    },
+    {
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/433731587",
+        "id": "2111b5df-cf03-40f6-8099-a38db3b9d602"
+      },
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "attributes": [],
+      "direction": "forward",
+      "attribute-ids": {}
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "type": "streaming",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "url": {
+        "id": "20f4b4cb-2364-43bc-a988-5b90b857ac8c",
+        "resource": "https://tidal.com/artist/9454480"
+      },
+      "target-type": "url"
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "VIAF",
+      "begin": null,
+      "ended": false,
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "target-type": "url",
+      "url": {
+        "id": "98abd58f-443b-4a9c-a8c2-1901f9f56def",
+        "resource": "http://viaf.org/viaf/306324764"
+      },
+      "target-credit": ""
+    },
+    {
+      "attribute-values": {},
+      "attribute-ids": {},
+      "direction": "forward",
+      "attributes": [],
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "target-type": "url",
+      "url": {
+        "id": "390f6bef-bbf1-4062-ab1b-18bfa887025d",
+        "resource": "https://www.wikidata.org/wiki/Q773793"
+      },
+      "source-credit": "",
+      "end": null,
+      "type": "wikidata",
+      "begin": null,
+      "ended": false
+    }
+  ],
+  "gender": "Female",
+  "sort-name": "Jobarteh, Sona",
+  "name": "Sona Jobarteh",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "isnis": [
+    "0000000426500281"
+  ],
+  "begin-area": {
+    "id": "52641fae-20e3-3698-9fa9-1849f2c79ab8",
+    "name": "Gambia",
+    "type-id": null,
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "GM"
+    ],
+    "sort-name": "Gambia",
+    "type": null
+  },
+  "area": {
+    "type": null,
+    "disambiguation": "",
+    "iso-3166-2-codes": [
+      "GB-ENG"
+    ],
+    "type-id": null,
+    "name": "England",
+    "sort-name": "England",
+    "id": "9d5dd675-3cf4-4296-9e39-67865ebee758"
+  },
+  "gender-id": "93452b5a-a947-30c8-934f-6a4056b151c2",
+  "id": "7778142f-c11a-44a1-8917-7e8a5d2d72df",
+  "type": "Person",
+  "ipis": [],
+  "end-area": null
+}

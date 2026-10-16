@@ -1,4 +1,8 @@
 import sqlite3
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import argparse
 import os
 from datetime import datetime
@@ -7,7 +11,9 @@ def connect_to_db(db_path):
     """Conecta a la base de datos SQLite."""
     if not os.path.exists(db_path):
         raise FileNotFoundError(f"La base de datos no existe en la ruta: {db_path}")
-    return sqlite3.connect(db_path)
+    _conn = sqlite3.connect(db_path)
+    apply_pragmas(_conn)
+    return _conn
 
 def check_missing_values(conn, args):
     """Verifica campos vacíos o nulos en tablas principales."""

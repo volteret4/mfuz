@@ -54,6 +54,10 @@ TABLAS GENERADAS (35 total):
 
 import sqlite3
 import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
+import sys
 from datetime import datetime, timedelta
 import logging
 
@@ -66,6 +70,7 @@ class MusicStatsGenerator:
         self.db_path = db_path
         self.username = username
         self.conn = sqlite3.connect(db_path)
+        apply_pragmas(self.conn)
         self.conn.execute("PRAGMA foreign_keys = ON")
         
     def close(self):

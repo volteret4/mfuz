@@ -1,0 +1,258 @@
+{
+  "type": "Group",
+  "begin-area": {
+    "type-id": null,
+    "type": null,
+    "sort-name": "Dayton",
+    "disambiguation": "",
+    "id": "a55188f6-e976-499b-97b2-735985458216",
+    "name": "Dayton"
+  },
+  "ipis": [],
+  "gender-id": null,
+  "isnis": [
+    "0000000106587138"
+  ],
+  "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+  "gender": null,
+  "sort-name": "Lakeside",
+  "disambiguation": "US funk band",
+  "area": {
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "name": "United States",
+    "type-id": null,
+    "type": null,
+    "disambiguation": "",
+    "sort-name": "United States",
+    "id": "489ce91b-6658-3307-9877-795b68554c98"
+  },
+  "id": "4e2dc6e4-1808-4850-8e97-df7ea8007f39",
+  "end-area": null,
+  "relations": [
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "type": "allmusic",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "d339502b-3a82-4549-a3de-f8f8c6b379d9",
+        "resource": "https://www.allmusic.com/artist/mn0000107249"
+      }
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "267710dc-3ab1-4990-bc3f-db3388300034",
+        "resource": "http://web.archive.org/web/20080104132457/http://www.discomuseum.com/Lakeside.html"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "biography",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "78f75830-94e1-4138-8f8a-643e3bb21ce5"
+    },
+    {
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "discogs",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "2cfe9072-47a1-488e-8910-988f32a11951",
+        "resource": "https://www.discogs.com/artist/75985"
+      },
+      "ended": false,
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "begin": null,
+      "target-type": "url"
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "url": {
+        "resource": "https://open.spotify.com/artist/74lTWE4DqbFU3Vn8z4uH72",
+        "id": "134d3c13-fb79-4c3b-aa33-3a43a2a117a2"
+      },
+      "direction": "forward",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "type": "free streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd"
+    },
+    {
+      "target-credit": "",
+      "begin": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-type": "url",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "free streaming",
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.deezer.com/artist/423017",
+        "id": "8beb4bb2-23ab-4b02-be14-7c423ffd4a87"
+      }
+    },
+    {
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "id": "b482466e-6f43-43f7-892b-5cdaec374d9b",
+        "resource": "https://www.last.fm/music/Lakeside"
+      },
+      "attributes": [],
+      "type": "last.fm",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "source-credit": "",
+      "end": null,
+      "target-type": "url",
+      "begin": null,
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-credit": ""
+    },
+    {
+      "target-credit": "",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "begin": null,
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "type": "myspace",
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "resource": "https://myspace.com/lakesidemusicband",
+        "id": "a5dceecd-cddd-4d84-8d48-7b43fa982e48"
+      },
+      "ended": false
+    },
+    {
+      "ended": false,
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/lakeside",
+        "id": "c295daaa-5f12-4304-832f-7f15ca1aa752"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "begin": null,
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": ""
+    },
+    {
+      "attributes": [],
+      "direction": "forward",
+      "url": {
+        "id": "6867a1b8-7a20-4d9b-8251-9e586c0f48ac",
+        "resource": "https://www.setlist.fm/setlists/lakeside-53d61fc1.html"
+      },
+      "ended": false,
+      "source-credit": "",
+      "end": null,
+      "attribute-ids": {},
+      "attribute-values": {},
+      "type": "setlistfm",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "begin": null
+    },
+    {
+      "attributes": [],
+      "ended": false,
+      "direction": "forward",
+      "url": {
+        "resource": "https://music.apple.com/gb/artist/549439",
+        "id": "62538bd9-69b2-4da4-b53e-696cadeb529c"
+      },
+      "attribute-values": {},
+      "attribute-ids": {},
+      "source-credit": "",
+      "end": null,
+      "type": "streaming",
+      "target-type": "url",
+      "target-credit": "",
+      "begin": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "begin": null,
+      "target-credit": "",
+      "target-type": "url",
+      "type": "streaming",
+      "end": null,
+      "source-credit": "",
+      "attribute-ids": {},
+      "attribute-values": {},
+      "url": {
+        "id": "25626c0c-ad8c-4533-89c6-77b9d22e6348",
+        "resource": "https://tidal.com/artist/64984"
+      },
+      "direction": "forward",
+      "ended": false,
+      "attributes": []
+    },
+    {
+      "target-type": "url",
+      "begin": null,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "ended": false,
+      "url": {
+        "id": "60f2167e-4d97-4515-9ed9-fa410dda18de",
+        "resource": "https://www.wikidata.org/wiki/Q3110146"
+      },
+      "direction": "forward",
+      "attributes": [],
+      "type": "wikidata",
+      "attribute-values": {},
+      "attribute-ids": {},
+      "end": null,
+      "source-credit": ""
+    }
+  ],
+  "life-span": {
+    "ended": false,
+    "begin": "1969",
+    "end": null
+  },
+  "name": "Lakeside",
+  "country": "US"
+}

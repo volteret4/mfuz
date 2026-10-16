@@ -3,6 +3,8 @@ import sys
 import json
 import time
 import sqlite3
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from base.db_connection import apply_pragmas
 import datetime
 import requests
 from pathlib import Path
@@ -831,6 +833,7 @@ def main(config):
     
     # Conectar a la base de datos
     conn = sqlite3.connect(db_path)
+    apply_pragmas(conn)
     
     # Crear tabla para scrobbles
     crear_tabla_scrobbles(conn, lastfm_user)

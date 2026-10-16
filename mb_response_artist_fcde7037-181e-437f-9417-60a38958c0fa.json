@@ -1,0 +1,441 @@
+{
+  "country": "US",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "type": "Person",
+  "ipis": [
+    "00089242256",
+    "00436853436"
+  ],
+  "relations": [
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://www.allmusic.com/artist/mn0000458423",
+        "id": "7e391700-0df2-42a4-9a8a-12d40f724143"
+      },
+      "type-id": "6b3e3c85-0002-4f34-aca6-80ace0d7e846",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "allmusic",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "discogs",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "url": {
+        "resource": "https://www.discogs.com/artist/94940",
+        "id": "f0b4af4e-a16f-4450-9005-fb57661daab0"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "resource": "https://open.spotify.com/artist/3SIMDjcp8RCbUQ3CUkZEEb",
+        "id": "91b39503-dbae-4665-80a8-905c611fbaf9"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "free streaming",
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "type": "free streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "b3782c3a-33bc-4641-9ee8-75ac1ed3ee35",
+        "resource": "https://open.spotify.com/artist/771qBvjnXOH9Azr6lKy6FB"
+      }
+    },
+    {
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "free streaming",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "c0c3376e-2c9f-424e-96e5-97b2ec433357",
+        "resource": "https://www.deezer.com/artist/5825"
+      }
+    },
+    {
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "94c8b0cc-4477-4106-932c-da60e63de61c",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "IMDb",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "c9f456a6-f23f-41d8-be2a-92fbaf41bd23",
+        "resource": "https://www.imdb.com/name/nm0783732/"
+      }
+    },
+    {
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "id": "ab2beed5-d99d-4df2-9ee0-2a3b3e37845c",
+        "resource": "https://www.last.fm/music/Michael+Sembello"
+      },
+      "type-id": "08db8098-c0df-4b78-82c3-c8697b4bba7f",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "last.fm",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {}
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "5d7ea82b-1b6b-49dc-beec-32288dcec482",
+        "resource": "https://genius.com/artists/Michael-sembello"
+      },
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "type-id": "e4d73442-3762-45a8-905c-401da65544ed",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "lyrics"
+    },
+    {
+      "url": {
+        "resource": "https://myspace.com/michaelsembello",
+        "id": "c55ae144-05ee-4e8c-9f28-b8a2921b255a"
+      },
+      "begin": null,
+      "direction": "forward",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "myspace",
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false
+    },
+    {
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "url": {
+        "id": "03f947f6-4c1a-4109-8ed4-9d367bf6034d",
+        "resource": "http://id.loc.gov/authorities/names/n87834461"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "type": "other databases",
+      "target-type": "url",
+      "source-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "resource": "https://catalogue.bnf.fr/ark:/12148/cb13987452t",
+        "id": "316c1b85-a88b-41b2-a398-af3c9b592272"
+      }
+    },
+    {
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "6eb4e55f-7261-4ac6-ab58-6fac27e1881a",
+        "resource": "https://d-nb.info/gnd/134519531"
+      }
+    },
+    {
+      "target-type": "url",
+      "source-credit": "",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "url": {
+        "resource": "http://snaccooperative.org/ark:/99166/w6jq18q4",
+        "id": "517513d4-b17f-49d4-a85f-b1ab62221409"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "url": {
+        "resource": "https://rateyourmusic.com/artist/michael_sembello",
+        "id": "4d645f80-30b9-410a-bdac-45b453258031"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://www.worldcat.org/identities/lccn-n87834461",
+        "id": "44d8f248-b7e8-4ca6-9f21-35f711d0c71d"
+      },
+      "direction": "forward",
+      "begin": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "source-credit": "",
+      "target-type": "url",
+      "type": "other databases",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55"
+    },
+    {
+      "url": {
+        "resource": "https://secondhandsongs.com/artist/10558",
+        "id": "1c962913-9e26-4f58-abd7-c6a81c218aa9"
+      },
+      "begin": null,
+      "direction": "forward",
+      "type": "secondhandsongs",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "79c5b84d-a206-4f4c-9832-78c028c312c3",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {}
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "type": "setlistfm",
+      "target-type": "url",
+      "source-credit": "",
+      "type-id": "bf5d0d5e-27a1-4e94-9df7-3cdc67b3b207",
+      "url": {
+        "id": "bbfc20fc-ceb9-4326-a1ea-39f9af1f9a56",
+        "resource": "https://www.setlist.fm/setlists/michael-sembello-63d6b2a3.html"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "ended": false,
+      "attribute-values": {},
+      "end": null,
+      "type": "songkick",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "url": {
+        "resource": "https://www.songkick.com/artists/533378",
+        "id": "0a3b6608-c1a3-43cd-bc97-018aead26499"
+      },
+      "direction": "forward",
+      "begin": null
+    },
+    {
+      "attribute-ids": {},
+      "attributes": [],
+      "target-credit": "",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "target-type": "url",
+      "source-credit": "",
+      "type": "streaming",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "url": {
+        "resource": "https://music.apple.com/us/artist/181968",
+        "id": "e4bf1ab5-9cde-4479-a83b-073884fa1cc7"
+      },
+      "begin": null,
+      "direction": "forward"
+    },
+    {
+      "url": {
+        "id": "ebb3aada-8a12-44a4-a228-b3b341c3d212",
+        "resource": "https://tidal.com/artist/33306"
+      },
+      "begin": null,
+      "direction": "forward",
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": "",
+      "end": null,
+      "ended": false,
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "target-type": "url",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161"
+    },
+    {
+      "begin": null,
+      "direction": "forward",
+      "url": {
+        "id": "307e9e36-3c50-4af6-b46b-397f3a61b14e",
+        "resource": "http://viaf.org/viaf/37111049"
+      },
+      "type-id": "e8571dcc-35d4-4e91-a577-a3382fd84460",
+      "source-credit": "",
+      "target-type": "url",
+      "type": "VIAF",
+      "end": null,
+      "attribute-values": {},
+      "ended": false,
+      "attributes": [],
+      "attribute-ids": {},
+      "target-credit": ""
+    },
+    {
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-type": "url",
+      "source-credit": "",
+      "type": "wikidata",
+      "attribute-values": {},
+      "ended": false,
+      "end": null,
+      "target-credit": "",
+      "attribute-ids": {},
+      "attributes": [],
+      "direction": "forward",
+      "begin": null,
+      "url": {
+        "resource": "https://www.wikidata.org/wiki/Q1929388",
+        "id": "9c610f97-5795-44d0-a186-881d38fb47e7"
+      }
+    }
+  ],
+  "gender": "Male",
+  "area": {
+    "sort-name": "United States",
+    "disambiguation": "",
+    "iso-3166-1-codes": [
+      "US"
+    ],
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "name": "United States",
+    "type": null,
+    "type-id": null
+  },
+  "name": "Michael Sembello",
+  "isnis": [
+    "0000000063097402"
+  ],
+  "id": "fcde7037-181e-437f-9417-60a38958c0fa",
+  "life-span": {
+    "begin": "1954-04-17",
+    "end": null,
+    "ended": false
+  },
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "end-area": null,
+  "begin-area": {
+    "type-id": null,
+    "sort-name": "Philadelphia",
+    "id": "0eeb01c2-6e31-46ad-96b8-319749f731d2",
+    "type": null,
+    "name": "Philadelphia",
+    "disambiguation": ""
+  },
+  "disambiguation": "",
+  "sort-name": "Sembello, Michael"
+}

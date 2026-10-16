@@ -1,0 +1,320 @@
+{
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "sort-name": "Perc",
+  "id": "7693c255-9697-4ba2-ac70-8bbbe3f9f7eb",
+  "disambiguation": "techno producer",
+  "end-area": null,
+  "name": "Perc",
+  "area": {
+    "sort-name": "London",
+    "disambiguation": "Greater London",
+    "id": "f03d09b3-39dc-4083-afd6-159e3f0d462f",
+    "type": null,
+    "name": "London",
+    "type-id": null
+  },
+  "life-span": {
+    "begin": null,
+    "end": null,
+    "ended": false
+  },
+  "type": "Person",
+  "gender": "Male",
+  "relations": [
+    {
+      "target-credit": "",
+      "type-id": "c550166e-0548-4a18-b1d4-e2ae423a3e88",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "bandcamp",
+      "attribute-values": {},
+      "attributes": [],
+      "url": {
+        "resource": "https://perctrax.bandcamp.com/",
+        "id": "c033308d-787c-4d9a-ad04-78ab4718d42c"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "source-credit": "",
+      "type": "discogs",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://www.discogs.com/artist/53980",
+        "id": "9da8a831-5ddb-4278-bddf-0cbc7e17eccb"
+      },
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "attributes": []
+    },
+    {
+      "attribute-values": {},
+      "type": "free streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "b5a8b6a4-0ed9-41a9-8483-08187e972e6f",
+        "resource": "https://open.spotify.com/artist/4iyqyvWXO734GUNLTTnrPQ"
+      },
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "8732c5f4-9bc4-43d4-b232-0b186f6e2dcb",
+        "resource": "https://www.deezer.com/artist/479589"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "free streaming",
+      "ended": false,
+      "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+      "target-credit": "",
+      "end": null,
+      "begin": null
+    },
+    {
+      "attribute-values": {},
+      "type": "myspace",
+      "source-credit": "",
+      "end": null,
+      "begin": null,
+      "ended": false,
+      "type-id": "bac47923-ecde-4b59-822e-d08f0cd10156",
+      "target-credit": "",
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "url": {
+        "id": "3f748500-0fdb-40c1-9773-1e3adbb10910",
+        "resource": "https://myspace.com/perctrax"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "resource": "https://ra.co/dj/perc",
+        "id": "d17b32cf-4fdb-47dc-823f-2d721d33001d"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false,
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "ce5ecc78-7ab0-4511-a5fe-3f2c5bf81807",
+        "resource": "https://rateyourmusic.com/artist/perc"
+      },
+      "attributes": [],
+      "type": "other databases",
+      "attribute-values": {},
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "d94fb61c-fa20-4e3c-a19a-71a949fb2c55",
+      "ended": false
+    },
+    {
+      "attributes": [],
+      "attribute-ids": {},
+      "target-type": "url",
+      "direction": "forward",
+      "url": {
+        "id": "080174f6-12f3-45b6-800e-5f3e8bc57864",
+        "resource": "https://www.beatport.com/artist/perc/1839"
+      },
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+      "ended": false,
+      "type": "purchase for download",
+      "attribute-values": {},
+      "source-credit": ""
+    },
+    {
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "url": {
+        "resource": "https://twitter.com/perctrax",
+        "id": "379d9b93-c39f-4873-8fa3-098e237264e9"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "attributes": []
+    },
+    {
+      "url": {
+        "id": "f3241f88-034e-4954-9a5c-b63153abcc8e",
+        "resource": "https://www.facebook.com/PercTrax"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": [],
+      "source-credit": "",
+      "type": "social network",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "end": null,
+      "begin": null
+    },
+    {
+      "begin": null,
+      "end": null,
+      "target-credit": "",
+      "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+      "ended": false,
+      "type": "social network",
+      "attribute-values": {},
+      "source-credit": "",
+      "attributes": [],
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "211fb9de-c1c4-4d38-8a54-b6ec7d815224",
+        "resource": "https://www.instagram.com/perctrax/"
+      }
+    },
+    {
+      "source-credit": "",
+      "type": "songkick",
+      "attribute-values": {},
+      "ended": false,
+      "target-credit": "",
+      "type-id": "aac9c4bc-a5b9-30b8-9839-e3ac314c6e58",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "6ab4ae5e-6104-413e-8ff8-57a907d7246d",
+        "resource": "https://www.songkick.com/artists/534988"
+      },
+      "target-type": "url",
+      "direction": "forward",
+      "attribute-ids": {},
+      "attributes": []
+    },
+    {
+      "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+      "target-credit": "",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "soundcloud",
+      "attributes": [],
+      "url": {
+        "resource": "https://soundcloud.com/perc",
+        "id": "85c82e0a-2bc9-4862-968f-b20a2085789f"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url"
+    },
+    {
+      "attribute-values": {},
+      "type": "streaming",
+      "source-credit": "",
+      "begin": null,
+      "end": null,
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "target-credit": "",
+      "ended": false,
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "url": {
+        "id": "5feb02f2-59eb-4e12-be83-9f803ef6c3c7",
+        "resource": "https://music.apple.com/us/artist/1679393990"
+      },
+      "attributes": []
+    },
+    {
+      "attributes": [],
+      "url": {
+        "id": "8a9e21aa-aab1-45aa-b906-7f5a4266925a",
+        "resource": "https://tidal.com/artist/3569250"
+      },
+      "attribute-ids": {},
+      "direction": "forward",
+      "target-type": "url",
+      "target-credit": "",
+      "type-id": "63cc5d1f-f096-4c94-a43f-ecb32ea94161",
+      "ended": false,
+      "begin": null,
+      "end": null,
+      "source-credit": "",
+      "type": "streaming",
+      "attribute-values": {}
+    },
+    {
+      "source-credit": "",
+      "attribute-values": {},
+      "type": "wikidata",
+      "ended": false,
+      "type-id": "689870a4-a1e4-4912-b17f-7b2664215698",
+      "target-credit": "",
+      "end": null,
+      "begin": null,
+      "url": {
+        "id": "b6ed96b9-f589-46c4-aac6-503733f28644",
+        "resource": "https://www.wikidata.org/wiki/Q69403120"
+      },
+      "direction": "forward",
+      "target-type": "url",
+      "attribute-ids": {},
+      "attributes": []
+    }
+  ],
+  "country": "GB",
+  "isnis": [
+    "0000000372366215"
+  ],
+  "begin-area": null,
+  "ipis": [],
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+}
