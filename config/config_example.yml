@@ -281,20 +281,6 @@ modulos_desactivados:
     exclude_spotify_from_local: 'True'
     show_lastfm_scrobbles: 'False'
 
-# Editor de la base de datos (WIP)
-- name: Database Editor
-  path: modules/editor_module.py
-  args:
-    db_path: db/sqlite/musica.sqlite
-    temas:
-    - Tokyo Night
-    - Solarized Dark
-    - Monokai
-    tema_seleccionado: Monokai
-  logging:
-    debug_enabled: true
-    capture_stdout: true
-    log_color: '#7AA2F7'
 - name: Database Creator
   path: modules/db_creator_ui_module.py
   args:

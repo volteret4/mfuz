@@ -15,9 +15,18 @@ class DatabaseManager:
         "CREATE INDEX IF NOT EXISTS idx_menciones_artist ON menciones(artist_id)",
     ]
     
+    # Origen que db_musica_path.py asigna a lo que estuvo en local y ya no tiene archivos
+    OLD_LOCAL_ORIGEN = 'antiguo_local'
+
     def __init__(self, db_path):
         self.db_path = db_path
+        # Con el filtro "solo local", incluir también lo que ya no tiene archivos
+        self.include_old_local = False
         self._ensure_indexes()
+
+    def is_local_origen(self, origen):
+        """Indica si un origen cuenta como local según el modo actual."""
+        return origen == 'local' or (self.include_old_local and origen == self.OLD_LOCAL_ORIGEN)
     
     def _ensure_indexes(self):
         """Crea los índices de búsqueda si faltan (se ignora si la base es de solo lectura)."""
@@ -41,6 +50,8 @@ class DatabaseManager:
         try:
             conn = sqlite3.connect(self.db_path)
             conn.row_factory = sqlite3.Row
+            # is_local(origen) en SQL aplica el mismo criterio que is_local_origen
+            conn.create_function("is_local", 1, self.is_local_origen)
             return conn
         except sqlite3.Error as e:
             print(f"Database connection error: {e}")
@@ -62,7 +73,7 @@ class DatabaseManager:
                     SELECT DISTINCT artists.id, artists.name, artists.formed_year, artists.origin
                     FROM artists
                     INNER JOIN albums ON artists.id = albums.artist_id
-                    WHERE artists.name LIKE ? AND albums.origen = 'local'
+                    WHERE artists.name LIKE ? AND is_local(albums.origen)
                     ORDER BY artists.name
                 """
                 print("SQL (artistas con álbumes locales):", sql)
@@ -105,7 +116,7 @@ class DatabaseManager:
                         artists.name as artist_name, artists.id as artist_id
                     FROM albums
                     JOIN artists ON albums.artist_id = artists.id
-                    WHERE albums.name LIKE ? AND albums.origen = 'local'
+                    WHERE albums.name LIKE ? AND is_local(albums.origen)
                     ORDER BY albums.name
                 """
                 print("SQL Albums (solo locales):", sql)
@@ -152,7 +163,7 @@ class DatabaseManager:
                     FROM songs s
                     LEFT JOIN artists ar ON s.artist = ar.name
                     LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
-                    WHERE s.title LIKE ? AND s.origen = 'local'
+                    WHERE s.title LIKE ? AND is_local(s.origen)
                     ORDER BY s.title
                 """
                 print("SQL Songs (solo locales):", sql)
@@ -202,7 +213,7 @@ class DatabaseManager:
                 WHERE al.id = ?
             """
             if only_local:
-                sql += " AND s.origen = 'local'"
+                sql += " AND is_local(s.origen)"
             sql += " ORDER BY s.track_number, s.title"
             
             return [self._row_to_dict(row) for row in conn.execute(sql, (album_id,))]
@@ -272,7 +283,7 @@ class DatabaseManager:
                 cursor.execute("""
                     SELECT id, name, year, genre, total_tracks, origen, folder_path
                     FROM albums
-                    WHERE artist_id = ? AND origen = 'local'
+                    WHERE artist_id = ? AND is_local(origen)
                     ORDER BY year DESC, name
                 """, (artist_id,))
             else:

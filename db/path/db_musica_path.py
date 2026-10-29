@@ -1238,169 +1238,186 @@ class MusicLibraryManager:
                 ''')
                 conn.commit()
             
-            # First pass: gather folder information to establish consistent album metadata
+            # Primera pasada, barata: solo fechas de modificación contra la db.
+            # Antes se leían las etiquetas de toda la biblioteca (horas por NFS)
+            # aunque solo hubiera cambiado un puñado de archivos
+            known_songs = {
+                row[0]: (row[1], row[2])
+                for row in c.execute("SELECT file_path, last_modified, added_timestamp FROM songs")
+            }
+            pending_files = []
+            first_file_in_folder = {}
             for file_path in self.root_path.rglob('*'):
-                if file_path.suffix.lower() in self.supported_formats:
-                    try:
-                        metadata = self.get_audio_metadata(file_path)
-                        if metadata:
-                            folder_path = metadata['folder_path']
-                            if folder_path not in folder_albums:
-                                # Use album artist if available, otherwise use primary artist
-                                primary_artist = metadata['album_artist'] or metadata['artist'].split('feat.')[0].split('with')[0].split('&')[0].strip()
-                                
-                                folder_albums[folder_path] = {
-                                    'album': metadata['album'],
-                                    'primary_artist': primary_artist,
-                                    'year': metadata['date'],
-                                    'genre': metadata['genre'],
-                                    'label': metadata['label']
-                                }
-                    except Exception as e:
-                        error_logger.error(f"First pass error for {file_path}: {str(e)}")
-            
-            # Second pass: process files with consistent album metadata
-            for file_path in self.root_path.rglob('*'):
-                if file_path.suffix.lower() in self.supported_formats:
-                    abs_path = str(file_path.absolute())
+                if file_path.suffix.lower() not in self.supported_formats:
+                    continue
+                first_file_in_folder.setdefault(str(file_path.parent), file_path)
+                abs_path = str(file_path.absolute())
+                try:
+                    last_modified = datetime.fromtimestamp(os.path.getmtime(file_path))
+                    existing_record = known_songs.get(abs_path)
                     
-                    try:
-                        last_modified = datetime.fromtimestamp(os.path.getmtime(file_path))
-                        
-                        # Check if file needs processing
-                        c.execute("SELECT last_modified, added_timestamp FROM songs WHERE file_path = ?", (abs_path,))
-                        existing_record = c.fetchone()
-                        
-                        # Convert database date to datetime
-                        if existing_record:
+                    # Convert database date to datetime
+                    if existing_record:
+                        try:
+                            db_last_modified = datetime.strptime(existing_record[0], '%Y-%m-%d %H:%M:%S.%f')
+                            original_added_timestamp = datetime.strptime(existing_record[1], '%Y-%m-%d %H:%M:%S.%f') if existing_record[1] else None
+                        except ValueError:
+                            # Try without the fraction of seconds
                             try:
-                                db_last_modified = datetime.strptime(existing_record[0], '%Y-%m-%d %H:%M:%S.%f')
-                                original_added_timestamp = datetime.strptime(existing_record[1], '%Y-%m-%d %H:%M:%S.%f') if existing_record[1] else None
-                            except ValueError:
-                                # Try without the fraction of seconds
-                                try:
-                                    db_last_modified = datetime.strptime(existing_record[0], '%Y-%m-%d %H:%M:%S')
-                                    original_added_timestamp = datetime.strptime(existing_record[1], '%Y-%m-%d %H:%M:%S') if existing_record[1] else None
-                                except:
-                                    db_last_modified = None
-                                    original_added_timestamp = None
-                        else:
-                            db_last_modified = None
-                            original_added_timestamp = None
-                            
-
-                        if force_update == True or not db_last_modified or last_modified > db_last_modified:
-                            metadata = self.get_audio_metadata(file_path)
-                            
-                            if metadata:
-                                # Preserve original added_timestamp if it exists
-                                if original_added_timestamp:
-                                    metadata['added_timestamp'] = original_added_timestamp
-                                    metadata['added_day'] = original_added_timestamp.day
-                                    metadata['added_week'] = int(original_added_timestamp.strftime('%V'))
-                                    metadata['added_month'] = original_added_timestamp.month
-                                    metadata['added_year'] = original_added_timestamp.year
-                                
-                                # Use folder-based consistent album metadata
-                                folder_path = metadata['folder_path']
-                                if folder_path in folder_albums:
-                                    folder_metadata = folder_albums[folder_path]
-                                    consistent_album_artist = folder_metadata['primary_artist']
-                                    
-                                    # Insert or update song with consistent album metadata
-                                    c.execute('''
-                                        INSERT OR REPLACE INTO songs 
-                                        (file_path, title, track_number, artist, album_artist, 
-                                        album, date, genre, label, mbid, bitrate, 
-                                        bit_depth, sample_rate, last_modified, duration,
-                                        added_timestamp, added_day, added_week, added_month, added_year,
-                                        replay_gain_track_gain, replay_gain_track_peak, 
-                                        replay_gain_album_gain, replay_gain_album_peak, origen,
-                                        musicbrainz_artistid, musicbrainz_recordingid, 
-                                        musicbrainz_albumartistid, musicbrainz_releasegroupid)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                                    ''', (
-                                        metadata['file_path'], metadata['title'], metadata['track_number'], 
-                                        metadata['artist'], consistent_album_artist, folder_metadata['album'], 
-                                        folder_metadata['year'], folder_metadata['genre'], folder_metadata['label'], 
-                                        metadata['mbid'], metadata.get('bitrate'), metadata.get('bit_depth'),
-                                        metadata.get('sample_rate'), metadata['last_modified'], 
-                                        metadata.get('duration'), metadata['added_timestamp'],
-                                        metadata.get('added_day'), metadata['added_week'], 
-                                        metadata['added_month'], metadata['added_year'],
-                                        metadata.get('replay_gain_track_gain'), metadata.get('replay_gain_track_peak'),
-                                        metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak'),
-                                        'local',
-                                        metadata.get('musicbrainz_artistid', ''),
-                                        metadata.get('musicbrainz_recordingid', ''),
-                                        metadata.get('musicbrainz_albumartistid', ''),
-                                        metadata.get('musicbrainz_releasegroupid', '')
-                                    ))
-                                    
-                                    # Asegurarse de que la canción también tenga entrada en song_links
-                                    self._ensure_song_links_entry(c, metadata['file_path'])
-                                    
-                                    processed_files += 1
-                                    
-                                    # Update/insert artist information (using album artist for album relationship)
-                                    self._update_artist_info(c, consistent_album_artist)
-                                    
-                                    # Update/insert album information using consistent album metadata
-                                    self._update_album_info(c, {
-                                        'artist': consistent_album_artist,
-                                        'album': folder_metadata['album'],
-                                        'date': folder_metadata['year'],
-                                        'label': folder_metadata['label'],
-                                        'genre': folder_metadata['genre']
-                                    })
-                                    
-                                    # Update/insert genre information
-                                    self._update_genre_info(c, folder_metadata['genre'])
-                                else:
-                                    # Fallback to original metadata if folder info not available
-                                    c.execute('''
-                                        INSERT OR REPLACE INTO songs 
-                                        (file_path, title, track_number, artist, album_artist, 
-                                        album, date, genre, label, mbid, bitrate, 
-                                        bit_depth, sample_rate, last_modified, duration,
-                                        added_timestamp, added_day, added_week, added_month, added_year,
-                                        replay_gain_track_gain, replay_gain_track_peak, 
-                                        replay_gain_album_gain, replay_gain_album_peak, origen)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                                    ''', (
-                                        metadata['file_path'], metadata['title'], metadata['track_number'], 
-                                        metadata['artist'], metadata['album_artist'], metadata['album'], 
-                                        metadata['date'], metadata['genre'], metadata['label'], 
-                                        metadata['mbid'], metadata.get('bitrate'), metadata.get('bit_depth'),
-                                        metadata.get('sample_rate'), metadata['last_modified'], 
-                                        metadata.get('duration'), metadata['added_timestamp'],
-                                        metadata.get('added_day'), metadata['added_week'], 
-                                        metadata['added_month'], metadata['added_year'],
-                                        metadata.get('replay_gain_track_gain'), metadata.get('replay_gain_track_peak'),
-                                        metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak'),
-                                        'local'
-                                    ))
-                                    
-                                    # Asegurarse de que la canción también tenga entrada en song_links
-                                    self._ensure_song_links_entry(c, metadata['file_path'])
-                                    
-                                    processed_files += 1
-                                    
-                                    # Update remaining tables
-                                    self._update_artist_info(c, metadata['album_artist'] or metadata['artist'])
-                                    self._update_album_info(c, metadata)
-                                    self._update_genre_info(c, metadata['genre'])
-                            
-                            else:
-                                error_files += 1
-                                error_logger.error(f"Metadata extraction failed: {abs_path}")
-                        
-                        if processed_files % 200 == 0:
-                            conn.commit()
+                                db_last_modified = datetime.strptime(existing_record[0], '%Y-%m-%d %H:%M:%S')
+                                original_added_timestamp = datetime.strptime(existing_record[1], '%Y-%m-%d %H:%M:%S') if existing_record[1] else None
+                            except:
+                                db_last_modified = None
+                                original_added_timestamp = None
+                    else:
+                        db_last_modified = None
+                        original_added_timestamp = None
                     
-                    except Exception as file_error:
+                    if force_update == True or not db_last_modified or last_modified > db_last_modified:
+                        pending_files.append((file_path, original_added_timestamp))
+                except Exception as e:
+                    error_files += 1
+                    error_logger.error(f"File processing error {abs_path}: {str(e)}")
+            
+            self.logger.info(f"Archivos nuevos o modificados: {len(pending_files)}")
+            
+            # Metadatos de álbum coherentes por carpeta: los del primer archivo de
+            # cada carpeta, como antes, pero solo en las carpetas con cambios
+            for folder in {str(file_path.parent) for file_path, _ in pending_files}:
+                file_path = first_file_in_folder[folder]
+                try:
+                    metadata = self.get_audio_metadata(file_path)
+                    if metadata:
+                        # Use album artist if available, otherwise use primary artist
+                        primary_artist = metadata['album_artist'] or metadata['artist'].split('feat.')[0].split('with')[0].split('&')[0].strip()
+                        
+                        folder_albums[metadata['folder_path']] = {
+                            'album': metadata['album'],
+                            'primary_artist': primary_artist,
+                            'year': metadata['date'],
+                            'genre': metadata['genre'],
+                            'label': metadata['label']
+                        }
+                except Exception as e:
+                    error_logger.error(f"First pass error for {file_path}: {str(e)}")
+            
+            # Second pass: process only new or modified files with consistent album metadata
+            for file_path, original_added_timestamp in pending_files:
+                abs_path = str(file_path.absolute())
+                try:
+                    metadata = self.get_audio_metadata(file_path)
+                            
+                    if metadata:
+                        # Preserve original added_timestamp if it exists
+                        if original_added_timestamp:
+                            metadata['added_timestamp'] = original_added_timestamp
+                            metadata['added_day'] = original_added_timestamp.day
+                            metadata['added_week'] = int(original_added_timestamp.strftime('%V'))
+                            metadata['added_month'] = original_added_timestamp.month
+                            metadata['added_year'] = original_added_timestamp.year
+                                
+                        # Use folder-based consistent album metadata
+                        folder_path = metadata['folder_path']
+                        if folder_path in folder_albums:
+                            folder_metadata = folder_albums[folder_path]
+                            consistent_album_artist = folder_metadata['primary_artist']
+                                    
+                            # Insert or update song with consistent album metadata
+                            c.execute('''
+                                INSERT INTO songs 
+                                (file_path, title, track_number, artist, album_artist, 
+                                album, date, genre, label, mbid, bitrate, 
+                                bit_depth, sample_rate, last_modified, duration,
+                                added_timestamp, added_day, added_week, added_month, added_year,
+                                replay_gain_track_gain, replay_gain_track_peak, 
+                                replay_gain_album_gain, replay_gain_album_peak, origen,
+                                musicbrainz_artistid, musicbrainz_recordingid, 
+                                musicbrainz_albumartistid, musicbrainz_releasegroupid)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                ON CONFLICT(file_path) DO UPDATE SET title = excluded.title, track_number = excluded.track_number, artist = excluded.artist, album_artist = excluded.album_artist, album = excluded.album, date = excluded.date, genre = excluded.genre, label = excluded.label, mbid = excluded.mbid, bitrate = excluded.bitrate, bit_depth = excluded.bit_depth, sample_rate = excluded.sample_rate, last_modified = excluded.last_modified, duration = excluded.duration, added_timestamp = excluded.added_timestamp, added_day = excluded.added_day, added_week = excluded.added_week, added_month = excluded.added_month, added_year = excluded.added_year, replay_gain_track_gain = excluded.replay_gain_track_gain, replay_gain_track_peak = excluded.replay_gain_track_peak, replay_gain_album_gain = excluded.replay_gain_album_gain, replay_gain_album_peak = excluded.replay_gain_album_peak, origen = excluded.origen, musicbrainz_artistid = excluded.musicbrainz_artistid, musicbrainz_recordingid = excluded.musicbrainz_recordingid, musicbrainz_albumartistid = excluded.musicbrainz_albumartistid, musicbrainz_releasegroupid = excluded.musicbrainz_releasegroupid
+                            ''', (
+                                metadata['file_path'], metadata['title'], metadata['track_number'], 
+                                metadata['artist'], consistent_album_artist, folder_metadata['album'], 
+                                folder_metadata['year'], folder_metadata['genre'], folder_metadata['label'], 
+                                metadata['mbid'], metadata.get('bitrate'), metadata.get('bit_depth'),
+                                metadata.get('sample_rate'), metadata['last_modified'], 
+                                metadata.get('duration'), metadata['added_timestamp'],
+                                metadata.get('added_day'), metadata['added_week'], 
+                                metadata['added_month'], metadata['added_year'],
+                                metadata.get('replay_gain_track_gain'), metadata.get('replay_gain_track_peak'),
+                                metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak'),
+                                'local',
+                                metadata.get('musicbrainz_artistid', ''),
+                                metadata.get('musicbrainz_recordingid', ''),
+                                metadata.get('musicbrainz_albumartistid', ''),
+                                metadata.get('musicbrainz_releasegroupid', '')
+                            ))
+                                    
+                            # Asegurarse de que la canción también tenga entrada en song_links
+                            self._ensure_song_links_entry(c, metadata['file_path'])
+                                    
+                            processed_files += 1
+                                    
+                            # Update/insert artist information (using album artist for album relationship)
+                            self._update_artist_info(c, consistent_album_artist)
+                                    
+                            # Update/insert album information using consistent album metadata
+                            self._update_album_info(c, {
+                                'artist': consistent_album_artist,
+                                'album': folder_metadata['album'],
+                                'date': folder_metadata['year'],
+                                'label': folder_metadata['label'],
+                                'genre': folder_metadata['genre']
+                            })
+                                    
+                            # Update/insert genre information
+                            self._update_genre_info(c, folder_metadata['genre'])
+                        else:
+                            # Fallback to original metadata if folder info not available
+                            c.execute('''
+                                INSERT INTO songs 
+                                (file_path, title, track_number, artist, album_artist, 
+                                album, date, genre, label, mbid, bitrate, 
+                                bit_depth, sample_rate, last_modified, duration,
+                                added_timestamp, added_day, added_week, added_month, added_year,
+                                replay_gain_track_gain, replay_gain_track_peak, 
+                                replay_gain_album_gain, replay_gain_album_peak, origen)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                ON CONFLICT(file_path) DO UPDATE SET title = excluded.title, track_number = excluded.track_number, artist = excluded.artist, album_artist = excluded.album_artist, album = excluded.album, date = excluded.date, genre = excluded.genre, label = excluded.label, mbid = excluded.mbid, bitrate = excluded.bitrate, bit_depth = excluded.bit_depth, sample_rate = excluded.sample_rate, last_modified = excluded.last_modified, duration = excluded.duration, added_timestamp = excluded.added_timestamp, added_day = excluded.added_day, added_week = excluded.added_week, added_month = excluded.added_month, added_year = excluded.added_year, replay_gain_track_gain = excluded.replay_gain_track_gain, replay_gain_track_peak = excluded.replay_gain_track_peak, replay_gain_album_gain = excluded.replay_gain_album_gain, replay_gain_album_peak = excluded.replay_gain_album_peak, origen = excluded.origen
+                            ''', (
+                                metadata['file_path'], metadata['title'], metadata['track_number'], 
+                                metadata['artist'], metadata['album_artist'], metadata['album'], 
+                                metadata['date'], metadata['genre'], metadata['label'], 
+                                metadata['mbid'], metadata.get('bitrate'), metadata.get('bit_depth'),
+                                metadata.get('sample_rate'), metadata['last_modified'], 
+                                metadata.get('duration'), metadata['added_timestamp'],
+                                metadata.get('added_day'), metadata['added_week'], 
+                                metadata['added_month'], metadata['added_year'],
+                                metadata.get('replay_gain_track_gain'), metadata.get('replay_gain_track_peak'),
+                                metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak'),
+                                'local'
+                            ))
+                                    
+                            # Asegurarse de que la canción también tenga entrada en song_links
+                            self._ensure_song_links_entry(c, metadata['file_path'])
+                                    
+                            processed_files += 1
+                                    
+                            # Update remaining tables
+                            self._update_artist_info(c, metadata['album_artist'] or metadata['artist'])
+                            self._update_album_info(c, metadata)
+                            self._update_genre_info(c, metadata['genre'])
+                            
+                    else:
                         error_files += 1
-                        error_logger.error(f"File processing error {abs_path}: {str(file_error)}")
+                        error_logger.error(f"Metadata extraction failed: {abs_path}")
+                        
+                    if processed_files % 200 == 0:
+                        conn.commit()
+                    
+                except Exception as file_error:
+                    error_files += 1
+                    error_logger.error(f"File processing error {abs_path}: {str(file_error)}")
             
             # Commit final para asegurar que todos los cambios se guarden
             conn.commit()

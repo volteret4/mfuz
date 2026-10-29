@@ -20,6 +20,29 @@ class _ImageLoadSignals(QObject):
     loaded = pyqtSignal(object, int, object, QImage)  # label, token, clave de caché, imagen
 
 
+class _ConcertDateItem(QTableWidgetItem):
+    """Muestra la fecha como DD-MM-YYYY y ordena cronológicamente."""
+
+    def __init__(self, event_date):
+        super().__init__(event_date)
+        parts = event_date.split('-')
+        # Clave YYYY-MM-DD: se compara como texto sin parsear fechas
+        if len(parts) == 3 and all(p.isdigit() for p in parts):
+            self.sort_key = f"{parts[2]}-{parts[1]}-{parts[0]}"
+        else:
+            self.sort_key = None
+
+    def __lt__(self, other):
+        other_key = getattr(other, 'sort_key', None)
+        if self.sort_key is not None and other_key is not None:
+            return self.sort_key < other_key
+        if self.sort_key is not None:
+            return True  # Las fechas válidas van antes que las no válidas
+        if other_key is not None:
+            return False
+        return self.text() < other.text()
+
+
 class _ImageLoadTask(QRunnable):
     """Lee y reduce una imagen fuera del hilo de la interfaz (las portadas están en NFS)"""
 
@@ -798,136 +821,96 @@ class UIUpdater:
     def _populate_concerts_table(self, table_widget, concerts):
         """Populate the concerts table with concert data."""
         from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
-        from PyQt6.QtCore import Qt
-        from datetime import datetime
-        import json
-        import sys
-        import os
-        
-        # Importar las clases personalizadas para ordenación
-        sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-        from submodules.muspy.table_widgets import DateTableWidgetItem, NumericTableWidgetItem
-        
-        # Clear existing content
-        table_widget.clear()
-        
-        if not concerts:
-            table_widget.setRowCount(1)
-            table_widget.setColumnCount(1)
-            table_widget.setItem(0, 0, QTableWidgetItem("No hay conciertos disponibles"))
-            return
-        
-        # Definir las columnas
-        headers = ["Fecha", "Venue", "Ciudad", "País", "Tour", "Tracklist", "URL"]
-        table_widget.setColumnCount(len(headers))
-        table_widget.setHorizontalHeaderLabels(headers)
-        
-        # Configurar número de filas
-        table_widget.setRowCount(len(concerts))
-        
-        # Poblar la tabla
-        for row, concert in enumerate(concerts):
-            # DEBUG: Imprimir el primer concierto para ver la estructura
-            if row == 0:
-                print(f"Estructura del concierto: {concert}")
-                print(f"Tipo de concert: {type(concert)}")
-            
-            # Los datos vienen como tuplas, usar índices según la consulta SQL:
-            # SELECT id, artist_name, setlist_id, eventDate, venue_name, city_name, 
-            #        city_state, country_name, url, tour, sets, last_updated
-            
-            # Fecha (índice 3: eventDate)
-            event_date = concert[3] if len(concert) > 3 and concert[3] else ''
-            if event_date:
-                try:
-                    # Intentar parsear la fecha desde el formato DD-MM-YYYY al formato YYYY-MM-DD
-                    parsed_date = datetime.strptime(event_date, '%d-%m-%Y')
-                    formatted_date = parsed_date.strftime('%Y-%m-%d')  # Formato para ordenación
-                    # Usar DateTableWidgetItem con el formato correcto para ordenación
-                    date_item = DateTableWidgetItem(formatted_date, "%Y-%m-%d")
-                    # Cambiar el texto mostrado al formato original pero mantener la ordenación correcta
-                    date_item.setData(Qt.ItemDataRole.DisplayRole, event_date)  # Mostrar DD-MM-YYYY
-                except ValueError:
-                    # Si no se puede parsear, usar como texto normal
-                    date_item = QTableWidgetItem(event_date)
-            else:
-                date_item = QTableWidgetItem("Sin fecha")
-            
-            # Guardar datos completos del concierto en el primer item de la fila
-            # Convertir tupla a diccionario para facilitar el acceso
-            concert_dict = {
-                'id': concert[0],
-                'artist_name': concert[1],
-                'setlist_id': concert[2],
-                'eventDate': concert[3],
-                'venue_name': concert[4],
-                'city_name': concert[5],
-                'city_state': concert[6],
-                'country_name': concert[7],
-                'url': concert[8],
-                'tour': concert[9],
-                'sets': concert[10],
-                'last_updated': concert[11]
-            }
-            date_item.setData(Qt.ItemDataRole.UserRole + 1, concert_dict)
-            table_widget.setItem(row, 0, date_item)
-            
-            # Venue (índice 4: venue_name)
-            venue_name = concert[4] if len(concert) > 4 and concert[4] else 'Venue desconocido'
-            table_widget.setItem(row, 1, QTableWidgetItem(venue_name))
-            
-            # Ciudad (índices 5: city_name, 6: city_state)
-            city_parts = []
-            if len(concert) > 5 and concert[5]:  # city_name
-                city_parts.append(concert[5])
-            if len(concert) > 6 and concert[6]:  # city_state
-                city_parts.append(concert[6])
-            city = ", ".join(city_parts) if city_parts else "Ciudad desconocida"
-            table_widget.setItem(row, 2, QTableWidgetItem(city))
-            
-            # País (índice 7: country_name)
-            country = concert[7] if len(concert) > 7 and concert[7] else 'País desconocido'
-            table_widget.setItem(row, 3, QTableWidgetItem(country))
-            
-            # Tour (índice 9: tour)
-            tour = concert[9] if len(concert) > 9 and concert[9] else ''
-            table_widget.setItem(row, 4, QTableWidgetItem(tour))
-            
-            # Tracklist (índice 10: sets)
-            sets_data = concert[10] if len(concert) > 10 and concert[10] else ''
-            tracklist = self._format_setlist(sets_data)
-            tracklist_item = QTableWidgetItem(tracklist)
-            tracklist_item.setToolTip(tracklist)  # Tooltip para ver el tracklist completo
-            table_widget.setItem(row, 5, tracklist_item)
-            
-            # URL (índice 8: url)
-            url = concert[8] if len(concert) > 8 and concert[8] else ''
-            if url:
-                url_item = QTableWidgetItem("Ver en setlist.fm")
-                url_item.setData(Qt.ItemDataRole.UserRole, url)  # Guardar URL en los datos del item
-                url_item.setToolTip(url)
-            else:
-                url_item = QTableWidgetItem("")
-            table_widget.setItem(row, 6, url_item)
-        
-        # Configurar el comportamiento de la tabla
-        table_widget.setSortingEnabled(True)  # Habilitar ordenación
-        table_widget.setAlternatingRowColors(True)  # Filas alternas con colores diferentes
-        table_widget.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)  # Seleccionar filas completas
-        
-        # Ajustar el ancho de las columnas
-        header = table_widget.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)  # Fecha
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Venue
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Ciudad
-        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # País
-        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)  # Tour
-        header.setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)  # Tracklist (expandir)
-        header.setSectionResizeMode(6, QHeaderView.ResizeMode.ResizeToContents)  # URL
-        
-        # Conectar doble clic para abrir URLs
-        table_widget.itemDoubleClicked.connect(self._handle_concert_item_double_click)
 
+        # Con la ordenación activa, cada setItem reordena la tabla entera
+        table_widget.setSortingEnabled(False)
+        table_widget.setUpdatesEnabled(False)
+        try:
+            table_widget.clear()
+
+            if not concerts:
+                table_widget.setRowCount(1)
+                table_widget.setColumnCount(1)
+                table_widget.setItem(0, 0, QTableWidgetItem("No hay conciertos disponibles"))
+                return
+
+            headers = ["Fecha", "Venue", "Ciudad", "País", "Tour", "Tracklist", "URL"]
+            table_widget.setColumnCount(len(headers))
+            table_widget.setHorizontalHeaderLabels(headers)
+            table_widget.setRowCount(len(concerts))
+
+            # Los datos vienen como tuplas, según la consulta SQL:
+            # SELECT id, artist_name, setlist_id, eventDate, venue_name, city_name,
+            #        city_state, country_name, url, tour, sets, last_updated
+            for row, concert in enumerate(concerts):
+                concert = tuple(concert) + (None,) * (12 - len(concert))
+
+                event_date = concert[3] or ''
+                if event_date:
+                    date_item = _ConcertDateItem(event_date)
+                else:
+                    date_item = QTableWidgetItem("Sin fecha")
+
+                # Guardar datos completos del concierto en el primer item de la fila
+                concert_dict = {
+                    'id': concert[0],
+                    'artist_name': concert[1],
+                    'setlist_id': concert[2],
+                    'eventDate': concert[3],
+                    'venue_name': concert[4],
+                    'city_name': concert[5],
+                    'city_state': concert[6],
+                    'country_name': concert[7],
+                    'url': concert[8],
+                    'tour': concert[9],
+                    'sets': concert[10],
+                    'last_updated': concert[11]
+                }
+                date_item.setData(Qt.ItemDataRole.UserRole + 1, concert_dict)
+                table_widget.setItem(row, 0, date_item)
+
+                table_widget.setItem(row, 1, QTableWidgetItem(concert[4] or 'Venue desconocido'))
+
+                city = ", ".join(part for part in (concert[5], concert[6]) if part)
+                table_widget.setItem(row, 2, QTableWidgetItem(city or "Ciudad desconocida"))
+
+                table_widget.setItem(row, 3, QTableWidgetItem(concert[7] or 'País desconocido'))
+                table_widget.setItem(row, 4, QTableWidgetItem(concert[9] or ''))
+
+                tracklist = self._format_setlist(concert[10] or '')
+                tracklist_item = QTableWidgetItem(tracklist)
+                tracklist_item.setToolTip(tracklist)  # Tooltip para ver el tracklist completo
+                table_widget.setItem(row, 5, tracklist_item)
+
+                url = concert[8] or ''
+                if url:
+                    url_item = QTableWidgetItem("Ver en setlist.fm")
+                    url_item.setData(Qt.ItemDataRole.UserRole, url)  # Guardar URL en los datos del item
+                    url_item.setToolTip(url)
+                else:
+                    url_item = QTableWidgetItem("")
+                table_widget.setItem(row, 6, url_item)
+
+            table_widget.setAlternatingRowColors(True)
+            table_widget.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+
+            # ResizeToContents recalcula el ancho recorriendo todas las filas en cada
+            # cambio; se calcula una vez y las columnas quedan ajustables a mano
+            header = table_widget.horizontalHeader()
+            header.setResizeContentsPrecision(100)  # Medir solo las primeras filas
+            table_widget.resizeColumnsToContents()
+            for col in range(len(headers)):
+                header.setSectionResizeMode(col, QHeaderView.ResizeMode.Interactive)
+            header.setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)  # Tracklist (expandir)
+
+            table_widget.setSortingEnabled(True)
+        finally:
+            table_widget.setUpdatesEnabled(True)
+
+        # Conectar doble clic para abrir URLs (una sola vez por tabla)
+        if not table_widget.property("_concert_dblclick_connected"):
+            table_widget.itemDoubleClicked.connect(self._handle_concert_item_double_click)
+            table_widget.setProperty("_concert_dblclick_connected", True)
 
 
 

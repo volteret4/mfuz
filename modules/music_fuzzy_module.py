@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QApplication, QComboBox, QWidget, QTreeWidgetItem, QPushButton,
                              QLabel, QVBoxLayout, QCheckBox, QStackedWidget, QGroupBox,
                              QRadioButton, QSpinBox, QComboBox, QGridLayout, QDialog)
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence
 import os
 import sqlite3
@@ -36,6 +36,11 @@ class MusicFuzzyModule(BaseModule):
 
         print(f"Estado inicial de 'only_local_files' desde config: {self.only_local_files_state}")
 
+        # Con "solo local", incluir también lo que estuvo en local y ya no tiene archivos
+        self.include_old_local_state = kwargs.get('include_old_local', False)
+        if isinstance(self.include_old_local_state, str):
+            self.include_old_local_state = self.include_old_local_state.lower() == 'true'
+
         # Llamar a super().__init__ para cargar la UI
         super().__init__(parent, theme, **kwargs)
 
@@ -51,7 +56,12 @@ class MusicFuzzyModule(BaseModule):
         """Inicializar componentes de forma diferida para acelerar el startup."""
         # Componentes críticos primero (los que afectan la UI inmediata)
         self.db_manager = DatabaseManager(self.db_path)
+        self.db_manager.include_old_local = bool(self.include_old_local_state)
         self.search_handler = SearchHandler(self)
+        if hasattr(self, 'results_tree_widget'):
+            # Atenuar lo que ya no tiene archivos cada vez que se rellenan los resultados
+            self.results_tree_widget.model().rowsInserted.connect(
+                self.search_handler.schedule_old_local_marking)
 
         # Configurar el filtro inmediatamente
         self.search_handler.set_only_local(self.only_local_files_state)
@@ -139,6 +149,7 @@ class MusicFuzzyModule(BaseModule):
         # Solo las conexiones esenciales para que funcione la búsqueda
         if hasattr(self, 'results_tree_widget'):
             self.results_tree_widget.itemClicked.connect(self._handle_item_clicked)
+            self._connect_keyboard_navigation()
 
         if hasattr(self, 'advanced_settings_check'):
             self.advanced_settings_check.toggled.connect(self._toggle_advanced_settings)
@@ -413,15 +424,23 @@ class MusicFuzzyModule(BaseModule):
         """Configurar controles avanzados de forma optimizada."""
         # Solo obtener referencias, no conectar todas las señales todavía
         self.only_local_files = advanced_widget.findChild(QRadioButton, "only_local_files")
+        self.local_and_old = advanced_widget.findChild(QRadioButton, "local_and_old")
         self.show_all = advanced_widget.findChild(QRadioButton, "show_all")
 
-        if self.only_local_files:
-            self.only_local_files.setChecked(bool(self.only_local_files_state))
-            # Conectar solo las señales críticas
-            self.only_local_files.toggled.connect(self._save_checkbox_state)
-
-        if self.show_all:
-            self.show_all.setChecked(not bool(self.only_local_files_state))
+        only_local = bool(self.only_local_files_state)
+        include_old = bool(self.include_old_local_state)
+        initial = [
+            (self.only_local_files, only_local and not include_old),
+            (self.local_and_old, only_local and include_old),
+            (self.show_all, not only_local),
+        ]
+        for radio, checked in initial:
+            if radio:
+                radio.setChecked(checked)
+        # Conectar después de fijar el estado inicial para no relanzar la búsqueda
+        for radio, _ in initial:
+            if radio:
+                radio.toggled.connect(self._on_origin_mode_toggled)
 
         # Guardar referencias a controles pero no conectar todas las señales aún
         self.time_value = advanced_widget.findChild(QSpinBox, "time_value")
@@ -623,21 +642,26 @@ class MusicFuzzyModule(BaseModule):
             self.advanced_settings_container.setVisible(checked)
 
 
+    def _on_origin_mode_toggled(self, checked):
+        """Aplica el radio de origen elegido: solo local, local + antiguos o todo."""
+        # Cada cambio emite toggled en dos radios; actuar solo en el que se activa
+        if not checked:
+            return
+        local_and_old = getattr(self, 'local_and_old', None)
+        include_old = bool(local_and_old and local_and_old.isChecked())
+        only_local = include_old or bool(self.only_local_files and self.only_local_files.isChecked())
+        self.only_local_files_state = only_local
+        self.include_old_local_state = include_old
+        self._save_checkbox_state(only_local, include_old)
+        self.search_handler.set_origin_mode(only_local, include_old)
+
     def _on_only_local_toggled(self, checked):
         """Manejador para el radio button 'only_local_files'."""
-        if checked:
-            print("Radio button 'only_local_files' activado")
-            self.only_local_state = True
-            self._save_checkbox_state(True)
-            self.search_handler.perform_search()
+        self._on_origin_mode_toggled(checked)
 
     def _on_show_all_toggled(self, checked):
         """Manejador para el radio button 'show_all'."""
-        if checked:
-            print("Radio button 'show_all' activado")
-            self.only_local_state = False
-            self._save_checkbox_state(False)
-            self.search_handler.perform_search()
+        self._on_origin_mode_toggled(checked)
 
 
     def _setup_link_buttons(self):
@@ -651,8 +675,33 @@ class MusicFuzzyModule(BaseModule):
             child.setVisible(False)
 
 
+    def _connect_keyboard_navigation(self):
+        """Actualizar el panel de info al moverse por los resultados con el teclado."""
+        if getattr(self, '_nav_timer', None) is not None:
+            return
+        self._nav_timer = QTimer(self)
+        self._nav_timer.setSingleShot(True)
+        self._nav_timer.setInterval(150)  # Al mantener una flecha pulsada solo se carga el último
+        self._nav_timer.timeout.connect(self._handle_current_item_settled)
+        self._shown_item_key = None
+        self.results_tree_widget.currentItemChanged.connect(lambda current, previous: self._nav_timer.start())
+
+    def _handle_current_item_settled(self):
+        item = self.results_tree_widget.currentItem()
+        if item is None:
+            return
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data:
+            return
+        # Un clic ya habrá mostrado este elemento
+        if (item_data.get('type'), item_data.get('id')) == self._shown_item_key:
+            return
+        self._handle_item_clicked(item, 0)
+
     def _handle_item_clicked(self, item, column):
         """Handle clicks on tree widget items"""
+        if getattr(self, '_nav_timer', None) is not None:
+            self._nav_timer.stop()
         # Get item data
         item_data = item.data(0, Qt.ItemDataRole.UserRole)
 
@@ -668,6 +717,7 @@ class MusicFuzzyModule(BaseModule):
             return
 
         print(f"Handling click on {item_type} with ID: {item_id}")
+        self._shown_item_key = (item_type, item_id)
 
         try:
             if item_type == 'artist':
@@ -718,7 +768,7 @@ class MusicFuzzyModule(BaseModule):
             import traceback
             traceback.print_exc()
 
-    def _save_checkbox_state(self, state):
+    def _save_checkbox_state(self, state, include_old_local=None):
         """Save the checkbox state to config file"""
         try:
             # Import functions from main.py to reuse existing code
@@ -739,6 +789,8 @@ class MusicFuzzyModule(BaseModule):
 
                     # Update checkbox state
                     module_config['args']['only_local_files'] = state
+                    if include_old_local is not None:
+                        module_config['args']['include_old_local'] = include_old_local
                     print(f"Saving 'only_local_files' state: {state}")
 
                     # Save config file

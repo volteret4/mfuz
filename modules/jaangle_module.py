@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import (QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QRad
                           QGroupBox, QGridLayout, QSpinBox, QProgressBar,  QButtonGroup, QTabWidget,
                           QComboBox, QWidget, QMessageBox, QScrollArea, QDialog, QTableWidgetItem,
                           QLineEdit, QCheckBox, QTableWidget, QHeaderView)
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QUrl
-from PyQt6.QtGui import QFont, QPixmap
+from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QUrl, QObject, QRunnable, QThreadPool
+from PyQt6.QtGui import QFont, QPixmap, QImage, QImageReader
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 import random
 import sqlite3
@@ -16,6 +16,9 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from base_module import BaseModule, PROJECT_ROOT
+
+# Datos que solo usa la app (filtros de jaangle), fuera de musica_local.sqlite
+APP_DB_PATH = Path(PROJECT_ROOT, "db", "sqlite", "app_local.sqlite")
 from modules.submodules.jaangle.spotify_player import SpotifyPlayer
 from modules.submodules.jaangle.listenbrainz_player import ListenBrainzPlayer
 from modules.submodules.jaangle.jaangle_advanced_config import JaangleAdvancedConfig
@@ -24,6 +27,86 @@ from modules.submodules.jaangle.jaangle_advanced_config import JaangleAdvancedCo
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def _select_playable_songs(conn, query, params, count, music_origin, max_retries=3):
+    """Ejecuta la consulta aleatoria y devuelve `count` canciones reproducibles, o []."""
+    for attempt in range(max_retries):
+        candidates = conn.execute(query, params).fetchall()
+        if music_origin == 'local':
+            # La consulta no sabe si el archivo sigue en disco (o en el NAS)
+            valid = []
+            for song in candidates:
+                if song[4] and os.path.exists(song[4]):
+                    valid.append(song)
+                    if len(valid) >= count:
+                        break
+        else:
+            # Spotify y online: la consulta ya exige un enlace en song_links
+            valid = list(candidates[:count])
+        if len(valid) >= count:
+            return valid[:count]
+        print(f"No hay suficientes canciones válidas para {count} opciones. Reintento {attempt + 1}/{max_retries}")
+    return []
+
+
+def _load_cover_thumbnail(song, size=80):
+    """Lee la portada de una canción ya reducida a miniatura (QImage), o None."""
+    # album_art_path_denorm de la canción y, si no, el del álbum
+    for path in (song[8], song[6]):
+        if not path or not os.path.exists(path):
+            continue
+        reader = QImageReader(path)
+        reader.setAutoTransform(True)
+        source_size = reader.size()
+        if source_size.isValid() and max(source_size.width(), source_size.height()) > size * 2:
+            # Decodificar directamente a tamaño reducido: las portadas pueden ser de 1500 px
+            reader.setScaledSize(source_size.scaled(size * 2, size * 2, Qt.AspectRatioMode.KeepAspectRatio))
+        image = reader.read()
+        if not image.isNull():
+            return image.scaled(size, size, Qt.AspectRatioMode.KeepAspectRatio,
+                                Qt.TransformationMode.SmoothTransformation)
+    return None
+
+
+class _QuestionSignals(QObject):
+    # request_id, canciones (lista o None), portadas (QImage o None por canción)
+    ready = pyqtSignal(int, object, object)
+
+
+class _QuestionPrepTask(QRunnable):
+    """Prepara una pregunta fuera del hilo de la interfaz: consulta, archivos y portadas."""
+
+    def __init__(self, request_id, db_path, query, params, count, music_origin, signals):
+        super().__init__()
+        self.request_id = request_id
+        self.db_path = db_path
+        self.query = query
+        self.params = list(params)
+        self.count = count
+        self.music_origin = music_origin
+        self.signals = signals
+
+    def run(self):
+        songs, covers = None, []
+        try:
+            # Conexión propia: sqlite3 no permite compartir la del módulo entre hilos
+            conn = sqlite3.connect(self.db_path, timeout=5)
+            try:
+                songs = _select_playable_songs(conn, self.query, self.params, self.count, self.music_origin)
+            finally:
+                conn.close()
+            covers = [_load_cover_thumbnail(song) for song in songs]
+        except Exception as e:
+            print(f"Error preparando la pregunta: {e}")
+            import traceback
+            traceback.print_exc()
+        try:
+            self.signals.ready.emit(self.request_id, songs, covers)
+        except RuntimeError:
+            pass  # El módulo se cerró mientras se preparaba
+
+
 
 class ScalableLabel(QLabel):
     def __init__(self, text="", min_font_size=8, max_font_size=16):
@@ -71,6 +154,9 @@ class MusicQuiz(BaseModule):
     """Módulo de quiz musical que permite a los usuarios adivinar canciones."""
     
     quiz_completed = pyqtSignal()
+
+    # Margen para que una canción local empiece a sonar (NAS que despierta, etc.)
+    PLAYBACK_START_TIMEOUT_MS = 8000
     
     def __init__(self, parent=None, theme='Tokyo Night', db_path=None, config=None, **kwargs):
         # IMPORTANTE: Inicializar todos los atributos al principio
@@ -131,9 +217,24 @@ class MusicQuiz(BaseModule):
         self.player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.player.setAudioOutput(self.audio_output)
+
+        # Flujo de preguntas (ver _invalidate_pending / _request_question)
+        self._question_token = 0
+        self._prep_request_id = 0
+        self._prep_in_flight = False
+        self._prepared_question = None
+        self._waiting_for_question = False
+        self._pending_start_ms = None
+        self._awaiting_playback = False
+        self._total_progress_band = None
         
         # Inicializar la UI
         super().__init__(parent, theme)
+
+        self._question_signals = _QuestionSignals()
+        self._question_signals.ready.connect(self._on_question_prepared)
+        self.player.mediaStatusChanged.connect(self._on_media_status_changed)
+        self.player.playbackStateChanged.connect(self._on_playback_state_changed)
         
         self.global_config = self.get_global_config()
 
@@ -295,8 +396,12 @@ class MusicQuiz(BaseModule):
                 self.total_quiz_progressbar.setValue(int(progress_percent))
                 self.total_quiz_progressbar.setFormat(f"Tiempo restante: {self.format_time(self.remaining_total_time)}")
                 
-                # Cambiar color cuando queda poco tiempo
-                if progress_percent <= 10:  # Menos del 10%
+                # Cambiar color cuando queda poco tiempo. Aplicar una hoja de estilos
+                # obliga a recalcular el estilo: solo al cambiar de tramo, no cada segundo
+                band = 'low' if progress_percent <= 10 else 'mid' if progress_percent <= 25 else 'ok'
+                if band == self._total_progress_band:
+                    pass
+                elif band == 'low':  # Menos del 10%
                     self.total_quiz_progressbar.setStyleSheet("""
                         QProgressBar {
                             border: 2px solid grey;
@@ -308,7 +413,7 @@ class MusicQuiz(BaseModule):
                             border-radius: 3px;
                         }
                     """)
-                elif progress_percent <= 25:  # Menos del 25%
+                elif band == 'mid':  # Menos del 25%
                     self.total_quiz_progressbar.setStyleSheet("""
                         QProgressBar {
                             border: 2px solid grey;
@@ -333,6 +438,7 @@ class MusicQuiz(BaseModule):
                             border-radius: 3px;
                         }
                     """)
+                self._total_progress_band = band
             
             # Actualizar label
             # if hasattr(self, 'total_time_label'):
@@ -622,7 +728,7 @@ class MusicQuiz(BaseModule):
         album_image.setFixedSize(80, 80)
         album_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
         album_image.setText("Portada")
-        album_image.setStyleSheet("border: 1px solid gray; background-color: lightgray;")
+        album_image.setStyleSheet("border: 1px solid rgba(128, 128, 128, 0.5); background-color: rgba(128, 128, 128, 0.15);")
         option_layout.addWidget(album_image)
         
         # Información de la canción
@@ -800,6 +906,9 @@ class MusicQuiz(BaseModule):
             
             self.conn = sqlite3.connect(str(self.db_path))
             self.cursor = self.conn.cursor()
+            # Los filtros de jaangle van en una db propia del PC: la principal
+            # llega de pepecono por Syncthing y se reemplaza entera
+            self.cursor.execute("ATTACH DATABASE ? AS app", (str(APP_DB_PATH),))
             print(f"Conectado a la base de datos: {self.db_path}")
             
             # Verificar la estructura de la base de datos
@@ -860,36 +969,30 @@ class MusicQuiz(BaseModule):
         # Inicializar tiempo total del quiz
         self.total_quiz_duration_seconds = self.quiz_duration_minutes * 60
         self.remaining_total_time = self.total_quiz_duration_seconds
+        self._total_progress_band = None
         
         # Configurar progressbar total
         if hasattr(self, 'total_quiz_progressbar'):
             self.total_quiz_progressbar.setValue(100)
             self.total_quiz_progressbar.setFormat(f"Tiempo restante: {self.format_time(self.remaining_total_time)}")
         
-        # if hasattr(self, 'total_time_label'):
-        #     self.total_time_label.setText(f"Tiempo restante: {self.format_time(self.remaining_total_time)}")
-        
+        # Descartar preguntas preparadas con la configuración anterior
+        self._discard_prepared_question()
+        self._invalidate_pending()
+
         # Activar el estado del juego
         self.game_active = True
         
-        # Configurar el timer del quiz completo
-        try:
-            self.quiz_timer.timeout.disconnect()  # Desconectar señales previas
-        except TypeError:
-            pass  # No hay conexiones previas
-        self.quiz_timer.timeout.connect(self.end_quiz)
-        self.quiz_timer.start(self.total_quiz_duration_seconds * 1000)  # En milisegundos
+        # El final lo decide update_total_quiz_progress, que tiene en cuenta los
+        # premios y penalizaciones; un temporizador fijo cortaba antes de tiempo
+        if hasattr(self, 'quiz_timer'):
+            self.quiz_timer.stop()
         
         # Timer para actualizar el progreso total cada segundo
         if not hasattr(self, 'total_progress_timer'):
             self.total_progress_timer = QTimer()
             self.total_progress_timer.setInterval(1000)  # 1 segundo
-        
-        try:
-            self.total_progress_timer.timeout.disconnect()  # Desconectar señales previas
-        except TypeError:
-            pass  # No hay conexiones previas
-        self.total_progress_timer.timeout.connect(self.update_total_quiz_progress)
+            self.total_progress_timer.timeout.connect(self.update_total_quiz_progress)
         self.total_progress_timer.start()
         
         # Iniciar la primera pregunta
@@ -899,6 +1002,8 @@ class MusicQuiz(BaseModule):
     def stop_quiz(self):
         """Detiene el juego en curso."""
         self.game_active = False
+        self._invalidate_pending()
+        self._discard_prepared_question()
         
         # Actualizar estados de botones
         if hasattr(self, 'start_button') and hasattr(self, 'stop_button'):
@@ -930,11 +1035,13 @@ class MusicQuiz(BaseModule):
         # Restablecer la visualización
         if hasattr(self, 'countdown_label'):
             self.countdown_label.setText("---")
+            self.countdown_label.setStyleSheet("")
         if hasattr(self, 'progress_bar'):
             self.progress_bar.setValue(0)
         
         # Restablecer el progressbar total
         if hasattr(self, 'total_quiz_progressbar'):
+            self._total_progress_band = None
             self.total_quiz_progressbar.setValue(0)
             self.total_quiz_progressbar.setFormat("Tiempo restante: --:--")
             self.total_quiz_progressbar.setStyleSheet("""
@@ -947,17 +1054,19 @@ class MusicQuiz(BaseModule):
                     border-radius: 3px;
                 }
             """)
-        
-        # if hasattr(self, 'total_time_label'):
-        #     self.total_time_label.setText("Tiempo restante: --:--")
-        #     self.total_time_label.setStyleSheet("font-weight: bold;")
 
 
     def end_quiz(self):
         """Finaliza el quiz cuando se acaba el tiempo total."""
+        if not self.game_active:
+            return
         print("Finalizando quiz...")
         
-        # Detener el timer de progreso total
+        # Cortar ya el juego: sin esto la siguiente pregunta pendiente seguía sonando
+        self.game_active = False
+        self._invalidate_pending()
+        if hasattr(self, 'timer'):
+            self.timer.stop()
         if hasattr(self, 'total_progress_timer'):
             self.total_progress_timer.stop()
         
@@ -969,6 +1078,22 @@ class MusicQuiz(BaseModule):
         
         # Pequeña pausa para asegurar que la reproducción se ha detenido
         QTimer.singleShot(500, self._show_final_results)
+
+    def _show_final_results(self):
+        """Muestra los resultados finales después de asegurar que la música se ha detenido."""
+        # Llamar a stop_quiz para limpiar todo
+        self.stop_quiz()
+        
+        # Mostrar resultados finales
+        score_percent = 0 if self.total_played == 0 else (self.score / self.total_played) * 100
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Quiz completado")
+        msg.setText(f"¡Quiz completado!\n\nPuntuación: {self.score}/{self.total_played}\nPrecisión: {score_percent:.1f}%")
+        msg.setIcon(QMessageBox.Icon.Information)
+        msg.exec()
+        
+        # Emitir señal de quiz completado
+        self.quiz_completed.emit()
 
 
     def update_player_game_statistics(self):
@@ -996,6 +1121,9 @@ class MusicQuiz(BaseModule):
 
     def stop_all_playback(self):
         """Detiene toda la reproducción de música activa de forma más agresiva."""
+        # Que una carga en curso no arranque la canción después de parar
+        self._pending_start_ms = None
+        self._awaiting_playback = False
         try:
             print("Deteniendo toda la reproducción...")
             
@@ -1091,29 +1219,96 @@ class MusicQuiz(BaseModule):
         except Exception as e:
             print(f"Error al restaurar volumen: {e}")
 
+    # --- Flujo de preguntas ---------------------------------------------------
+    # La pregunta siguiente se prepara en segundo plano (consulta, comprobación de
+    # archivos en el NAS y portadas) mientras se juega la actual. Cada pregunta
+    # tiene un token: los callbacks diferidos de una pregunta ya terminada se
+    # descartan en lugar de reproducir audio o contar respuestas a destiempo.
+
+    def _invalidate_pending(self):
+        """Anula los callbacks diferidos de la pregunta en curso."""
+        self._question_token += 1
+        self._pending_start_ms = None
+        self._awaiting_playback = False
+
+    def _later(self, ms, callback):
+        """Programa callback solo si sigue la misma pregunta y el juego activo."""
+        token = self._question_token
+
+        def run():
+            if self.game_active and token == self._question_token:
+                callback()
+
+        QTimer.singleShot(ms, run)
+
+    def _discard_prepared_question(self):
+        """Olvida la pregunta preparada (y la que se esté preparando)."""
+        self._prep_request_id += 1
+        self._prep_in_flight = False
+        self._prepared_question = None
+        self._waiting_for_question = False
+
+    def _request_question(self):
+        """Lanza en segundo plano la preparación de la siguiente pregunta."""
+        if self._prep_in_flight or self._prepared_question is not None:
+            return
+        try:
+            query, params = self._build_random_songs_query(self.options_count)
+        except Exception as e:
+            print(f"Error construyendo la consulta de canciones: {e}")
+            return
+        self._prep_request_id += 1
+        self._prep_in_flight = True
+        QThreadPool.globalInstance().start(_QuestionPrepTask(
+            self._prep_request_id, str(self.db_path), query, params,
+            self.options_count, self.music_origin, self._question_signals))
+
+    def _on_question_prepared(self, request_id, songs, covers):
+        if request_id != self._prep_request_id:
+            return  # Preparada con una configuración que ya no vale
+        self._prep_in_flight = False
+        self._prepared_question = (songs, covers)
+        if self._waiting_for_question and self.game_active:
+            self._waiting_for_question = False
+            self.show_next_question()
+
     def show_next_question(self):
-        """Muestra la siguiente pregunta del quiz con soporte mejorado para reproducción."""
+        """Muestra la siguiente pregunta del quiz."""
         if not self.game_active:
             return
 
-        # Restaurar volumen si fue silenciado
-        self.restore_audio_volume()
+        self._invalidate_pending()
+        self.timer.stop()
     
-        # Detener la reproducción anterior si existe
-        self.player.stop()
-        if hasattr(self, 'spotify_player'):
-            self.spotify_player.stop()
-        if hasattr(self, 'listenbrainz_player'):
-            self.listenbrainz_player.stop()
-        
-        # Obtener las canciones aleatorias (ahora con número variable)
-        songs = self.get_random_songs(self.options_count)
-        
+        # Detener la reproducción anterior y devolver el volumen
+        self.stop_all_playback()
+        self.restore_audio_volume()
+
+        if self._prepared_question is None:
+            # Primera pregunta, o la preparación aún no ha terminado
+            self._waiting_for_question = True
+            self.enable_options(False)
+            if hasattr(self, 'countdown_label'):
+                self.countdown_label.setStyleSheet("")
+                self.countdown_label.setText("Preparando...")
+            self._request_question()
+            return
+
+        songs, covers = self._prepared_question
+        self._prepared_question = None
+
         if not songs or len(songs) < self.options_count:
             self.show_error_message("Error", f"No hay suficientes canciones en la base de datos para mostrar {self.options_count} opciones.")
             self.stop_quiz()
             return
-            
+
+        self._present_question(songs, covers)
+
+        # Preparar ya la siguiente mientras se juega esta
+        self._request_question()
+
+    def _present_question(self, songs, covers):
+        """Rellena las opciones y arranca la reproducción de la correcta."""
         # Elegir una canción aleatoria como correcta
         self.current_correct_option = random.randint(0, self.options_count - 1)
         self.current_song = songs[self.current_correct_option]
@@ -1128,10 +1323,10 @@ class MusicQuiz(BaseModule):
             button.artist_label.setText(f"👤 {artist}")
             button.album_label.setText(f"💿 {album}")
             
-            # Cargar imagen del álbum
-            pixmap = self.load_album_art(album_art_path_denorm if album_art_path_denorm else album_art_path)
-            if pixmap:
-                button.album_image.setPixmap(pixmap)
+            # Portada ya decodificada a tamaño miniatura por la tarea de preparación
+            cover = covers[i] if i < len(covers) else None
+            if cover is not None:
+                button.album_image.setPixmap(QPixmap.fromImage(cover))
             else:
                 button.album_image.setText("🎵")
                 button.album_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -1145,64 +1340,39 @@ class MusicQuiz(BaseModule):
         
         # Mostrar mensaje de carga
         if hasattr(self, 'countdown_label'):
+            self.countdown_label.setStyleSheet("")
             self.countdown_label.setText("Cargando...")
         if hasattr(self, 'progress_bar'):
             self.progress_bar.setValue(10)
-        
-        # Obtener los IDs de todas las canciones para una posible playlist
-        song_ids = [song[0] for song in songs if song[0] is not None]
         
         # Iniciar la reproducción de la canción correcta según el origen
         correct_song = songs[self.current_correct_option]
         self.current_song_id = correct_song[0] if len(correct_song) > 0 else None  # ID de la canción
 
-        try:
-            if self.music_origin == 'spotify':
-                # Usar el reproductor de Spotify
-                if hasattr(self, 'spotify_container') and self.spotify_container:
-                    self.spotify_container.show()
-                    
-                if self.current_song_id is not None:
-                    QTimer.singleShot(2000, lambda: self._play_spotify_track())
-                else:
-                    logger.error("ID de canción no válido para reproducción de Spotify, intentando con otra pregunta")
-                    QTimer.singleShot(1000, self.show_next_question)
-                    return
-                    
-            elif self.music_origin == 'online':
-                # Usar el reproductor online (anteriormente listenbrainz)
-                if hasattr(self, 'listenbrainz_container') and self.listenbrainz_container:
-                    self.listenbrainz_container.show()
-                    
-                if self.current_song_id is not None:
-                    # Añadir un delay para dar tiempo a la carga del reproductor
-                    QTimer.singleShot(2000, lambda: self._play_online_track())
-                else:
-                    logger.error("ID de canción no válido para reproducción online, intentando con otra pregunta")
-                    QTimer.singleShot(1000, self.show_next_question)
-                    return
+        if self.music_origin == 'spotify':
+            # Usar el reproductor de Spotify
+            if hasattr(self, 'spotify_container') and self.spotify_container:
+                self.spotify_container.show()
+            if self.current_song_id is not None:
+                self._later(2000, self._play_spotify_track)
             else:
-                # Reproducción local tradicional
-                if len(correct_song) > 4 and correct_song[4]:
-                    self.current_song_path = correct_song[4]  # Ruta del archivo local
-                else:
-                    raise Exception("No hay ruta de archivo disponible para esta canción")
+                logger.error("ID de canción no válido para reproducción de Spotify, intentando con otra pregunta")
+                self._later(1000, self.show_next_question)
                 
-                # Verificar que la ruta del archivo exista
-                if not os.path.exists(self.current_song_path):
-                    print(f"Error: El archivo de audio no existe: {self.current_song_path}")
-                    raise FileNotFoundError(f"Archivo de audio no encontrado: {self.current_song_path}")
-                    
+        elif self.music_origin == 'online':
+            # Usar el reproductor online (anteriormente listenbrainz)
+            if hasattr(self, 'listenbrainz_container') and self.listenbrainz_container:
+                self.listenbrainz_container.show()
+            if self.current_song_id is not None:
                 # Añadir un delay para dar tiempo a la carga del reproductor
-                QTimer.singleShot(1500, lambda: self._play_local_track())
-                
-        except Exception as e:
-            print(f"Error al reproducir la canción: {e}")
-            import traceback
-            traceback.print_exc()
-            # Intentar con la siguiente pregunta si hay error
-            QTimer.singleShot(500, self.show_next_question)
-            return
+                self._later(2000, self._play_online_track)
+            else:
+                logger.error("ID de canción no válido para reproducción online, intentando con otra pregunta")
+                self._later(1000, self.show_next_question)
+        else:
+            # Reproducción local: la tarea de preparación ya comprobó que el archivo existe
+            self.current_song_path = correct_song[4]
+            self._play_local_track()
 
     def _play_online_track(self):
         """Método auxiliar para reproducir canción online después del delay inicial."""
@@ -1237,7 +1407,7 @@ class MusicQuiz(BaseModule):
             traceback.print_exc()
             
             # Intentar con la siguiente pregunta si hay error
-            QTimer.singleShot(1000, self.show_next_question)
+            self._later(1000, self.show_next_question)
 
     def _play_with_listenbrainz_playlist(self, song_ids):
         """Método auxiliar para reproducir con ListenBrainz usando playlist."""
@@ -1309,7 +1479,7 @@ class MusicQuiz(BaseModule):
                     return
             
             # Si todo falla, pasar a la siguiente pregunta
-            QTimer.singleShot(1000, self.show_next_question)
+            self._later(1000, self.show_next_question)
 
     def _get_song_playable_urls(self, song_id):
         """Obtiene URLs reproducibles para una canción desde la tabla song_links."""
@@ -1352,24 +1522,6 @@ class MusicQuiz(BaseModule):
 
 
 
-    def check_playback_started(self):
-        """Verifica si la reproducción ha comenzado correctamente."""
-        if self.player.playbackState() != QMediaPlayer.PlaybackState.PlayingState:
-            print("Error: No se pudo iniciar la reproducción")
-            # Intentar reproducir de nuevo
-            self.player.play()
-            
-            # Si sigue sin funcionar después de otro intento, pasar a la siguiente pregunta
-            QTimer.singleShot(1000, lambda: self.check_if_still_not_playing())
-
-    def check_if_still_not_playing(self):
-        """Comprueba si la canción sigue sin reproducirse después de un segundo intento."""
-        if self.player.playbackState() != QMediaPlayer.PlaybackState.PlayingState:
-            print("Error persistente: La canción no se puede reproducir después de varios intentos")
-            QTimer.singleShot(500, self.show_next_question)
-
-
-
     def update_countdown(self):
         """Actualiza la cuenta atrás y el progreso."""
         if self.remaining_time > 0:
@@ -1380,17 +1532,16 @@ class MusicQuiz(BaseModule):
             progress_value = (self.remaining_time / self.song_duration_seconds) * 100
             self.progress_bar.setValue(int(progress_value))
             
-            # Si hay poco tiempo, cambiar el color
-            if self.remaining_time <= 5:
+            # Si hay poco tiempo, cambiar el color (una vez, no en cada segundo)
+            if self.remaining_time <= 5 and self.countdown_label.styleSheet() != "color: red;":
                 self.countdown_label.setStyleSheet("color: red;")
-            else:
-                self.countdown_label.setStyleSheet("")
         else:
             # Se acabó el tiempo
             self.timer.stop()
             
             # NUEVO: Detener reproducción cuando se acaba el tiempo de la canción
             self.stop_all_playback()
+            self._invalidate_pending()
             
             # NUEVO: Aplicar penalización por tiempo agotado
             self.apply_time_adjustment(False, self.current_song_id)  # False = respuesta incorrecta
@@ -1406,7 +1557,7 @@ class MusicQuiz(BaseModule):
             self.enable_options(False)
             
             # Pausa antes de la siguiente pregunta
-            QTimer.singleShot(self.pause_between_songs * 1000, self.show_next_question)
+            self._later(self.pause_between_songs * 1000, self.show_next_question)
 
     def on_option_selected(self):
         """Maneja la selección de una opción por parte del usuario."""
@@ -1422,6 +1573,8 @@ class MusicQuiz(BaseModule):
         
         # NUEVO: Detener reproducción cuando se selecciona una opción
         self.stop_all_playback()
+        # Si la canción aún estaba cargando, que no empiece a sonar ahora
+        self._invalidate_pending()
         
         # Determinar si la respuesta es correcta
         is_correct = selected_option == self.current_correct_option
@@ -1445,7 +1598,7 @@ class MusicQuiz(BaseModule):
         self.enable_options(False)
         
         # Pausa antes de la siguiente pregunta
-        QTimer.singleShot(self.pause_between_songs * 1000, self.show_next_question)
+        self._later(self.pause_between_songs * 1000, self.show_next_question)
 
 
 
@@ -2934,14 +3087,14 @@ class MusicQuiz(BaseModule):
             
             # Verificar si la tabla existe
             self.cursor.execute(f"""
-                SELECT name FROM sqlite_master 
+                SELECT name FROM app.sqlite_master 
                 WHERE type='table' AND name='{actual_table}'
             """)
             if not self.cursor.fetchone():
                 print(f"Tabla {actual_table} no existe, creándola automáticamente")
                 # Crear la tabla automáticamente si no existe
                 self.cursor.execute(f"""
-                    CREATE TABLE IF NOT EXISTS {actual_table} (
+                    CREATE TABLE IF NOT EXISTS app.{actual_table} (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL UNIQUE,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -2951,7 +3104,7 @@ class MusicQuiz(BaseModule):
                 return []
             
             # Obtener los elementos
-            self.cursor.execute(f"SELECT name FROM {actual_table} ORDER BY name")
+            self.cursor.execute(f"SELECT name FROM app.{actual_table} ORDER BY name")
             items = self.cursor.fetchall()
             result = [item[0] for item in items if item[0]]
             print(f"Elementos excluidos obtenidos de {actual_table}: {len(result)} elementos")
@@ -2990,14 +3143,14 @@ class MusicQuiz(BaseModule):
             
             # Verificar si la tabla existe
             self.cursor.execute(f"""
-                SELECT name FROM sqlite_master 
+                SELECT name FROM app.sqlite_master 
                 WHERE type='table' AND name='{actual_table}'
             """)
             if not self.cursor.fetchone():
                 print(f"Tabla {actual_table} no existe, creándola automáticamente")
                 # Crear la tabla automáticamente si no existe
                 self.cursor.execute(f"""
-                    CREATE TABLE IF NOT EXISTS {actual_table} (
+                    CREATE TABLE IF NOT EXISTS app.{actual_table} (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL UNIQUE,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -3007,7 +3160,7 @@ class MusicQuiz(BaseModule):
                 return []
             
             # Obtener los elementos
-            self.cursor.execute(f"SELECT name FROM {actual_table} ORDER BY name")
+            self.cursor.execute(f"SELECT name FROM app.{actual_table} ORDER BY name")
             items = self.cursor.fetchall()
             result = [item[0] for item in items if item[0]]
             print(f"Elementos incluidos obtenidos de {actual_table}: {len(result)} elementos")
@@ -3051,7 +3204,7 @@ class MusicQuiz(BaseModule):
             for table_name in filter_tables:
                 try:
                     cursor.execute(f"""
-                        CREATE TABLE IF NOT EXISTS {table_name} (
+                        CREATE TABLE IF NOT EXISTS app.{table_name} (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             name TEXT NOT NULL UNIQUE,
                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -3102,7 +3255,7 @@ class MusicQuiz(BaseModule):
             
             for table_name in filter_tables:
                 try:
-                    cursor.execute(f"DELETE FROM {table_name}")
+                    cursor.execute(f"DELETE FROM app.{table_name}")
                     print(f"Filtros limpiados de {table_name}")
                 except Exception as e:
                     # Si la tabla no existe, simplemente continuar
@@ -3671,7 +3824,7 @@ class MusicQuiz(BaseModule):
             success = self.spotify_player.play(self.current_song_id)
             if not success:
                 logger.error(f"Error al reproducir canción de Spotify con ID {self.current_song_id}, intentando con otra pregunta")
-                QTimer.singleShot(1000, self.show_next_question)
+                self._later(1000, self.show_next_question)
                 return
                 
             # Configurar el temporizador para la cuenta regresiva
@@ -3683,10 +3836,10 @@ class MusicQuiz(BaseModule):
             self.timer.start()
         except Exception as e:
             print(f"Error al reproducir canción de Spotify: {e}")
-            QTimer.singleShot(1000, self.show_next_question)
+            self._later(1000, self.show_next_question)
 
     def _play_local_track(self):
-        """Método auxiliar para reproducir canción local después del delay inicial."""
+        """Carga la canción local; empieza a sonar en cuanto el reproductor la tiene lista."""
         try:
             # Obtener la información relevante de la canción actual
             song_duration = 0
@@ -3704,73 +3857,60 @@ class MusicQuiz(BaseModule):
             if start_from_beginning or song_duration <= (self.song_duration_seconds + avoid_last_seconds):
                 start_position = 0
             else:
-                max_start = max(0, song_duration - self.song_duration_seconds - avoid_last_seconds)
-                if max_start > 0:
-                    # Corregir el error: convertir max_start a entero antes de usarlo en randint
-                    max_start_int = int(max_start)
-                    start_position = random.randint(10, max_start_int)
-                else:
-                    start_position = 0
+                max_start = int(max(0, song_duration - self.song_duration_seconds - avoid_last_seconds))
+                start_position = random.randint(10, max_start) if max_start > 10 else 0
             
-            # Mostrar progreso de carga
             if hasattr(self, 'progress_bar'):
                 self.progress_bar.setValue(50)
                 
-            # Configurar el reproductor
-            source = QUrl.fromLocalFile(self.current_song_path)
-            self.player.setSource(source)
-            
-            # Verificar si la fuente es válida antes de reproducir
-            QTimer.singleShot(200, lambda: self.play_song_at_position(start_position))
-            
-            # Configurar el temporizador
-            self.remaining_time = self.song_duration_seconds
-            self.countdown_label.setText(str(self.remaining_time))
-            self.progress_bar.setValue(90)
-            
-            # Iniciar la cuenta regresiva
-            self.timer.start()
+            # _on_media_status_changed salta a la posición y reproduce al cargar;
+            # la cuenta atrás empieza cuando suena (_on_playback_state_changed)
+            self._pending_start_ms = int(start_position * 1000)
+            self._awaiting_playback = True
+            self.player.setSource(QUrl.fromLocalFile(self.current_song_path))
+
+            # Si no llega a sonar (NAS dormido, formato no soportado), pasar a otra
+            self._later(self.PLAYBACK_START_TIMEOUT_MS, self._on_playback_timeout)
         except Exception as e:
             print(f"Error al reproducir canción local: {e}")
             import traceback
             traceback.print_exc()
-            QTimer.singleShot(1000, self.show_next_question)
+            self._later(1000, self.show_next_question)
 
-    def play_song_at_position(self, position_seconds):
-        """Reproduce la canción desde una posición específica."""
-        try:
-            # Verificar si estamos reproduciendo desde Spotify
-            if self.music_origin == 'spotify' and hasattr(self, 'spotify_player'):
-                # Si estamos usando Spotify, intentar posicionar la reproducción
-                # Nota: esto dependerá de las capacidades del reproductor de Spotify
-                if hasattr(self.spotify_player, 'seek_to_position'):
-                    self.spotify_player.seek_to_position(position_seconds)
-                return
-            
-            # Código para reproducción local
-            if not hasattr(self, 'player') or not self.player:
-                print("Error: Reproductor no disponible")
-                return
-                
-            if self.player.mediaStatus() in [QMediaPlayer.MediaStatus.InvalidMedia, 
-                                            QMediaPlayer.MediaStatus.NoMedia]:
-                print(f"Error: Fuente de media inválida: {self.current_song_path}")
-                # Intentar reproducir la siguiente canción
-                QTimer.singleShot(500, self.show_next_question)
-                return
-                
-            # Establecer la posición y reproducir
-            self.player.setPosition(int(position_seconds * 1000))  # Convertir a milisegundos enteros
+    def _on_media_status_changed(self, status):
+        if self._pending_start_ms is None:
+            return
+        if status in (QMediaPlayer.MediaStatus.LoadedMedia, QMediaPlayer.MediaStatus.BufferedMedia):
+            start_ms = self._pending_start_ms
+            self._pending_start_ms = None
+            if start_ms:
+                self.player.setPosition(start_ms)
             self.player.play()
-            
-            # Verificar después de un breve retraso si la reproducción comenzó
-            QTimer.singleShot(500, self.check_playback_started)
-        except Exception as e:
-            print(f"Error al establecer la posición de reproducción: {e}")
-            import traceback
-            traceback.print_exc()
-            QTimer.singleShot(500, self.show_next_question)
+        elif status == QMediaPlayer.MediaStatus.InvalidMedia:
+            print(f"Error: Fuente de media inválida: {self.current_song_path}")
+            self._pending_start_ms = None
+            self._awaiting_playback = False
+            self._later(300, self.show_next_question)
 
+    def _on_playback_state_changed(self, state):
+        if state == QMediaPlayer.PlaybackState.PlayingState and self._awaiting_playback:
+            self._awaiting_playback = False
+            self._start_countdown()
+
+    def _on_playback_timeout(self):
+        if self._awaiting_playback:
+            print(f"La canción no empezó a sonar a tiempo, se cambia de pregunta: {self.current_song_path}")
+            self.show_next_question()
+
+    def _start_countdown(self):
+        """Arranca la cuenta atrás de la pregunta (cuando el audio ya suena)."""
+        self.remaining_time = self.song_duration_seconds
+        if hasattr(self, 'countdown_label'):
+            self.countdown_label.setStyleSheet("")
+            self.countdown_label.setText(str(self.remaining_time))
+        if hasattr(self, 'progress_bar'):
+            self.progress_bar.setValue(100)
+        self.timer.start()
 
     def save_config(self):
         """Guarda la configuración actual a un archivo (versión mejorada)."""
@@ -4847,8 +4987,9 @@ class MusicQuiz(BaseModule):
                 self.countdown_label.setText(message)
                 self.countdown_label.setStyleSheet(style)
                 
-                # Restaurar después de 2 segundos
-                QTimer.singleShot(2000, lambda: self.restore_countdown_display(original_text, original_style))
+                # Restaurar a los 2 segundos, salvo que ya haya empezado otra pregunta
+                # (antes pisaba su "Cargando..." o su cuenta atrás con el número viejo)
+                self._later(2000, lambda: self.restore_countdown_display(original_text, original_style))
             
         except Exception as e:
             print(f"Error mostrando notificación de ajuste: {e}")
@@ -5575,7 +5716,7 @@ class MusicQuiz(BaseModule):
             
             # Crear la tabla si no existe
             cursor.execute(f"""
-                CREATE TABLE IF NOT EXISTS {actual_table} (
+                CREATE TABLE IF NOT EXISTS app.{actual_table} (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL UNIQUE,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -5583,14 +5724,14 @@ class MusicQuiz(BaseModule):
             """)
             
             # Limpiar datos existentes
-            cursor.execute(f"DELETE FROM {actual_table}")
+            cursor.execute(f"DELETE FROM app.{actual_table}")
             
             # Insertar nuevos elementos excluidos
             excluded_count = 0
             for item in excluded_items:
                 if item and str(item).strip():  # Asegurar que no sea None, vacío o solo espacios
                     try:
-                        cursor.execute(f"INSERT OR IGNORE INTO {actual_table} (name) VALUES (?)", (str(item).strip(),))
+                        cursor.execute(f"INSERT OR IGNORE INTO app.{actual_table} (name) VALUES (?)", (str(item).strip(),))
                         excluded_count += 1
                     except Exception as e:
                         print(f"Error inserting item '{item}': {e}")
@@ -5707,193 +5848,134 @@ class MusicQuiz(BaseModule):
             print(f"Error obteniendo resumen de filtros: {e}")
             return "Error al obtener resumen de filtros"
 
-    def get_random_songs_with_advanced_filters(self, count=4, max_retries=3):
+    def _build_random_songs_query(self, count):
+        """Construye la consulta (y sus parámetros) que elige canciones al azar con los filtros activos."""
+        query = """
+            SELECT s.id, s.title, s.artist, s.album, s.file_path, s.duration, 
+                a.album_art_path, s.track_number, s.album_art_path_denorm, s.origen
+            FROM songs s
+            LEFT JOIN artists ar ON ar.name = s.artist
+            LEFT JOIN albums a ON a.name = s.album AND a.artist_id = ar.id
+            WHERE s.duration >= ?
         """
-        Versión modificada de get_random_songs que incorpora los filtros avanzados.
-        Reemplaza o complementa el método original.
-        """
-        retries = 0
-        while retries < max_retries:
-            try:
-                # Construir la consulta base
-                query = """
-                    SELECT s.id, s.title, s.artist, s.album, s.file_path, s.duration, 
-                        a.album_art_path, s.track_number, s.album_art_path_denorm, s.origen
-                    FROM songs s
-                    LEFT JOIN albums a ON s.album = a.name AND s.artist = (
-                        SELECT name FROM artists WHERE id = a.artist_id
-                    )
-                    WHERE s.duration >= ?
-                """
-                params = [self.min_song_duration]
-                
-                # Aplicar filtros avanzados PRIMERO
-                query, params = self.apply_advanced_filters_to_query(query, params)
-                
-                # Aplicar filtro por origen de música
-                if self.music_origin == 'local':
-                    query += " AND s.origen = 'local' AND s.file_path IS NOT NULL"
-                elif self.music_origin == 'spotify':
-                    if self.spotify_user:
-                        query += " AND s.origen = ?"
-                        params.append(f"spotify_{self.spotify_user}")
-                    else:
-                        query += " AND s.origen LIKE 'spotify_%'"
-                    
-                    # Asegurarse que hay un enlace de Spotify disponible
-                    query += """ 
-                    AND EXISTS (
-                        SELECT 1 FROM song_links sl 
-                        WHERE sl.song_id = s.id 
-                        AND sl.spotify_url IS NOT NULL
-                    )
-                    """
-                elif self.music_origin == 'online':
-                    # Cambiar para buscar cualquier enlace online (YouTube, SoundCloud, Bandcamp)
-                    query += """ 
-                    AND EXISTS (
-                        SELECT 1 FROM song_links sl 
-                        WHERE sl.song_id = s.id 
-                        AND (sl.youtube_url IS NOT NULL 
-                            OR sl.soundcloud_url IS NOT NULL 
-                            OR sl.bandcamp_url IS NOT NULL)
-                    )
-                    """
-                
-                # Verificar si hay artistas excluidos (filtros normales)
-                excluded_artists = self.get_excluded_items("excluded_artists")
-                if excluded_artists:
-                    placeholders = ", ".join(["?" for _ in excluded_artists])
-                    query += f" AND s.artist NOT IN ({placeholders})"
-                    params.extend(excluded_artists)
-                
-                # Verificar si hay álbumes excluidos
-                excluded_albums = self.get_excluded_items("excluded_albums")
-                if excluded_albums:
-                    placeholders = ", ".join(["?" for _ in excluded_albums])
-                    query += f" AND s.album NOT IN ({placeholders})"
-                    params.extend(excluded_albums)
-                
-                # Verificar si hay géneros excluidos
-                excluded_genres = self.get_excluded_items("excluded_genres")
-                if excluded_genres:
-                    placeholders = ", ".join(["?" for _ in excluded_genres])
-                    query += f" AND s.genre NOT IN ({placeholders})"
-                    params.extend(excluded_genres)
-                
-                # Verificar si hay carpetas excluidas
-                excluded_folders = self.get_excluded_items("excluded_folders")
-                if excluded_folders:
-                    folder_conditions = []
-                    for folder in excluded_folders:
-                        folder_conditions.append("s.file_path NOT LIKE ?")
-                        params.append(f"{folder}%")
-                    if folder_conditions:
-                        query += f" AND {' AND '.join(folder_conditions)}"
-                
-                # Aplicar filtros de sesión si están activos
-                if hasattr(self, 'session_filters') and self.session_filters:
-                    session_filters = self.session_filters.get('filters', {})
-                    
-                    # Filtrar por artistas incluidos
-                    included_artists = session_filters.get('Artistas', [])
-                    if included_artists:
-                        placeholders = ", ".join(["?" for _ in included_artists])
-                        query += f" AND s.artist IN ({placeholders})"
-                        params.extend(included_artists)
-                    
-                    # Filtrar por álbumes incluidos
-                    included_albums = session_filters.get('Álbumes', [])
-                    if included_albums:
-                        placeholders = ", ".join(["?" for _ in included_albums])
-                        query += f" AND s.album IN ({placeholders})"
-                        params.extend(included_albums)
-                    
-                    # Filtrar por géneros incluidos
-                    included_genres = session_filters.get('Géneros', [])
-                    if included_genres:
-                        placeholders = ", ".join(["?" for _ in included_genres])
-                        query += f" AND s.genre IN ({placeholders})"
-                        params.extend(included_genres)
-                    
-                    # Filtrar por carpetas incluidas
-                    included_folders = session_filters.get('Carpetas', [])
-                    if included_folders:
-                        folder_conditions = []
-                        for folder in included_folders:
-                            folder_conditions.append("s.file_path LIKE ?")
-                            params.append(f"{folder}%")
-                        if folder_conditions:
-                            query += f" AND ({' OR '.join(folder_conditions)})"
-                
-                # Agregar orden aleatorio y límite
-                query += " ORDER BY RANDOM() LIMIT ?"
-                params.append(count * 4)  # Obtener más canciones para tener margen
-                
-                print(f"Ejecutando consulta con filtros avanzados: {query[:200]}...")
-                self.cursor.execute(query, params)
-                candidates = self.cursor.fetchall()
-                
-                if len(candidates) == 0:
-                    print(f"La consulta no devolvió resultados con filtros avanzados")
-                    print(f"Parámetros: {params}")
-                    retries += 1
-                    continue
-                
-                print(f"Encontradas {len(candidates)} canciones candidatas")
-                
-                # Verificar las canciones según el origen
-                valid_songs = []
-                for song in candidates:
-                    valid = False
-                    
-                    if self.music_origin == 'local':
-                        # Para canciones locales, verificar que el archivo existe
-                        if song[4] and os.path.exists(song[4]):
-                            valid = True
-                    elif self.music_origin == 'spotify':
-                        # Para canciones de Spotify, verificar que tengan un enlace válido
-                        self.cursor.execute("""
-                            SELECT spotify_url FROM song_links 
-                            WHERE song_id = ? AND spotify_url IS NOT NULL
-                        """, (song[0],))
-                        
-                        if self.cursor.fetchone():
-                            valid = True
-                    elif self.music_origin == 'online':
-                        # Para canciones online, verificar que tengan un enlace válido
-                        self.cursor.execute("""
-                            SELECT youtube_url, soundcloud_url, bandcamp_url 
-                            FROM song_links 
-                            WHERE song_id = ? 
-                            AND (youtube_url IS NOT NULL OR soundcloud_url IS NOT NULL OR bandcamp_url IS NOT NULL)
-                        """, (song[0],))
-                        
-                        if self.cursor.fetchone():
-                            valid = True
-                    
-                    if valid:
-                        valid_songs.append(song)
-                        if len(valid_songs) >= count:
-                            break
-                
-                if len(valid_songs) >= count:
-                    print(f"Devolviendo {len(valid_songs[:count])} canciones válidas")
-                    return valid_songs[:count]
-                
-                # Si no hay suficientes canciones válidas, intentar de nuevo
-                retries += 1
-                print(f"No se encontraron suficientes canciones válidas para {count} opciones. Reintento {retries}/{max_retries}")
-            
-            except Exception as e:
-                print(f"Error al obtener canciones aleatorias con filtros avanzados: {e}")
-                import traceback
-                traceback.print_exc()
-                retries += 1
+        params = [self.min_song_duration]
         
-        # Si llegamos aquí, no pudimos obtener suficientes canciones
-        print(f"Error: No se pudieron obtener suficientes canciones válidas ({count}) después de varios intentos")
-        return []
+        # Aplicar filtros avanzados PRIMERO
+        query, params = self.apply_advanced_filters_to_query(query, params)
+        
+        # Aplicar filtro por origen de música
+        if self.music_origin == 'local':
+            query += " AND s.origen = 'local' AND s.file_path IS NOT NULL"
+        elif self.music_origin == 'spotify':
+            if self.spotify_user:
+                query += " AND s.origen = ?"
+                params.append(f"spotify_{self.spotify_user}")
+            else:
+                query += " AND s.origen LIKE 'spotify_%'"
+            
+            # Asegurarse que hay un enlace de Spotify disponible
+            query += """ 
+            AND EXISTS (
+                SELECT 1 FROM song_links sl 
+                WHERE sl.song_id = s.id 
+                AND sl.spotify_url IS NOT NULL
+            )
+            """
+        elif self.music_origin == 'online':
+            # Cambiar para buscar cualquier enlace online (YouTube, SoundCloud, Bandcamp)
+            query += """ 
+            AND EXISTS (
+                SELECT 1 FROM song_links sl 
+                WHERE sl.song_id = s.id 
+                AND (sl.youtube_url IS NOT NULL 
+                    OR sl.soundcloud_url IS NOT NULL 
+                    OR sl.bandcamp_url IS NOT NULL)
+            )
+            """
+        
+        # Verificar si hay artistas excluidos (filtros normales)
+        excluded_artists = self.get_excluded_items("excluded_artists")
+        if excluded_artists:
+            placeholders = ", ".join(["?" for _ in excluded_artists])
+            query += f" AND s.artist NOT IN ({placeholders})"
+            params.extend(excluded_artists)
+        
+        # Verificar si hay álbumes excluidos
+        excluded_albums = self.get_excluded_items("excluded_albums")
+        if excluded_albums:
+            placeholders = ", ".join(["?" for _ in excluded_albums])
+            query += f" AND s.album NOT IN ({placeholders})"
+            params.extend(excluded_albums)
+        
+        # Verificar si hay géneros excluidos
+        excluded_genres = self.get_excluded_items("excluded_genres")
+        if excluded_genres:
+            placeholders = ", ".join(["?" for _ in excluded_genres])
+            query += f" AND s.genre NOT IN ({placeholders})"
+            params.extend(excluded_genres)
+        
+        # Verificar si hay carpetas excluidas
+        excluded_folders = self.get_excluded_items("excluded_folders")
+        if excluded_folders:
+            folder_conditions = []
+            for folder in excluded_folders:
+                folder_conditions.append("s.file_path NOT LIKE ?")
+                params.append(f"{folder}%")
+            if folder_conditions:
+                query += f" AND {' AND '.join(folder_conditions)}"
+        
+        # Aplicar filtros de sesión si están activos
+        if hasattr(self, 'session_filters') and self.session_filters:
+            session_filters = self.session_filters.get('filters', {})
+            
+            # Filtrar por artistas incluidos
+            included_artists = session_filters.get('Artistas', [])
+            if included_artists:
+                placeholders = ", ".join(["?" for _ in included_artists])
+                query += f" AND s.artist IN ({placeholders})"
+                params.extend(included_artists)
+            
+            # Filtrar por álbumes incluidos
+            included_albums = session_filters.get('Álbumes', [])
+            if included_albums:
+                placeholders = ", ".join(["?" for _ in included_albums])
+                query += f" AND s.album IN ({placeholders})"
+                params.extend(included_albums)
+            
+            # Filtrar por géneros incluidos
+            included_genres = session_filters.get('Géneros', [])
+            if included_genres:
+                placeholders = ", ".join(["?" for _ in included_genres])
+                query += f" AND s.genre IN ({placeholders})"
+                params.extend(included_genres)
+            
+            # Filtrar por carpetas incluidas
+            included_folders = session_filters.get('Carpetas', [])
+            if included_folders:
+                folder_conditions = []
+                for folder in included_folders:
+                    folder_conditions.append("s.file_path LIKE ?")
+                    params.append(f"{folder}%")
+                if folder_conditions:
+                    query += f" AND ({' OR '.join(folder_conditions)})"
+        
+        # Agregar orden aleatorio y límite
+        query += " ORDER BY RANDOM() LIMIT ?"
+        params.append(count * 4)  # Obtener más canciones para tener margen
+        return query, params
+
+    def get_random_songs_with_advanced_filters(self, count=4, max_retries=3):
+        """Elige canciones al azar con los filtros activos (versión síncrona)."""
+        try:
+            query, params = self._build_random_songs_query(count)
+        except Exception as e:
+            print(f"Error al obtener canciones aleatorias con filtros avanzados: {e}")
+            return []
+        songs = _select_playable_songs(self.conn, query, params, count, self.music_origin, max_retries)
+        if not songs:
+            print(f"Error: No se pudieron obtener suficientes canciones válidas ({count}) después de varios intentos")
+            return []
+        return songs
 
     def integrate_advanced_filters_with_existing_system(self):
         """

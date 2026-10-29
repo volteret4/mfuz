@@ -333,6 +333,16 @@ QPushButton:hover {
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="local_and_old">
+              <property name="toolTip">
+               <string>Incluye también lo que estuvo en local y ya no tiene archivos (se muestra atenuado)</string>
+              </property>
+              <property name="text">
+               <string>Local y antiguos</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QRadioButton" name="show_all">
               <property name="text">
                <string>Mostrar todo</string>

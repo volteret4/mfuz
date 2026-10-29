@@ -522,6 +522,11 @@ def guardar_scrobbles_en_db(conn, scrobbles, lastfm_user):
     
     print(f"Guardando {len(scrobbles)} scrobbles en la base de datos...")
     
+    # La tabla puede haber sido creada por otro módulo (url_playlist) con las
+    # columnas antiguas track_name/scrobble_date NOT NULL: rellenarlas también
+    cursor.execute(f"PRAGMA table_info({tabla_scrobbles})")
+    columnas_tabla = {fila[1] for fila in cursor.fetchall()}
+    
     for scrobble in scrobbles:
         # Verificar si ya existe este scrobble (mismo artista y canción)
         cursor.execute(f"""
@@ -564,24 +569,29 @@ def guardar_scrobbles_en_db(conn, scrobbles, lastfm_user):
             actualizados += 1
         else:
             # Insertar nuevo scrobble
-            cursor.execute(f"""
-            INSERT INTO {tabla_scrobbles} (
-                artist_name, artist_mbid, name, album_name, album_mbid, 
-                timestamp, fecha_scrobble, lastfm_url, reproducciones, fecha_reproducciones
+            valores = {
+                'artist_name': scrobble['artist_name'],
+                'artist_mbid': scrobble['artist_mbid'],
+                'name': scrobble['name'],
+                'album_name': scrobble['album_name'],
+                'album_mbid': scrobble['album_mbid'],
+                'timestamp': scrobble['timestamp'],
+                'fecha_scrobble': scrobble['fecha_scrobble'],
+                'lastfm_url': scrobble['lastfm_url'],
+                'reproducciones': scrobble['reproducciones'],
+                'fecha_reproducciones': scrobble['fecha_reproducciones'],
+            }
+            if 'track_name' in columnas_tabla:
+                valores['track_name'] = scrobble['name']
+            if 'scrobble_date' in columnas_tabla:
+                valores['scrobble_date'] = scrobble['fecha_scrobble']
+            
+            columnas = ', '.join(valores)
+            marcadores = ', '.join('?' for _ in valores)
+            cursor.execute(
+                f"INSERT INTO {tabla_scrobbles} ({columnas}) VALUES ({marcadores})",
+                tuple(valores.values())
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                scrobble['artist_name'],
-                scrobble['artist_mbid'],
-                scrobble['name'],
-                scrobble['album_name'],
-                scrobble['album_mbid'],
-                scrobble['timestamp'],
-                scrobble['fecha_scrobble'],
-                scrobble['lastfm_url'],
-                scrobble['reproducciones'],
-                scrobble['fecha_reproducciones']
-            ))
             
             nuevos += 1
     

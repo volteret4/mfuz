@@ -18,7 +18,13 @@ from urllib.parse import urlparse
 
 # Importar módulos base
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from tools.discogs_login import DiscogsClient
+# Cargar tools/discogs_login.py por ruta: 'tools' colisiona con db/tools
+import importlib.util
+_discogs_login_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'discogs_login.py')
+_spec = importlib.util.spec_from_file_location('discogs_login', _discogs_login_path)
+_discogs_login = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_discogs_login)
+DiscogsClient = _discogs_login.DiscogsClient
 from base_module import PROJECT_ROOT
 print(PROJECT_ROOT)
 

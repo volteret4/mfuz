@@ -12,7 +12,7 @@ import time
 import os
 from pathlib import Path
 
-def parse_args():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description='Obtener listens de ListenBrainz y añadirlos a la base de datos')
     parser.add_argument('--config',  help='Archivo de configuración')
     parser.add_argument('--user', type=str,  help='Usuario de ListenBrainz')
@@ -33,7 +33,7 @@ def parse_args():
     parser.add_argument('--analyze-mismatches', default=False, help='Analizar razones de discrepancias')
     parser.add_argument('--use-all-matching', default=False, help='Utilizar todas las técnicas de coincidencia mejoradas')
     
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 def get_and_process_backfill_listens(username, token, conn, existing_artists, existing_albums, existing_songs, 
                              max_items=1000, limit_total=None,
@@ -2118,19 +2118,24 @@ def get_and_process_listens_in_batches(username, token, conn, existing_artists, 
 
 
 
-def main():
-    args = parse_args()
-    
-    try:
-        with open(args.config, 'r') as f:
-            config_data = json.load(f)
+def main(config=None):
+    if config is not None:
+        # Llamado desde db_creator: la configuración ya viene filtrada y no
+        # hay que parsear sys.argv (son los argumentos de db_creator)
+        args = parse_args([])
+    else:
+        args = parse_args()
         
-        config = {}
-        config.update(config_data.get("common", {}))
-        config.update(config_data.get("listenbrainz/listens_listenbrainz", {}))
-    except Exception as e:
-        print(f"Error al cargar el archivo de configuración: {e}")
-        return
+        try:
+            with open(args.config, 'r') as f:
+                config_data = json.load(f)
+            
+            config = {}
+            config.update(config_data.get("common", {}))
+            config.update(config_data.get("listenbrainz/listens_listenbrainz", {}))
+        except Exception as e:
+            print(f"Error al cargar el archivo de configuración: {e}")
+            return
 
     db_path = args.db_path or config.get('db_path')
     if not db_path: 

@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QTreeWidgetItem, QSpinBox, QComboBox, QCheckBox, QPushButton, QRadioButton, QWidget, QGroupBox
 from PyQt6.QtCore import Qt, QTimer
+import re
 import sqlite3
 
 
@@ -44,26 +45,28 @@ class SearchHandler:
             # Búsqueda normal (sin filtros): mínimo 3 caracteres
             return len(query) >= 3
 
-        # Encontrar el último filtro en la consulta para medir el texto real de búsqueda
+        # Encontrar el último filtro u operador para medir el texto real de búsqueda
         filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:", "t:", "b:", "c:"]
+        numeric_filters = ["y:", "rs:", "rm:", "ra:"]
         operators = ["+", "&"]
 
-        last_idx = -1
-        for f in filters:
-            idx = query.rfind(f)
-            if idx > last_idx:
-                last_idx = idx + len(f)
+        last_end = -1
+        last_token = None
+        # A igual final gana el más largo ("ra:" frente a "a:")
+        for token in sorted(filters + operators, key=len):
+            idx = query.rfind(token)
+            if idx != -1 and idx + len(token) >= last_end:
+                last_end = idx + len(token)
+                last_token = token
 
-        for op in operators:
-            idx = query.rfind(op)
-            if idx > last_idx:
-                last_idx = idx + len(op)
+        search_text = query[last_end:].strip() if last_end != -1 else query
 
-        # Extraer el texto de búsqueda que va después del filtro/operador
-        search_text = query[last_idx:] if last_idx != -1 else query
+        # Los filtros de año y tiempo son numéricos: basta con que haya valor
+        if last_token in numeric_filters:
+            return len(search_text) >= 1
 
-        # Mínimo 5 caracteres si hay filtros activos
-        return len(search_text.strip()) >= 5
+        # Resto de filtros y operadores: mínimo 3 caracteres
+        return len(search_text) >= 3
 
     def _execute_search(self):
         """Ejecuta la búsqueda real después de que el temporizador expire."""
@@ -132,6 +135,8 @@ class SearchHandler:
 
         # Procesar filtros especiales normales o consultas con +
         elif self._has_special_filters(query):
+            # Los filtros añaden al árbol; sin limpiar se mezclarían con la búsqueda anterior
+            self.parent.results_tree_widget.clear()
             self._perform_filtered_search(query, only_local)
         else:
             # Búsqueda normal
@@ -526,7 +531,7 @@ class SearchHandler:
             # Filter and add albums
             for album in albums:
                 # Skip non-local albums if filtering is enabled
-                if only_local and album.get('origen') != 'local':
+                if only_local and not self._is_local_origen(album.get('origen')):
                     continue
 
                 self._add_filtered_album(album, artist_item, only_local)
@@ -536,7 +541,7 @@ class SearchHandler:
     def _add_filtered_album(self, album, artist_item, only_local=False, load_content=True):
         """Add an album to an artist with filtered content."""
         # Skip non-local albums if filtering is enabled
-        if only_local and ('origen' in album and album['origen'] != 'local'):
+        if only_local and ('origen' in album and not self._is_local_origen(album['origen'])):
             # Obtener canciones del álbum para verificar si hay alguna local
             songs = self.parent.db_manager.get_album_songs(album['id'], only_local=True)
 
@@ -573,6 +578,76 @@ class SearchHandler:
 
 
 
+
+    def _is_local_origen(self, origen):
+        return self.parent.db_manager.is_local_origen(origen)
+
+    def set_origin_mode(self, only_local, include_old_local):
+        """Cambia el filtro de origen y repite la búsqueda actual."""
+        self.parent.db_manager.include_old_local = bool(include_old_local)
+        # Sin pasar por set_only_local: su sincronización de radios desmarcaría
+        # "Local y antiguos" al ver "solo local" sin marcar
+        self.only_local_state = bool(only_local)
+        self.perform_search()
+
+    def schedule_old_local_marking(self, *args):
+        """Agrupa las inserciones en el árbol y marca los antiguos una vez al terminar."""
+        if not hasattr(self, '_old_local_timer'):
+            self._old_local_timer = QTimer()
+            self._old_local_timer.setSingleShot(True)
+            self._old_local_timer.timeout.connect(self._mark_old_local_items)
+        self._old_local_timer.start(0)
+
+    def _mark_old_local_items(self):
+        """Atenúa los artistas y álbumes cuyos archivos ya no existen (antiguo_local)."""
+        tree = self.parent.results_tree_widget
+        items = {'artist': {}, 'album': {}}
+        stack = [tree.topLevelItem(i) for i in range(tree.topLevelItemCount())]
+        while stack:
+            item = stack.pop()
+            data = item.data(0, Qt.ItemDataRole.UserRole)
+            if isinstance(data, dict) and data.get('type') in items and data.get('id') is not None:
+                items[data['type']].setdefault(data['id'], []).append(item)
+            stack.extend(item.child(i) for i in range(item.childCount()))
+        if not items['artist'] and not items['album']:
+            return
+
+        old_origen = self.parent.db_manager.OLD_LOCAL_ORIGEN
+        old_items = []
+        conn = self.parent.db_manager._get_connection()
+        if not conn:
+            return
+        try:
+            for kind, table in (('artist', 'artists'), ('album', 'albums')):
+                ids = list(items[kind])
+                for start in range(0, len(ids), 900):  # límite de parámetros de SQLite
+                    chunk = ids[start:start + 900]
+                    rows = conn.execute(
+                        f"SELECT id FROM {table} WHERE origen = ? AND id IN ({','.join('?' * len(chunk))})",
+                        [old_origen, *chunk]).fetchall()
+                    for row in rows:
+                        old_items.extend(items[kind][row['id']])
+        except sqlite3.Error as e:
+            print(f"Error marcando elementos antiguos: {e}")
+            return
+        finally:
+            conn.close()
+
+        if not old_items:
+            return
+        from PyQt6.QtGui import QBrush, QPalette
+        # Color del texto del tema con transparencia: funciona en temas claros y oscuros
+        color = tree.palette().color(QPalette.ColorRole.Text)
+        color.setAlpha(110)
+        color = QBrush(color)
+        tooltip = "Ya no está en local: sus archivos se borraron o movieron"
+        for item in old_items:
+            for col in range(tree.columnCount()):
+                item.setForeground(col, color)
+                font = item.font(col)
+                font.setItalic(True)
+                item.setFont(col, font)
+                item.setToolTip(col, tooltip)
 
     def set_only_local(self, state):
         """Establecer el estado de filtrado de solo archivos locales sin depender del checkbox"""
@@ -645,7 +720,7 @@ class SearchHandler:
                         continue  # Skip if album not found
 
                     # If origin filtering is enabled, check album origin
-                    if only_local and album.get('origen') != 'local':
+                    if only_local and not self._is_local_origen(album.get('origen')):
                         continue
 
                     # Find or add artist
@@ -682,7 +757,7 @@ class SearchHandler:
                     cursor.execute("""
                         SELECT COUNT(*) as count
                         FROM albums
-                        WHERE artist_id = ? AND origen = 'local'
+                        WHERE artist_id = ? AND is_local(origen)
                     """, (artist['id'],))
                     result = cursor.fetchone()
                     if result and result['count'] == 0:
@@ -706,7 +781,7 @@ class SearchHandler:
     def _add_album_to_tree(self, album, artist_item, only_local=False):
         """Add an album to the artist item with local filtering."""
         # Check if origin filtering is needed
-        if only_local and album.get('origen') != 'local':
+        if only_local and not self._is_local_origen(album.get('origen')):
             return None
 
         # Check if this album is already a child of the artist
@@ -732,7 +807,7 @@ class SearchHandler:
     def _add_song_to_tree(self, song, album_item, only_local=False):
         """Add a song to the album item with local filtering."""
         # Check if origin filtering is needed
-        if only_local and song.get('origen') != 'local':
+        if only_local and not self._is_local_origen(song.get('origen')):
             return None
 
         # Create a unique identifier to check for duplicates
@@ -869,44 +944,32 @@ class SearchHandler:
             print(f"Ejecutando búsqueda de país para: {filters['country']}")
             self._search_by_country(filters["country"], only_local)
 
+    # Prefijo de filtro: solo al principio o tras espacio/operador, para que
+    # "a:" no coincida dentro de "ra:" ni "s:" dentro de "rs:"
+    FILTER_PREFIX_RE = re.compile(r'(?:^|(?<=[\s+&]))(rs|rm|ra|ay|a|d|g|y|s|t|c):')
+
+    FILTER_PREFIXES = {
+        "a": "artist",
+        "d": "album",
+        "g": "genre",
+        "y": "year",
+        "ay": "year",  # alias que muestra la ayuda de la caja de búsqueda
+        "s": "label",
+        "rs": "recent_weeks",
+        "rm": "recent_months",
+        "ra": "recent_years",
+        "t": "title",
+        "c": "country"
+    }
+
     def _extract_filters(self, query):
         """Extrae los filtros de la consulta."""
         filters = {}
-
-        # Lista de prefijos a buscar
-        prefix_map = {
-            "a:": "artist",
-            "d:": "album",
-            "g:": "genre",
-            "y:": "year",
-            "s:": "label",
-            "rs:": "recent_weeks",
-            "rm:": "recent_months",
-            "ra:": "recent_years",
-            "t:": "title",
-            "c:": "country"
-        }
-
-        # Buscar cada prefijo en la consulta
-        for prefix, filter_name in prefix_map.items():
-            if prefix in query:
-                # Encontrar la posición del prefijo
-                pos = query.find(prefix)
-                # Extraer el resto de la cadena después del prefijo
-                substring = query[pos + len(prefix):]
-
-                # Buscar el siguiente prefijo, si existe
-                next_prefix_pos = len(substring)
-                for p in prefix_map.keys():
-                    if p in substring:
-                        p_pos = substring.find(p)
-                        if 0 <= p_pos < next_prefix_pos:
-                            next_prefix_pos = p_pos
-
-                # Extraer el valor hasta el siguiente prefijo o el final
-                filter_value = substring[:next_prefix_pos].strip()
-                filters[filter_name] = filter_value
-
+        matches = list(self.FILTER_PREFIX_RE.finditer(query))
+        for i, match in enumerate(matches):
+            # El valor llega hasta el siguiente prefijo o el final
+            end = matches[i + 1].start() if i + 1 < len(matches) else len(query)
+            filters[self.FILTER_PREFIXES[match.group(1)]] = query[match.end():end].strip()
         return filters
 
     def _search_songs_by_title(self, title_query, only_local=False):
@@ -928,7 +991,7 @@ class SearchHandler:
                     FROM songs s
                     LEFT JOIN artists ar ON s.artist = ar.name
                     LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
-                    WHERE s.title LIKE ? AND s.origen = 'local'
+                    WHERE s.title LIKE ? AND is_local(s.origen)
                     ORDER BY s.artist, s.album, s.track_number, s.title
                 """
             else:
@@ -1021,7 +1084,7 @@ class SearchHandler:
                         ar.id as artist_id, ar.name as artist_name
                     FROM albums a
                     JOIN artists ar ON a.artist_id = ar.id
-                    WHERE a.genre LIKE ? AND a.origen = 'local'
+                    WHERE a.genre LIKE ? AND is_local(a.origen)
                     ORDER BY ar.name, a.year DESC
                 """
             else:
@@ -1044,7 +1107,7 @@ class SearchHandler:
                 album_id = row['album_id']
 
                 # Verificar filtro de solo local
-                if only_local and ('origen' in row.keys() and row['origen'] != 'local'):
+                if only_local and ('origen' in row.keys() and not self._is_local_origen(row['origen'])):
                     continue
 
                 # Si el artista no está en nuestro diccionario, lo añadimos
@@ -1112,7 +1175,7 @@ class SearchHandler:
                         ar.id as artist_id, ar.name as artist_name
                     FROM albums a
                     JOIN artists ar ON a.artist_id = ar.id
-                    WHERE (a.year = ? OR a.year LIKE ?) AND a.origen = 'local'
+                    WHERE (a.year = ? OR a.year LIKE ?) AND is_local(a.origen)
                     ORDER BY ar.name, a.year DESC
                 """
             else:
@@ -1141,7 +1204,7 @@ class SearchHandler:
                 album_id = row['album_id']
 
                 # Verificar filtro de solo local
-                if only_local and ('origen' in row.keys() and row['origen'] != 'local'):
+                if only_local and ('origen' in row.keys() and not self._is_local_origen(row['origen'])):
                     continue
 
                 # Si el artista no está en nuestro diccionario, lo añadimos
@@ -1205,7 +1268,7 @@ class SearchHandler:
                 label_sql = """
                     SELECT DISTINCT a.label
                     FROM albums a
-                    WHERE a.label LIKE ? AND a.origen = 'local'
+                    WHERE a.label LIKE ? AND is_local(a.origen)
                     ORDER BY a.label
                 """
             else:
@@ -1236,7 +1299,7 @@ class SearchHandler:
                         SELECT DISTINCT ar.id as artist_id, ar.name as artist_name
                         FROM albums a
                         JOIN artists ar ON a.artist_id = ar.id
-                        WHERE a.label = ? AND a.origen = 'local'
+                        WHERE a.label = ? AND is_local(a.origen)
                         ORDER BY ar.name
                     """
                 else:
@@ -1272,7 +1335,7 @@ class SearchHandler:
                         album_sql = """
                             SELECT id, name, year, genre, total_tracks, origen
                             FROM albums
-                            WHERE artist_id = ? AND label = ? AND origen = 'local'
+                            WHERE artist_id = ? AND label = ? AND is_local(origen)
                             ORDER BY year DESC, name
                         """
                     else:
@@ -1292,7 +1355,7 @@ class SearchHandler:
                         album = self._row_to_dict(album_row)
 
                         # Verificar filtro de solo local
-                        if only_local and album.get('origen') != 'local':
+                        if only_local and not self._is_local_origen(album.get('origen')):
                             continue
 
                         # Añadir álbum al artista
@@ -1329,7 +1392,7 @@ class SearchHandler:
                     SELECT DISTINCT a.id, a.name, a.formed_year, a.origin
                     FROM artists a
                     INNER JOIN albums al ON a.id = al.artist_id
-                    WHERE a.origin LIKE ? AND al.origen = 'local'
+                    WHERE a.origin LIKE ? AND is_local(al.origen)
                     ORDER BY a.name
                 """
             else:
@@ -1394,47 +1457,23 @@ class SearchHandler:
             import datetime
             now = datetime.datetime.now()
 
-            # Determinar la columna y valor a usar según la unidad de tiempo
+            # Fecha de corte sobre added_timestamp (texto ISO): comparar semana o mes
+            # sueltos mezclaba elementos del mismo periodo de años anteriores
             if time_unit == "week":
-                column = "added_week"
-                current_value = int(now.strftime("%V"))  # Número de semana actual (1-53)
-                compare_value = max(1, current_value - time_value)  # No permitir valores menores a 1
-
-                # Considerar cambio de año
-                if compare_value > current_value:
-                    # Estamos cruzando al año anterior
-                    where_clause = f"({column} >= {compare_value} OR {column} <= {current_value})"
-                else:
-                    where_clause = f"{column} >= {compare_value} AND {column} <= {current_value}"
-
+                cutoff = now - datetime.timedelta(weeks=time_value)
             elif time_unit == "month":
-                column = "added_month"
-                current_value = now.month
-                compare_value = current_value - time_value
-
-                # Considerar cambio de año
-                if compare_value <= 0:
-                    # Estamos cruzando al año anterior
-                    months_in_current_year = current_value
-                    months_in_prev_year = abs(compare_value)
-                    year_column = "added_year"
-                    current_year = now.year
-                    prev_year = current_year - 1
-
-                    where_clause = f"({column} >= 1 AND {column} <= {current_value} AND {year_column} = {current_year}) OR " \
-                                f"({column} > {12 - months_in_prev_year} AND {year_column} = {prev_year})"
-                else:
-                    where_clause = f"{column} >= {compare_value} AND {column} <= {current_value}"
-
+                month_index = now.year * 12 + (now.month - 1) - time_value
+                year, month = divmod(month_index, 12)
+                cutoff = now.replace(year=year, month=month + 1, day=1)
             elif time_unit == "year":
-                column = "added_year"
-                current_value = now.year
-                compare_value = current_value - time_value
-                where_clause = f"{column} >= {compare_value} AND {column} <= {current_value}"
-
+                cutoff = now.replace(year=now.year - time_value, month=1, day=1)
             else:
                 print(f"Unidad de tiempo inválida: {time_unit}")
                 return
+            if time_unit != "week":
+                cutoff = cutoff.replace(hour=0, minute=0, second=0, microsecond=0)
+            cutoff = cutoff.strftime("%Y-%m-%d %H:%M:%S")
+            where_clause = f"added_timestamp >= '{cutoff}'"
 
             print(f"Filtrando por tiempo: {where_clause}")
 
@@ -1445,8 +1484,8 @@ class SearchHandler:
                     SELECT DISTINCT ar.id, ar.name, ar.formed_year, ar.origin
                     FROM artists ar
                     JOIN albums al ON ar.id = al.artist_id
-                    JOIN songs s ON s.album = al.name
-                    WHERE (s.{where_clause}) AND s.origen = 'local'
+                    JOIN songs s ON s.album = al.name AND s.artist = ar.name
+                    WHERE (s.added_timestamp >= '{cutoff}') AND is_local(s.origen)
                     ORDER BY ar.name
                 """
             else:
@@ -1454,8 +1493,8 @@ class SearchHandler:
                     SELECT DISTINCT ar.id, ar.name, ar.formed_year, ar.origin
                     FROM artists ar
                     JOIN albums al ON ar.id = al.artist_id
-                    JOIN songs s ON s.album = al.name
-                    WHERE s.{where_clause}
+                    JOIN songs s ON s.album = al.name AND s.artist = ar.name
+                    WHERE s.added_timestamp >= '{cutoff}'
                     ORDER BY ar.name
                 """
 
@@ -1477,20 +1516,20 @@ class SearchHandler:
                         album_sql = f"""
                             SELECT DISTINCT al.id, al.name, al.year, al.genre
                             FROM albums al
-                            JOIN songs s ON s.album = al.name
-                            WHERE al.artist_id = ? AND (s.{where_clause}) AND s.origen = 'local'
+                            JOIN songs s ON s.album = al.name AND s.artist = ?
+                            WHERE al.artist_id = ? AND (s.added_timestamp >= '{cutoff}') AND is_local(s.origen)
                             ORDER BY al.year DESC, al.name
                         """
                     else:
                         album_sql = f"""
                             SELECT DISTINCT al.id, al.name, al.year, al.genre
                             FROM albums al
-                            JOIN songs s ON s.album = al.name
-                            WHERE al.artist_id = ? AND s.{where_clause}
+                            JOIN songs s ON s.album = al.name AND s.artist = ?
+                            WHERE al.artist_id = ? AND s.added_timestamp >= '{cutoff}'
                             ORDER BY al.year DESC, al.name
                         """
 
-                    cursor.execute(album_sql, (artist['id'],))
+                    cursor.execute(album_sql, (artist['name'], artist['id']))
                     albums = cursor.fetchall()
 
                     for album in albums:
@@ -1507,7 +1546,7 @@ class SearchHandler:
                                 song_sql = f"""
                                     SELECT id, title, track_number, artist, album, genre, file_path, duration, origen
                                     FROM songs
-                                    WHERE album = ? AND artist = ? AND {where_clause} AND origen = 'local'
+                                    WHERE album = ? AND artist = ? AND {where_clause} AND is_local(origen)
                                     ORDER BY track_number, title
                                 """
                             else:
@@ -1591,7 +1630,7 @@ class SearchHandler:
                         ar.id as artist_id, ar.name as artist_name
                     FROM albums a
                     JOIN artists ar ON a.artist_id = ar.id
-                    WHERE a.name LIKE ? AND a.origen = 'local'
+                    WHERE a.name LIKE ? AND is_local(a.origen)
                     ORDER BY ar.name, a.year DESC
                 """
             else:
@@ -1614,7 +1653,7 @@ class SearchHandler:
                 album_id = row['album_id']
 
                 # Verificar filtro de solo local
-                if only_local and ('origen' in row.keys() and row['origen'] != 'local'):
+                if only_local and ('origen' in row.keys() and not self._is_local_origen(row['origen'])):
                     continue
 
                 # Si el artista no está en nuestro diccionario, lo añadimos
@@ -1670,7 +1709,7 @@ class SearchHandler:
         if 'origen' in song:
             origen = song['origen']
 
-        if only_local and origen != 'local':
+        if only_local and not self._is_local_origen(origen):
             return None
 
         # Get song title and track number safely
@@ -1911,7 +1950,7 @@ class SearchHandler:
                         ar.id as artist_id, ar.name as artist_name
                     FROM albums a
                     JOIN artists ar ON a.artist_id = ar.id
-                    WHERE a.origen = 'local' AND (
+                    WHERE is_local(a.origen) AND (
                         (CAST(substr(a.year, 1, 4) AS INTEGER) BETWEEN ? AND ?) OR
                         (a.year BETWEEN ? AND ?)
                     )
@@ -1944,7 +1983,7 @@ class SearchHandler:
                 album_id = row['album_id']
 
                 # Verificar filtro de solo local
-                if only_local and ('origen' in row.keys() and row['origen'] != 'local'):
+                if only_local and ('origen' in row.keys() and not self._is_local_origen(row['origen'])):
                     continue
 
                 # Si el artista no está en nuestro diccionario, lo añadimos
