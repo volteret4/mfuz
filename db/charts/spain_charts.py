@@ -18,7 +18,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 try:
-    from base_module import PROJECT_ROOT
+    from project_utils import PROJECT_ROOT
 except ImportError:
     # Fallback si no se puede importar
     PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))

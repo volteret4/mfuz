@@ -25,7 +25,7 @@ _spec = importlib.util.spec_from_file_location('discogs_login', _discogs_login_p
 _discogs_login = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_discogs_login)
 DiscogsClient = _discogs_login.DiscogsClient
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT  # sin PyQt: estos scripts corren en pepecono
 print(PROJECT_ROOT)
 
 # Configuración de logging

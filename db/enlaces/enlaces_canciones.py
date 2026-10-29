@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Set, Tuple
 import requests
 from bs4 import BeautifulSoup
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 
 
 

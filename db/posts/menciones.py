@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from base.db_connection import apply_pragmas
 import os
 import re
-from base_module import BaseModule, PROJECT_ROOT
+from project_utils import PROJECT_ROOT  # sin PyQt: estos scripts corren en pepecono
 
 class ArtistMentions:
     """Clase para buscar menciones de artistas en feeds y crear registros en la tabla 'menciones'"""

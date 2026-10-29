@@ -52,7 +52,7 @@ from pathlib import Path
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 # Variables globales para configuración
 CONFIG = {}
 DB_PATH = None

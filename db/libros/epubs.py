@@ -16,7 +16,6 @@ import zipfile
 import xml.etree.ElementTree as ET
 from html import unescape
 import argparse
-from base_module import BaseModule
 
 def extract_text_from_epub(epub_path):
     """

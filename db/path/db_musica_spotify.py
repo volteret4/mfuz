@@ -26,7 +26,7 @@ import re
 
 # Añadir el path del proyecto al sys.path para importar módulos
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from base_module import PROJECT_ROOT, BaseModule
+from project_utils import PROJECT_ROOT
 
 # Intentar importar spotipy
 try:

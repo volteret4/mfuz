@@ -53,7 +53,7 @@ import sys
 
 # Añadir esta línea después de las importaciones existentes
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 
 # Configuración para APIs
 DISCOGS_TOKEN = "MJXLYUGuqwXHVONuYZxVWFSXvFmxpdLqauTRcCsP"  # Opcional: añade tu token de Discogs para más requests

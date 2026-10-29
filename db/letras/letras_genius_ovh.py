@@ -15,7 +15,7 @@ import lyricsgenius
 
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 
 # Adaptador personalizado para datetime
 def adapt_datetime(dt):

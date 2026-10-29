@@ -7,7 +7,7 @@ import json
 import requests
 import time
 from datetime import datetime
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT  # sin PyQt: estos scripts corren en pepecono
 
 class DiscogsArtistInfoUpdater:
     def __init__(self, config=None):

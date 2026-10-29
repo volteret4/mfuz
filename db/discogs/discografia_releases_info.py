@@ -7,7 +7,7 @@ import requests
 import json
 import time
 from datetime import datetime
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 
 class DiscogsUpdater:
     def __init__(self, config=None):

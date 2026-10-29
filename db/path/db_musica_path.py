@@ -34,7 +34,7 @@ from datetime import datetime, timedelta
 import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT  # sin PyQt: estos scripts corren en pepecono
 from base.db_connection import apply_pragmas
 
 

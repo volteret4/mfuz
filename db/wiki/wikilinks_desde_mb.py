@@ -90,7 +90,7 @@ def construct_log_path(log_file):
         return log_file
     
     # Otherwise, construct the path using PROJECT_ROOT
-    from base_module import PROJECT_ROOT
+    from project_utils import PROJECT_ROOT
     log_path = os.path.join(PROJECT_ROOT, log_file)
     
     # Ensure the directory exists

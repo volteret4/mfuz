@@ -8,7 +8,7 @@ import requests
 import time
 import json
 import re
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 
 class DiscogsDiscographyModule:
     def __init__(self, config):

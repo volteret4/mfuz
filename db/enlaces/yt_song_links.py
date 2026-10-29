@@ -17,7 +17,7 @@ import requests
 import logging
 import json
 import re
-from base_module import PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 from urllib.parse import quote_plus
 
 # Importación condicional de BeautifulSoup para evitar errores si no está instalado
