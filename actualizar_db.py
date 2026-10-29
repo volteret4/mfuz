@@ -275,7 +275,7 @@ def ssh(orden: str, **kw) -> subprocess.CompletedProcess:
 def en_servidor(argumentos: list[str]) -> int:
     """Lanza actualizar_db.py en pepecono desacoplado de la sesión ssh (si se
     apaga el PC sigue allí), muestra su salida y al terminar trae la db."""
-    orden = (f"cd {REPO_SERVIDOR} && PYTHONUNBUFFERED=1 setsid nohup ./actualizar_db.py "
+    orden = (f"cd {REPO_SERVIDOR} && mkdir -p {Path(SALIDA_REMOTA).parent} && PYTHONUNBUFFERED=1 setsid nohup ./actualizar_db.py "
              f"{shlex.join(argumentos)} > {SALIDA_REMOTA} 2>&1 < /dev/null & echo $!")
     r = ssh(orden, capture_output=True, text=True)
     pid = r.stdout.strip()
