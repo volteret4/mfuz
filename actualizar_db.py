@@ -76,11 +76,19 @@ PRESETS = {
     "rapido": [
         "path/db_musica_path",
         "enlaces/enlaces_artista_album",
+        "generos/generos_creditos",
         "wiki/wikilinks_desde_mb",
+    ],
+    # Lo lanza la cola de qBittorrent al terminar una descarga: el disco nuevo
+    # entra en la db y se le buscan géneros y créditos (los más recientes primero)
+    "nuevo": [
+        "path/db_musica_path",
+        "generos/generos_creditos",
     ],
     "semanal": [
         "path/db_musica_path",
         "enlaces/enlaces_artista_album",
+        "generos/generos_creditos",
         "enlaces/redes_sociales",
         "wiki/wikilinks_desde_mb",
         "img/portadas_artistas",
@@ -101,6 +109,7 @@ DESC_EXTRA = {
     "path/db_musica_path": "Escanea la carpeta de música y actualiza artistas, álbumes y canciones de la biblioteca local.",
     "lastfm/lastfm_escuchas": "Importa tus escuchas de Last.fm.",
     "lastfm/lastfm_info": "Información de artistas y álbumes desde Last.fm.",
+    "generos/generos_creditos": "Géneros (Discogs, MusicBrainz, Last.fm) y créditos de Discogs de los álbumes locales.",
 }
 
 
