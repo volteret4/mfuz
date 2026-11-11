@@ -24,6 +24,8 @@ import sys
 import os
 import json
 import logging
+import re
+import unicodedata
 from pathlib import Path
 from typing import Dict, List, Optional
 import mutagen
@@ -1008,34 +1010,51 @@ class MusicLibraryManager:
 
         try:
             # Primero, obtener todos los álbumes en la base de datos
-            c.execute("SELECT id, name FROM albums")
+            c.execute("""
+                SELECT al.id, al.name, ar.name, al.album_art_path, al.folder_path
+                FROM albums al LEFT JOIN artists ar ON ar.id = al.artist_id
+            """)
+
+            def in_collection(path):
+                return bool(path) and any(Path(path).is_relative_to(root) for root in self.root_paths)
             albums = c.fetchall()
-            
+
             self.logger.info(f"Actualizando información de rutas, portadas y conteo de canciones para {len(albums)} álbumes...")
             start_time = datetime.now()
-            
+
             albums_updated = 0
             artwork_found = 0
-            
-            for album_id, album_name in albums:
-                # Obtener las rutas de carpetas y contar canciones para este álbum desde la tabla songs
+
+            for album_id, album_name, album_artist, current_art, current_folders in albums:
+                # Las canciones con este título que son de este artista: buscar solo por título
+                # mezclaba discos homónimos (Grimes - Visions acababa con la portada de Norah Jones)
                 c.execute("""
-                    SELECT file_path FROM songs 
+                    SELECT id, file_path, artist, album_artist FROM songs
                     WHERE album = ?
                 """, (album_name,))
-                
-                results = c.fetchall()
+
+                wanted = (album_artist or '').casefold()
+                results = [(song_id, file_path) for song_id, file_path, artist, song_album_artist in c.fetchall()
+                           if wanted in (self._album_artist_name(song_album_artist).casefold(),
+                                         self._album_artist_name(artist).casefold())]
                 track_count = len(results)
-                
+
                 # Extraer las rutas de carpetas únicas
                 folder_paths = set()
-                for row in results:
-                    if row[0]:
+                for _, file_path in results:
+                    if file_path:
                         # Obtener la carpeta padre del archivo
-                        folder_path = str(Path(row[0]).parent)
-                        folder_paths.add(folder_path)
-                
+                        folder_paths.add(str(Path(file_path).parent))
+
                 if not folder_paths:
+                    # Disco sin canciones propias (de Last.fm, Spotify...): una carpeta o portada
+                    # de la colección solo puede ser de otro disco con el mismo título
+                    # (si el nombre del artista no está en la ruta; 'µ-Ziq' en 'Mu‐Ziq/' sí vale)
+                    if in_collection(current_art) and not self._artist_in_path(album_artist, current_art):
+                        c.execute("UPDATE albums SET album_art_path = NULL WHERE id = ?", (album_id,))
+                    if current_folders and all(in_collection(f) and not self._artist_in_path(album_artist, f)
+                                               for f in current_folders.split(';')):
+                        c.execute("UPDATE albums SET folder_path = NULL WHERE id = ?", (album_id,))
                     continue
                     
                 # Actualizar los folder_paths y total_tracks en la tabla albums
@@ -1076,11 +1095,11 @@ class MusicLibraryManager:
                     artwork_found += 1
                     
                     # Actualizar el campo album_art_path_denorm en la tabla songs
-                    c.execute("""
-                        UPDATE songs 
-                        SET album_art_path_denorm = ? 
-                        WHERE album = ?
-                    """, (album_art_path, album_name))
+                    c.executemany("UPDATE songs SET album_art_path_denorm = ? WHERE id = ?",
+                                  [(album_art_path, song_id) for song_id, _ in results])
+                elif in_collection(current_art) and str(Path(current_art).parent) not in folder_paths:
+                    # Portada de la colección que no está en ninguna carpeta del disco: era de otro
+                    c.execute("UPDATE albums SET album_art_path = NULL WHERE id = ?", (album_id,))
                 
             # Guardar los cambios
             conn.commit()
@@ -1506,14 +1525,42 @@ class MusicLibraryManager:
 
 
 
+    @staticmethod
+    def _artist_in_path(artist, path):
+        """¿Aparece el artista en la ruta? Tolera grafías: 'µ-Ziq' en 'Mu‐Ziq/', 'Clark' en
+        'Christopher Stephen Clark/', 'R.E.M.' en 'REM'. Sin nombre latino no se puede saber: sí."""
+        def key(text):
+            for a, b in (('æ', 'ae'), ('ø', 'oe'), ('ß', 'ss'), ('µ', 'mu'), ('μ', 'mu'), ('’', ''), ("'", '')):
+                text = text.replace(a, b).replace(a.upper(), b.upper())
+            text = unicodedata.normalize('NFKD', text.replace('_', ' ').replace('.', ''))
+            text = text.encode('ascii', 'ignore').decode().lower().replace('&', ' and ')
+            return ' '.join(re.sub(r'[^a-z0-9]+', ' ', text).split())
+
+        name = key(re.sub(r'\s*\(\d+\)\s*$', '', artist or ''))
+        if not name or name in ('various artists', 'various', 'va', 'artisti vari', 'varios artistas'):
+            return True
+        if any(part and not key(part) for part in (path or '').split('/')):
+            return True  # carpeta con nombre japonés, que queda como '____'
+        hay = key(path or '')
+        if name.replace(' ', '') in hay.replace(' ', ''):
+            return True
+        words = set(hay.split())
+        common = {'the', 'and', 'los', 'las', 'les', 'der', 'die', 'das', 'band', 'orchestra', 'quartet',
+                  'quintet', 'trio', 'ensemble', 'project', 'group', 'sound', 'sounds', 'music', 'records', 'disc'}
+        return any(w in words for w in name.split() if len(w) >= 3 and w not in common)
+
+    @staticmethod
+    def _album_artist_name(artist):
+        """Nombre con el que se guarda el artista del álbum en albums/artists."""
+        return (artist or '').split('feat.')[0].split('with')[0].split('&')[0].strip()
+
     def _update_album_info(self, cursor, metadata):
         """Update album information with all MusicBrainz and additional metadata."""
         # Omitir si no hay datos válidos
         if not metadata['artist'] or not metadata['album']:
             return
             
-        # Limpiar nombre de artista 
-        artist_name = metadata['artist'].split('feat.')[0].split('with')[0].split('&')[0].strip()
+        artist_name = self._album_artist_name(metadata['artist'])
         
         # Verificar si existe el artista
         cursor.execute("SELECT id FROM artists WHERE name = ?", (artist_name,))
