@@ -1,17 +1,20 @@
 #!/usr/bin/env python
 #
 # Script Name: db_musica_links.py
-# Description: Complementa db_musica.py añadiendo enlaces a servicios externos (Spotify, YouTube, MusicBrainz, Discogs, RateYourMusic, Bandcamp)
+# Description: Complementa db_musica.py añadiendo enlaces a servicios externos (YouTube, MusicBrainz, Discogs, RateYourMusic, Bandcamp, Last.fm)
 #              para artistas y álbumes en la base de datos musical.
 # Author: basado en el trabajo de volteret4
-# Dependencies: - python3, sqlite3, spotipy, musicbrainzngs, discogs_client, google-api-python-client
-# TODO: - arreglar spotify url e id de album
+# Dependencies: - python3, sqlite3, musicbrainzngs, discogs_client, google-api-python-client
+# Spotify ya no se consulta (su API exige Premium al dueño de la app); los
+# spotify_url/spotify_id que ya hay en la db se conservan.
+# TODO:
 #       - copiar artist
 #       - anadir bandcamp
 #       - anadir rateyourmusic 
 
 import os
 import sys
+import html
 import json
 import logging
 import sqlite3
@@ -31,8 +34,6 @@ import lxml
 
 # APIs específicas
 import pylast
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 import musicbrainzngs
 import discogs_client
 #from googleapiclient.discovery import build
@@ -45,6 +46,9 @@ from base.api_cache import APICache
 from base.rate_limiter import get_limiter
 from base.concurrent_processor import ConcurrentEnricher
 from base.db_connection import apply_pragmas
+from base.discos import (normalizar, discogs_es_el_disco, creditos_discogs, url_bandcamp,
+                         leer_pagina_bandcamp, bandcamp_es_el_disco, parecido, artista_coincide,
+                         UA_BANDCAMP)
 
 
 # Adaptador personalizado para datetime
@@ -55,99 +59,14 @@ def adapt_datetime(dt):
 sqlite3.register_adapter(datetime, adapt_datetime)
 
 
-# ── Coincidencia de discos de Discogs ──────────────────────────────────────
-# Una release de Discogs solo se guarda si su artista y su título son los del
-# álbum. Antes se aceptaba un parecido por palabras o, sin coincidencia, el
-# primer resultado de la búsqueda, y se asignaban discos de otros artistas.
-
-# Palabras de edición que no cambian el disco: 'OK Computer - Remastered 2009'
-_EDICION = re.compile(
-    r"\b(remaster(ed)?|remasterizado|deluxe|edition|expanded|anniversary|reissue|"
-    r"bonus( tracks?)?|special|super|version|mono|stereo|\d{4}|\d+(st|nd|rd|th))\b")
-# Separadores de artistas en colaboraciones: 'Ric Wilson, Chromeo'
-_SEP_ARTISTAS = re.compile(
-    r"\s*(?:,|&|/|\+|;| and | y | con | with | feat\.? | ft\.? | vs\.? | x )\s*", re.I)
-
-
-def _normalizar(texto):
-    """Minúsculas, sin acentos, sin '(Deluxe)'/'[2009]', sin el '(2)' de Discogs."""
-    texto = unicodedata.normalize("NFKD", texto or "")
-    texto = "".join(c for c in texto if not unicodedata.combining(c)).casefold()
-    texto = re.sub(r"\s*\(\d+\)\s*$", "", texto)       # 'Grimes (4)' de Discogs
-    texto = re.sub(r"[(\[{].*?[)\]}]", " ", texto)       # '(Deluxe)', '[Remastered]'
-    texto = texto.replace("&", " and ")
-    texto = " ".join(re.sub(r"[\W_]+", " ", texto).split())
-    return re.sub(r"^the ", "", texto)
-
-
-def _mismo_titulo(a, b):
-    a, b = _normalizar(a), _normalizar(b)
-    if not a or not b:
-        return False
-    if a == b:
-        return True
-    a2, b2 = (" ".join(_EDICION.sub(" ", x).split()) for x in (a, b))
-    return bool(a2) and a2 == b2
-
-
-def _mismo_artista(local, artistas_discogs):
-    """local: nombre del artista en la db; artistas_discogs: nombres de la release."""
-    if not artistas_discogs:
-        return False
-    nombres = {_normalizar(n) for n in artistas_discogs} - {""}
-    todos = _normalizar(" ".join(artistas_discogs))
-    nl = _normalizar(local)
-    if nl in ("various", "various artists", "va", "varios", "varios artistas"):
-        return "various" in nombres
-    if not nl:
-        return False
-    if nl in nombres or nl == todos:
-        return True
-    # Colaboraciones: algún artista del nombre local es uno de la release
-    partes = {_normalizar(x) for x in _SEP_ARTISTAS.split(local or "")} - {""}
-    return len(partes) > 1 and bool(partes & nombres)
-
-
-def _es_el_disco(data, artista, album):
-    """data: release completa de la API de Discogs."""
-    nombres = []
-    for a in data.get("artists", []):
-        nombres += [x for x in (a.get("name"), a.get("anv")) if x]
-    return _mismo_titulo(data.get("title", ""), album) and _mismo_artista(artista, nombres)
-
-
-def _creditos_discogs(data):
-    """(producers, engineers, mastering_engineers, credits_json) de una release.
-
-    Mismo formato que db/generos/generos_creditos.py: credits = JSON
-    {rol en minúsculas: [nombres]}; el resto, nombres separados por comas.
-    """
-    creditos = {}
-    extra = list(data.get("extraartists", []))
-    for pista in data.get("tracklist", []):
-        extra += pista.get("extraartists", [])
-    for e in extra:
-        nombre = re.sub(r"\s*\(\d+\)\s*$", "", e.get("anv") or e.get("name") or "").strip()
-        for rol in (e.get("role") or "").split(","):
-            rol = re.sub(r"\s*\[.*?\]", "", rol).strip().lower()
-            if nombre and rol and nombre not in creditos.setdefault(rol, []):
-                creditos[rol].append(nombre)
-    if not creditos:
-        return None, None, None, None
-
-    def con(*claves, sin=()):
-        return ", ".join(dict.fromkeys(
-            n for rol, nombres in creditos.items()
-            if any(c in rol for c in claves) and not any(x in rol for x in sin)
-            for n in nombres)) or None
-
-    return (con("produc"), con("engineer", sin=("master",)), con("master"),
-            json.dumps(creditos, ensure_ascii=False))
-
 def _sin_secretos(config):
     """Copia de la config para el log, sin claves ni tokens."""
     return {k: ('*' * 8 if value and re.search(r'key|secret|token|password|apikey', k, re.I) else value)
             for k, value in config.items()}
+
+
+# Fallo de red o del servicio: lo buscado queda pendiente, no se marca como consultado
+ERROR_RED = object()
 
 
 class MusicLinksManager:
@@ -241,12 +160,6 @@ class MusicLinksManager:
             self.config['db_path'] = os.getenv('DB_PATH')
         
         # Cargar credenciales
-        if 'spotify_client_id' not in self.config:
-            self.config['spotify_client_id'] = os.getenv('SPOTIFY_CLIENT_ID')
-        
-        if 'spotify_client_secret' not in self.config:
-            self.config['spotify_client_secret'] = os.getenv('SPOTIFY_CLIENT_SECRET')
-        
         if 'lastfm_api_key' not in self.config:
             self.config['lastfm_api_key'] = os.getenv('LASTFM_API_KEY')
         
@@ -276,8 +189,6 @@ class MusicLinksManager:
         self.lastfm_api_key = config_dict.get('lastfm_api_key')
         self.lastfm_user = config_dict.get('lastfm_user')
         self.youtube_api_key = config_dict.get('youtube_api_key')
-        self.spotify_client_id = config_dict.get('spotify_client_id')
-        self.spotify_client_secret = config_dict.get('spotify_client_secret')
         self.discogs_token = config_dict.get('discogs_token')
 
         # Lo que no se encontró (enlaces de un álbum, MBID) no se vuelve a buscar
@@ -285,6 +196,9 @@ class MusicLinksManager:
         # (0 = sin límite), los nunca intentados primero.
         self.reintentar_dias = int(config_dict.get('reintentar_dias') or 7)
         self.limite_albums = int(config_dict.get('limite_albums') or 0)
+        # Bandcamp es lento (página por candidato) y rara vez cambia
+        self.bandcamp_dias = int(config_dict.get('bandcamp_dias') or 90)
+        self.limite_bandcamp = int(config_dict.get('limite_bandcamp') or 100)
 
         # Depuración de configuración
         print("Configuración recibida:")
@@ -294,44 +208,6 @@ class MusicLinksManager:
     def _init_apis(self):
         """Inicializa las conexiones a las APIs externas"""
         # [Código existente para otras APIs...]
-        
-        # Spotify
-        if 'spotify' in self.disabled_services:
-            self.spotify = None
-            self.logger.info("Spotify service disabled")
-        else:
-            try:
-                spotify_client_id = self.spotify_client_id
-                spotify_client_secret = self.spotify_client_secret
-                
-                # Debug output for credentials
-                self.logger.info(f"Spotify client ID available: {bool(spotify_client_id)}")
-                self.logger.info(f"Spotify client secret available: {bool(spotify_client_secret)}")
-                
-                if spotify_client_id and spotify_client_secret:
-                    try:
-                        client_credentials_manager = SpotifyClientCredentials(
-                            client_id=spotify_client_id, 
-                            client_secret=spotify_client_secret
-                        )
-                        self.spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-                        
-                        # Test if the connection works
-                        test_result = self.spotify.search(q="test", limit=1)
-                        if test_result and 'tracks' in test_result:
-                            self.logger.info("Spotify API initialized and tested successfully")
-                        else:
-                            self.logger.warning("Spotify API initialized but test query returned unexpected results")
-                        
-                    except Exception as spotify_init_error:
-                        self.logger.error(f"Error during Spotify client initialization: {str(spotify_init_error)}")
-                        self.spotify = None
-                else:
-                    self.spotify = None
-                    self.logger.warning("Spotify API credentials not found or invalid")
-            except Exception as e:
-                self.spotify = None
-                self.logger.error(f"Failed to initialize Spotify API: {str(e)}")
         
         # MusicBrainz
         if 'musicbrainz' not in self.disabled_services:
@@ -433,7 +309,6 @@ class MusicLinksManager:
 
         # Per-service locks so only one thread calls each API at a time
         self._api_locks: Dict[str, threading.Lock] = {
-            'spotify': threading.Lock(),
             'musicbrainz': threading.Lock(),
             'discogs': threading.Lock(),
             'youtube': threading.Lock(),
@@ -444,6 +319,7 @@ class MusicLinksManager:
         # Shared response cache (SQLite-backed, per-service TTL)
         cache_path = Path(str(self.db_path)).parent / '.cache' / 'api_responses.sqlite'
         self._cache = APICache(cache_path)
+        self._bandcamp_ultima = 0.0
 
 
     def _update_database_schema(self):
@@ -490,6 +366,12 @@ class MusicLinksManager:
         # Añadir columna lastfm a artistas si no existe
         if 'lastfm_url' not in album_columns:
             c.execute("ALTER TABLE albums ADD COLUMN lastfm_url TEXT")
+
+        # Bandcamp: id del EmbeddedPlayer y cuándo se buscó/comprobó
+        if 'bandcamp_album_id' not in album_columns:
+            c.execute("ALTER TABLE albums ADD COLUMN bandcamp_album_id INTEGER")
+        if 'bandcamp_checked' not in album_columns:
+            c.execute("ALTER TABLE albums ADD COLUMN bandcamp_checked TIMESTAMP")
 
         # Cuándo se buscó el MBID sin encontrarlo (para no repetir cada día)
         for tabla, columnas in (('artists', artist_columns), ('albums', album_columns)):
@@ -590,66 +472,87 @@ class MusicLinksManager:
             return None
 
 
-    def _get_bandcamp_album_url(self, artist_name: str, album_name: str) -> Optional[str]:
-        """
-        Obtiene la URL del álbum en Bandcamp usando búsqueda simple con expresiones regulares.
-        
-        Args:
-            artist_name (str): Nombre del artista
-            album_name (str): Nombre del álbum
-        
-        Returns:
-            Optional[str]: URL del álbum o None si no se encuentra
-        """
-        if 'bandcamp' in self.disabled_services:
-            return None
-
+    def _bandcamp_get(self, url):
+        """Página de un álbum de Bandcamp (3 s entre peticiones, como vvmm). None si 404; ERROR_RED si falla."""
+        espera = 3 - (time.monotonic() - self._bandcamp_ultima)
+        if espera > 0:
+            time.sleep(espera)
         try:
-            import requests
-            import re
-            import urllib.parse
-
-            # Preparar consulta de búsqueda
-            encoded_album = urllib.parse.quote(album_name)
-            search_url = f"https://bandcamp.com/search?q={encoded_album}&item_type=a"
-
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            }
-
-            # Realizar solicitud de búsqueda
-            response = requests.get(search_url, headers=headers, timeout=10)
-            
-            if response.status_code != 200:
-                self.logger.warning(f"Error de solicitud HTTP: {response.status_code}")
-                return None
-
-            # Buscar URLs de álbumes usando regex
-            album_pattern = rf'href="(https://[^.]+\.bandcamp\.com/album/{re.escape(album_name.lower().replace(" ", "-"))}[^"]*)"'
-            matches = re.findall(album_pattern, response.text, re.IGNORECASE)
-
-            # Filtrar por artista si es posible
-            artist_matches = [
-                url for url in matches 
-                if artist_name.lower().replace(" ", "-") in url.lower()
-            ]
-
-            # Devolver la primera coincidencia
-            if artist_matches:
-                return artist_matches[0].split('?')[0]
-            elif matches:
-                return matches[0].split('?')[0]
-
-            self.logger.info(f"No se encontró URL de álbum para {album_name} by {artist_name}")
+            r = requests.get(url, headers={'User-Agent': UA_BANDCAMP}, timeout=20)
+        except requests.RequestException as e:
+            self.logger.warning(f"Bandcamp: {type(e).__name__} en {url}")
+            return ERROR_RED
+        finally:
+            self._bandcamp_ultima = time.monotonic()
+        if r.status_code in (404, 410):
             return None
+        if r.status_code != 200:
+            self.logger.warning(f"Bandcamp: HTTP {r.status_code} en {url}")
+            return ERROR_RED
+        return r.text
 
-        except Exception as e:
-            self.logger.error(f"Error en búsqueda de álbum Bandcamp: {e}")
-            return None
+    def _bandcamp_desde_musicbrainz(self, artist_name, album_name, mbid):
+        """URLs …bandcamp.com/album/… enlazadas en MusicBrainz (como vvmm/bandcamp_buscar.py)."""
+        if 'musicbrainz' in self.disabled_services:
+            return []
 
+        def de(entidad):
+            return [u for u in (url_bandcamp(r.get('target')) for r in entidad.get('url-relation-list', [])) if u]
 
+        def del_grupo(rgid):
+            urls = []
+            datos = musicbrainzngs.browse_releases(release_group=rgid, includes=['url-rels'], limit=50)
+            for rel in datos.get('release-list', []):
+                urls += de(rel)
+            return urls
 
+        urls = []
+        if mbid:
+            try:
+                rel = musicbrainzngs.get_release_by_id(mbid, includes=['url-rels', 'release-groups'])['release']
+                urls = de(rel)
+                rg = (rel.get('release-group') or {}).get('id')
+                if not urls and rg and parecido(rel.get('title'), album_name):
+                    urls = del_grupo(rg)
+            except musicbrainzngs.ResponseError:
+                pass  # el mbid ya no existe: se busca por nombre
+        if not urls:
+            grupos = musicbrainzngs.search_release_groups(
+                artist=artist_name, releasegroup=album_name, limit=5).get('release-group-list', [])
+            for g in grupos:
+                if (int(g.get('ext:score', 0)) >= 90 and parecido(g.get('title'), album_name)
+                        and artista_coincide(artist_name, [g.get('artist-credit-phrase', '')], estricto=False)):
+                    urls = del_grupo(g['id'])
+                    if urls:
+                        break
+        return list(dict.fromkeys(urls))
 
+    def _get_bandcamp_album(self, artist_name: str, album_name: str, mbid: Optional[str] = None):
+        """
+        (url, album_id) del álbum en Bandcamp, (None, None) si no está y
+        (ERROR_RED, None) si no se pudo consultar.
+
+        Candidatos: las URLs de Bandcamp enlazadas en MusicBrainz (la edición
+        del mbid, las demás de su release group o el release group buscado por
+        nombre). Cada una se comprueba en su página (artista, título y pistas
+        que se pueden escuchar), como bandcamp_verificar.py de vvmm.
+        """
+        if not self.bandcamp_enabled:
+            return None, None
+        # Como vvmm (bandcamp_buscar.py): solo los enlaces de MusicBrainz. La
+        # búsqueda de bandcamp.com tiene una comprobación anti-bots y no se usa.
+        candidatos = self._bandcamp_desde_musicbrainz(artist_name, album_name, mbid)
+        for url in candidatos:
+            texto = self._bandcamp_get(url)
+            if texto is ERROR_RED:
+                return ERROR_RED, None
+            info = leer_pagina_bandcamp(texto) if texto else None
+            if bandcamp_es_el_disco(info, artist_name, album_name):
+                return url, info['id']
+            if info:
+                self.logger.info(f"Bandcamp: {url} es «{info['artista']} - {info['titulo']}», "
+                                 f"no «{artist_name} - {album_name}»")
+        return None, None
 
     def _check_tables_exist(self):
         """Verifica qué tablas existen en la base de datos"""
@@ -695,6 +598,55 @@ class MusicLinksManager:
         
         self.update_artist_links(days_threshold, force_update, recent_only, missing_only)
         self.update_album_and_track_links(days_threshold, force_update, recent_only, missing_only)
+        self.update_album_bandcamp()
+
+    # ------------------------------------------------------------------ #
+    # Bandcamp de los álbumes                                            #
+    # ------------------------------------------------------------------ #
+
+    def update_album_bandcamp(self):
+        """
+        Busca el álbum en Bandcamp, como mucho una vez cada `bandcamp_dias` días
+        (90) y `limite_bandcamp` álbumes por ejecución (100), los nunca buscados
+        y más recientes primero. Guarda bandcamp_url (…bandcamp.com/album/…) y
+        bandcamp_album_id (el del EmbeddedPlayer) solo si la página es el disco.
+        """
+        if not self.bandcamp_enabled:
+            return
+        conn = sqlite3.connect(self.db_path)
+        apply_pragmas(conn)
+        c = conn.cursor()
+        limite = f" LIMIT {self.limite_bandcamp}" if self.limite_bandcamp > 0 else ""
+        c.execute(f"""
+            SELECT albums.id, albums.name, artists.name, albums.mbid
+            FROM albums JOIN artists ON albums.artist_id = artists.id
+            WHERE albums.bandcamp_url IS NULL
+              AND (albums.bandcamp_checked IS NULL
+                   OR datetime(albums.bandcamp_checked) < datetime('now', '-{self.bandcamp_dias} days'))
+            ORDER BY albums.bandcamp_checked IS NOT NULL, albums.bandcamp_checked,
+                     coalesce(albums.added_timestamp, albums.last_updated) DESC
+            {limite}
+        """)
+        albums = c.fetchall()
+        self.logger.info(f"Bandcamp: {len(albums)} álbumes por buscar")
+        encontrados = 0
+        for idx, (album_id, album_name, artist_name, mbid) in enumerate(albums, 1):
+            try:
+                url, bc_id = self._get_bandcamp_album(artist_name, album_name, mbid)
+            except Exception as e:  # sin red: se queda pendiente
+                self.logger.warning(f"Bandcamp: error con «{artist_name} - {album_name}»: {e}")
+                continue
+            if url is ERROR_RED:
+                continue
+            c.execute("UPDATE albums SET bandcamp_url = coalesce(?, bandcamp_url), "
+                      "bandcamp_album_id = coalesce(?, bandcamp_album_id), bandcamp_checked = ? WHERE id = ?",
+                      (url, bc_id, datetime.now(), album_id))
+            conn.commit()
+            if url:
+                encontrados += 1
+                self.logger.info(f"Bandcamp {idx}/{len(albums)}: «{artist_name} - {album_name}» → {url} (id {bc_id})")
+        conn.close()
+        self.logger.info(f"Bandcamp: {encontrados}/{len(albums)} encontrados")
 
     # ------------------------------------------------------------------ #
     # Concurrent artist enrichment                                       #
@@ -725,11 +677,7 @@ class MusicLinksManager:
 
             # Basic link dict
             links = {
-                'spotify_url': (
-                    self._get_spotify_artist_url(artist_name)
-                    if self.spotify and current_data.get('spotify_url') is None
-                    else current_data.get('spotify_url')
-                ),
+                'spotify_url': current_data.get('spotify_url'),  # Spotify ya no se consulta
                 'youtube_url': (
                     self._get_youtube_artist_url(artist_name)
                     if self.youtube and current_data.get('youtube_url') is None
@@ -746,11 +694,9 @@ class MusicLinksManager:
                     if self.rateyourmusic_enabled and current_data.get('rateyourmusic_url') is None
                     else current_data.get('rateyourmusic_url')
                 ),
-                'bandcamp_url': (
-                    self._get_bandcamp_artist_url(artist_name)
-                    if self.bandcamp_enabled and current_data.get('bandcamp_url') is None
-                    else current_data.get('bandcamp_url')
-                ),
+                # La búsqueda de bandcamp.com tiene una comprobación anti-bots:
+                # el bandcamp_url de artista ya no se busca, se conserva el que hay
+                'bandcamp_url': current_data.get('bandcamp_url'),
                 'links_updated': datetime.now(),
             }
 
@@ -824,8 +770,6 @@ class MusicLinksManager:
             c.execute("SELECT id, name FROM artists")
         elif missing_only:
             missing_conditions = []
-            if self.spotify:
-                missing_conditions.append("spotify_url IS NULL")
             if self.youtube:
                 missing_conditions.append("youtube_url IS NULL")
             if 'musicbrainz' not in self.disabled_services:
@@ -835,8 +779,6 @@ class MusicLinksManager:
                 missing_conditions.extend(["discogs_url IS NULL", "aliases IS NULL", "member_of IS NULL"])
             if self.rateyourmusic_enabled:
                 missing_conditions.append("rateyourmusic_url IS NULL")
-            if self.bandcamp_enabled:
-                missing_conditions.append("bandcamp_url IS NULL")
             if self.lastfm_api_key:
                 missing_conditions.append("bio IS NULL")
 
@@ -957,7 +899,9 @@ class MusicLinksManager:
             ('mastering_engineers', 'TEXT'),
             ('credits', 'TEXT'),
             ('links_updated', 'DATETIME'),
-            ('lastfm_url', 'TEXT')
+            ('lastfm_url', 'TEXT'),
+            ('bandcamp_album_id', 'INTEGER'),   # id del EmbeddedPlayer
+            ('bandcamp_checked', 'TIMESTAMP'),  # última búsqueda/comprobación en Bandcamp
         ]
         
         # Verificar y crear columnas faltantes
@@ -994,8 +938,6 @@ class MusicLinksManager:
             if missing_only:
                 # Añadir condiciones para información faltante
                 missing_links_conditions = []
-                if self.spotify:
-                    missing_links_conditions.append("albums.spotify_url IS NULL")
                 if self.youtube:
                     missing_links_conditions.append("albums.youtube_url IS NULL")
                 if 'musicbrainz' not in self.disabled_services:
@@ -1010,8 +952,6 @@ class MusicLinksManager:
                     missing_links_conditions.append("albums.rateyourmusic_url IS NULL")
                 if self.lastfm_enabled:
                     missing_links_conditions.append("albums.lastfm_url IS NULL")
-                if self.bandcamp_enabled:
-                    missing_links_conditions.append("albums.bandcamp_url IS NULL")
 
                 # Si hay condiciones de información faltante, incluirlas
                 if missing_links_conditions:
@@ -1045,13 +985,10 @@ class MusicLinksManager:
                 self.logger.info(f"Processing album {idx}/{total_albums}: {album_name} by {artist_name}")
                 
                 # Inicializar variables con valores predeterminados
-                spotify_url = None
-                spotify_id = None
                 youtube_url = None
                 musicbrainz_url = None
                 discogs_url = None
                 rateyourmusic_url = None
-                bandcamp_url = None
                 lastfm_url = None
                 producers = None
                 engineers = None
@@ -1062,64 +999,12 @@ class MusicLinksManager:
                     # Datos actuales: se conservan y solo se piden a las APIs los que faltan
                     # (antes, sin missing_only, se sobrescribían con None los de
                     # servicios desactivados)
-                    cols_actuales = ['spotify_url', 'spotify_id', 'youtube_url', 'musicbrainz_url',
-                                     'discogs_url', 'rateyourmusic_url', 'bandcamp_url', 'producers',
+                    cols_actuales = ['youtube_url', 'musicbrainz_url',
+                                     'discogs_url', 'rateyourmusic_url', 'producers',
                                      'engineers', 'mastering_engineers', 'credits', 'lastfm_url']
                     c.execute(f"SELECT {', '.join(cols_actuales)} FROM albums WHERE id = ?", (album_id,))
                     result = c.fetchone()
                     current_data = dict(zip(cols_actuales, result or [None] * len(cols_actuales)))
-
-                    # ===== SPOTIFY =====
-                    if self.spotify and (current_data['spotify_url'] is None or current_data['spotify_id'] is None or force_update):
-                        try:
-                            # Check explicitly if spotify is initialized
-                            if not hasattr(self, 'spotify') or self.spotify is None:
-                                self.logger.error("Spotify API not initialized although it should be - check configuration")
-                            else:
-                                # Log that we're about to search
-                                self.logger.info(f"Starting Spotify search for album '{album_name}' by '{artist_name}'")
-                                
-                                # Call the search function with proper error handling
-                                spotify_result = None
-                                try:
-                                    spotify_result = self._get_spotify_album_data(artist_name, album_name)
-                                except Exception as spotify_search_error:
-                                    self.logger.error(f"Exception calling _get_spotify_album_data: {str(spotify_search_error)}")
-                                
-                                # Process the results
-                                if spotify_result:
-                                    spotify_url = spotify_result.get('album_url')
-                                    spotify_id = spotify_result.get('album_id')
-                                    
-                                    # Validate the results
-                                    if spotify_url and spotify_id:
-                                        self.logger.info(f"Successfully found Spotify data: URL={spotify_url}, ID={spotify_id}")
-                                    else:
-                                        self.logger.warning("Spotify search succeeded but returned incomplete data")
-                                else:
-                                    self.logger.warning("Spotify search returned no results")
-                        except Exception as e:
-                            self.logger.error(f"Error in Spotify processing section: {str(e)}")
-                            import traceback
-                            self.logger.error(f"Traceback: {traceback.format_exc()}")
-                    else:
-                        # Use existing data
-                        spotify_url = current_data['spotify_url']
-                        spotify_id = current_data['spotify_id']
-                        if spotify_url or spotify_id:
-                            self.logger.info(f"Using existing Spotify data: URL={spotify_url}, ID={spotify_id}")
-
-                    # ===== BANDCAMP =====
-                    if self.bandcamp_enabled and (current_data['bandcamp_url'] is None or force_update):
-                        try:
-                            # Be explicit about function name to avoid mismatches
-                            bandcamp_url = self._get_bandcamp_album_url(artist_name, album_name)
-                            if bandcamp_url:
-                                self.logger.info(f"Found Bandcamp URL for album '{album_name}': {bandcamp_url}")
-                        except Exception as e:
-                            self.logger.error(f"Error getting Bandcamp URL for album '{album_name}': {str(e)}")
-                    else:
-                        bandcamp_url = current_data['bandcamp_url']
 
                     # ===== LASTFM =====
                     if self.lastfm_enabled and (current_data['lastfm_url'] is None or force_update):
@@ -1200,8 +1085,8 @@ class MusicLinksManager:
                     # Now update the album with all the links we've gathered
                     update_query = """
                         UPDATE albums SET 
-                        spotify_url = ?, spotify_id = ?, youtube_url = ?, musicbrainz_url = ?, 
-                        discogs_url = ?, rateyourmusic_url = ?, bandcamp_url = ?, producers = ?, 
+                        youtube_url = ?, musicbrainz_url = ?, 
+                        discogs_url = ?, rateyourmusic_url = ?, producers = ?, 
                         engineers = ?, mastering_engineers = ?, credits = ?, lastfm_url = ?, 
                         links_updated = ?
                         WHERE id = ?
@@ -1209,13 +1094,10 @@ class MusicLinksManager:
                     
                     # Use the values that were set earlier, this ensures we don't overwrite existing data
                     c.execute(update_query, (
-                        spotify_url, 
-                        spotify_id, 
                         youtube_url, 
                         musicbrainz_url, 
                         discogs_url, 
                         rateyourmusic_url, 
-                        bandcamp_url, 
                         producers, 
                         engineers,
                         mastering_engineers, 
@@ -1228,7 +1110,7 @@ class MusicLinksManager:
                     self.logger.info(f"Updated database record for album '{album_name}'")
                     
                     # Debug output
-                    self.logger.info(f"Values used for update: spotify_url={spotify_url}, spotify_id={spotify_id}, lastfm_url={lastfm_url}, bandcamp_url={bandcamp_url}")
+                    self.logger.info(f"Values used for update: discogs_url={discogs_url}, lastfm_url={lastfm_url}, musicbrainz_url={musicbrainz_url}")
                     
                     # Now update MBIDs for songs in this album if we have the album_mbid
                     if album_mbid and 'musicbrainz' not in self.disabled_services:
@@ -2193,122 +2075,6 @@ class MusicLinksManager:
             return None
 
 
-    def _get_spotify_artist_url(self, artist_name: str) -> Optional[str]:
-        """Obtiene la URL del artista en Spotify"""
-        if not self.spotify:
-            return None
-
-        cached = self._cache.get(('artist_url', artist_name), 'spotify')
-        if cached is not None:
-            return cached
-
-        with self._api_locks['spotify']:
-            cached = self._cache.get(('artist_url', artist_name), 'spotify')
-            if cached is not None:
-                return cached
-            get_limiter('spotify').wait()
-            try:
-                results = self.spotify.search(q=f'artist:{artist_name}', type='artist', limit=1)
-                if results and results['artists']['items']:
-                    url = results['artists']['items'][0]['external_urls']['spotify']
-                    self._cache.set(('artist_url', artist_name), 'spotify', url)
-                    return url
-            except Exception as e:
-                self.logger.error(f"Spotify artist search error for {artist_name}: {str(e)}")
-
-        return None
-    
-    def _get_spotify_album_data(self, artist_name: str, album_name: str) -> Dict:
-        """
-        Busca específicamente datos de un álbum en Spotify, no canciones individuales.
-        
-        Args:
-            artist_name: Nombre del artista
-            album_name: Nombre del álbum
-            
-        Returns:
-            Dictionary con album_url y album_id o None si no se encuentra
-        """
-        # First check if Spotify is properly initialized
-        if not hasattr(self, 'spotify') or self.spotify is None:
-            self.logger.error("Spotify API client not initialized - cannot search for albums")
-            return None
-        
-        try:
-            self.logger.info(f"Searching Spotify for album: '{album_name}' by '{artist_name}'")
-            
-            # Try different search strategies
-            search_strategies = [
-                # Strategy 1: Precise search with filters
-                {"query": f"artist:\"{artist_name}\" album:\"{album_name}\"", "desc": "Precise search with filters"},
-                # Strategy 2: Simple artist and album combination
-                {"query": f"{artist_name} {album_name}", "desc": "Simple artist and album search"},
-                # Strategy 3: Just the album name
-                {"query": f"album:{album_name}", "desc": "Album name only search"}
-            ]
-            
-            for strategy in search_strategies:
-                self.logger.info(f"Trying Spotify search strategy: {strategy['desc']}")
-                query = strategy["query"]
-                
-                try:
-                    # Make the API call with error handling
-                    results = self.spotify.search(q=query, type='album', limit=5)
-                    
-                    # Check for valid results
-                    if results and 'albums' in results and results['albums']['items']:
-                        # Log the number of results
-                        num_results = len(results['albums']['items'])
-                        self.logger.info(f"Found {num_results} album results with strategy '{strategy['desc']}'")
-                        
-                        # Process the results
-                        best_match = None
-                        best_score = 0
-                        
-                        for album in results['albums']['items']:
-                            # Extract and log album info
-                            album_title = album['name']
-                            album_artists = [artist['name'] for artist in album['artists']]
-                            album_id = album['id']
-                            album_url = album['external_urls'].get('spotify', '')
-                            
-                            self.logger.info(f"Candidate: '{album_title}' by '{', '.join(album_artists)}' (ID: {album_id})")
-                            
-                            # Calculate match score
-                            artist_score = max([self._similarity_score(artist_name, a) for a in album_artists])
-                            title_score = self._similarity_score(album_name, album_title)
-                            total_score = (artist_score * 0.6) + (title_score * 0.4)
-                            
-                            self.logger.info(f"Match score: {total_score:.2f} (Artist: {artist_score:.2f}, Title: {title_score:.2f})")
-                            
-                            if total_score > best_score:
-                                best_score = total_score
-                                best_match = album
-                        
-                        # If we have a good match, return it
-                        if best_match and best_score > 0.6:
-                            result = {
-                                'album_id': best_match['id'],
-                                'album_url': best_match['external_urls'].get('spotify', '')
-                            }
-                            self.logger.info(f"Selected match: '{best_match['name']}' with score {best_score:.2f}")
-                            self.logger.info(f"Album URL: {result['album_url']}, Album ID: {result['album_id']}")
-                            return result
-                    else:
-                        self.logger.info(f"No results found with strategy '{strategy['desc']}'")
-                    
-                except Exception as search_error:
-                    self.logger.error(f"Error during Spotify search with strategy '{strategy['desc']}': {str(search_error)}")
-            
-            self.logger.warning(f"No matching album found on Spotify for '{album_name}' by '{artist_name}' after trying all strategies")
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"Unexpected error in Spotify album search: {str(e)}")
-            import traceback
-            self.logger.error(f"Traceback: {traceback.format_exc()}")
-            return None
-    
     def _get_youtube_artist_url(self, artist_name: str) -> Optional[str]:
         """Obtiene la URL del canal/tópico del artista en YouTube"""
         if not self.youtube:
@@ -2608,8 +2374,8 @@ class MusicLinksManager:
                     vistos.add(resultado.id)
                     # El título del resultado es "Artista - Título": si no contiene el
                     # título del álbum, se descarta sin pedir la release
-                    titulo_busqueda = _normalizar(resultado.data.get('title', ''))
-                    titulo_album = _normalizar(album_name)
+                    titulo_busqueda = normalizar(resultado.data.get('title', ''))
+                    titulo_album = normalizar(album_name)
                     if titulo_album and titulo_album not in titulo_busqueda:
                         continue
                     get_limiter('discogs').wait()
@@ -2620,9 +2386,9 @@ class MusicLinksManager:
                     except Exception as e:
                         self.logger.warning(f"Discogs: error leyendo la release {resultado.id}: {e}")
                         continue
-                    if _es_el_disco(data, artist_name, album_name):
+                    if discogs_es_el_disco(data, artist_name, album_name):
                         url = f"https://www.discogs.com/release/{data['id']}"
-                        return (url, *_creditos_discogs(data))
+                        return (url, *creditos_discogs(data))
             self.logger.info(f"Discogs: ninguna release coincide con «{artist_name} - {album_name}»")
         except Exception as e:
             self.logger.error(f"Discogs album search error for {album_name} by {artist_name}: {e}")
