@@ -20,6 +20,11 @@ sqlite3.register_adapter(datetime.datetime, lambda dt: dt.isoformat())
 # MusicBrainz API constants
 MUSICBRAINZ_API_BASE = "https://musicbrainz.org/ws/2"
 MUSICBRAINZ_USER_AGENT = "MusicLibraryWikipediaUpdater/1.0 (your-email@example.com)"
+# Wikimedia (Wikidata/Wikipedia) responde 403 a User-Agents genéricos como el de
+# python-requests: exige uno que identifique la herramienta y un contacto.
+WIKIMEDIA_HEADERS = {
+    "User-Agent": "music-fuzzy/1.0 (https://github.com/volteret4/mfuz; wikilinks_desde_mb) python-requests"
+}
 MUSICBRAINZ_RATE_LIMIT = 1.0  # seconds between requests
 
 # Definición de colores para el log
@@ -367,7 +372,7 @@ def extract_wikipedia_from_wikidata(wikidata_url):
             "props": "sitelinks"
         }
         
-        response = requests.get(endpoint, params=params, timeout=10)
+        response = requests.get(endpoint, params=params, headers=WIKIMEDIA_HEADERS, timeout=10)
         
         if response.status_code != 200:
             print(f"  {COLOR_RED}Error en API de Wikidata: {response.status_code}{COLOR_RESET}")
@@ -414,7 +419,7 @@ def search_wikipedia(query):
     try:
         encoded_query = quote(query)
         url = f"https://en.wikipedia.org/w/api.php?action=opensearch&search={encoded_query}&limit=1&namespace=0&format=json"
-        response = requests.get(url)
+        response = requests.get(url, headers=WIKIMEDIA_HEADERS, timeout=30)
         
         if response.status_code == 200:
             data = response.json()
@@ -423,7 +428,7 @@ def search_wikipedia(query):
         
         # Intentar en español si no hay resultados
         url = f"https://es.wikipedia.org/w/api.php?action=opensearch&search={encoded_query}&limit=1&namespace=0&format=json"
-        response = requests.get(url)
+        response = requests.get(url, headers=WIKIMEDIA_HEADERS, timeout=30)
         
         if response.status_code == 200:
             data = response.json()
@@ -441,7 +446,7 @@ def get_wikipedia_content(url):
         return None
     
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=WIKIMEDIA_HEADERS, timeout=30)
         
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')

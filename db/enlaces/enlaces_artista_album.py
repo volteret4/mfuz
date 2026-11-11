@@ -18,6 +18,7 @@ import sqlite3
 import re
 import threading
 import time
+import unicodedata
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -52,6 +53,102 @@ def adapt_datetime(dt):
 
 # Registrar el adaptador
 sqlite3.register_adapter(datetime, adapt_datetime)
+
+
+# ── Coincidencia de discos de Discogs ──────────────────────────────────────
+# Una release de Discogs solo se guarda si su artista y su título son los del
+# álbum. Antes se aceptaba un parecido por palabras o, sin coincidencia, el
+# primer resultado de la búsqueda, y se asignaban discos de otros artistas.
+
+# Palabras de edición que no cambian el disco: 'OK Computer - Remastered 2009'
+_EDICION = re.compile(
+    r"\b(remaster(ed)?|remasterizado|deluxe|edition|expanded|anniversary|reissue|"
+    r"bonus( tracks?)?|special|super|version|mono|stereo|\d{4}|\d+(st|nd|rd|th))\b")
+# Separadores de artistas en colaboraciones: 'Ric Wilson, Chromeo'
+_SEP_ARTISTAS = re.compile(
+    r"\s*(?:,|&|/|\+|;| and | y | con | with | feat\.? | ft\.? | vs\.? | x )\s*", re.I)
+
+
+def _normalizar(texto):
+    """Minúsculas, sin acentos, sin '(Deluxe)'/'[2009]', sin el '(2)' de Discogs."""
+    texto = unicodedata.normalize("NFKD", texto or "")
+    texto = "".join(c for c in texto if not unicodedata.combining(c)).casefold()
+    texto = re.sub(r"\s*\(\d+\)\s*$", "", texto)       # 'Grimes (4)' de Discogs
+    texto = re.sub(r"[(\[{].*?[)\]}]", " ", texto)       # '(Deluxe)', '[Remastered]'
+    texto = texto.replace("&", " and ")
+    texto = " ".join(re.sub(r"[\W_]+", " ", texto).split())
+    return re.sub(r"^the ", "", texto)
+
+
+def _mismo_titulo(a, b):
+    a, b = _normalizar(a), _normalizar(b)
+    if not a or not b:
+        return False
+    if a == b:
+        return True
+    a2, b2 = (" ".join(_EDICION.sub(" ", x).split()) for x in (a, b))
+    return bool(a2) and a2 == b2
+
+
+def _mismo_artista(local, artistas_discogs):
+    """local: nombre del artista en la db; artistas_discogs: nombres de la release."""
+    if not artistas_discogs:
+        return False
+    nombres = {_normalizar(n) for n in artistas_discogs} - {""}
+    todos = _normalizar(" ".join(artistas_discogs))
+    nl = _normalizar(local)
+    if nl in ("various", "various artists", "va", "varios", "varios artistas"):
+        return "various" in nombres
+    if not nl:
+        return False
+    if nl in nombres or nl == todos:
+        return True
+    # Colaboraciones: algún artista del nombre local es uno de la release
+    partes = {_normalizar(x) for x in _SEP_ARTISTAS.split(local or "")} - {""}
+    return len(partes) > 1 and bool(partes & nombres)
+
+
+def _es_el_disco(data, artista, album):
+    """data: release completa de la API de Discogs."""
+    nombres = []
+    for a in data.get("artists", []):
+        nombres += [x for x in (a.get("name"), a.get("anv")) if x]
+    return _mismo_titulo(data.get("title", ""), album) and _mismo_artista(artista, nombres)
+
+
+def _creditos_discogs(data):
+    """(producers, engineers, mastering_engineers, credits_json) de una release.
+
+    Mismo formato que db/generos/generos_creditos.py: credits = JSON
+    {rol en minúsculas: [nombres]}; el resto, nombres separados por comas.
+    """
+    creditos = {}
+    extra = list(data.get("extraartists", []))
+    for pista in data.get("tracklist", []):
+        extra += pista.get("extraartists", [])
+    for e in extra:
+        nombre = re.sub(r"\s*\(\d+\)\s*$", "", e.get("anv") or e.get("name") or "").strip()
+        for rol in (e.get("role") or "").split(","):
+            rol = re.sub(r"\s*\[.*?\]", "", rol).strip().lower()
+            if nombre and rol and nombre not in creditos.setdefault(rol, []):
+                creditos[rol].append(nombre)
+    if not creditos:
+        return None, None, None, None
+
+    def con(*claves, sin=()):
+        return ", ".join(dict.fromkeys(
+            n for rol, nombres in creditos.items()
+            if any(c in rol for c in claves) and not any(x in rol for x in sin)
+            for n in nombres)) or None
+
+    return (con("produc"), con("engineer", sin=("master",)), con("master"),
+            json.dumps(creditos, ensure_ascii=False))
+
+def _sin_secretos(config):
+    """Copia de la config para el log, sin claves ni tokens."""
+    return {k: ('*' * 8 if value and re.search(r'key|secret|token|password|apikey', k, re.I) else value)
+            for k, value in config.items()}
+
 
 class MusicLinksManager:
     def __init__(self, config):
@@ -182,15 +279,17 @@ class MusicLinksManager:
         self.spotify_client_id = config_dict.get('spotify_client_id')
         self.spotify_client_secret = config_dict.get('spotify_client_secret')
         self.discogs_token = config_dict.get('discogs_token')
-        
+
+        # Lo que no se encontró (enlaces de un álbum, MBID) no se vuelve a buscar
+        # hasta pasados `reintentar_dias` días; `limite_albums` álbumes por ejecución
+        # (0 = sin límite), los nunca intentados primero.
+        self.reintentar_dias = int(config_dict.get('reintentar_dias') or 7)
+        self.limite_albums = int(config_dict.get('limite_albums') or 0)
+
         # Depuración de configuración
         print("Configuración recibida:")
-        for key, value in config_dict.items():
-            # No mostrar valores de claves sensibles
-            if key in ['spotify_client_secret', 'discogs_token']:
-                print(f"{key}: {'*' * 8}")
-            else:
-                print(f"{key}: {value}")
+        for key, value in _sin_secretos(config_dict).items():
+            print(f"{key}: {value}")
 
     def _init_apis(self):
         """Inicializa las conexiones a las APIs externas"""
@@ -391,6 +490,16 @@ class MusicLinksManager:
         # Añadir columna lastfm a artistas si no existe
         if 'lastfm_url' not in album_columns:
             c.execute("ALTER TABLE albums ADD COLUMN lastfm_url TEXT")
+
+        # Cuándo se buscó el MBID sin encontrarlo (para no repetir cada día)
+        for tabla, columnas in (('artists', artist_columns), ('albums', album_columns)):
+            if 'mbid_checked' not in columnas:
+                c.execute(f"ALTER TABLE {tabla} ADD COLUMN mbid_checked TIMESTAMP")
+        c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='songs'")
+        if c.fetchone():
+            c.execute("PRAGMA table_info(songs)")
+            if 'mbid_checked' not in {col[1] for col in c.fetchall()}:
+                c.execute("ALTER TABLE songs ADD COLUMN mbid_checked TIMESTAMP")
 
         conn.commit()
         conn.close()
@@ -892,8 +1001,11 @@ class MusicLinksManager:
                 if 'musicbrainz' not in self.disabled_services:
                     missing_links_conditions.append("albums.musicbrainz_url IS NULL")
                 if self.discogs:
+                    # Los créditos de un discogs_url ya guardado los completa
+                    # generos/generos_creditos (comprobando que la release es del disco);
+                    # muchos discos no tienen productor/ingeniero en Discogs y
+                    # pedirlos aquí hacía reprocesar los mismos álbumes cada día.
                     missing_links_conditions.append("albums.discogs_url IS NULL")
-                    missing_links_conditions.append("(albums.producers IS NULL OR albums.engineers IS NULL OR albums.mastering_engineers IS NULL)")
                 if self.rateyourmusic_enabled:
                     missing_links_conditions.append("albums.rateyourmusic_url IS NULL")
                 if self.lastfm_enabled:
@@ -912,13 +1024,16 @@ class MusicLinksManager:
                 # Añadir condición de registros antiguos
                 conditions.append(f"(albums.links_updated IS NULL OR datetime(albums.links_updated) < datetime('now', '-{days_threshold} days'))")
             
-            # Combinar condiciones
-            if conditions:
-                query = base_query + " WHERE " + " AND ".join(conditions)
-                c.execute(query)
-            else:
-                # Si no hay condiciones, ejecutar consulta base
-                c.execute(base_query)
+            # Lo ya intentado (links_updated) no se repite hasta pasados reintentar_dias
+            conditions.append(f"(albums.links_updated IS NULL OR datetime(albums.links_updated) < "
+                              f"datetime('now', '-{self.reintentar_dias} days'))")
+
+            # Primero los nunca intentados, luego los intentados hace más tiempo
+            query = (base_query + " WHERE " + " AND ".join(conditions)
+                     + " ORDER BY albums.links_updated IS NOT NULL, albums.links_updated, albums.id DESC")
+            if self.limite_albums > 0:
+                query += f" LIMIT {self.limite_albums}"
+            c.execute(query)
         
         # Obtener los resultados de la consulta
         albums = c.fetchall()
@@ -944,36 +1059,15 @@ class MusicLinksManager:
                 credits = None
 
                 try:
-                    # Obtener los enlaces y datos actuales para no solicitar API si ya existen
-                    if missing_only:
-                        c.execute("""
-                            SELECT spotify_url, spotify_id, youtube_url, musicbrainz_url, 
-                                discogs_url, rateyourmusic_url, bandcamp_url, producers, 
-                                engineers, mastering_engineers, credits, lastfm_url
-                            FROM albums WHERE id = ?
-                        """, (album_id,))
-                        result = c.fetchone()
-                        if result:
-                            current_data = dict(zip(
-                                ['spotify_url', 'spotify_id', 'youtube_url', 'musicbrainz_url', 
-                                'discogs_url', 'rateyourmusic_url', 'bandcamp_url', 'producers', 
-                                'engineers', 'mastering_engineers', 'credits', 'lastfm_url'], 
-                                result
-                            ))
-                        else:
-                            current_data = {
-                                'spotify_url': None, 'spotify_id': None, 'youtube_url': None, 
-                                'musicbrainz_url': None, 'discogs_url': None, 'rateyourmusic_url': None,
-                                'bandcamp_url': None, 'producers': None, 'engineers': None,
-                                'mastering_engineers': None, 'credits': None, 'lastfm_url': None
-                            }
-                    else:
-                        current_data = {
-                            'spotify_url': None, 'spotify_id': None, 'youtube_url': None, 
-                            'musicbrainz_url': None, 'discogs_url': None, 'rateyourmusic_url': None,
-                            'bandcamp_url': None, 'producers': None, 'engineers': None,
-                            'mastering_engineers': None, 'credits': None, 'lastfm_url': None
-                        }
+                    # Datos actuales: se conservan y solo se piden a las APIs los que faltan
+                    # (antes, sin missing_only, se sobrescribían con None los de
+                    # servicios desactivados)
+                    cols_actuales = ['spotify_url', 'spotify_id', 'youtube_url', 'musicbrainz_url',
+                                     'discogs_url', 'rateyourmusic_url', 'bandcamp_url', 'producers',
+                                     'engineers', 'mastering_engineers', 'credits', 'lastfm_url']
+                    c.execute(f"SELECT {', '.join(cols_actuales)} FROM albums WHERE id = ?", (album_id,))
+                    result = c.fetchone()
+                    current_data = dict(zip(cols_actuales, result or [None] * len(cols_actuales)))
 
                     # ===== SPOTIFY =====
                     if self.spotify and (current_data['spotify_url'] is None or current_data['spotify_id'] is None or force_update):
@@ -1085,25 +1179,23 @@ class MusicLinksManager:
                         rateyourmusic_url = current_data['rateyourmusic_url']
 
                     # ===== DISCOGS =====
-                    if self.discogs and (current_data['discogs_url'] is None or 
-                                    current_data['producers'] is None or 
-                                    current_data['engineers'] is None or 
-                                    current_data['mastering_engineers'] is None or
-                                    force_update):
+                    # Se conserva lo que ya hay; solo se busca si falta discogs_url y
+                    # solo se guarda una release cuyo artista y título son los del álbum.
+                    discogs_url = current_data['discogs_url']
+                    producers = current_data['producers']
+                    engineers = current_data['engineers']
+                    mastering_engineers = current_data['mastering_engineers']
+                    credits = current_data['credits']
+                    if self.discogs and (discogs_url is None or force_update):
                         try:
-                            discogs_result = self._get_discogs_album_url(artist_name, album_name)
-                            if discogs_result and len(discogs_result) >= 5:
-                                discogs_url, producers, engineers, mastering_engineers, credits = discogs_result
-                                if discogs_url:
-                                    self.logger.info(f"Found Discogs URL for album '{album_name}': {discogs_url}")
+                            encontrado = self._get_discogs_album_url(artist_name, album_name)
+                            if encontrado[0]:
+                                discogs_url = encontrado[0]
+                                self.logger.info(f"Found Discogs URL for album '{album_name}': {discogs_url}")
+                                if encontrado[4] and (force_update or credits in (None, '', '[]', '{}')):
+                                    producers, engineers, mastering_engineers, credits = encontrado[1:]
                         except Exception as e:
                             self.logger.error(f"Error getting Discogs data for album '{album_name}': {str(e)}")
-                    else:
-                        discogs_url = current_data['discogs_url']
-                        producers = current_data['producers']
-                        engineers = current_data['engineers']
-                        mastering_engineers = current_data['mastering_engineers']
-                        credits = current_data['credits']
 
                     # Now update the album with all the links we've gathered
                     update_query = """
@@ -1152,7 +1244,7 @@ class MusicLinksManager:
                             num_songs = len(album_songs)
                             self.logger.info(f"Found {num_songs} songs for album '{album_name}'")
                             
-                            if num_songs > 0:
+                            if any(not s[3] for s in album_songs):
                                 # Retrieve the release info from MusicBrainz to get track MBIDs
                                 try:
                                     # Add debug message for tracking
@@ -1419,7 +1511,9 @@ class MusicLinksManager:
         c = conn.cursor()
 
         # Actualizar MBID de artistas - agregar filtro para nombres válidos
-        c.execute("SELECT id, name FROM artists WHERE mbid IS NULL AND name IS NOT NULL AND TRIM(name) != ''")
+        no_intentado = (f"(mbid_checked IS NULL OR datetime(mbid_checked) < "
+                        f"datetime('now', '-{self.reintentar_dias} days'))")
+        c.execute(f"SELECT id, name FROM artists WHERE mbid IS NULL AND name IS NOT NULL AND TRIM(name) != '' AND {no_intentado}")
         artists_without_mbid = c.fetchall()
         
         self.logger.info(f"Processing {len(artists_without_mbid)} artists without MBID")
@@ -1435,9 +1529,10 @@ class MusicLinksManager:
                     continue
                     
                 mbid = self._get_musicbrainz_artist_mbid(artist_name.strip())
+                c.execute("UPDATE artists SET mbid = coalesce(?, mbid), mbid_checked = ? WHERE id = ?",
+                          (mbid, datetime.now(), artist_id))
+                conn.commit()
                 if mbid:
-                    c.execute("UPDATE artists SET mbid = ? WHERE id = ?", (mbid, artist_id))
-                    conn.commit()
                     self.logger.info(f"Found MBID for artist: {artist_name}")
                 else:
                     self.logger.debug(f"No MBID found for artist: {artist_name}")
@@ -1457,7 +1552,7 @@ class MusicLinksManager:
             WHERE albums.mbid IS NULL 
             AND albums.name IS NOT NULL AND TRIM(albums.name) != ''
             AND artists.name IS NOT NULL AND TRIM(artists.name) != ''
-        """)
+            AND """ + no_intentado.replace("mbid_checked", "albums.mbid_checked"))
         albums_without_mbid = c.fetchall()
         
         self.logger.info(f"Processing {len(albums_without_mbid)} albums without MBID")
@@ -1473,9 +1568,10 @@ class MusicLinksManager:
                     continue
                     
                 mbid = self._get_musicbrainz_album_mbid(artist_name.strip(), album_name.strip())
+                c.execute("UPDATE albums SET mbid = coalesce(?, mbid), mbid_checked = ? WHERE id = ?",
+                          (mbid, datetime.now(), album_id))
+                conn.commit()
                 if mbid:
-                    c.execute("UPDATE albums SET mbid = ? WHERE id = ?", (mbid, album_id))
-                    conn.commit()
                     self.logger.info(f"Found MBID for album: {album_name}")
                 else:
                     self.logger.debug(f"No MBID found for album: {album_name}")
@@ -1494,7 +1590,7 @@ class MusicLinksManager:
             WHERE mbid IS NULL
             AND title IS NOT NULL AND TRIM(title) != ''
             AND artist IS NOT NULL AND TRIM(artist) != ''
-        """)
+            AND """ + no_intentado)
         songs_without_mbid = c.fetchall()
         
         self.logger.info(f"Processing {len(songs_without_mbid)} songs without MBID")
@@ -1510,9 +1606,10 @@ class MusicLinksManager:
                     continue
                     
                 mbid = self._get_musicbrainz_recording_mbid(artist.strip(), title.strip(), album.strip() if album else None)
+                c.execute("UPDATE songs SET mbid = coalesce(?, mbid), mbid_checked = ? WHERE id = ?",
+                          (mbid, datetime.now(), song_id))
+                conn.commit()
                 if mbid:
-                    c.execute("UPDATE songs SET mbid = ? WHERE id = ?", (mbid, song_id))
-                    conn.commit()
                     self.logger.info(f"Found MBID for song: {title}")
                 else:
                     self.logger.debug(f"No MBID found for song: {title}")
@@ -2375,23 +2472,10 @@ class MusicLinksManager:
             get_limiter('discogs').wait()
 
         try:
-            # Realizar búsqueda simple
-            results = self.discogs.search(artist_name, type='artist')
-            
-            if not results:
-                return None, None, None
-                
-            # Convertir results a lista si es necesario para evitar problemas con slices
-            try:
-                results_list = list(results)[:5]  # Convertir a lista y tomar los primeros 5
-            except Exception as e:
-                self.logger.warning(f"Error al convertir resultados para {artist_name}: {str(e)}")
-                # Intento alternativo: acceder directamente al primer resultado
-                if len(results) > 0:
-                    try:
-                        return f"https://www.discogs.com/artist/{results[0].id}", None, None
-                    except Exception:
-                        return None, None, None
+            # Solo la primera página: list(results) recorría todas las páginas de
+            # resultados (una petición por cada 50, a 60/min), minutos por artista.
+            results_list = self.discogs.search(artist_name, type='artist', per_page=5).page(1)[:5]
+            if not results_list:
                 return None, None, None
                 
             # Variables para almacenar datos adicionales
@@ -2490,265 +2574,59 @@ class MusicLinksManager:
 
 
     def _get_discogs_album_url(self, artist_name: str, album_name: str) -> tuple:
-        """Obtiene la URL del álbum en Discogs y datos de producción con enfoque robusto ante errores de tipo"""
+        """
+        Busca la release del álbum en Discogs.
+
+        Devuelve (url, producers, engineers, mastering_engineers, credits_json), o
+        todo None si ninguna release tiene el artista y el título del álbum: sin
+        coincidencia no se guarda nada (antes se usaba el primer resultado y se
+        asignaban discos homónimos de otros artistas).
+        """
+        vacio = (None, None, None, None, None)
         if not self.discogs:
-            return None, None, None, None, None
-        
+            return vacio
+
+        # Sin '[Disc 2]', '(Deluxe)'...: con ellos Discogs no suele encontrar nada
+        titulo = re.sub(r"\s*[(\[{].*?[)\]}]", "", album_name).strip() or album_name
+        busquedas = (
+            {'artist': artist_name, 'release_title': titulo},
+            {'q': f'{artist_name} {titulo}'},
+        )
+        vistos = set()
         try:
-            # Intentar diferentes estrategias de búsqueda
-            search_strategies = [
-                f'"{artist_name}" - "{album_name}"',  # Búsqueda exacta con comillas
-                f'{artist_name} - {album_name}',      # Formato estándar artista - álbum
-                f'{artist_name} {album_name}'         # Simple combinación
-            ]
-            
-            best_result = None
-            highest_score = 0
-            
-            for strategy in search_strategies:
+            for campos in busquedas:
+                get_limiter('discogs').wait()
                 try:
-                    results = self.discogs.search(strategy, type='release')
-                    
-                    if not results:
-                        continue
-                        
-                    # Convertir a lista para evitar problemas con slices
-                    try:
-                        results_list = list(results)[:3]  # Convertir a lista y tomar los primeros 3
-                    except Exception as e:
-                        self.logger.warning(f"Error al convertir resultados para {strategy}: {str(e)}")
-                        results_list = []
-                        # Intento alternativo: acceder al primer resultado
-                        if len(results) > 0:
-                            try:
-                                results_list = [results[0]]
-                            except Exception:
-                                continue
-                    
-                    for result in results_list:
-                        try:
-                            # Obtener detalles completos del lanzamiento
-                            release = self.discogs.release(result.id)
-                            
-                            # Normalizar nombres para comparación
-                            album_name_norm = album_name.lower().strip()
-                            result_title_norm = release.title.lower().strip()
-                            
-                            # Determinar artista del resultado
-                            result_artist = None
-                            if hasattr(release, 'artists') and release.artists:
-                                result_artist = release.artists[0].name.lower().strip()
-                            
-                            # Calcular puntuación sin usar división
-                            title_score = 0
-                            artist_score = 0
-                            
-                            # Puntuar título
-                            if album_name_norm == result_title_norm:
-                                title_score = 100  # Coincidencia exacta
-                            elif album_name_norm in result_title_norm:
-                                title_score = 80  # Contiene el nombre completo
-                            elif result_title_norm in album_name_norm:
-                                title_score = 70  # Está contenido en el nombre
-                            else:
-                                # Comparación por palabras sin usar división
-                                try:
-                                    words_query = set(album_name_norm.split())
-                                    words_result = set(result_title_norm.split())
-                                    common_words = words_query.intersection(words_result)
-                                    
-                                    # Puntuar basado en palabras comunes sin división
-                                    if len(common_words) == len(words_query):
-                                        title_score = 90  # Todas las palabras de la consulta están en el resultado
-                                    elif len(common_words) > 0:
-                                        # Puntajes relativos sin usar división
-                                        if len(words_query) <= 2 and len(common_words) == 1:
-                                            title_score = 60  # Una palabra en común para consultas cortas
-                                        elif len(common_words) > 1:
-                                            title_score = 70  # Múltiples palabras en común
-                                except Exception as e:
-                                    self.logger.warning(f"Error en comparación de palabras para título: {str(e)}")
-                            
-                            # Puntuar artista
-                            if result_artist:
-                                artist_name_norm = artist_name.lower().strip()
-                                if artist_name_norm == result_artist:
-                                    artist_score = 100  # Coincidencia exacta
-                                elif artist_name_norm in result_artist:
-                                    artist_score = 80  # Contiene el nombre completo
-                                elif result_artist in artist_name_norm:
-                                    artist_score = 70  # Está contenido en el nombre
-                                else:
-                                    # Comparación por palabras sin usar división
-                                    try:
-                                        words_artist_query = set(artist_name_norm.split())
-                                        words_artist_result = set(result_artist.split())
-                                        common_artist_words = words_artist_query.intersection(words_artist_result)
-                                        
-                                        # Puntuar basado en palabras comunes sin división
-                                        if len(common_artist_words) == len(words_artist_query):
-                                            artist_score = 90  # Todas las palabras de la consulta están en el resultado
-                                        elif len(common_artist_words) > 0:
-                                            # Puntajes relativos sin usar división
-                                            if len(words_artist_query) <= 2 and len(common_artist_words) == 1:
-                                                artist_score = 60  # Una palabra en común para consultas cortas
-                                            elif len(common_artist_words) > 1:
-                                                artist_score = 70  # Múltiples palabras en común
-                                    except Exception as e:
-                                        self.logger.warning(f"Error en comparación de palabras para artista: {str(e)}")
-                            
-                            # Calcular puntuación combinada sin usar división
-                            # 60% título (0.6) y 40% artista (0.4)
-                            # Simplificado a: (6*título + 4*artista) / 10
-                            score = (6 * title_score + 4 * artist_score) // 10
-                            
-                            if score > highest_score:
-                                highest_score = score
-                                best_result = release
-                                
-                            # Si encontramos una coincidencia muy buena, terminar
-                            if score >= 90:
-                                break
-                                
-                            # Pausar para evitar rate limiting
-                            self._rate_limit_pause()
-                        except Exception as e:
-                            self.logger.warning(f"Error procesando resultado de Discogs para {album_name}: {str(e)}")
-                            continue
-                
+                    # Solo la primera página (list(results) las pedía todas)
+                    candidatos = self.discogs.search(type='release', per_page=10, **campos).page(1)
                 except Exception as e:
-                    self.logger.warning(f"Error en estrategia de búsqueda '{strategy}': {str(e)}")
+                    self.logger.warning(f"Discogs: error buscando {campos}: {e}")
                     continue
-                    
-                # Si ya encontramos una coincidencia buena, no probar más estrategias
-                if highest_score >= 85:
-                    break
-                    
-                # Pausa entre estrategias
-                self._rate_limit_pause()
-            
-            # Extraer datos de producción del mejor resultado
-            album_url = None
-            producers = None
-            engineers = None
-            mastering_engineers = None
-            credits_json = None
-            
-            if best_result and highest_score > 60:  # Umbral para considerar una coincidencia aceptable
-                album_url = f"https://www.discogs.com/release/{best_result.id}"
-                
-                # Extraer información de créditos
-                try:
-                    if hasattr(best_result, 'credits') and best_result.credits:
-                        # Diccionario para agrupar por roles
-                        credits_dict = {}
-                        producers_list = []
-                        engineers_list = []
-                        mastering_list = []
-                        
-                        for credit in best_result.credits:
-                            if hasattr(credit, 'name') and hasattr(credit, 'role'):
-                                name = credit.name
-                                role = credit.role.lower()
-                                
-                                # Agregar al diccionario de créditos
-                                if role not in credits_dict:
-                                    credits_dict[role] = []
-                                if name not in credits_dict[role]:
-                                    credits_dict[role].append(name)
-                                
-                                # Agrupar por categorías específicas
-                                if 'produc' in role:
-                                    if name not in producers_list:
-                                        producers_list.append(name)
-                                elif 'engineer' in role and 'master' not in role:
-                                    if name not in engineers_list:
-                                        engineers_list.append(name)
-                                elif 'master' in role:
-                                    if name not in mastering_list:
-                                        mastering_list.append(name)
-                        
-                        # Convertir a texto separado por comas
-                        if producers_list:
-                            producers = ", ".join(producers_list)
-                        if engineers_list:
-                            engineers = ", ".join(engineers_list)
-                        if mastering_list:
-                            mastering_engineers = ", ".join(mastering_list)
-                        
-                        # Guardar diccionario completo como JSON
-                        # Guardar diccionario completo como JSON
+                for resultado in candidatos[:10]:
+                    if resultado.id in vistos:
+                        continue
+                    vistos.add(resultado.id)
+                    # El título del resultado es "Artista - Título": si no contiene el
+                    # título del álbum, se descarta sin pedir la release
+                    titulo_busqueda = _normalizar(resultado.data.get('title', ''))
+                    titulo_album = _normalizar(album_name)
+                    if titulo_album and titulo_album not in titulo_busqueda:
+                        continue
+                    get_limiter('discogs').wait()
                     try:
-                        import json
-                        credits_json = json.dumps(credits_dict)
+                        release = self.discogs.release(resultado.id)
+                        release.refresh()
+                        data = release.data
                     except Exception as e:
-                        self.logger.warning(f"Error al convertir créditos a JSON para {album_name}: {str(e)}")
-                
-                except Exception as e:
-                    self.logger.warning(f"Error procesando créditos de Discogs para {album_name}: {str(e)}")
-            
-                return album_url, producers, engineers, mastering_engineers, credits_json
-            elif results_list:
-                # Si no hay buena coincidencia pero hay resultados, usar el primero
-                try:
-                    first_release = self.discogs.release(results_list[0].id)
-                    album_url = f"https://www.discogs.com/release/{first_release.id}"
-                    # Intentar extraer créditos también del primer resultado
-                    try:
-                        if hasattr(first_release, 'credits') and first_release.credits:
-                            credits_dict = {}
-                            producers_list = []
-                            engineers_list = []
-                            mastering_list = []
-                            
-                            for credit in first_release.credits:
-                                if hasattr(credit, 'name') and hasattr(credit, 'role'):
-                                    name = credit.name
-                                    role = credit.role.lower()
-                                    
-                                    # Agregar al diccionario de créditos
-                                    if role not in credits_dict:
-                                        credits_dict[role] = []
-                                    if name not in credits_dict[role]:
-                                        credits_dict[role].append(name)
-                                    
-                                    # Agrupar por categorías específicas
-                                    if 'produc' in role:
-                                        if name not in producers_list:
-                                            producers_list.append(name)
-                                    elif 'engineer' in role and 'master' not in role:
-                                        if name not in engineers_list:
-                                            engineers_list.append(name)
-                                    elif 'master' in role:
-                                        if name not in mastering_list:
-                                            mastering_list.append(name)
-                            
-                            # Convertir a texto separado por comas
-                            if producers_list:
-                                producers = ", ".join(producers_list)
-                            if engineers_list:
-                                engineers = ", ".join(engineers_list)
-                            if mastering_list:
-                                mastering_engineers = ", ".join(mastering_list)
-                            
-                            # Guardar diccionario completo como JSON
-                            try:
-                                import json
-                                credits_json = json.dumps(credits_dict)
-                            except Exception as e:
-                                self.logger.warning(f"Error al convertir créditos a JSON para {album_name}: {str(e)}")
-                        
-                    except Exception as e:
-                        self.logger.warning(f"Error procesando créditos de primer resultado para {album_name}: {str(e)}")
-                    
-                    return album_url, producers, engineers, mastering_engineers, credits_json
-                except Exception as e:
-                    self.logger.warning(f"Error procesando primer resultado para {album_name}: {str(e)}")
-                    return f"https://www.discogs.com/release/{results_list[0].id}", None, None, None, None
+                        self.logger.warning(f"Discogs: error leyendo la release {resultado.id}: {e}")
+                        continue
+                    if _es_el_disco(data, artist_name, album_name):
+                        url = f"https://www.discogs.com/release/{data['id']}"
+                        return (url, *_creditos_discogs(data))
+            self.logger.info(f"Discogs: ninguna release coincide con «{artist_name} - {album_name}»")
         except Exception as e:
-            self.logger.error(f"Discogs album search error for {album_name} by {artist_name}: {str(e)}")
-        
-        return None, None, None, None, None
+            self.logger.error(f"Discogs album search error for {album_name} by {artist_name}: {e}")
+        return vacio
 
 
 
@@ -2797,7 +2675,7 @@ def main(config=None):
     
     # Imprimir configuración para depuración
     print("Configuración final:")
-    print(json.dumps(config, indent=2))
+    print(json.dumps(_sin_secretos(config), indent=2))
 
     # Crear instancia de MusicLinksManager
     manager = MusicLinksManager(config)
