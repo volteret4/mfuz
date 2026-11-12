@@ -27,10 +27,13 @@ Config (config_database_creator.json, sección "musicbrainz/mb_singles"):
 import logging
 import os
 import re
+import signal
 import sqlite3
 import sys
+import threading
 import time
 from collections import Counter, defaultdict
+from contextlib import contextmanager
 from datetime import date, datetime, timedelta
 
 import requests
@@ -41,6 +44,7 @@ from base.discos import normalizar  # noqa: E402
 
 USER_AGENT = "music-fuzzy/1.0 (+https://github.com/volteret4/mfuz; mb_singles)"
 API = "https://musicbrainz.org/ws/2/"
+LIMITE = 60         # segundos como mucho por petición
 PAUSA = 1.1          # MusicBrainz: 1 petición por segundo
 EPOCA = 2 * 365      # días antes/después del álbum para ser «su» single
 ERROR = object()
@@ -61,6 +65,27 @@ def _fecha(texto):
         return date(int(m.group(1)), int(m.group(2) or 7), int(m.group(3) or 1))
     except ValueError:
         return None
+
+
+@contextmanager
+def _plazo(segundos):
+    """Corta la petición si tarda más de `segundos` en total (el timeout de
+    requests solo mide el silencio entre bytes: una conexión que gotea o se
+    queda a medias lo esquiva). Solo en el hilo principal, que es como se lanza."""
+    if threading.current_thread() is not threading.main_thread():
+        yield
+        return
+
+    def _salta(*_):
+        raise TimeoutError(f"más de {segundos} s")
+
+    anterior = signal.signal(signal.SIGALRM, _salta)
+    signal.alarm(segundos)
+    try:
+        yield
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, anterior)
 
 
 def _claves(titulo):
@@ -103,9 +128,11 @@ class Singles:
             if espera > 0:
                 time.sleep(espera)
             try:
-                r = self.session.get(API + ruta, params=params, timeout=30)
-            except requests.RequestException as e:
+                with _plazo(LIMITE):
+                    r = self.session.get(API + ruta, params=params, timeout=30)
+            except (requests.RequestException, TimeoutError) as e:
                 logger.warning(f"MusicBrainz: {type(e).__name__}")
+                self.session.close()  # no reutilizar una conexión colgada
                 return ERROR
             finally:
                 self.ultima = time.monotonic()
