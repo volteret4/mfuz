@@ -958,8 +958,10 @@ class MusicLinksManager:
                     conditions.append(f"({' OR '.join(missing_links_conditions)})")
             
             if recent_only:
-                # Añadir condición de registros recientes
-                conditions.append(f"(datetime(albums.last_updated) > datetime('now', '-{days_threshold} days') OR albums.last_updated IS NULL)")
+                # Recientes (escaneados en los últimos días) y los que nunca se han
+                # intentado: sin esto un álbum antiguo sin enlaces no entraba nunca
+                conditions.append(f"(datetime(albums.last_updated) > datetime('now', '-{days_threshold} days') "
+                                  f"OR albums.last_updated IS NULL OR albums.links_updated IS NULL)")
             else:
                 # Añadir condición de registros antiguos
                 conditions.append(f"(albums.links_updated IS NULL OR datetime(albums.links_updated) < datetime('now', '-{days_threshold} days'))")
@@ -2467,7 +2469,8 @@ def main(config=None):
             print(f"{table.capitalize()}: {count}")
     else:
         manager.update_links(
-            days_threshold=config.get('days', 30),
+            # 'days': false en la config daba '-False days' y SQLite no filtraba nada
+            days_threshold=int(config.get('days') or 30),
             force_update=config.get('force_update', False),
             recent_only=not config.get('older_only', False),
             missing_only=config.get('missing_only', False),
