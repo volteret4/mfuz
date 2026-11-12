@@ -28,7 +28,7 @@ _EDICION = re.compile(
     r"bonus( tracks?)?|special|super|version|mono|stereo|\d{4}|\d+(st|nd|rd|th))\b")
 # Separadores de artistas en colaboraciones: 'Ric Wilson, Chromeo'
 _SEP_ARTISTAS = re.compile(
-    r"\s*(?:,|&|/|\+|;| and | y | con | with | feat\.? | ft\.? | vs\.? | x )\s*", re.I)
+    r"\s*(?:,|&|/|\+|;|×| and | y | con | with | feat\.? | ft\.? | vs\.? | x )\s*", re.I)
 _VARIOS = {"various", "various artists", "va", "varios", "varios artistas"}
 # Letras que NFKD no descompone ('Lindstrøm', 'µ-Ziq') y marcas que sí lo hacen mal ('We™' → 'WeTM')
 _LETRAS = str.maketrans({"ø": "o", "Ø": "o", "æ": "ae", "Æ": "ae", "œ": "oe", "Œ": "oe",
@@ -166,7 +166,11 @@ def artista_coincide(local, nombres, estricto=True):
     # ('Fennesz + Ryuichi Sakamoto' y 'Fennesz + Sakamoto')
     partes = _partes(local)
     del_enlace = norm.union(*(_partes(n) for n in nombres))
-    return nl in del_enlace or (len(partes) > 1 and bool(partes & del_enlace))
+    if nl in del_enlace or (len(partes) > 1 and bool(partes & del_enlace)):
+        return True
+    # 'Deep 88' y 'Deep88 & Melchior Sultana'
+    sin_esp = {x.replace(" ", "") for x in del_enlace}
+    return nl.replace(" ", "") in sin_esp or bool({x.replace(" ", "") for x in partes} & sin_esp)
 
 
 # ── Discogs ──────────────────────────────────────────────────────────────────
