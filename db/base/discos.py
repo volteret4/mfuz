@@ -30,28 +30,85 @@ _EDICION = re.compile(
 _SEP_ARTISTAS = re.compile(
     r"\s*(?:,|&|/|\+|;| and | y | con | with | feat\.? | ft\.? | vs\.? | x )\s*", re.I)
 _VARIOS = {"various", "various artists", "va", "varios", "varios artistas"}
+# Letras que NFKD no descompone ('Lindstrøm', 'µ-Ziq') y marcas que sí lo hacen mal ('We™' → 'WeTM')
+_LETRAS = str.maketrans({"ø": "o", "Ø": "o", "æ": "ae", "Æ": "ae", "œ": "oe", "Œ": "oe",
+                         "ß": "ss", "ð": "d", "Ð": "d", "þ": "th", "Þ": "th", "ł": "l", "Ł": "l",
+                         "đ": "d", "Đ": "d", "ı": "i", "µ": "mu ", "μ": "mu ", "Μ": "mu ",
+                         "™": " ", "®": " ", "©": " ", "°": " ", "º": " ", "ª": " "})
+# 'Vol. I', 'Volume Two', 'Pt. 2' → 'vol 1', 'vol 2', 'part 2'
+_SERIE = {"vol": "vol", "vols": "vols", "volume": "vol", "volumes": "vols", "volumen": "vol",
+          "volumenes": "vols",
+          "pt": "part", "part": "part", "parte": "part", "disc": "disc", "cd": "disc"}
+_NUMEROS = {"i": "1", "ii": "2", "iii": "3", "iv": "4", "v": "5", "vi": "6", "vii": "7", "viii": "8",
+            "ix": "9", "x": "10", "one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+            "six": "6", "seven": "7", "eight": "8", "nine": "9", "ten": "10"}
+# 'Esquivel And His Orchestra', 'Isao Suzuki Trio', 'Clive Tanaka y su Orquesta'
+_FORMACION = re.compile(r"\b(?:(?:and|y|with|con) )?(?:his|her|their|su|sus) \w+\b|"
+                        r"\b(?:trio|quartet|quintet|sextet|orchestra|orquesta)\b")
+_APODO = re.compile(r"[\"“”«»].*?[\"“”«»]")  # Bobby “Blue” Bland
+
+
+def _limpiar(texto, sin_corchetes):
+    texto = unicodedata.normalize("NFKD", (texto or "").translate(_LETRAS))
+    texto = "".join(c for c in texto if not unicodedata.combining(c)).casefold()
+    texto = re.sub(r"\s*\(\d+\)\s*$", "", texto)           # 'Grimes (4)' de Discogs
+    if sin_corchetes:
+        texto = re.sub(r"[(\[{].*?[)\]}]", " ", texto)     # '(Deluxe)', '[Remastered]'
+    palabras = re.sub(r"[\W_]+", " ", texto.replace("&", " and ")).split()
+    for i in range(1, len(palabras)):
+        if palabras[i - 1] in _SERIE.values():
+            palabras[i] = _NUMEROS.get(palabras[i], palabras[i]).lstrip("0") or "0"
+    return re.sub(r"^the ", "", " ".join(palabras))
 
 
 def normalizar(texto):
-    """Minúsculas, sin acentos, sin '(Deluxe)'/'[2009]', sin el '(2)' de Discogs ni 'the '."""
-    texto = unicodedata.normalize("NFKD", texto or "")
-    texto = "".join(c for c in texto if not unicodedata.combining(c)).casefold()
-    texto = re.sub(r"\s*\(\d+\)\s*$", "", texto)       # 'Grimes (4)' de Discogs
-    texto = re.sub(r"[(\[{].*?[)\]}]", " ", texto)       # '(Deluxe)', '[Remastered]'
-    texto = texto.replace("&", " and ")
-    texto = " ".join(re.sub(r"[\W_]+", " ", texto).split())
-    return re.sub(r"^the ", "", texto)
+    """Minúsculas, sin acentos, sin '(Deluxe)'/'[2009]', sin el '(2)' de Discogs ni 'the '.
+
+    Si todo el texto va entre corchetes ('(IV)', '[KRTM]') se usa lo de dentro.
+    """
+    texto = re.sub(r"\b(vols?|volumes?|volumen(?:es)?|pt|parte?|disc|cd)\b\.?",
+                   lambda m: f" {_SERIE[m.group(1).casefold()]} ", texto or "", flags=re.I)
+    return _limpiar(texto, True) or _limpiar(texto, False)
+
+
+def _crudo(texto):
+    """Para títulos solo de símbolos ('★', '+/-', '( )'), que normalizar deja vacíos."""
+    sin = re.sub(r"[(\[{].*?[)\]}]", " ", texto or "")
+    return " ".join((sin if sin.strip() else texto or "").casefold().split())
+
+
+_UNION = {"and", "plus", "y"}
+
+
+def _palabras(norm):
+    return sorted(w for w in norm.split() if w not in _UNION)
+
+
+def _traducciones(titulo):
+    """Lo que va entre paréntesis si el resto no está en alfabeto latino."""
+    fuera = re.sub(r"[(\[{].*?[)\]}]", " ", titulo or "")
+    if re.search(r"[a-z]", normalizar(fuera)):
+        return set()
+    return {normalizar(x) for x in re.findall(r"[(\[{](.*?)[)\]}]", titulo or "")} - {""}
 
 
 def titulo_igual(a, b):
     """Estricto: mismo título salvo edición ('Remastered 2009', '(Deluxe)')."""
-    a, b = normalizar(a), normalizar(b)
-    if not a or not b:
-        return False
-    if a == b:
+    na, nb = normalizar(a), normalizar(b)
+    if not na or not nb:
+        return bool(_crudo(a)) and _crudo(a) == _crudo(b)
+    if na == nb:
         return True
-    a2, b2 = (" ".join(_EDICION.sub(" ", x).split()) for x in (a, b))
-    return bool(a2) and a2 == b2
+    a2, b2 = (" ".join(_EDICION.sub(" ", x).split()) for x in (na, nb))
+    if a2 and a2 == b2:
+        return True
+    # Mismas partes en otro orden o unidas de otra forma: 'Fixed Broken' y
+    # 'Broken / Fixed', 'A & B' y 'A plus B'
+    if _palabras(a2) == _palabras(b2) and _palabras(a2):
+        return True
+    # Título en otro alfabeto con la traducción entre paréntesis: 'पर्वत (The Mountain)'
+    ta, tb = _traducciones(a) | {na}, _traducciones(b) | {nb}
+    return (ta != {na} or tb != {nb}) and bool(ta & tb)
 
 
 def parecido(a, b):
@@ -73,6 +130,17 @@ def titulo_parecido(titulo, album, artista):
     return parecido(titulo, album)
 
 
+def _nucleo(nombre):
+    """Nombre sin apodo ni formación: 'Bobby “Blue” Bland' → 'bobby bland',
+    'Trio Isao Suzuki' → 'isao suzuki', 'Esquivel And His Orchestra' → 'esquivel'."""
+    x = normalizar(_APODO.sub(" ", nombre or ""))
+    return " ".join(_FORMACION.sub(" ", x).split()) or x
+
+
+def _partes(nombre):
+    return {normalizar(x) for x in _SEP_ARTISTAS.split(nombre or "")} - {""}
+
+
 def artista_coincide(local, nombres, estricto=True):
     """local: artista en la db; nombres: artistas del enlace (release, página...)."""
     nombres = [n for n in nombres if n]
@@ -87,11 +155,18 @@ def artista_coincide(local, nombres, estricto=True):
         return False
     if nl in norm or nl == todos:
         return True
-    if not estricto and any(parecido(local, n) for n in nombres + [" ".join(nombres)]):
+    # Mismo nombre sin apodo ni formación, en cualquier orden de palabras
+    nucleo = sorted(_nucleo(local).split())
+    if any(sorted(_nucleo(n).split()) == nucleo for n in nombres):
+        return True
+    if not estricto and any(parecido(_nucleo(local), _nucleo(n)) or parecido(local, n)
+                            for n in nombres + [" ".join(nombres)]):
         return True
     # Colaboraciones: algún artista del nombre local es uno de los del enlace
-    partes = {normalizar(x) for x in _SEP_ARTISTAS.split(local or "")} - {""}
-    return len(partes) > 1 and bool(partes & norm)
+    # ('Fennesz + Ryuichi Sakamoto' y 'Fennesz + Sakamoto')
+    partes = _partes(local)
+    del_enlace = norm.union(*(_partes(n) for n in nombres))
+    return nl in del_enlace or (len(partes) > 1 and bool(partes & del_enlace))
 
 
 # ── Discogs ──────────────────────────────────────────────────────────────────
