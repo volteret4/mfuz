@@ -14,6 +14,12 @@ pgrep -af "[d]b_creator.py" | sed -E 's/.*--scripts ([^ ]+).*/  db_creator: \1/'
 pgrep -af "[c]aratulas_moode.py" | sed 's/^/  /' | cut -c1-120
 pgrep -f "[d]b_creator.py|[c]aratulas_moode.py" >/dev/null || echo "  nada"
 
+cadena=$(ls -t $LOGS/cadena_*.out 2>/dev/null | head -1)
+if [ -n "$cadena" ]; then
+    echo "== Cadena ($cadena)"
+    grep -aE "^esperando|^== |^cadena" "$cadena" | tail -6 | sed 's/^/  /' | cut -c1-120
+fi
+
 echo "== Último cron diario"
 ultimo=$(ls -t $LOGS/*_0400.log 2>/dev/null | head -1)
 if [ -n "$ultimo" ]; then
