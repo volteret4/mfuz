@@ -48,6 +48,17 @@ LIMITE = 60         # segundos como mucho por petición
 PAUSA = 1.1          # MusicBrainz: 1 petición por segundo
 EPOCA = 2 * 365      # días antes/después del álbum para ser «su» single
 ERROR = object()
+MAX_GRUPOS = 2000    # más release groups que esto no es un artista, es un cajón (no se pagina)
+# Artistas especiales de MusicBrainz: millones de release groups y ningún single propio
+ESPECIALES = (
+    "89ad4ac3-39f7-470e-963a-56509c546377",  # Various Artists
+    "125ec42a-7229-4250-afc5-e057484327fe",  # [unknown]
+    "f731ccc4-e22a-43af-a747-64213329e088",  # [anonymous]
+    "33cf029c-63b0-41a0-9855-be2a3665fb3b",  # [data]
+    "eec63d3c-3b81-4ad4-b1e4-7c147d4d2b61",  # [no artist]
+    "9be7f096-97ec-4615-8957-8d40b5dcbc41",  # [traditional]
+    "314e1c25-dde7-4e4d-b2f4-0a7b9f7c56dc",  # [dialogue]
+)
 
 REMIX = re.compile(r"\b(remix(es|ed)?|rmx|mix|edit|rework|bootleg|dub|version|instrumental|"
                    r"acapella|a cappella|vip|flip|redux|reprise)\b", re.I)
@@ -155,6 +166,9 @@ class Singles:
                 return ERROR
             if d is None:
                 return []
+            if offset == 0 and d.get("release-group-count", 0) > MAX_GRUPOS:
+                logger.warning(f"{artist_mbid}: {d['release-group-count']} release groups, se salta")
+                return []
             grupos += d.get("release-groups", [])
             offset += 100
             if offset >= d.get("release-group-count", 0) or not d.get("release-groups"):
@@ -164,13 +178,14 @@ class Singles:
 
     def artistas_pendientes(self):
         limite_fecha = (datetime.now() - self.reintentar).isoformat(sep=" ")
-        filas = self.conn.execute("""
+        filas = self.conn.execute(f"""
             SELECT ar.id, ar.name, ar.mbid FROM artists ar
             WHERE coalesce(ar.mbid, '') != ''
+              AND lower(ar.mbid) NOT IN ({",".join("?" * len(ESPECIALES))})
               AND EXISTS (SELECT 1 FROM albums al WHERE al.artist_id = ar.id)
               AND (ar.singles_checked IS NULL OR ar.singles_checked < ?)
             ORDER BY ar.singles_checked IS NOT NULL, ar.singles_checked, ar.id DESC""",
-                                  (limite_fecha,)).fetchall()
+                                  (*ESPECIALES, limite_fecha)).fetchall()
         return filas[:self.limite] if self.limite else filas
 
     def albumes(self, artist_id, artist_name):

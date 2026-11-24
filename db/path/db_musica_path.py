@@ -41,8 +41,10 @@ from base.db_connection import apply_pragmas
 
 
 class MusicLibraryManager:
-    def __init__(self, root_path: str, db_path: str):
+    def __init__(self, root_path: str, db_path: str, extra_root_paths=None):
         self.root_path = Path(root_path).resolve()
+        # Raíces adicionales (p. ej. /mnt/NFS/moode/temp, fuera de la colección)
+        self.root_paths = [self.root_path] + [Path(p).resolve() for p in (extra_root_paths or [])]
         self.db_path = Path(db_path).resolve()
         self.supported_formats = ('.mp3', '.flac', '.m4a')
         self._song_links_table_verified = False  # checked once per scan, not per file
@@ -927,6 +929,12 @@ class MusicLibraryManager:
             return None
 
 
+    def _rglob(self, pattern):
+        """rglob sobre root_path y todas las raíces adicionales."""
+        for root in self.root_paths:
+            if root.exists():
+                yield from root.rglob(pattern)
+
     def find_album_folders(self):
         """
         Encuentra todas las carpetas que contienen archivos FLAC u otros formatos soportados.
@@ -940,7 +948,7 @@ class MusicLibraryManager:
         start_time = datetime.now()
         
         for extension in self.supported_formats:
-            for file_path in self.root_path.rglob(f'*{extension}'):
+            for file_path in self._rglob(f'*{extension}'):
                 album_folders.add(str(file_path.parent.resolve()))
         
         self.logger.info(f"Se encontraron {len(album_folders)} carpetas en {(datetime.now() - start_time).total_seconds():.2f} segundos")
@@ -1266,7 +1274,7 @@ class MusicLibraryManager:
             }
             pending_files = []
             first_file_in_folder = {}
-            for file_path in self.root_path.rglob('*'):
+            for file_path in self._rglob('*'):
                 if file_path.suffix.lower() not in self.supported_formats:
                     continue
                 first_file_in_folder.setdefault(str(file_path.parent), file_path)
@@ -1801,7 +1809,7 @@ class MusicLibraryManager:
             existing_files = {}  # {filename: [full_paths]} - puede haber múltiples archivos con el mismo nombre
             files_by_path = {}   # {full_path: True}
             
-            for file_path in self.root_path.rglob('*'):
+            for file_path in self._rglob('*'):
                 if file_path.suffix.lower() in self.supported_formats and file_path.is_file():
                     full_path = str(file_path.absolute())
                     filename = file_path.name
@@ -2093,7 +2101,7 @@ def main(config=None):
         print(f"Error: Faltan claves necesarias en la configuración: {', '.join(missing)}")
         return 1
         
-    manager = MusicLibraryManager(root_path, db_path)
+    manager = MusicLibraryManager(root_path, db_path, config.get('extra_root_paths'))
 
     # Asegurar que el esquema esté actualizado con los nuevos campos
     manager.update_schema_with_musicbrainz_metadata()

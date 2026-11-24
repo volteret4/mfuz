@@ -54,3 +54,6 @@ config/ui_db_creator/temp_config_database_creator.json
 
 # db antigua en la raíz del repo
 /musica_local.sqlite*
+
+mb_response_artist_*.json
+*.bak-*

@@ -28,7 +28,7 @@ import sys
 from pathlib import Path
 
 # El mismo script corre en el PC y en pepecono: usar el venv de cada uno
-VENV_PY = Path.home() / "Scripts/python_venv/bin/python"
+VENV_PY = Path.home() / ".local/share/venvs/music-fuzzy/bin/python"
 if VENV_PY.exists() and Path(sys.prefix) != VENV_PY.parent.parent:
     os.execv(VENV_PY, [str(VENV_PY), *sys.argv])
 
@@ -78,6 +78,7 @@ PRESETS = {
         "enlaces/enlaces_artista_album",
         "generos/generos_creditos",
         "wiki/wikilinks_desde_mb",
+        "discogs/sellos_detalle",
     ],
     # Lo lanza la cola de qBittorrent al terminar una descarga: el disco nuevo
     # entra en la db y se le buscan géneros y créditos (los más recientes primero)
@@ -98,6 +99,7 @@ PRESETS = {
         "listenbrainz/listens_listenbrainz",
         "posts/posts_fresh_rss",
         "posts/menciones",
+        "discogs/sellos_detalle",
     ],
 }
 # 'completo' = todos los scripts salvo estos grupos (descargas, no enriquecen la db)
@@ -109,6 +111,7 @@ DESC_EXTRA = {
     "path/db_musica_path": "Escanea la carpeta de música y actualiza artistas, álbumes y canciones de la biblioteca local.",
     "lastfm/lastfm_escuchas": "Importa tus escuchas de Last.fm.",
     "lastfm/lastfm_info": "Información de artistas y álbumes desde Last.fm.",
+    "discogs/sellos_detalle": "Sellos de la colección: catálogo, estudios e ingenieros habituales (Discogs) y relaciones (MusicBrainz).",
     "generos/generos_creditos": "Géneros (Discogs, MusicBrainz, Last.fm) y créditos de Discogs de los álbumes locales.",
 }
 
