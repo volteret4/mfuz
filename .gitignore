@@ -58,8 +58,8 @@ config/ui_db_creator/temp_config_database_creator.json
 mb_response_artist_*.json
 *.bak-*
 
-# credenciales en claro (los cifrados son *encrypted*.env)
+# credenciales en claro
 .env
 *.env
-!*encrypted*.env
+*encrypted*.env
 !example.env
